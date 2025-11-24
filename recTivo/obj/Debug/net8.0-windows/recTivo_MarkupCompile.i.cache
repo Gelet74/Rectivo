@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-D:\gelet\escritorio\DI\recTivo\recTivo\obj\Debug\net8.0-windows\
+C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\
 recTivo
 none
 false
 TRACE;DEBUG;NET;NET8_0;NETCOREAPP;WINDOWS;WINDOWS7_0;NET5_0_OR_GREATER;NET6_0_OR_GREATER;NET7_0_OR_GREATER;NET8_0_OR_GREATER;NETCOREAPP3_0_OR_GREATER;NETCOREAPP3_1_OR_GREATER;WINDOWS7_0_OR_GREATER
-D:\gelet\escritorio\DI\recTivo\recTivo\App.xaml
-3-1924486439
+C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\App.xaml
+6960301513
 
-312126678159
-2321532263481
-Frontend\Dialogos\Inicio.xaml;Frontend\Dialogos\Login.xaml;MainWindow.xaml;
+342101255520
+2321236926000
+Frontend\Dialogos\DialogoAlmacen.xaml;Frontend\Dialogos\DialogoEntradaAlmacen.xaml;Frontend\Dialogos\DialogoSalidaAlmacen.xaml;Frontend\Dialogos\Inicio.xaml;Frontend\Dialogos\Login.xaml;MainWindow.xaml;
 
-False
+True
 

@@ -21,5 +21,25 @@ namespace recTivo
         {
             InitializeComponent();
         }
+
+        private void Articulos_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Clientes_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Almacen_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Ordenes_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

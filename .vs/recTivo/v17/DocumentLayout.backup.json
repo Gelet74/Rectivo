@@ -1,14 +1,18 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "D:\\gelet\\escritorio\\DI\\recTivo\\",
+  "WorkspaceRootPath": "C:\\Users\\windows10\\Desktop\\2\u00BA DAM\\PROYECTO\\DI\\Rectivo\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{B3DBAD09-B43C-4DB6-8443-DDFF634DBF98}|recTivo\\recTivo.csproj|d:\\gelet\\escritorio\\di\\rectivo\\rectivo\\app.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "AbsoluteMoniker": "D:0:0:{B3DBAD09-B43C-4DB6-8443-DDFF634DBF98}|recTivo\\recTivo.csproj|c:\\users\\windows10\\desktop\\2\u00BA dam\\proyecto\\di\\rectivo\\rectivo\\app.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
       "RelativeMoniker": "D:0:0:{B3DBAD09-B43C-4DB6-8443-DDFF634DBF98}|recTivo\\recTivo.csproj|solutionrelative:rectivo\\app.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{B3DBAD09-B43C-4DB6-8443-DDFF634DBF98}|recTivo\\recTivo.csproj|d:\\gelet\\escritorio\\di\\rectivo\\rectivo\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "AbsoluteMoniker": "D:0:0:{B3DBAD09-B43C-4DB6-8443-DDFF634DBF98}|recTivo\\recTivo.csproj|c:\\users\\windows10\\desktop\\2\u00BA dam\\proyecto\\di\\rectivo\\rectivo\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
       "RelativeMoniker": "D:0:0:{B3DBAD09-B43C-4DB6-8443-DDFF634DBF98}|recTivo\\recTivo.csproj|solutionrelative:rectivo\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B3DBAD09-B43C-4DB6-8443-DDFF634DBF98}|recTivo\\recTivo.csproj|c:\\users\\windows10\\desktop\\2\u00BA dam\\proyecto\\di\\rectivo\\rectivo\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B3DBAD09-B43C-4DB6-8443-DDFF634DBF98}|recTivo\\recTivo.csproj|solutionrelative:rectivo\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -24,22 +28,35 @@
               "$type": "Document",
               "DocumentIndex": 0,
               "Title": "App.xaml",
-              "DocumentMoniker": "D:\\gelet\\escritorio\\DI\\recTivo\\recTivo\\App.xaml",
+              "DocumentMoniker": "C:\\Users\\windows10\\Desktop\\2\u00BA DAM\\PROYECTO\\DI\\Rectivo\\recTivo\\App.xaml",
               "RelativeDocumentMoniker": "recTivo\\App.xaml",
-              "ToolTip": "D:\\gelet\\escritorio\\DI\\recTivo\\recTivo\\App.xaml*",
+              "ToolTip": "C:\\Users\\windows10\\Desktop\\2\u00BA DAM\\PROYECTO\\DI\\Rectivo\\recTivo\\App.xaml*",
               "RelativeToolTip": "recTivo\\App.xaml*",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2025-11-23T14:35:49.982Z",
+              "WhenOpened": "2025-11-24T09:34:06.016Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "MainWindow.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\windows10\\Desktop\\2\u00BA DAM\\PROYECTO\\DI\\Rectivo\\recTivo\\MainWindow.xaml.cs",
+              "RelativeDocumentMoniker": "recTivo\\MainWindow.xaml.cs",
+              "ToolTip": "C:\\Users\\windows10\\Desktop\\2\u00BA DAM\\PROYECTO\\DI\\Rectivo\\recTivo\\MainWindow.xaml.cs",
+              "RelativeToolTip": "recTivo\\MainWindow.xaml.cs",
+              "ViewState": "AgIAAAwAAAAAAAAAAAAAACIAAAA0AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-24T09:28:52.857Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
               "Title": "MainWindow.xaml",
-              "DocumentMoniker": "D:\\gelet\\escritorio\\DI\\recTivo\\recTivo\\MainWindow.xaml",
+              "DocumentMoniker": "C:\\Users\\windows10\\Desktop\\2\u00BA DAM\\PROYECTO\\DI\\Rectivo\\recTivo\\MainWindow.xaml",
               "RelativeDocumentMoniker": "recTivo\\MainWindow.xaml",
-              "ToolTip": "D:\\gelet\\escritorio\\DI\\recTivo\\recTivo\\MainWindow.xaml*",
-              "RelativeToolTip": "recTivo\\MainWindow.xaml*",
+              "ToolTip": "C:\\Users\\windows10\\Desktop\\2\u00BA DAM\\PROYECTO\\DI\\Rectivo\\recTivo\\MainWindow.xaml",
+              "RelativeToolTip": "recTivo\\MainWindow.xaml",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
               "WhenOpened": "2025-11-20T20:00:02.056Z",
               "EditorCaption": ""
