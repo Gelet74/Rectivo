@@ -23,5 +23,20 @@ namespace recTivo.Frontend.Dialogos
         {
             InitializeComponent();
         }
+
+        private void EntradaAlmacen_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void SalidaAlmacen_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void DialAlmacen_Loaded(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

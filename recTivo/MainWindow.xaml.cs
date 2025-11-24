@@ -1,4 +1,5 @@
 ﻿using MahApps.Metro.Controls;
+using recTivo.Frontend.Dialogos;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -34,7 +35,8 @@ namespace recTivo
 
         private void Almacen_Click(object sender, RoutedEventArgs e)
         {
-
+            DialogoAlmacen dialogoAlmacen = new DialogoAlmacen();
+            dialogoAlmacen.ShowDialog();
         }
 
         private void Ordenes_Click(object sender, RoutedEventArgs e)

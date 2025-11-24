@@ -4,9 +4,33 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:recTivo.Frontend.Dialogos"
+        WindowStyle="None"
+        x:Name="DialAlmacen"
+        Loaded="DialAlmacen_Loaded"
+        WindowStartupLocation="CenterScreen"
         mc:Ignorable="d"
-        Title="DialogoAlmacen" Height="450" Width="800">
-    <Grid>
-        
+        Title="DialogoAlmacen" Height="600" Width="1000">
+    <Grid Background="#2D2D30">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Button x:Name="EntradaAlmacen"
+          Click="EntradaAlmacen_Click"
+          Content="Entrada&#x0a;Almacén" 
+          FontSize="40"
+          Margin="10,0"
+          Width="300"
+          Height="150"/>
+
+        <Button Grid.Column="1"
+          x:Name="SalidaAlmacen"
+       Click="SalidaAlmacen_Click"
+       Content="Salida&#x0a;Almacén" 
+       FontSize="40"
+       Margin="10,0"
+       Width="300"
+       Height="150"/>
+
     </Grid>
 </Window>
