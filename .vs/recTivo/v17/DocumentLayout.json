@@ -1,22 +1,26 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "D:\\gelet\\escritorio\\DI\\recTivo\\",
+  "WorkspaceRootPath": "C:\\Users\\windows10\\Desktop\\2\u00BA DAM\\PROYECTO\\DI\\Rectivo\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{B3DBAD09-B43C-4DB6-8443-DDFF634DBF98}|recTivo\\recTivo.csproj|d:\\gelet\\escritorio\\di\\rectivo\\rectivo\\frontend\\dialogos\\dialogoalmacen.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
-      "RelativeMoniker": "D:0:0:{B3DBAD09-B43C-4DB6-8443-DDFF634DBF98}|recTivo\\recTivo.csproj|solutionrelative:rectivo\\frontend\\dialogos\\dialogoalmacen.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+      "AbsoluteMoniker": "D:0:0:{B3DBAD09-B43C-4DB6-8443-DDFF634DBF98}|recTivo\\recTivo.csproj|c:\\users\\windows10\\desktop\\2\u00BA dam\\proyecto\\di\\rectivo\\rectivo\\frontend\\dialogos\\dialogoentradaalmacen.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B3DBAD09-B43C-4DB6-8443-DDFF634DBF98}|recTivo\\recTivo.csproj|solutionrelative:rectivo\\frontend\\dialogos\\dialogoentradaalmacen.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{B3DBAD09-B43C-4DB6-8443-DDFF634DBF98}|recTivo\\recTivo.csproj|d:\\gelet\\escritorio\\di\\rectivo\\rectivo\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{B3DBAD09-B43C-4DB6-8443-DDFF634DBF98}|recTivo\\recTivo.csproj|solutionrelative:rectivo\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{B3DBAD09-B43C-4DB6-8443-DDFF634DBF98}|recTivo\\recTivo.csproj|d:\\gelet\\escritorio\\di\\rectivo\\rectivo\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
-      "RelativeMoniker": "D:0:0:{B3DBAD09-B43C-4DB6-8443-DDFF634DBF98}|recTivo\\recTivo.csproj|solutionrelative:rectivo\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{B3DBAD09-B43C-4DB6-8443-DDFF634DBF98}|recTivo\\recTivo.csproj|d:\\gelet\\escritorio\\di\\rectivo\\rectivo\\frontend\\dialogos\\dialogoalmacen.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{B3DBAD09-B43C-4DB6-8443-DDFF634DBF98}|recTivo\\recTivo.csproj|c:\\users\\windows10\\desktop\\2\u00BA dam\\proyecto\\di\\rectivo\\rectivo\\frontend\\dialogos\\dialogoalmacen.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{B3DBAD09-B43C-4DB6-8443-DDFF634DBF98}|recTivo\\recTivo.csproj|solutionrelative:rectivo\\frontend\\dialogos\\dialogoalmacen.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B3DBAD09-B43C-4DB6-8443-DDFF634DBF98}|recTivo\\recTivo.csproj|c:\\users\\windows10\\desktop\\2\u00BA dam\\proyecto\\di\\rectivo\\rectivo\\frontend\\dialogos\\dialogosalidaalmacen.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B3DBAD09-B43C-4DB6-8443-DDFF634DBF98}|recTivo\\recTivo.csproj|solutionrelative:rectivo\\frontend\\dialogos\\dialogosalidaalmacen.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B3DBAD09-B43C-4DB6-8443-DDFF634DBF98}|recTivo\\recTivo.csproj|c:\\users\\windows10\\desktop\\2\u00BA dam\\proyecto\\di\\rectivo\\rectivo\\frontend\\dialogos\\dialogoentradaalmacen.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{B3DBAD09-B43C-4DB6-8443-DDFF634DBF98}|recTivo\\recTivo.csproj|solutionrelative:rectivo\\frontend\\dialogos\\dialogoentradaalmacen.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B3DBAD09-B43C-4DB6-8443-DDFF634DBF98}|recTivo\\recTivo.csproj|c:\\users\\windows10\\desktop\\2\u00BA dam\\proyecto\\di\\rectivo\\rectivo\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{B3DBAD09-B43C-4DB6-8443-DDFF634DBF98}|recTivo\\recTivo.csproj|solutionrelative:rectivo\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     }
   ],
   "DocumentGroupContainers": [
@@ -26,56 +30,69 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 3,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "DialogoAlmacen.xaml",
-              "DocumentMoniker": "D:\\gelet\\escritorio\\DI\\recTivo\\recTivo\\Frontend\\Dialogos\\DialogoAlmacen.xaml",
-              "RelativeDocumentMoniker": "recTivo\\Frontend\\Dialogos\\DialogoAlmacen.xaml",
-              "ToolTip": "D:\\gelet\\escritorio\\DI\\recTivo\\recTivo\\Frontend\\Dialogos\\DialogoAlmacen.xaml",
-              "RelativeToolTip": "recTivo\\Frontend\\Dialogos\\DialogoAlmacen.xaml",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2025-11-24T18:26:15.037Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "MainWindow.xaml",
-              "DocumentMoniker": "D:\\gelet\\escritorio\\DI\\recTivo\\recTivo\\MainWindow.xaml",
-              "RelativeDocumentMoniker": "recTivo\\MainWindow.xaml",
-              "ToolTip": "D:\\gelet\\escritorio\\DI\\recTivo\\recTivo\\MainWindow.xaml",
-              "RelativeToolTip": "recTivo\\MainWindow.xaml",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2025-11-20T20:00:02.056Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "DialogoAlmacen.xaml.cs",
-              "DocumentMoniker": "D:\\gelet\\escritorio\\DI\\recTivo\\recTivo\\Frontend\\Dialogos\\DialogoAlmacen.xaml.cs",
-              "RelativeDocumentMoniker": "recTivo\\Frontend\\Dialogos\\DialogoAlmacen.xaml.cs",
-              "ToolTip": "D:\\gelet\\escritorio\\DI\\recTivo\\recTivo\\Frontend\\Dialogos\\DialogoAlmacen.xaml.cs",
-              "RelativeToolTip": "recTivo\\Frontend\\Dialogos\\DialogoAlmacen.xaml.cs",
-              "ViewState": "AgIAABQAAAAAAAAAAAAAwCYAAAAAAAAAAAAAAA==",
+              "Title": "DialogoSalidaAlmacen.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\windows10\\Desktop\\2\u00BA DAM\\PROYECTO\\DI\\Rectivo\\recTivo\\Frontend\\Dialogos\\DialogoSalidaAlmacen.xaml.cs",
+              "RelativeDocumentMoniker": "recTivo\\Frontend\\Dialogos\\DialogoSalidaAlmacen.xaml.cs",
+              "ToolTip": "C:\\Users\\windows10\\Desktop\\2\u00BA DAM\\PROYECTO\\DI\\Rectivo\\recTivo\\Frontend\\Dialogos\\DialogoSalidaAlmacen.xaml.cs",
+              "RelativeToolTip": "recTivo\\Frontend\\Dialogos\\DialogoSalidaAlmacen.xaml.cs",
+              "ViewState": "AgIAAAsAAAAAAAAAAAAAwC8AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-24T18:26:09.157Z",
+              "WhenOpened": "2025-11-25T11:25:31.817Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "MainWindow.xaml.cs",
-              "DocumentMoniker": "D:\\gelet\\escritorio\\DI\\recTivo\\recTivo\\MainWindow.xaml.cs",
-              "RelativeDocumentMoniker": "recTivo\\MainWindow.xaml.cs",
-              "ToolTip": "D:\\gelet\\escritorio\\DI\\recTivo\\recTivo\\MainWindow.xaml.cs",
-              "RelativeToolTip": "recTivo\\MainWindow.xaml.cs",
-              "ViewState": "AgIAABcAAAAAAAAAAAAqwCMAAAAHAAAAAAAAAA==",
+              "Title": "DialogoAlmacen.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\windows10\\Desktop\\2\u00BA DAM\\PROYECTO\\DI\\Rectivo\\recTivo\\Frontend\\Dialogos\\DialogoAlmacen.xaml.cs",
+              "RelativeDocumentMoniker": "recTivo\\Frontend\\Dialogos\\DialogoAlmacen.xaml.cs",
+              "ToolTip": "C:\\Users\\windows10\\Desktop\\2\u00BA DAM\\PROYECTO\\DI\\Rectivo\\recTivo\\Frontend\\Dialogos\\DialogoAlmacen.xaml.cs",
+              "RelativeToolTip": "recTivo\\Frontend\\Dialogos\\DialogoAlmacen.xaml.cs",
+              "ViewState": "AgIAABUAAAAAAAAAAAA5wDYAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-24T09:28:52.857Z",
+              "WhenOpened": "2025-11-25T11:25:20.547Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "DialogoEntradaAlmacen.xaml",
+              "DocumentMoniker": "C:\\Users\\windows10\\Desktop\\2\u00BA DAM\\PROYECTO\\DI\\Rectivo\\recTivo\\Frontend\\Dialogos\\DialogoEntradaAlmacen.xaml",
+              "RelativeDocumentMoniker": "recTivo\\Frontend\\Dialogos\\DialogoEntradaAlmacen.xaml",
+              "ToolTip": "C:\\Users\\windows10\\Desktop\\2\u00BA DAM\\PROYECTO\\DI\\Rectivo\\recTivo\\Frontend\\Dialogos\\DialogoEntradaAlmacen.xaml",
+              "RelativeToolTip": "recTivo\\Frontend\\Dialogos\\DialogoEntradaAlmacen.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-11-25T07:55:04.386Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "DialogoEntradaAlmacen.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\windows10\\Desktop\\2\u00BA DAM\\PROYECTO\\DI\\Rectivo\\recTivo\\Frontend\\Dialogos\\DialogoEntradaAlmacen.xaml.cs",
+              "RelativeDocumentMoniker": "recTivo\\Frontend\\Dialogos\\DialogoEntradaAlmacen.xaml.cs",
+              "ToolTip": "C:\\Users\\windows10\\Desktop\\2\u00BA DAM\\PROYECTO\\DI\\Rectivo\\recTivo\\Frontend\\Dialogos\\DialogoEntradaAlmacen.xaml.cs",
+              "RelativeToolTip": "recTivo\\Frontend\\Dialogos\\DialogoEntradaAlmacen.xaml.cs",
+              "ViewState": "AgIAAFMAAAAAAAAAAAAowHYAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-25T07:50:39.781Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "MainWindow.xaml",
+              "DocumentMoniker": "C:\\Users\\windows10\\Desktop\\2\u00BA DAM\\PROYECTO\\DI\\Rectivo\\recTivo\\MainWindow.xaml",
+              "RelativeDocumentMoniker": "recTivo\\MainWindow.xaml",
+              "ToolTip": "C:\\Users\\windows10\\Desktop\\2\u00BA DAM\\PROYECTO\\DI\\Rectivo\\recTivo\\MainWindow.xaml",
+              "RelativeToolTip": "recTivo\\MainWindow.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-11-20T20:00:02.056Z",
               "EditorCaption": ""
             }
           ]

@@ -25,9 +25,35 @@ namespace recTivo.Frontend.Dialogos
         }
 
         private void EntradaAlmacen_Click(object sender, RoutedEventArgs e)
-        {
-
+        { 
+              this.Close();
+            DialogoEntradaAlmacen dialogoEntradaAlmacen = new DialogoEntradaAlmacen();
+            dialogoEntradaAlmacen.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            dialogoEntradaAlmacen.ShowDialog();
         }
+        protected override void OnPreviewKeyDown(System.Windows.Input.KeyEventArgs e)
+        {
+            base.OnPreviewKeyDown(e);
+
+            if (e.Key == System.Windows.Input.Key.Escape)
+            {
+                // Recuperar la ventana principal que ya está abierta
+                var main = Application.Current.Windows
+                    .OfType<MainWindow>()
+                    .FirstOrDefault();
+
+                if (main != null)
+                {
+                    // Traerla al frente
+                    main.Activate();
+                }
+
+                // Cerrar el diálogo actual
+                this.Close();
+            }
+        }
+
+
 
         private void SalidaAlmacen_Click(object sender, RoutedEventArgs e)
         {

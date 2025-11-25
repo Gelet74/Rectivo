@@ -23,5 +23,29 @@ namespace recTivo.Frontend.Dialogos
         {
             InitializeComponent();
         }
+
+        protected override void OnPreviewKeyDown(System.Windows.Input.KeyEventArgs e)
+        {
+            base.OnPreviewKeyDown(e);
+
+            if (e.Key == System.Windows.Input.Key.Escape)
+            {
+                // Recuperar la ventana principal que ya está abierta
+                var main = Application.Current.Windows
+                    .OfType<MainWindow>()
+                    .FirstOrDefault();
+
+                if (main != null)
+                {
+                    // Traerla al frente
+                    main.Activate();
+                }
+
+                // Cerrar el diálogo actual
+                this.Close();
+            }
+        }
+
+
     }
 }

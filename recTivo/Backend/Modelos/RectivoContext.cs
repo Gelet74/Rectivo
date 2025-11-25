@@ -22,7 +22,7 @@ namespace recTivo.Backend.Modelos
         public virtual DbSet<Orden> Ordens { get; set; } = null!;
         public virtual DbSet<Permiso> Permisos { get; set; } = null!;
         public virtual DbSet<Rol> Rols { get; set; } = null!;
-        public virtual DbSet<Ubicacion> Ubicacions { get; set; } = null!;
+        public virtual DbSet<Ubicacion> Ubicacion { get; set; } = null!;
         public virtual DbSet<ClienteHasArticulo> ClienteHasArticulos { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
