@@ -4,12 +4,14 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:recTivo.Frontend.Dialogos"
-        WindowStyle="None"
+        
         x:Name="DialAlmacen"
         Loaded="DialAlmacen_Loaded"
         WindowStartupLocation="CenterScreen"
         mc:Ignorable="d"
-        Title="DialogoAlmacen" Height="600" Width="1000">
+        Foreground="White"
+        Background="#2D2D30"
+        Title="Pulsa ESC para volver atrás" Height="600" Width="1000">
     <Grid Background="#2D2D30">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>

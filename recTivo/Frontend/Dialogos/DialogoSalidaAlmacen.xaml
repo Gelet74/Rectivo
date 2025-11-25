@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:recTivo.Frontend.Dialogos"
         mc:Ignorable="d"
-        Title="DialogoSalidaAlmacen" Height="450" Width="800">
+        Title="Pulsa ESC para volver atrás" Height="450" Width="800">
     <Grid>
         
     </Grid>
