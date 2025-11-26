@@ -124,7 +124,7 @@ namespace recTivo.Frontend.Dialogos {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/recTivo;component/frontend/dialogos/dialogoentradaalmacen.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/recTivo;V1.0.0.0;component/frontend/dialogos/dialogoentradaalmacen.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\..\Frontend\Dialogos\DialogoEntradaAlmacen.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

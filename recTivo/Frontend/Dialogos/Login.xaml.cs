@@ -5,6 +5,7 @@ using recTivo.Backend.Modelos;
 using recTivo.Backend.Repos;
 using System.Windows;
 using Microsoft.EntityFrameworkCore.SqlServer;
+using di.proyecto.clase._2025.Frontend.Mensajes;
 
 namespace recTivo.Frontend.Dialogos
 {
@@ -36,18 +37,30 @@ namespace recTivo.Frontend.Dialogos
             string usuario = txtUsuario.Text.Trim();
             string password = txtPassword.Password.Trim();
 
-            var empleado = await _empleadoRepository.ValidarCredencialesAsync(usuario, password);
-
-            if (empleado != null)
+            // Primer caso: campos vacíos
+            if (string.IsNullOrEmpty(usuario) || string.IsNullOrEmpty(password))
             {
-                var main = new MainWindow();
-                main.WindowState = WindowState.Maximized;
-                main.Show();
-                this.Close();
+                MensajeAdvertencia.Mostrar("Advertencia de autenticación", "Por favor, introduce usuario y clave.");
             }
             else
             {
-                MessageBox.Show("Usuario o contraseña incorrectos");
+                // Segundo caso: comprobamos credenciales
+                var empleado = await _empleadoRepository.ValidarCredencialesAsync(usuario, password);
+
+                if (empleado != null)
+                {
+                    var main = new MainWindow
+                    {
+                        WindowState = WindowState.Maximized
+                    };
+                    main.Show();
+                    this.Close();
+                }
+                else
+                {
+                    // Tercer caso: credenciales incorrectas
+                    MensajeError.Mostrar("Error de autenticación", "Usuario o clave incorrectos.");
+                }
             }
         }
 
