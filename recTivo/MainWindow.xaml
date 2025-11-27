@@ -15,6 +15,7 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -28,9 +29,11 @@
                     FontSize="40"
                     Background="#ff9800"
                     BorderBrush="Transparent"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
                     HorizontalContentAlignment="Center"
-                    VerticalContentAlignment="Center"
-                    Cursor="Hand" Margin="-20,0,310,0">
+                    VerticalContentAlignment="Bottom"
+                    Cursor="Hand" Margin="0,0,20,10">
                 <Button.Template>
                     <ControlTemplate TargetType="Button">
                         <Border Background="{TemplateBinding Background}"
@@ -44,7 +47,7 @@
                 </Button.Template>
             </Button>
 
-            <Button Grid.Column="1"
+            <Button Grid.Column="2"
                     x:Name="ordenes"
                     Click="Ordenes_Click"
                     Content="Órdenes"
@@ -53,9 +56,11 @@
                     Height="150"
                     Background="#ff9800"
                     BorderBrush="Transparent"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Bottom"
                     HorizontalContentAlignment="Center"
                     VerticalContentAlignment="Center"
-                    Cursor="Hand" Margin="20,0,-20,0">
+                    Cursor="Hand" Margin="20,0,0,10">
                 <Button.Template>
                     <ControlTemplate TargetType="Button">
                         <Border Background="{TemplateBinding Background}"
@@ -78,9 +83,10 @@
                     Height="150"
                     Background="#ff9800"
                     BorderBrush="Transparent"
+                    HorizontalAlignment="Right"
                     HorizontalContentAlignment="Center"
                     VerticalContentAlignment="Center"
-                    Cursor="Hand" Margin="-20,20,310,-20">
+                    Cursor="Hand" Margin="0,10,20,0">
                 <Button.Template>
                     <ControlTemplate TargetType="Button">
                         <Border Background="{TemplateBinding Background}"
@@ -94,7 +100,7 @@
                 </Button.Template>
             </Button>
 
-            <Button Grid.Row="1" Grid.Column="1"
+            <Button Grid.Row="1" Grid.Column="2"
                     x:Name="clientes"
                     Click="Clientes_Click"
                     Content="Clientes"
@@ -103,9 +109,11 @@
                     Height="150"
                     Background="#ff9800"
                     BorderBrush="Transparent"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
                     HorizontalContentAlignment="Center"
                     VerticalContentAlignment="Center"
-        Cursor="Hand" Margin="20,20,-20,-20">
+        Cursor="Hand" Margin="20,10,0,0">
                 <Button.Template>
                     <ControlTemplate TargetType="Button">
                         <Border Background="{TemplateBinding Background}"
@@ -120,8 +128,8 @@
             </Button>
 
 
-            <Button Grid.ColumnSpan="2"
-                    Grid.RowSpan="2"
+            <Button Grid.Column="1"
+                    Grid.Row="0"
                     Content="Empleados"
                     x:Name="empleados"
                     Click="empleados_Click"
@@ -129,9 +137,11 @@
                     FontSize="40"
                     Background="#ff9800"
                     BorderBrush="Transparent"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Bottom"
                     HorizontalContentAlignment="Center"
                     VerticalContentAlignment="Center"
-                    Cursor="Hand">
+                    Cursor="Hand" Margin="0,0,0,10">
                 <Button.Template>
                     <ControlTemplate TargetType="Button">
                         <Border Background="{TemplateBinding Background}"
@@ -144,6 +154,34 @@
                     </ControlTemplate>
                 </Button.Template>
             </Button>
+
+            <Button Grid.Column="1"
+                    Grid.Row="1"
+                    Content="Ventas"
+                    x:Name="ventas"
+                    Click="ventas_Click"
+                    Width="300" Height="150"
+                    FontSize="40"
+                    Background="#ff9800"
+                    BorderBrush="Transparent"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Top"
+                    HorizontalContentAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    Cursor="Hand" Margin="0,10,0,0">
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="20"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                  VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+
 
         </Grid>
     </Grid>
