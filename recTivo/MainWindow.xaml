@@ -9,7 +9,7 @@
         mc:Ignorable="d"
         WindowStyle="None"
         Title="rectivo" 
-        Height="450" Width="800">
+        Height="450" Width="950">
     <Grid Background="#2D2D30">
         <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
             <Grid.ColumnDefinitions>

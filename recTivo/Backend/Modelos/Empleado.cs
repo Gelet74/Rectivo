@@ -32,5 +32,9 @@ public partial class Empleado
     [ForeignKey("IdRol")]
     public virtual Rol? Rol { get; set; }
 
+    [Column("ESTADO")]
+    public string Estado { get; set; } = "activo";
+
+
     public virtual ICollection<Orden> Ordens { get; set; } = new List<Orden>();
 }

@@ -8,6 +8,7 @@
         Background="#2D2D30"
         Title="Pulsa ESC para volver atrás" 
         Cursor="Hand"
+        WindowStartupLocation="CenterScreen"
         Height="450" 
         Width="800">
     <Grid Background="#2D2D30">

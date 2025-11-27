@@ -1,26 +1,22 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\windows10\\Desktop\\2\u00BA DAM\\PROYECTO\\DI\\Rectivo\\",
+  "WorkspaceRootPath": "D:\\gelet\\escritorio\\DI\\Rectivo\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{B3DBAD09-B43C-4DB6-8443-DDFF634DBF98}|recTivo\\recTivo.csproj|c:\\users\\windows10\\desktop\\2\u00BA dam\\proyecto\\di\\rectivo\\rectivo\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
-      "RelativeMoniker": "D:0:0:{B3DBAD09-B43C-4DB6-8443-DDFF634DBF98}|recTivo\\recTivo.csproj|solutionrelative:rectivo\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+      "AbsoluteMoniker": "D:0:0:{B3DBAD09-B43C-4DB6-8443-DDFF634DBF98}|recTivo\\recTivo.csproj|d:\\gelet\\escritorio\\di\\rectivo\\rectivo\\frontend\\dialogos\\empleado\\dialogoempleado.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{B3DBAD09-B43C-4DB6-8443-DDFF634DBF98}|recTivo\\recTivo.csproj|solutionrelative:rectivo\\frontend\\dialogos\\empleado\\dialogoempleado.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{B3DBAD09-B43C-4DB6-8443-DDFF634DBF98}|recTivo\\recTivo.csproj|c:\\users\\windows10\\desktop\\2\u00BA dam\\proyecto\\di\\rectivo\\rectivo\\frontend\\dialogos\\empleado\\dialogoempleado.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{B3DBAD09-B43C-4DB6-8443-DDFF634DBF98}|recTivo\\recTivo.csproj|solutionrelative:rectivo\\frontend\\dialogos\\empleado\\dialogoempleado.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{B3DBAD09-B43C-4DB6-8443-DDFF634DBF98}|recTivo\\recTivo.csproj|d:\\gelet\\escritorio\\di\\rectivo\\rectivo\\frontend\\dialogos\\empleado\\dialogoaltaempleado.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{B3DBAD09-B43C-4DB6-8443-DDFF634DBF98}|recTivo\\recTivo.csproj|solutionrelative:rectivo\\frontend\\dialogos\\empleado\\dialogoaltaempleado.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{B3DBAD09-B43C-4DB6-8443-DDFF634DBF98}|recTivo\\recTivo.csproj|c:\\users\\windows10\\desktop\\2\u00BA dam\\proyecto\\di\\rectivo\\rectivo\\frontend\\dialogos\\empleado\\dialogoconsultaempleado.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{B3DBAD09-B43C-4DB6-8443-DDFF634DBF98}|recTivo\\recTivo.csproj|solutionrelative:rectivo\\frontend\\dialogos\\empleado\\dialogoconsultaempleado.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{B3DBAD09-B43C-4DB6-8443-DDFF634DBF98}|recTivo\\recTivo.csproj|d:\\gelet\\escritorio\\di\\rectivo\\rectivo\\frontend\\dialogos\\almacen\\dialogoalmacen.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B3DBAD09-B43C-4DB6-8443-DDFF634DBF98}|recTivo\\recTivo.csproj|solutionrelative:rectivo\\frontend\\dialogos\\almacen\\dialogoalmacen.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{B3DBAD09-B43C-4DB6-8443-DDFF634DBF98}|recTivo\\recTivo.csproj|c:\\users\\windows10\\desktop\\2\u00BA dam\\proyecto\\di\\rectivo\\rectivo\\frontend\\dialogos\\empleado\\dialogoconsultaempleado.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
-      "RelativeMoniker": "D:0:0:{B3DBAD09-B43C-4DB6-8443-DDFF634DBF98}|recTivo\\recTivo.csproj|solutionrelative:rectivo\\frontend\\dialogos\\empleado\\dialogoconsultaempleado.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{B3DBAD09-B43C-4DB6-8443-DDFF634DBF98}|recTivo\\recTivo.csproj|c:\\users\\windows10\\desktop\\2\u00BA dam\\proyecto\\di\\rectivo\\rectivo\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{B3DBAD09-B43C-4DB6-8443-DDFF634DBF98}|recTivo\\recTivo.csproj|solutionrelative:rectivo\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{B3DBAD09-B43C-4DB6-8443-DDFF634DBF98}|recTivo\\recTivo.csproj|d:\\gelet\\escritorio\\di\\rectivo\\rectivo\\frontend\\dialogos\\empleado\\dialogoaltaempleado.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B3DBAD09-B43C-4DB6-8443-DDFF634DBF98}|recTivo\\recTivo.csproj|solutionrelative:rectivo\\frontend\\dialogos\\empleado\\dialogoaltaempleado.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -30,66 +26,56 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 4,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "MainWindow.xaml.cs",
-              "DocumentMoniker": "C:\\Users\\windows10\\Desktop\\2\u00BA DAM\\PROYECTO\\DI\\Rectivo\\recTivo\\MainWindow.xaml.cs",
-              "RelativeDocumentMoniker": "recTivo\\MainWindow.xaml.cs",
-              "ToolTip": "C:\\Users\\windows10\\Desktop\\2\u00BA DAM\\PROYECTO\\DI\\Rectivo\\recTivo\\MainWindow.xaml.cs",
-              "RelativeToolTip": "recTivo\\MainWindow.xaml.cs",
+              "DocumentIndex": 0,
+              "Title": "DialogoEmpleado.xaml",
+              "DocumentMoniker": "D:\\gelet\\escritorio\\DI\\Rectivo\\recTivo\\Frontend\\Dialogos\\Empleado\\DialogoEmpleado.xaml",
+              "RelativeDocumentMoniker": "recTivo\\Frontend\\Dialogos\\Empleado\\DialogoEmpleado.xaml",
+              "ToolTip": "D:\\gelet\\escritorio\\DI\\Rectivo\\recTivo\\Frontend\\Dialogos\\Empleado\\DialogoEmpleado.xaml",
+              "RelativeToolTip": "recTivo\\Frontend\\Dialogos\\Empleado\\DialogoEmpleado.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-11-27T19:55:19.864Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "DialogoAltaEmpleado.xaml.cs",
+              "DocumentMoniker": "D:\\gelet\\escritorio\\DI\\Rectivo\\recTivo\\Frontend\\Dialogos\\Empleado\\DialogoAltaEmpleado.xaml.cs",
+              "RelativeDocumentMoniker": "recTivo\\Frontend\\Dialogos\\Empleado\\DialogoAltaEmpleado.xaml.cs",
+              "ToolTip": "D:\\gelet\\escritorio\\DI\\Rectivo\\recTivo\\Frontend\\Dialogos\\Empleado\\DialogoAltaEmpleado.xaml.cs",
+              "RelativeToolTip": "recTivo\\Frontend\\Dialogos\\Empleado\\DialogoAltaEmpleado.xaml.cs",
+              "ViewState": "AgIAACkAAAAAAAAAAAAcwD0AAABNAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-27T11:54:41.002Z",
+              "WhenOpened": "2025-11-27T18:32:05.667Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "DialogoConsultaEmpleado.xaml.cs",
-              "DocumentMoniker": "C:\\Users\\windows10\\Desktop\\2\u00BA DAM\\PROYECTO\\DI\\Rectivo\\recTivo\\Frontend\\Dialogos\\Empleado\\DialogoConsultaEmpleado.xaml.cs",
-              "RelativeDocumentMoniker": "recTivo\\Frontend\\Dialogos\\Empleado\\DialogoConsultaEmpleado.xaml.cs",
-              "ToolTip": "C:\\Users\\windows10\\Desktop\\2\u00BA DAM\\PROYECTO\\DI\\Rectivo\\recTivo\\Frontend\\Dialogos\\Empleado\\DialogoConsultaEmpleado.xaml.cs",
-              "RelativeToolTip": "recTivo\\Frontend\\Dialogos\\Empleado\\DialogoConsultaEmpleado.xaml.cs",
-              "ViewState": "AgIAAAQAAAAAAAAAAAAAACgAAAAJAAAAAAAAAA==",
+              "Title": "DialogoAlmacen.xaml.cs",
+              "DocumentMoniker": "D:\\gelet\\escritorio\\DI\\Rectivo\\recTivo\\Frontend\\Dialogos\\Almacen\\DialogoAlmacen.xaml.cs",
+              "RelativeDocumentMoniker": "recTivo\\Frontend\\Dialogos\\Almacen\\DialogoAlmacen.xaml.cs",
+              "ToolTip": "D:\\gelet\\escritorio\\DI\\Rectivo\\recTivo\\Frontend\\Dialogos\\Almacen\\DialogoAlmacen.xaml.cs",
+              "RelativeToolTip": "recTivo\\Frontend\\Dialogos\\Almacen\\DialogoAlmacen.xaml.cs",
+              "ViewState": "AgIAAA8AAAAAAAAAAAAAABwAAAAKAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-27T08:43:12.219Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "DialogoConsultaEmpleado.xaml",
-              "DocumentMoniker": "C:\\Users\\windows10\\Desktop\\2\u00BA DAM\\PROYECTO\\DI\\Rectivo\\recTivo\\Frontend\\Dialogos\\Empleado\\DialogoConsultaEmpleado.xaml",
-              "RelativeDocumentMoniker": "recTivo\\Frontend\\Dialogos\\Empleado\\DialogoConsultaEmpleado.xaml",
-              "ToolTip": "C:\\Users\\windows10\\Desktop\\2\u00BA DAM\\PROYECTO\\DI\\Rectivo\\recTivo\\Frontend\\Dialogos\\Empleado\\DialogoConsultaEmpleado.xaml",
-              "RelativeToolTip": "recTivo\\Frontend\\Dialogos\\Empleado\\DialogoConsultaEmpleado.xaml",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2025-11-27T08:42:12.788Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "DialogoEmpleado.xaml.cs",
-              "DocumentMoniker": "C:\\Users\\windows10\\Desktop\\2\u00BA DAM\\PROYECTO\\DI\\Rectivo\\recTivo\\Frontend\\Dialogos\\Empleado\\DialogoEmpleado.xaml.cs",
-              "RelativeDocumentMoniker": "recTivo\\Frontend\\Dialogos\\Empleado\\DialogoEmpleado.xaml.cs",
-              "ToolTip": "C:\\Users\\windows10\\Desktop\\2\u00BA DAM\\PROYECTO\\DI\\Rectivo\\recTivo\\Frontend\\Dialogos\\Empleado\\DialogoEmpleado.xaml.cs",
-              "RelativeToolTip": "recTivo\\Frontend\\Dialogos\\Empleado\\DialogoEmpleado.xaml.cs",
-              "ViewState": "AgIAABUAAAAAAAAAAAAQwB0AAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-27T08:23:18.94Z",
+              "WhenOpened": "2025-11-27T19:52:03.553Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "MainWindow.xaml",
-              "DocumentMoniker": "C:\\Users\\windows10\\Desktop\\2\u00BA DAM\\PROYECTO\\DI\\Rectivo\\recTivo\\MainWindow.xaml",
-              "RelativeDocumentMoniker": "recTivo\\MainWindow.xaml",
-              "ToolTip": "C:\\Users\\windows10\\Desktop\\2\u00BA DAM\\PROYECTO\\DI\\Rectivo\\recTivo\\MainWindow.xaml",
-              "RelativeToolTip": "recTivo\\MainWindow.xaml",
+              "DocumentIndex": 1,
+              "Title": "DialogoAltaEmpleado.xaml",
+              "DocumentMoniker": "D:\\gelet\\escritorio\\DI\\Rectivo\\recTivo\\Frontend\\Dialogos\\Empleado\\DialogoAltaEmpleado.xaml",
+              "RelativeDocumentMoniker": "recTivo\\Frontend\\Dialogos\\Empleado\\DialogoAltaEmpleado.xaml",
+              "ToolTip": "D:\\gelet\\escritorio\\DI\\Rectivo\\recTivo\\Frontend\\Dialogos\\Empleado\\DialogoAltaEmpleado.xaml",
+              "RelativeToolTip": "recTivo\\Frontend\\Dialogos\\Empleado\\DialogoAltaEmpleado.xaml",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2025-11-20T20:00:02.056Z",
+              "WhenOpened": "2025-11-27T18:31:36.056Z",
               "EditorCaption": ""
             }
           ]

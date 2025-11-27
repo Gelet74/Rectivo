@@ -36,7 +36,9 @@
                       Height="30" 
                       Margin="0,5"
                       DisplayMemberPath="Codigo"
-                      SelectionChanged="cmbCodigo_SelectionChanged"/>
+                      SelectionChanged="cmbCodigo_SelectionChanged"
+                      Width="150"
+                      HorizontalAlignment="Left"/>
 
             <TextBlock Text="Descripción 1:" Foreground="#FF9800"/>
             <ComboBox x:Name="cmbDescrip1" 

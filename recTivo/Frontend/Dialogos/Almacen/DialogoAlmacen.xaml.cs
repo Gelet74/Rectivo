@@ -26,7 +26,7 @@ namespace recTivo.Frontend.Dialogos
 
         private void EntradaAlmacen_Click(object sender, RoutedEventArgs e)
         { 
-              this.Close();
+            this.Close();
             DialogoEntradaAlmacen dialogoEntradaAlmacen = new DialogoEntradaAlmacen();
             dialogoEntradaAlmacen.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             dialogoEntradaAlmacen.ShowDialog();

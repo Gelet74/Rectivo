@@ -48,6 +48,7 @@ namespace recTivo.Frontend.Dialogos
             dialogoAltaEmpleado.ShowDialog();
         }
 
+
         private void baja_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
