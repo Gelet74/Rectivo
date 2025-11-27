@@ -13,6 +13,7 @@
     <None Remove="Recursos\Iconos\rectivo_icon.png" />
     <None Remove="Recursos\Iconos\rectivo_logo.png" />
     <None Remove="Recursos\Iconos\rectivo_logo_fondo.png" />
+    <None Remove="Recursos\Iconos\rectivo_logo_sintexto.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -38,6 +39,7 @@
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Recursos\Iconos\rectivo_logo_fondo.png" />
+    <Resource Include="Recursos\Iconos\rectivo_logo_sintexto.png" />
   </ItemGroup>
 
 </Project>

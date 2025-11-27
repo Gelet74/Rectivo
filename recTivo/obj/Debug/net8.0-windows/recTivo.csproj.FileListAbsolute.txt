@@ -398,12 +398,6 @@ C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-
 C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\recTivo.pdb
 C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\recTivo.genruntimeconfig.cache
 C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\ref\recTivo.dll
-C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\DialogoAlmacen.g.cs
-C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\DialogoEntradaAlmacen.g.cs
-C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\DialogoSalidaAlmacen.g.cs
-C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\DialogoAlmacen.baml
-C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\DialogoEntradaAlmacen.baml
-C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\DialogoSalidaAlmacen.baml
 D:\gelet\escritorio\DI\recTivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\DialogoAlmacen.g.cs
 D:\gelet\escritorio\DI\recTivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\DialogoEntradaAlmacen.g.cs
 D:\gelet\escritorio\DI\recTivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\DialogoSalidaAlmacen.g.cs
@@ -415,3 +409,19 @@ C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-
 C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\Frontend\Mensajes\VentanaMensaje.g.cs
 C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\Frontend\Mensajes\MensajeDialogo.baml
 C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\Frontend\Mensajes\VentanaMensaje.baml
+C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\Almacen\DialogoEntradaAlmacen.baml
+C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\Almacen\DialogoAlmacen.g.cs
+C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\Almacen\DialogoEntradaAlmacen.g.cs
+C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\Almacen\DialogoSalidaAlmacen.g.cs
+C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\Empleado\DialogoAltaEmpleado.g.cs
+C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\Empleado\DialogoEmpleado.g.cs
+C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\Almacen\DialogoAlmacen.baml
+C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\Almacen\DialogoSalidaAlmacen.baml
+C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\Empleado\DialogoAltaEmpleado.baml
+C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\Empleado\DialogoEmpleado.baml
+C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\Empleado\DialogoBajaEmpleado.g.cs
+C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\Empleado\DialogoConsultaEmpleado.g.cs
+C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\Empleado\DialogoModificarEmpleado.g.cs
+C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\Empleado\DialogoBajaEmpleado.baml
+C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\Empleado\DialogoConsultaEmpleado.baml
+C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\Empleado\DialogoModificarEmpleado.baml

@@ -43,5 +43,11 @@ namespace recTivo
         {
 
         }
+
+        private void empleados_Click(object sender, RoutedEventArgs e)
+        {
+            DialogoEmpleado dialogoEmpleado = new DialogoEmpleado();
+            dialogoEmpleado.ShowDialog();
+        }
     }
 }

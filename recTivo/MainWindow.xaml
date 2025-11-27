@@ -30,7 +30,7 @@
                     BorderBrush="Transparent"
                     HorizontalContentAlignment="Center"
                     VerticalContentAlignment="Center"
-                    Cursor="Hand">
+                    Cursor="Hand" Margin="-20,0,310,0">
                 <Button.Template>
                     <ControlTemplate TargetType="Button">
                         <Border Background="{TemplateBinding Background}"
@@ -44,19 +44,18 @@
                 </Button.Template>
             </Button>
 
-            <Button Grid.Row="0" Grid.Column="1"
+            <Button Grid.Column="1"
                     x:Name="ordenes"
                     Click="Ordenes_Click"
                     Content="Órdenes"
                     FontSize="40"
                     Width="300"
                     Height="150"
-                    Margin="20"
                     Background="#ff9800"
                     BorderBrush="Transparent"
                     HorizontalContentAlignment="Center"
                     VerticalContentAlignment="Center"
-                    Cursor="Hand">
+                    Cursor="Hand" Margin="20,0,-20,0">
                 <Button.Template>
                     <ControlTemplate TargetType="Button">
                         <Border Background="{TemplateBinding Background}"
@@ -81,7 +80,7 @@
                     BorderBrush="Transparent"
                     HorizontalContentAlignment="Center"
                     VerticalContentAlignment="Center"
-                    Cursor="Hand">
+                    Cursor="Hand" Margin="-20,20,310,-20">
                 <Button.Template>
                     <ControlTemplate TargetType="Button">
                         <Border Background="{TemplateBinding Background}"
@@ -106,7 +105,7 @@
                     BorderBrush="Transparent"
                     HorizontalContentAlignment="Center"
                     VerticalContentAlignment="Center"
-        Cursor="Hand">
+        Cursor="Hand" Margin="20,20,-20,-20">
                 <Button.Template>
                     <ControlTemplate TargetType="Button">
                         <Border Background="{TemplateBinding Background}"
@@ -119,6 +118,33 @@
                     </ControlTemplate>
                 </Button.Template>
             </Button>
+
+
+            <Button Grid.ColumnSpan="2"
+                    Grid.RowSpan="2"
+                    Content="Empleados"
+                    x:Name="empleados"
+                    Click="empleados_Click"
+                    Width="300" Height="150"
+                    FontSize="40"
+                    Background="#ff9800"
+                    BorderBrush="Transparent"
+                    HorizontalContentAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    Cursor="Hand">
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="20"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                  VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+
         </Grid>
     </Grid>
 </mah:MetroWindow>

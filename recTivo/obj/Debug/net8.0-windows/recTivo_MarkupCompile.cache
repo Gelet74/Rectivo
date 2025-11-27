@@ -10,11 +10,11 @@ none
 false
 TRACE;DEBUG;NET;NET8_0;NETCOREAPP;WINDOWS;WINDOWS7_0;NET5_0_OR_GREATER;NET6_0_OR_GREATER;NET7_0_OR_GREATER;NET8_0_OR_GREATER;NETCOREAPP3_0_OR_GREATER;NETCOREAPP3_1_OR_GREATER;WINDOWS7_0_OR_GREATER
 C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\App.xaml
-8-221998284
+13-1149591888
 
-351497135066
+40-1295097680
 2321236926000
-Frontend\Dialogos\DialogoAlmacen.xaml;Frontend\Dialogos\DialogoEntradaAlmacen.xaml;Frontend\Dialogos\DialogoSalidaAlmacen.xaml;Frontend\Dialogos\Inicio.xaml;Frontend\Dialogos\Login.xaml;Frontend\Mensajes\MensajeDialogo.xaml;Frontend\Mensajes\VentanaMensaje.xaml;MainWindow.xaml;
+Frontend\Dialogos\Almacen\DialogoAlmacen.xaml;Frontend\Dialogos\Almacen\DialogoEntradaAlmacen.xaml;Frontend\Dialogos\Almacen\DialogoSalidaAlmacen.xaml;Frontend\Dialogos\Empleado\DialogoAltaEmpleado.xaml;Frontend\Dialogos\Empleado\DialogoBajaEmpleado.xaml;Frontend\Dialogos\Empleado\DialogoConsultaEmpleado.xaml;Frontend\Dialogos\Empleado\DialogoEmpleado.xaml;Frontend\Dialogos\Empleado\DialogoModificarEmpleado.xaml;Frontend\Dialogos\Inicio.xaml;Frontend\Dialogos\Login.xaml;Frontend\Mensajes\MensajeDialogo.xaml;Frontend\Mensajes\VentanaMensaje.xaml;MainWindow.xaml;
 
 False
 

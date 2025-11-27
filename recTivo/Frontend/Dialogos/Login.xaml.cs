@@ -26,7 +26,7 @@ namespace recTivo.Frontend.Dialogos
 
             // Logger opcional
             var loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
-            var logger = loggerFactory.CreateLogger<GenericRepository<Empleado>>();
+            var logger = loggerFactory.CreateLogger<GenericRepository<recTivo.Backend.Modelos.Empleado>>();
 
             // Crear repositorio
             _empleadoRepository = new EmpleadoRepository(context, logger);
