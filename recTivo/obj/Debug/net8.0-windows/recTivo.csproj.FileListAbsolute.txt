@@ -243,16 +243,10 @@ D:\gelet\escritorio\DI\recTivo\recTivo\bin\Debug\net8.0-windows\runtimes\win-x64
 D:\gelet\escritorio\DI\recTivo\recTivo\bin\Debug\net8.0-windows\runtimes\win-x64\native\krb5_64.dll
 D:\gelet\escritorio\DI\recTivo\recTivo\bin\Debug\net8.0-windows\runtimes\win-x64\native\krbcc64.dll
 D:\gelet\escritorio\DI\recTivo\recTivo\obj\Debug\net8.0-windows\recTivo.csproj.AssemblyReference.cache
-D:\gelet\escritorio\DI\recTivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\Inicio.g.cs
-D:\gelet\escritorio\DI\recTivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\Login.g.cs
-D:\gelet\escritorio\DI\recTivo\recTivo\obj\Debug\net8.0-windows\MainWindow.g.cs
 D:\gelet\escritorio\DI\recTivo\recTivo\obj\Debug\net8.0-windows\App.g.cs
 D:\gelet\escritorio\DI\recTivo\recTivo\obj\Debug\net8.0-windows\recTivo_MarkupCompile.cache
 D:\gelet\escritorio\DI\recTivo\recTivo\obj\Debug\net8.0-windows\recTivo_MarkupCompile.lref
 D:\gelet\escritorio\DI\recTivo\recTivo\obj\Debug\net8.0-windows\App.baml
-D:\gelet\escritorio\DI\recTivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\Inicio.baml
-D:\gelet\escritorio\DI\recTivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\Login.baml
-D:\gelet\escritorio\DI\recTivo\recTivo\obj\Debug\net8.0-windows\MainWindow.baml
 D:\gelet\escritorio\DI\recTivo\recTivo\obj\Debug\net8.0-windows\recTivo.g.resources
 D:\gelet\escritorio\DI\recTivo\recTivo\obj\Debug\net8.0-windows\recTivo.GeneratedMSBuildEditorConfig.editorconfig
 D:\gelet\escritorio\DI\recTivo\recTivo\obj\Debug\net8.0-windows\recTivo.AssemblyInfoInputs.cache
@@ -439,3 +433,9 @@ D:\gelet\escritorio\DI\recTivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogo
 D:\gelet\escritorio\DI\recTivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\Empleado\DialogoModificarEmpleado.baml
 D:\gelet\escritorio\DI\recTivo\recTivo\obj\Debug\net8.0-windows\Frontend\Mensajes\MensajeDialogo.baml
 D:\gelet\escritorio\DI\recTivo\recTivo\obj\Debug\net8.0-windows\Frontend\Mensajes\VentanaMensaje.baml
+D:\gelet\escritorio\DI\recTivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\VentanasInicio\Inicio.g.cs
+D:\gelet\escritorio\DI\recTivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\VentanasInicio\Login.g.cs
+D:\gelet\escritorio\DI\recTivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\VentanasInicio\MainWindow.g.cs
+D:\gelet\escritorio\DI\recTivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\VentanasInicio\Inicio.baml
+D:\gelet\escritorio\DI\recTivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\VentanasInicio\Login.baml
+D:\gelet\escritorio\DI\recTivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\VentanasInicio\MainWindow.baml

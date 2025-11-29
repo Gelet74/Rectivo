@@ -26,10 +26,10 @@
     <Compile Update="Frontend\Dialogos\Empleado\DialogoModificarEmpleado.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Frontend\Dialogos\Inicio.xaml.cs">
+    <Compile Update="Frontend\Dialogos\VentanasInicio\Inicio.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Frontend\Dialogos\Login.xaml.cs">
+    <Compile Update="Frontend\Dialogos\VentanasInicio\Login.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>

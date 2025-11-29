@@ -9,15 +9,27 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Frontend\ControlUsuario\**" />
+    <EmbeddedResource Remove="Frontend\ControlUsuario\**" />
+    <None Remove="Frontend\ControlUsuario\**" />
+    <Page Remove="Frontend\ControlUsuario\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Recursos\Iconos\Almacen.png" />
+    <None Remove="Recursos\Iconos\Articulos.png" />
+    <None Remove="Recursos\Iconos\Clientes.png" />
+    <None Remove="Recursos\Iconos\Empleado.png" />
+    <None Remove="Recursos\Iconos\Ordenes.png" />
     <None Remove="Recursos\Iconos\Rectivo.jpg" />
     <None Remove="Recursos\Iconos\rectivo_icon.png" />
     <None Remove="Recursos\Iconos\rectivo_logo.png" />
     <None Remove="Recursos\Iconos\rectivo_logo_fondo.png" />
     <None Remove="Recursos\Iconos\rectivo_logo_sintexto.png" />
+    <None Remove="Recursos\Iconos\Ventas.png" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Frontend\ControlUsuario\" />
     <Folder Include="Recursos\Imagenes\" />
   </ItemGroup>
 
@@ -33,6 +45,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Recursos\Iconos\Almacen.png" />
+    <Resource Include="Recursos\Iconos\Articulos.png" />
+    <Resource Include="Recursos\Iconos\Clientes.png" />
+    <Resource Include="Recursos\Iconos\Empleado.png" />
+    <Resource Include="Recursos\Iconos\Ordenes.png" />
     <Resource Include="Recursos\Iconos\Rectivo.jpg" />
     <Resource Include="Recursos\Iconos\rectivo_icon.png" />
     <Resource Include="Recursos\Iconos\rectivo_logo.png">
@@ -40,6 +57,7 @@
     </Resource>
     <Resource Include="Recursos\Iconos\rectivo_logo_fondo.png" />
     <Resource Include="Recursos\Iconos\rectivo_logo_sintexto.png" />
+    <Resource Include="Recursos\Iconos\Ventas.png" />
   </ItemGroup>
 
 </Project>
