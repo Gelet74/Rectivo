@@ -30,6 +30,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Frontend\Dialogos\Clientes\" />
+    <Folder Include="Frontend\Dialogos\Articulos\" />
+    <Folder Include="Frontend\Dialogos\Ventas\" />
+    <Folder Include="Frontend\Dialogos\Ordenes\" />
     <Folder Include="Recursos\Imagenes\" />
   </ItemGroup>
 
