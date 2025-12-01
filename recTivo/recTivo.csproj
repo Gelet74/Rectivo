@@ -20,6 +20,7 @@
     <None Remove="Recursos\Iconos\Articulos.png" />
     <None Remove="Recursos\Iconos\Clientes.png" />
     <None Remove="Recursos\Iconos\Empleado.png" />
+    <None Remove="Recursos\Iconos\error.jpg" />
     <None Remove="Recursos\Iconos\Ordenes.png" />
     <None Remove="Recursos\Iconos\Rectivo.jpg" />
     <None Remove="Recursos\Iconos\rectivo_icon.png" />
@@ -27,13 +28,10 @@
     <None Remove="Recursos\Iconos\rectivo_logo_fondo.png" />
     <None Remove="Recursos\Iconos\rectivo_logo_sintexto.png" />
     <None Remove="Recursos\Iconos\Ventas.png" />
+    <None Remove="Recursos\Iconos\warning.jpg" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Frontend\Dialogos\Clientes\" />
-    <Folder Include="Frontend\Dialogos\Articulos\" />
-    <Folder Include="Frontend\Dialogos\Ventas\" />
-    <Folder Include="Frontend\Dialogos\Ordenes\" />
     <Folder Include="Recursos\Imagenes\" />
   </ItemGroup>
 
@@ -53,6 +51,7 @@
     <Resource Include="Recursos\Iconos\Articulos.png" />
     <Resource Include="Recursos\Iconos\Clientes.png" />
     <Resource Include="Recursos\Iconos\Empleado.png" />
+    <Resource Include="Recursos\Iconos\error.jpg" />
     <Resource Include="Recursos\Iconos\Ordenes.png" />
     <Resource Include="Recursos\Iconos\Rectivo.jpg" />
     <Resource Include="Recursos\Iconos\rectivo_icon.png" />
@@ -62,6 +61,7 @@
     <Resource Include="Recursos\Iconos\rectivo_logo_fondo.png" />
     <Resource Include="Recursos\Iconos\rectivo_logo_sintexto.png" />
     <Resource Include="Recursos\Iconos\Ventas.png" />
+    <Resource Include="Recursos\Iconos\warning.jpg" />
   </ItemGroup>
 
 </Project>

@@ -5,6 +5,12 @@
     <Compile Update="Frontend\Dialogos\Almacen\DialogoAlmacen.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Frontend\Dialogos\Articulos\DialogoArticulos.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Frontend\Dialogos\Clientes\DialogoClientes.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Frontend\Dialogos\Empleado\DialogoAltaEmpleado.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -26,10 +32,16 @@
     <Compile Update="Frontend\Dialogos\Empleado\DialogoModificarEmpleado.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Frontend\Dialogos\Ordenes\DialogoOrdenes.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Frontend\Dialogos\VentanasInicio\Inicio.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Frontend\Dialogos\VentanasInicio\Login.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Frontend\Dialogos\Ventas\DialogoVentas.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>

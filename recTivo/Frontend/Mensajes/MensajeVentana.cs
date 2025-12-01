@@ -95,7 +95,7 @@ namespace di.proyecto.clase._2025.Frontend.Mensajes
             try
             {
                 // Ajusta la ruta según tu estructura de proyecto
-                var uri = new Uri($"pack://application:,,,/Recursos/Imagenes/{nombreIcono}.jpg",
+                var uri = new Uri($"pack://application:,,,/Recursos/Iconos/{nombreIcono}.jpg",
                     UriKind.RelativeOrAbsolute);
                 imagen = new BitmapImage(uri);
             }

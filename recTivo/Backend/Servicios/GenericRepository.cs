@@ -1,7 +1,8 @@
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace recTivo.Backend.Repos
 {
@@ -53,6 +54,21 @@ namespace recTivo.Backend.Repos
         {
             _logger?.LogInformation("Eliminando {Entity}", typeof(T).Name);
             _dbSet.Remove(entity);
+        }
+
+        public IQueryable<T> Query(bool asNoTracking = false, params Expression<Func<T, object>>[] includes)
+        {
+            IQueryable<T> query = asNoTracking ? _context.Set<T>().AsNoTracking() : _context.Set<T>();
+
+            if (includes != null)
+            {
+                foreach (var include in includes)
+                {
+                    query = query.Include(include);
+                }
+            }
+
+            return query;
         }
 
         public virtual Task<int> SaveChangesAsync()

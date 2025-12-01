@@ -1,5 +1,6 @@
 ﻿using MahApps.Metro.Controls;
 using recTivo.Frontend.Dialogos;
+using recTivo.Frontend.Dialogos.Articulos;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -25,7 +26,8 @@ namespace recTivo
 
         private void Articulos_Click(object sender, RoutedEventArgs e)
         {
-
+            DialogoArticulos dialogoArticulos = new DialogoArticulos();
+            dialogoArticulos.ShowDialog();
         }
 
         private void Clientes_Click(object sender, RoutedEventArgs e)

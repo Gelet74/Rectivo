@@ -4,7 +4,6 @@ using Microsoft.Extensions.Logging;
 using recTivo.Backend.Modelos;
 using recTivo.Backend.Repos;
 using System.Windows;
-using Microsoft.EntityFrameworkCore.SqlServer;
 using di.proyecto.clase._2025.Frontend.Mensajes;
 
 namespace recTivo.Frontend.Dialogos
@@ -21,12 +20,12 @@ namespace recTivo.Frontend.Dialogos
             var optionsBuilder = new DbContextOptionsBuilder<RectivoContext>();
             optionsBuilder.UseMySQL("server=localhost;database=recTivoDB;user=root;password=tuPassword;");
 
-
             var context = new RectivoContext(optionsBuilder.Options);
 
             // Logger opcional
             var loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
             var logger = loggerFactory.CreateLogger<GenericRepository<recTivo.Backend.Modelos.Empleado>>();
+
 
             // Crear repositorio
             _empleadoRepository = new EmpleadoRepository(context, logger);
@@ -63,7 +62,6 @@ namespace recTivo.Frontend.Dialogos
                 }
             }
         }
-
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             txtUsuario.Focus();

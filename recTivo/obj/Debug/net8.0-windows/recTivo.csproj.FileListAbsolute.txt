@@ -370,16 +370,10 @@ C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\bin\Debug\net8.0-
 C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\bin\Debug\net8.0-windows\runtimes\win-x64\native\krb5_64.dll
 C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\bin\Debug\net8.0-windows\runtimes\win-x64\native\krbcc64.dll
 C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\recTivo.csproj.AssemblyReference.cache
-C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\Inicio.g.cs
-C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\Login.g.cs
-C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\MainWindow.g.cs
 C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\App.g.cs
 C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\recTivo_MarkupCompile.cache
 C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\recTivo_MarkupCompile.lref
 C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\App.baml
-C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\Inicio.baml
-C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\Login.baml
-C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\MainWindow.baml
 C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\recTivo.g.resources
 C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\recTivo.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\recTivo.AssemblyInfoInputs.cache
@@ -393,9 +387,7 @@ C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-
 C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\recTivo.genruntimeconfig.cache
 C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\ref\recTivo.dll
 D:\gelet\escritorio\DI\recTivo\recTivo\obj\Debug\net8.0-windows\recTivo.sourcelink.json
-C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\Frontend\Mensajes\MensajeDialogo.g.cs
 C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\Frontend\Mensajes\VentanaMensaje.g.cs
-C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\Frontend\Mensajes\MensajeDialogo.baml
 C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\Frontend\Mensajes\VentanaMensaje.baml
 C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\Almacen\DialogoEntradaAlmacen.baml
 C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\Almacen\DialogoAlmacen.g.cs
@@ -439,3 +431,17 @@ D:\gelet\escritorio\DI\recTivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogo
 D:\gelet\escritorio\DI\recTivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\VentanasInicio\Inicio.baml
 D:\gelet\escritorio\DI\recTivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\VentanasInicio\Login.baml
 D:\gelet\escritorio\DI\recTivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\VentanasInicio\MainWindow.baml
+C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\VentanasInicio\Inicio.g.cs
+C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\VentanasInicio\Login.g.cs
+C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\VentanasInicio\MainWindow.g.cs
+C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\VentanasInicio\Inicio.baml
+C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\VentanasInicio\Login.baml
+C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\VentanasInicio\MainWindow.baml
+C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\Articulos\DialogoArticulos.g.cs
+C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\Clientes\DialogoClientes.g.cs
+C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\Ordenes\DialogoOrdenes.g.cs
+C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\Ventas\DialogoVentas.g.cs
+C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\Articulos\DialogoArticulos.baml
+C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\Clientes\DialogoClientes.baml
+C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\Ordenes\DialogoOrdenes.baml
+C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\Ventas\DialogoVentas.baml
