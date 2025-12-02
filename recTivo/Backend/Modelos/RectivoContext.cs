@@ -33,7 +33,9 @@ namespace recTivo.Backend.Modelos
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // Configuración de Orden
+            // ===========================
+            // CONFIGURACIÓN DE ORDEN
+            // ===========================
             modelBuilder.Entity<Orden>(entity =>
             {
                 entity.HasKey(e => e.IdOrden).HasName("PRIMARY");
@@ -45,12 +47,8 @@ namespace recTivo.Backend.Modelos
 
                 entity.Property(e => e.IdOrden).HasColumnName("ID_ORDEN");
                 entity.Property(e => e.Cantidad).HasColumnName("CANTIDAD");
-                entity.Property(e => e.Codigo)
-                    .HasMaxLength(10)
-                    .HasColumnName("CODIGO");
-                entity.Property(e => e.FechaFin)
-                    .HasColumnType("date")
-                    .HasColumnName("FECHA_FIN");
+                entity.Property(e => e.Codigo).HasMaxLength(10).HasColumnName("CODIGO");
+                entity.Property(e => e.FechaFin).HasColumnType("date").HasColumnName("FECHA_FIN");
                 entity.Property(e => e.IdArticulo).HasColumnName("ID_ARTICULO");
                 entity.Property(e => e.IdEmpleado).HasColumnName("ID_EMPLEADO");
 
@@ -67,14 +65,19 @@ namespace recTivo.Backend.Modelos
                     .HasConstraintName("orden_ibfk_1");
             });
 
+            // ===========================
+            // CONFIGURACIÓN DE EMPLEADO
+            // ===========================
             modelBuilder.Entity<Empleado>().ToTable("empleado");
+
             modelBuilder.Entity<Empleado>()
                         .HasOne(e => e.Rol)
                         .WithMany(r => r.Empleados)
                         .HasForeignKey(e => e.IdRol);
 
-
-            // Configuración de ClienteHasArticulo (clave compuesta + relaciones)
+            // ===========================
+            // CONFIGURACIÓN DE CLIENTE_HAS_ARTICULO
+            // ===========================
             modelBuilder.Entity<ClienteHasArticulo>(entity =>
             {
                 entity.HasKey(e => new { e.ClienteIdcliente, e.ArticuloIdArticulo });
@@ -91,9 +94,55 @@ namespace recTivo.Backend.Modelos
                     .HasForeignKey(e => e.ArticuloIdArticulo);
             });
 
+
+            // ===========================
+            // CONFIGURACIÓN DE ESCANDALLO (NUEVO)
+            // ===========================
+            modelBuilder.Entity<Escandallo>(entity =>
+            {
+                entity.ToTable("escandallo");
+
+                entity.HasKey(e => e.IdEscandallo);
+
+                entity.Property(e => e.IdEscandallo).HasColumnName("IdEscandallo");
+                entity.Property(e => e.CodigoProducto).HasMaxLength(10).HasColumnName("CodigoProducto");
+                entity.Property(e => e.NombreProducto).HasMaxLength(50).HasColumnName("NombreProducto");
+                entity.Property(e => e.Descripcion2).HasMaxLength(50).HasColumnName("Descripcion2");
+            });
+
+
+            // ===========================
+            // CONFIGURACIÓN DE COMPONENTE ESCANDALLO (NUEVO)
+            // ===========================
+            modelBuilder.Entity<ComponenteEscandallo>(entity =>
+            {
+                entity.ToTable("componenteescandallo");
+
+                entity.HasKey(e => e.IdComponente);
+
+                entity.Property(e => e.IdComponente).HasColumnName("IdComponente");
+                entity.Property(e => e.IdEscandallo).HasColumnName("IdEscandallo");
+                entity.Property(e => e.CodigoArticulo).HasMaxLength(10).HasColumnName("CodigoArticulo");
+                entity.Property(e => e.Descripcion).HasMaxLength(50).HasColumnName("Descripcion");
+                entity.Property(e => e.Descripcion2).HasMaxLength(50).HasColumnName("Descripcion2");
+                entity.Property(e => e.Cantidad).HasColumnName("Cantidad");
+                entity.Property(e => e.PrecioUnitario).HasColumnType("decimal(10,2)").HasColumnName("PrecioUnitario");
+
+                entity.HasOne(e => e.Escandallo)
+                    .WithMany(p => p.Componentes)
+                    .HasForeignKey(e => e.IdEscandallo)
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .HasConstraintName("fk_componenteescandallo_escandallo");
+            });
+
+
             OnModelCreatingPartial(modelBuilder);
         }
-    
+
+        public virtual DbSet<Escandallo> Escandallos { get; set; } = null!;
+        public virtual DbSet<ComponenteEscandallo> ComponenteEscandallos { get; set; } = null!;
+
+
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
     }

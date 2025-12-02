@@ -46,7 +46,10 @@ namespace recTivo
             services.AddScoped<IRepository<Empleado>, EmpleadoRepository>();
             services.AddScoped<IRepository<Cliente>, ClienteRepository>();
             services.AddScoped<IRepository<Orden>, OrdenRepository>();
-           
+            services.AddScoped<IRepository<Escandallo>, EscandalloRepository>();
+            services.AddScoped<EscandalloRepository>();
+
+
 
             services.AddScoped<ArticuloRepository>();
             services.AddScoped<EmpleadoRepository>();
