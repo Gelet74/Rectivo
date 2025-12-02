@@ -18,7 +18,7 @@
 
     <Grid>
         <!-- Logo centrado -->
-        <Image Source="/Recursos/Iconos/rectivo_logo_sintexto.png"
+        <Image Source="/Recursos/Iconos/rectivo_logo_fondo.png"
                Width="250"
                Height="250"
                VerticalAlignment="Center"
@@ -36,10 +36,10 @@
                                      From="0" To="2"
                                      Duration="0:0:4"/>
                             <DoubleAnimation Storyboard.TargetProperty="RenderTransform.ScaleX"
-                                     From="0.2" To="2"
+                                     From="0.2" To="3.8"
                                      Duration="0:0:4"/>
                             <DoubleAnimation Storyboard.TargetProperty="RenderTransform.ScaleY"
-                                     From="0.2" To="2"
+                                     From="0.2" To="3.8"
                                      Duration="0:0:4"/>
                         </Storyboard>
                     </BeginStoryboard>
