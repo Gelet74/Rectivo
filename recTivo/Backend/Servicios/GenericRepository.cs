@@ -76,5 +76,34 @@ namespace recTivo.Backend.Repos
             _logger?.LogInformation("Guardando cambios en {Entity}", typeof(T).Name);
             return _context.SaveChangesAsync();
         }
+        public virtual async Task UpdateAsync(T entity)
+        {
+            Update(entity);
+            await SaveChangesAsync();
+        }
+        public virtual async Task DeleteAsync(int id)
+        {
+            var entity = await GetByIdAsync(id);
+            if (entity != null)
+            {
+                Remove(entity);
+                await SaveChangesAsync();
+            }
+        }
+        public virtual async Task AddAsync(T[] entities)
+        {
+            await _dbSet.AddRangeAsync(entities);
+            await SaveChangesAsync();
+        }
+        public virtual async Task DeleteAsync(object key)
+        {
+            var entity = await GetByIdAsync(key);
+            if (entity != null)
+            {
+                Remove(entity);
+                await SaveChangesAsync();
+            }
+        }
+
     }
 }

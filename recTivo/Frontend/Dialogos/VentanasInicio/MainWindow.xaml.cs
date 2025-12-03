@@ -56,5 +56,10 @@ namespace recTivo
         {
 
         }
+
+        private void salir_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
     }
 }
