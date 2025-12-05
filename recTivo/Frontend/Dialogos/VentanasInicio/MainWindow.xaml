@@ -34,7 +34,7 @@
                    Height="40"
                    VerticalAlignment="Center"
                    HorizontalAlignment="Left"
-                   Margin="40,10,0,0"/>
+                   Margin="45,10,0,0"/>
 
             <TextBlock Grid.Row="1"
                        Text="recTivo" 
@@ -42,7 +42,7 @@
                        FontWeight="Bold" 
                        Foreground="#ff9800"
                        HorizontalAlignment="Left" 
-                       Margin="20,0,5,0"
+                       Margin="30,0,5,0"
                        VerticalAlignment="Center"/>
 
             <Separator Grid.Row="2"
@@ -52,11 +52,10 @@
                        Width="150"
                        Height="8"
                        HorizontalAlignment="Left"/>            
-            <Expander 
-                      HorizontalAlignment="Left"
+            <Expander HorizontalAlignment="Left"
                       Grid.Row="3"
                       IsExpanded="False"
-                      Width="160"
+                      Width="170"
                       Style="{StaticResource MaterialDesignExpander}"
                       Foreground="White"
                       Background="#ff9800" Cursor="Hand">
@@ -74,7 +73,9 @@
                                    FontWeight="Bold"/>
                     </StackPanel>
                 </Expander.Header>
-                <ListView Style="{StaticResource MaterialDesignListView}"
+                <ListView x:Name="almacen"
+                          SelectionChanged="almacen_SelectionChanged"
+                          Style="{StaticResource MaterialDesignListView}"
                           Foreground="White"
                           ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                     <ListViewItem Content="Entradas almacén" Padding="20 5"/>
@@ -85,7 +86,7 @@
             <Expander HorizontalAlignment="Left"
                       Grid.Row="4"
                       IsExpanded="False"
-                      Width="160"
+                      Width="170"
                       Style="{StaticResource MaterialDesignExpander}"
                       Foreground="White"
                       Background="#ff9800" Cursor="Hand">
@@ -116,7 +117,7 @@
             <Expander HorizontalAlignment="Left"
                       Grid.Row="5"
                       IsExpanded="False"
-                      Width="160"
+                      Width="170"
                       Style="{StaticResource MaterialDesignExpander}"
                       Foreground="White"
                       Background="#ff9800" Cursor="Hand">
@@ -147,7 +148,7 @@
             <Expander HorizontalAlignment="Left"
                       Grid.Row="6"
                       IsExpanded="False"
-                      Width="160"
+                      Width="170"
                       Style="{StaticResource MaterialDesignExpander}"
                       Foreground="White"
                       Background="#ff9800" Cursor="Hand">
@@ -165,9 +166,11 @@
                                    FontWeight="Bold"/>
                     </StackPanel>
                 </Expander.Header>
-                <ListView Style="{StaticResource MaterialDesignListView}"
-  Foreground="White"
-  ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                <ListView x:Name="empleados"
+                     SelectionChanged="empleados_SelectionChanged"
+                    Style="{StaticResource MaterialDesignListView}"
+                    Foreground="White"
+                    ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                     <ListViewItem Content="Dar de alta" Padding="20 5"/>
                     <ListViewItem Content="Dar de baja" Padding="20 5"/>
                     <ListViewItem Content="Modificar" Padding="20 5"/>
@@ -178,7 +181,7 @@
             <Expander HorizontalAlignment="Left"
                       Grid.Row="7"
                       IsExpanded="False"
-                      Width="160"
+                      Width="170"
                       Style="{StaticResource MaterialDesignExpander}"
                       Foreground="White"
                       Background="#ff9800" Cursor="Hand">
@@ -208,7 +211,7 @@
             <Expander HorizontalAlignment="Left"
                       Grid.Row="8"
                       IsExpanded="False"
-                      Width="160"
+                      Width="170"
                       Style="{StaticResource MaterialDesignExpander}"
                       Foreground="White"
                       Background="#ff9800" Cursor="Hand">

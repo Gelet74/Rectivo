@@ -1,6 +1,6 @@
 ﻿using MahApps.Metro.Controls;
 using recTivo.Frontend.Dialogos;
-using recTivo.Frontend.Dialogos.Articulos;
+using recTivo.Frontend.Dialogos.Empleado;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -24,38 +24,58 @@ namespace recTivo
             InitializeComponent();
         }
 
-        private void Articulos_Click(object sender, RoutedEventArgs e)
+        private void almacen_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            DialogoArticulos dialogoArticulos = new DialogoArticulos();
-            dialogoArticulos.ShowDialog();
+            if (almacen.SelectedItem is not ListViewItem item)
+                return;
+
+            string opcion = item.Content.ToString();
+
+            switch (opcion)
+            {
+                case "Entradas almacén":
+                    new DialogoEntradaAlmacen { Owner = this }.ShowDialog();
+                    break;
+
+                case "Salidas almacén":
+                    new DialogoSalidaAlmacen { Owner = this }.ShowDialog();
+                    break;
+            }
+
+            almacen.SelectedItem = null;
         }
 
-        private void Clientes_Click(object sender, RoutedEventArgs e)
+        private void empleados_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (empleados.SelectedItem is not ListViewItem item)
+                return;
 
+            string opcion = item.Content.ToString();
+
+            switch (opcion)
+            {
+                case "Dar de alta":
+                    new DialogoAltaEmpleado { Owner = this }.ShowDialog();
+                    break;
+
+                case "Dar de baja":
+                    new DialogoBajaEmpleado { Owner = this }.ShowDialog();
+                    break;
+                case "Modificar":
+                    new DialogoModificarEmpleado { Owner = this }.ShowDialog();
+                    break;
+
+                case "Listar empleados":
+                    new DialogoConsultaEmpleado { Owner = this }.ShowDialog();
+                    break;
+
+            }
+
+            almacen.SelectedItem = null;
         }
 
-        private void Almacen_Click(object sender, RoutedEventArgs e)
-        {
-            DialogoAlmacen dialogoAlmacen = new DialogoAlmacen();
-            dialogoAlmacen.ShowDialog();
-        }
 
-        private void Ordenes_Click(object sender, RoutedEventArgs e)
-        {
 
-        }
-
-        private void empleados_Click(object sender, RoutedEventArgs e)
-        {
-            DialogoEmpleado dialogoEmpleado = new DialogoEmpleado();
-            dialogoEmpleado.ShowDialog();
-        }
-
-        private void ventas_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
 
         private void salir_Click(object sender, RoutedEventArgs e)
         {

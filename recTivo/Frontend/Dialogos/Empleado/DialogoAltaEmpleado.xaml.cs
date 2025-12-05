@@ -59,7 +59,7 @@ namespace recTivo.Frontend.Dialogos.Empleado
                     string.IsNullOrWhiteSpace(txtPassword.Text) ||
                     cmbRol.SelectedValue == null)
                 {
-                    MessageBox.Show("Por favor, completa todos los campos son obligatorios.", "Campos incompletos", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MessageBox.Show("Por favor, completa, todos los campos son obligatorios.", "Campos incompletos", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
                 

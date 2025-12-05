@@ -2,9 +2,6 @@
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup />
   <ItemGroup>
-    <Compile Update="Frontend\Dialogos\Almacen\DialogoAlmacen.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Update="Frontend\Dialogos\Articulos\DialogoArticulos.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -18,9 +15,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Frontend\Dialogos\Empleado\DialogoConsultaEmpleado.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Frontend\Dialogos\Empleado\DialogoEmpleado.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Frontend\Dialogos\Almacen\DialogoEntradaAlmacen.xaml.cs">

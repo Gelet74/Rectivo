@@ -72,7 +72,7 @@ namespace recTivo
             services.AddTransient<DialogoBajaEmpleado>();
             services.AddTransient<DialogoConsultaEmpleado>();
             services.AddTransient<DialogoModificarEmpleado>();
-            services.AddTransient<DialogoEmpleado>();
+          
             
             services.AddTransient<DialogoEntradaAlmacen>();
             services.AddTransient<DialogoSalidaAlmacen>();

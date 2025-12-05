@@ -40,12 +40,16 @@
                       Margin="0,5"
                       DisplayMemberPath="Codigo"
                       SelectionChanged="cmbCodigo_SelectionChanged"
-                      Width="150"
-HorizontalAlignment="Left"/>
+                      Width="180"
+                      Cursor="Hand"
+                      HorizontalAlignment="Left"/>
 
             <TextBlock Text="Descripción 1:" Foreground="#FF9800"/>
             <ComboBox x:Name="cmbDescrip1" 
                       Height="30" 
+                      HorizontalAlignment="Left"
+                      Width="180"
+                      Cursor="Hand"
                       Margin="0,5"
                       SelectionChanged="cmbDescrip1_SelectionChanged"/>
 
@@ -53,43 +57,47 @@ HorizontalAlignment="Left"/>
             <ComboBox x:Name="cmbDescrip2" 
                       Height="30" 
                       Margin="0,5"
-                      SelectionChanged="cmbDescrip2_SelectionChanged" Cursor=""/>
+                      HorizontalAlignment="Left"
+                      Cursor="Hand"
+                      Width="180"
+                      SelectionChanged="cmbDescrip2_SelectionChanged"/>
 
             <TextBlock Text="Cantidad:" Foreground="#FF9800"/>
             <TextBox x:Name="txtCantidad" 
                      Height="30" 
                      Margin="0,5" 
-                     Width="150"
+                     Width="180"
                      HorizontalAlignment="Left"/>
 
             <TextBlock Text="Letra pasillo:" Foreground="#FF9800"/>
             <TextBox x:Name="txtPasillo" 
                      Height="30" 
                      Margin="0,5"
-                     Width="150"
+                     Width="180"
                      HorizontalAlignment="Left"/>
 
             <TextBlock Text="Número estantería:" Foreground="#FF9800"/>
             <TextBox x:Name="txtEstanteria" 
                      Height="30" 
                      Margin="0,5"
-                     Width="150"
+                     Width="180"
                      HorizontalAlignment="Left"/>
 
             <TextBlock Text="Hueco:" Foreground="#FF9800"/>
             <TextBox x:Name="txtHueco" 
                      Height="30" 
                      Margin="0,5"
-                     Width="150"
+                     Width="180"
                      HorizontalAlignment="Left"/>
         </StackPanel>
         <Button Content="Restar al almacén"
                 x:Name="btnRestarAlmacen"
                 Click="btnRestarAlmacen_Click"
                 Grid.Row="7" Grid.ColumnSpan="2"
-                Height="40" Width="200"
-                HorizontalAlignment="Center"
-                Margin="0,20,0,0"
+                Height="30" Width="180"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Bottom"
+                Margin="0,0,50,45"
                 Background="#E0E0E0"
                 Foreground="#ff9800"
                 FontWeight="Bold"/>
