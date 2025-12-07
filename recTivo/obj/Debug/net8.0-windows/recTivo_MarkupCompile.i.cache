@@ -16,5 +16,5 @@ D:\gelet\escritorio\DI\recTivo\recTivo\App.xaml
 2321532263481
 Frontend\Dialogos\Almacen\DialogoEntradaAlmacen.xaml;Frontend\Dialogos\Almacen\DialogoSalidaAlmacen.xaml;Frontend\Dialogos\Articulos\DialogoArticulos.xaml;Frontend\Dialogos\Clientes\DialogoClientes.xaml;Frontend\Dialogos\Empleado\DialogoAltaEmpleado.xaml;Frontend\Dialogos\Empleado\DialogoBajaEmpleado.xaml;Frontend\Dialogos\Empleado\DialogoConsultaEmpleado.xaml;Frontend\Dialogos\Empleado\DialogoModificarEmpleado.xaml;Frontend\Dialogos\Ordenes\DialogoOrdenes.xaml;Frontend\Dialogos\VentanasInicio\Inicio.xaml;Frontend\Dialogos\VentanasInicio\Login.xaml;Frontend\Dialogos\VentanasInicio\MainWindow.xaml;Frontend\Dialogos\Ventas\DialogoVentas.xaml;Frontend\Mensajes\VentanaMensaje.xaml;
 
-False
+True
 
