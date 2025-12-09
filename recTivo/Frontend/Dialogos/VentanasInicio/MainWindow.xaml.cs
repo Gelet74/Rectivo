@@ -1,5 +1,6 @@
 ﻿using MahApps.Metro.Controls;
 using recTivo.Frontend.Dialogos;
+using recTivo.Frontend.Dialogos.Articulos;
 using recTivo.Frontend.Dialogos.Empleado;
 using System.Text;
 using System.Windows;
@@ -45,6 +46,37 @@ namespace recTivo
             almacen.SelectedItem = null;
         }
 
+        private void articulos_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (articulos.SelectedItem is not ListViewItem item)
+                return;
+
+            string opcion = item.Content.ToString();
+
+            switch (opcion)
+            {
+                case "Dar de alta":
+                    new DialogoAltaArticulo { Owner = this }.ShowDialog();
+                    break;
+
+                case "Dar de baja":
+                    new DialogoBajaArticulo { Owner = this }.ShowDialog();
+                    break;
+                case "Modificar":
+                    new DialogoModificarArticulo { Owner = this }.ShowDialog();
+                    break;
+
+                case "Listar artículos":
+                    new DialogoListarArticulo { Owner = this }.ShowDialog();
+                    break;
+            }
+
+
+
+            articulos.SelectedItem = null;
+        }
+
+
         private void empleados_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (empleados.SelectedItem is not ListViewItem item)
@@ -71,7 +103,7 @@ namespace recTivo
 
             }
 
-            almacen.SelectedItem = null;
+            empleados.SelectedItem = null;
         }
 
 
@@ -80,6 +112,11 @@ namespace recTivo
         private void salir_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
+        }
+
+        private void articulos_SelectionChanged_1(object sender, SelectionChangedEventArgs e)
+        {
+
         }
     }
 }

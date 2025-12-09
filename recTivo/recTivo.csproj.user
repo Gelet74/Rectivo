@@ -2,10 +2,16 @@
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup />
   <ItemGroup>
-    <Compile Update="Frontend\Dialogos\Articulos\DialogoArticulos.xaml.cs">
+    <Compile Update="Frontend\Dialogos\Articulos\DialogoAltaArticulo.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Frontend\Dialogos\Clientes\DialogoClientes.xaml.cs">
+    <Compile Update="Frontend\Dialogos\Articulos\DialogoBajaArticulo.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Frontend\Dialogos\Articulos\DialogoListarArticulo.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Frontend\Dialogos\Articulos\DialogoModificarArticulo.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Frontend\Dialogos\Empleado\DialogoAltaEmpleado.xaml.cs">
@@ -26,16 +32,10 @@
     <Compile Update="Frontend\Dialogos\Empleado\DialogoModificarEmpleado.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Frontend\Dialogos\Ordenes\DialogoOrdenes.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Update="Frontend\Dialogos\VentanasInicio\Inicio.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Frontend\Dialogos\VentanasInicio\Login.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Frontend\Dialogos\Ventas\DialogoVentas.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>

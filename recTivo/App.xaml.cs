@@ -5,9 +5,7 @@ using recTivo.Backend.Repos;
 using recTivo.Backend.Servicios;
 using recTivo.Frontend.Dialogos;
 using recTivo.Frontend.Dialogos.Articulos;
-using recTivo.Frontend.Dialogos.Clientes;
 using recTivo.Frontend.Dialogos.Empleado;
-using recTivo.Frontend.Dialogos.Ordenes;
 using System.Windows;
 
 namespace recTivo
@@ -62,18 +60,18 @@ namespace recTivo
             
             services.AddTransient<Login>(); 
             
-            services.AddTransient<DialogoArticulos>();
             
-            services.AddTransient<DialogoClientes>();
-            
-            services.AddTransient<DialogoOrdenes>();
             
             services.AddTransient<DialogoAltaEmpleado>();
             services.AddTransient<DialogoBajaEmpleado>();
             services.AddTransient<DialogoConsultaEmpleado>();
             services.AddTransient<DialogoModificarEmpleado>();
-          
-            
+
+            services.AddTransient<DialogoAltaArticulo>();
+            services.AddTransient<DialogoBajaArticulo>();
+            services.AddTransient<DialogoModificarArticulo>();
+            services.AddTransient<DialogoListarArticulo>();
+
             services.AddTransient<DialogoEntradaAlmacen>();
             services.AddTransient<DialogoSalidaAlmacen>();
 

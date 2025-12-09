@@ -33,6 +33,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Frontend\Dialogos\Clientes\" />
+    <Folder Include="Frontend\Dialogos\Ordenes\" />
+    <Folder Include="Frontend\Dialogos\Ventas\" />
     <Folder Include="Recursos\Imagenes\" />
   </ItemGroup>
 

@@ -104,9 +104,11 @@
                                    FontWeight="Bold"/>
                     </StackPanel>
                 </Expander.Header>
-                <ListView Style="{StaticResource MaterialDesignListView}"
-              Foreground="White"
-              ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                <ListView x:Name="articulos"
+                          SelectionChanged="articulos_SelectionChanged"
+                          Style="{StaticResource MaterialDesignListView}"
+                          Foreground="White"
+                          ScrollViewer.HorizontalScrollBarVisibility="Disabled" Cursor="">
                     <ListViewItem Content="Dar de alta" Padding="20 5"/>
                     <ListViewItem Content="Dar de baja" Padding="20 5"/>
                     <ListViewItem Content="Modificar" Padding="20 5"/>
