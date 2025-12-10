@@ -1,6 +1,7 @@
-﻿using System.Windows;
+﻿using recTivo.Backend.Modelos;
+using recTivo.Frontend.Dialogos.VentanasInicio;
+using System.Windows;
 using System.Windows.Input;
-using recTivo.Backend.Modelos;
 
 
 namespace recTivo.Frontend.Dialogos.Empleado
@@ -15,24 +16,40 @@ namespace recTivo.Frontend.Dialogos.Empleado
             InitializeComponent();
         }
 
-        
+
         protected override void OnPreviewKeyDown(KeyEventArgs e)
         {
             base.OnPreviewKeyDown(e);
 
             if (e.Key == Key.Escape)
             {
-                var main = Application.Current.Windows
-                    .OfType<MainWindow>()
-                    .FirstOrDefault();
-                if (main != null)
+                var dialog = new ConfirmacionDialogo
                 {
-                    main.Activate();
+                    Owner = this
+                };
+
+                bool? result = dialog.ShowDialog();
+
+                if (result == true && dialog.Confirmado)
+                {
+                    var main = Application.Current.Windows
+                        .OfType<MainWindow>()
+                        .FirstOrDefault();
+
+                    if (main != null)
+                    {
+                        main.Activate();
+                    }
+
+                    this.Close();
                 }
-                this.Close();
+
+                e.Handled = true;
             }
         }
-       
+
+
+
         private void DialAltaEmpleado_Loaded(object sender, RoutedEventArgs e)
         {
             try

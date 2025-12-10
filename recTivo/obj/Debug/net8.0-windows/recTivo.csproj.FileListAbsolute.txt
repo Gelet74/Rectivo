@@ -443,3 +443,13 @@ C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-
 C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\Articulos\DialogoBajaArticulo.baml
 C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\Articulos\DialogoListarArticulo.baml
 C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\Articulos\DialogoModificarArticulo.baml
+C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\VentanasInicio\ConfirmacionDialogo.g.cs
+C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\VentanasInicio\ConfirmacionDialogo.baml
+C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\Clientes\DialogoAltaCliente.g.cs
+C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\Clientes\DialogoBajaCliente.g.cs
+C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\Clientes\DialogoConsultaCliente.g.cs
+C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\Clientes\DialogoModificarCliente.g.cs
+C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\Clientes\DialogoAltaCliente.baml
+C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\Clientes\DialogoBajaCliente.baml
+C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\Clientes\DialogoConsultaCliente.baml
+C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\Clientes\DialogoModificarCliente.baml

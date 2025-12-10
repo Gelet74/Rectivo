@@ -1,12 +1,14 @@
 ﻿using MahApps.Metro.Controls;
 using Microsoft.EntityFrameworkCore;
 using recTivo.Backend.Modelos;
+using recTivo.Frontend.Dialogos.VentanasInicio;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace recTivo.Frontend.Dialogos
 {
@@ -17,7 +19,7 @@ namespace recTivo.Frontend.Dialogos
     {
         private RectivoContext _context;
         private List<Articulo> _articulos;
-
+       
         public DialogoEntradaAlmacen()
         {
             InitializeComponent();
@@ -96,27 +98,46 @@ namespace recTivo.Frontend.Dialogos
                 cmbDescrip2.SelectedItem = seleccionado.Descrip2;
             }
         }
-        protected override void OnPreviewKeyDown(System.Windows.Input.KeyEventArgs e)
+
+        private bool _escapeProcesado = false;
+
+        private bool _escapeEnCurso = false;
+
+        protected override void OnPreviewKeyDown(KeyEventArgs e)
         {
-            base.OnPreviewKeyDown(e);
-
-            if (e.Key == System.Windows.Input.Key.Escape)
+            if (e.Key == Key.Escape && !_escapeEnCurso)
             {
-                
-                var main = Application.Current.Windows
-                    .OfType<MainWindow>()
-                    .FirstOrDefault();
+                _escapeEnCurso = true;
+                e.Handled = true;
 
-                if (main != null)
+                Dispatcher.BeginInvoke(new Action(() =>
                 {
-                    
-                    main.Activate();
-                }
+                    var dialog = new ConfirmacionDialogo { Owner = this };
+                    bool? result = dialog.ShowDialog();
 
-                
-                this.Close();
+                    if (result == true && dialog.Confirmado)
+                    {
+                        var main = Application.Current.Windows
+                            .OfType<MainWindow>()
+                            .FirstOrDefault();
+
+                        if (main != null)
+                            main.Activate();
+
+                        this.Close();
+                    }
+
+                    _escapeEnCurso = false;
+                }));
+
+                return;
             }
+
+            base.OnPreviewKeyDown(e);
         }
+
+
+
         private async void btnAnadirAlmacen_Click(object sender, RoutedEventArgs e)
         {
             try

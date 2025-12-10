@@ -1,12 +1,14 @@
 ﻿using MahApps.Metro.Controls;
 using Microsoft.EntityFrameworkCore;
 using recTivo.Backend.Modelos;
+using recTivo.Frontend.Dialogos.VentanasInicio;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace recTivo.Frontend.Dialogos
 {
@@ -94,24 +96,34 @@ namespace recTivo.Frontend.Dialogos
         }
 
 
-        protected override void OnPreviewKeyDown(System.Windows.Input.KeyEventArgs e)
+        protected override void OnPreviewKeyDown(KeyEventArgs e)
         {
             base.OnPreviewKeyDown(e);
 
-            if (e.Key == System.Windows.Input.Key.Escape)
+            if (e.Key == Key.Escape)
             {
-                
-                var main = Application.Current.Windows
-                    .OfType<MainWindow>()
-                    .FirstOrDefault();
-
-                if (main != null)
+                var dialog = new ConfirmacionDialogo
                 {
-                    
-                    main.Activate();
+                    Owner = this
+                };
+
+                bool? result = dialog.ShowDialog();
+
+                if (result == true && dialog.Confirmado)
+                {
+                    var main = Application.Current.Windows
+                        .OfType<MainWindow>()
+                        .FirstOrDefault();
+
+                    if (main != null)
+                    {
+                        main.Activate();
+                    }
+
+                    this.Close();
                 }
 
-                this.Close();
+                e.Handled = true;
             }
         }
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using recTivo.Frontend.Dialogos.VentanasInicio;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,25 +24,34 @@ namespace recTivo.Frontend.Dialogos.Articulos
         {
             InitializeComponent();
         }
-        protected override void OnPreviewKeyDown(System.Windows.Input.KeyEventArgs e)
+        protected override void OnPreviewKeyDown(KeyEventArgs e)
         {
             base.OnPreviewKeyDown(e);
 
-            if (e.Key == System.Windows.Input.Key.Escape)
+            if (e.Key == Key.Escape)
             {
-
-                var main = Application.Current.Windows
-                    .OfType<MainWindow>()
-                    .FirstOrDefault();
-
-                if (main != null)
+                var dialog = new ConfirmacionDialogo
                 {
+                    Owner = this
+                };
 
-                    main.Activate();
+                bool? result = dialog.ShowDialog();
+
+                if (result == true && dialog.Confirmado)
+                {
+                    var main = Application.Current.Windows
+                        .OfType<MainWindow>()
+                        .FirstOrDefault();
+
+                    if (main != null)
+                    {
+                        main.Activate();
+                    }
+
+                    this.Close();
                 }
 
-
-                this.Close();
+                e.Handled = true;
             }
         }
     }

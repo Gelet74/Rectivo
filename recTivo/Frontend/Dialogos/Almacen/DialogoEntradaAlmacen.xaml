@@ -7,32 +7,44 @@
         x:Name="DialEntradaAlmacen"
         Loaded="DialEntradaAlmacen_Loaded"
         WindowStartupLocation="CenterScreen"
-        Background="#2D2D30">
+        Background="#2D2D30"
+        WindowStyle="None">
+    
 
-    <Window.Resources>
+            <Window.Resources>
 
-        <Style TargetType="TextBox">
-            <Setter Property="Background" Value="#E0E0E0"/>
-            <Setter Property="Foreground" Value="Black"/>
-            <Setter Property="BorderBrush" Value="#E0E0E0"/>
-            <Setter Property="BorderThickness" Value="2"/>
-            <Setter Property="Padding" Value="5"/>
-        </Style>
+                <Style TargetType="TextBox">
+                    <Setter Property="Background" Value="#E0E0E0"/>
+                    <Setter Property="Foreground" Value="Black"/>
+                    <Setter Property="BorderBrush" Value="#E0E0E0"/>
+                    <Setter Property="BorderThickness" Value="2"/>
+                    <Setter Property="Padding" Value="5"/>
+                </Style>
 
 
-        <Style TargetType="ComboBox">
-            <Setter Property="Background" Value="#E0E0E0"/>
-            <Setter Property="Foreground" Value="Black"/>
-            <Setter Property="BorderBrush" Value="#E0E0E0"/>
-            <Setter Property="BorderThickness" Value="2"/>
-            <Setter Property="Padding" Value="5"/>
-        </Style>
-    </Window.Resources>
+                <Style TargetType="ComboBox">
+                    <Setter Property="Background" Value="#E0E0E0"/>
+                    <Setter Property="Foreground" Value="Black"/>
+                    <Setter Property="BorderBrush" Value="#E0E0E0"/>
+                    <Setter Property="BorderThickness" Value="2"/>
+                    <Setter Property="Padding" Value="5"/>
+                </Style>
+            </Window.Resources>
 
-    <Grid Margin="30">
-        <StackPanel>
-            <TextBlock Text="Código del artículo:" Foreground="#FF9800"/>
-            <ComboBox x:Name="cmbCodigo" 
+    <Grid>
+       
+        <DockPanel LastChildFill="True">
+            <Grid DockPanel.Dock="Top" Height="40" Background="#808080">
+                <TextBlock Text="Pulsa ESC para volver atrás"
+                       Foreground="White"
+                       VerticalAlignment="Center"
+                       Margin="10,0"/>
+            </Grid>
+
+            <Grid Margin="30">
+                <StackPanel>
+                    <TextBlock Text="Código del artículo:" Foreground="#FF9800"/>
+                    <ComboBox x:Name="cmbCodigo" 
                       Height="30" 
                       Margin="0,5"
                       DisplayMemberPath="Codigo"
@@ -40,8 +52,8 @@
                       Width="180"
                       HorizontalAlignment="Left"/>
 
-            <TextBlock Text="Descripción 1:" Foreground="#FF9800"/>
-            <ComboBox x:Name="cmbDescrip1" 
+                    <TextBlock Text="Descripción 1:" Foreground="#FF9800"/>
+                    <ComboBox x:Name="cmbDescrip1" 
                       Height="30" 
                       HorizontalAlignment="Left"
                       Margin="0,5"
@@ -49,8 +61,8 @@
                       Cursor="Hand"
                       Width="180"/>
 
-            <TextBlock Text="Descripción 2:" Foreground="#FF9800"/>
-            <ComboBox x:Name="cmbDescrip2" 
+                    <TextBlock Text="Descripción 2:" Foreground="#FF9800"/>
+                    <ComboBox x:Name="cmbDescrip2" 
                       Height="30" 
                       HorizontalAlignment="Left"
                       Margin="0,5"
@@ -58,35 +70,35 @@
                       Cursor="Hand"
                       Width="180"/>
 
-            <TextBlock Text="Cantidad:" Foreground="#FF9800"/>
-            <TextBox x:Name="txtCantidad" 
+                    <TextBlock Text="Cantidad:" Foreground="#FF9800"/>
+                    <TextBox x:Name="txtCantidad" 
                      Height="30" 
                      Margin="0,5" 
                      Width="180"
                      HorizontalAlignment="Left"/>
 
-            <TextBlock Text="Letra pasillo:" Foreground="#FF9800"/>
-            <TextBox x:Name="txtPasillo" 
+                    <TextBlock Text="Letra pasillo:" Foreground="#FF9800"/>
+                    <TextBox x:Name="txtPasillo" 
                      Height="30" 
                      Margin="0,5"
                      Width="180"
                      HorizontalAlignment="Left"/>
 
-            <TextBlock Text="Número estantería:" Foreground="#FF9800"/>
-            <TextBox x:Name="txtEstanteria" 
+                    <TextBlock Text="Número estantería:" Foreground="#FF9800"/>
+                    <TextBox x:Name="txtEstanteria" 
                      Height="30" 
                      Margin="0,5"
                      Width="180"
                      HorizontalAlignment="Left"/>
 
-            <TextBlock Text="Hueco:" Foreground="#FF9800"/>
-            <TextBox x:Name="txtHueco" 
+                    <TextBlock Text="Hueco:" Foreground="#FF9800"/>
+                    <TextBox x:Name="txtHueco" 
                      Height="30" 
                      Margin="0,5"
                      Width="180"
                      HorizontalAlignment="Left"/>
-        </StackPanel>
-        <Button Content="Añadir al almacén"
+                </StackPanel>
+                <Button Content="Añadir al almacén"
                 x:Name="btnAnadirAlmacen"
                 Click="btnAnadirAlmacen_Click"
                 Height="30" Width="180"
@@ -97,5 +109,7 @@
                 Foreground="#ff9800"
                 FontWeight="Bold"/>
 
+            </Grid>
+        </DockPanel>
     </Grid>
 </Window>

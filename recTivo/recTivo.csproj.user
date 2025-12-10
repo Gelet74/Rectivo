@@ -14,6 +14,18 @@
     <Compile Update="Frontend\Dialogos\Articulos\DialogoModificarArticulo.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Frontend\Dialogos\Clientes\DialogoAltaCliente.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Frontend\Dialogos\Clientes\DialogoBajaCliente.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Frontend\Dialogos\Clientes\DialogoConsultaCliente.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Frontend\Dialogos\Clientes\DialogoModificarCliente.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Frontend\Dialogos\Empleado\DialogoAltaEmpleado.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -30,6 +42,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Frontend\Dialogos\Empleado\DialogoModificarEmpleado.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Frontend\Dialogos\VentanasInicio\ConfirmacionDialogo.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Frontend\Dialogos\VentanasInicio\Inicio.xaml.cs">
