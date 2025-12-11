@@ -96,34 +96,39 @@ namespace recTivo.Frontend.Dialogos
         }
 
 
+        private bool _escapeEnCurso = false;
+
         protected override void OnPreviewKeyDown(KeyEventArgs e)
         {
-            base.OnPreviewKeyDown(e);
-
             if (e.Key == Key.Escape)
             {
-                var dialog = new ConfirmacionDialogo
+                if (_escapeEnCurso)
                 {
-                    Owner = this
-                };
-
-                bool? result = dialog.ShowDialog();
-
-                if (result == true && dialog.Confirmado)
-                {
-                    var main = Application.Current.Windows
-                        .OfType<MainWindow>()
-                        .FirstOrDefault();
-
-                    if (main != null)
-                    {
-                        main.Activate();
-                    }
-
-                    this.Close();
+                    e.Handled = true;
+                    return;
                 }
 
+                _escapeEnCurso = true;
                 e.Handled = true;
+
+                try
+                {
+                    var dialog = new ConfirmacionDialogo { Owner = this };
+                    bool? result = dialog.ShowDialog();
+
+                    if (result == true && dialog.Confirmado)
+                    {
+                        this.Close();
+                    }
+                }
+                finally
+                {
+                    _escapeEnCurso = false;
+                }
+            }
+            else
+            {
+                base.OnPreviewKeyDown(e);
             }
         }
 

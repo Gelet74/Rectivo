@@ -1,16 +1,91 @@
 ﻿<Window x:Class="recTivo.Frontend.Dialogos.Articulos.DialogoAltaArticulo"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:recTivo.Frontend.Dialogos.Articulos"
-        mc:Ignorable="d"
+        Title="Pulsa ESC para volver atrás"
+        Height="350" Width="500"
         ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen"
-        Background="#808080"
-        
-        Title="Pulsa ESC para volver atrás" Height="500" Width="600">
-    <Grid Background="#2D2D30">
-        
+        Background="#2D2D30"
+        WindowStyle="None">
+
+    <Window.Resources>
+        <Style TargetType="TextBox">
+            <Setter Property="Background" Value="#E0E0E0"/>
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="BorderBrush" Value="#E0E0E0"/>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="Padding" Value="5"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <DockPanel LastChildFill="True">
+           
+            <Grid DockPanel.Dock="Top" Height="40" Background="#808080">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Text="ALTA ARTÍCULO"
+                           Foreground="White"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Left"
+                           Margin="10,0"/>
+                <TextBlock Text="Pulsa ESC para volver atrás"
+                           Foreground="White"
+                           HorizontalAlignment="Right"
+                           VerticalAlignment="Center"
+                           Grid.Column="1"
+                           Margin="0,0,10,0"/>
+            </Grid>
+
+            <Grid Margin="30">
+                <StackPanel>
+                    <TextBlock Text="Código:" 
+                               Foreground="#FF9800"/>
+                    <TextBox x:Name="txtCodigo"
+                             HorizontalAlignment="Left"
+                             Height="30" 
+                             Margin="0,5" 
+                             Width="300"/>
+
+                    <TextBlock Text="Descripción 1:" 
+                               Foreground="#FF9800"/>
+                    <TextBox x:Name="txtDescrip1" 
+                             HorizontalAlignment="Left"
+                             Height="30" 
+                             Margin="0,5" 
+                             Width="300"/>
+
+                    <TextBlock Text="Descripción 2:" 
+                               Foreground="#FF9800"/>
+                    <TextBox x:Name="txtDescrip2" 
+                             HorizontalAlignment="Left"
+                             Height="30"
+                             Margin="0,5" 
+                             Width="300"/>
+
+                    <TextBlock Text="PVP:" 
+                               Foreground="#FF9800"/>
+                    <TextBox x:Name="txtPvp"
+                             HorizontalAlignment="Left"
+                             Height="30" 
+                             Margin="0,5"
+                             Width="100"/>
+                </StackPanel>
+
+                <Button Content="Dar de alta artículo"
+                        x:Name="btnAltaArticulo"
+                        Click="btnAltaArticulo_Click"
+                        Height="30" Width="180"
+                        HorizontalAlignment="Right"
+                        Margin="0,0,50,30"
+                        VerticalAlignment="Bottom"
+                        Background="#E0E0E0"
+                        Foreground="#ff9800"
+                        FontWeight="Bold"/>
+            </Grid>
+        </DockPanel>
     </Grid>
 </Window>

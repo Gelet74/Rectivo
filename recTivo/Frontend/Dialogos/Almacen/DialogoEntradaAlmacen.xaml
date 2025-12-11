@@ -33,14 +33,25 @@
 
     <Grid>
        
-        <DockPanel LastChildFill="True">
+        <DockPanel LastChildFill="True">            
             <Grid DockPanel.Dock="Top" Height="40" Background="#808080">
-                <TextBlock Text="Pulsa ESC para volver atrás"
-                       Foreground="White"
-                       VerticalAlignment="Center"
-                       Margin="10,0"/>
-            </Grid>
-
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+              
+                    <TextBlock Text="ENTRADA ALMACÉN"
+                               Foreground="White"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Left"
+                               Margin="10,0"/>
+                    <TextBlock Text="Pulsa ESC para volver atrás"
+                               Foreground="White"
+                               HorizontalAlignment="Right"
+                               VerticalAlignment="Center"
+                               Grid.Column="1"
+                               Margin="0,0,10,0"/>
+                </Grid>
             <Grid Margin="30">
                 <StackPanel>
                     <TextBlock Text="Código del artículo:" Foreground="#FF9800"/>
@@ -103,7 +114,7 @@
                 Click="btnAnadirAlmacen_Click"
                 Height="30" Width="180"
                 HorizontalAlignment="Right"
-                Margin="0,0,50,45"
+                Margin="0,0,50,12"
                 VerticalAlignment="Bottom"
                 Background="#E0E0E0"
                 Foreground="#ff9800"

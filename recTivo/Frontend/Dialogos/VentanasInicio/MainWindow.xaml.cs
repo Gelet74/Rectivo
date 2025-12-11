@@ -8,6 +8,7 @@ using recTivo.Frontend.Dialogos.VentanasInicio;
 using System;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace recTivo
 {
@@ -119,7 +120,7 @@ namespace recTivo
 
             clientes.SelectedItem = null;
         }
-
+              
         private void empleados_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (empleados.SelectedItem is not ListViewItem item)
@@ -157,6 +158,23 @@ namespace recTivo
             empleados.SelectedItem = null;
         }
 
+        private void ordenes_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+
+        private void ventas_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+
+        private void Menu_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape)
+            {
+                e.Handled = true;
+            }
+        }
         private void salir_Click(object sender, RoutedEventArgs e)
         {
             var dialogo = _serviceProvider.GetService<ConfirmacionDialogo>();
@@ -168,6 +186,6 @@ namespace recTivo
             {
                 Application.Current.Shutdown();
             }
-        }
+        }          
     }
 }
