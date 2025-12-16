@@ -8,7 +8,7 @@
         xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
         mc:Ignorable="d"
         WindowStyle="None"
-        Title="rectivo" 
+        Icon="/Recursos/Iconos/rectivo_logo_fondo.png"         
         Height="450" Width="950">
     <Grid Background="#2D2D30">
         <Grid.RowDefinitions>

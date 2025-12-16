@@ -29,80 +29,80 @@
     </Window.Resources>
 
     <Grid>
+        <Border BorderBrush="#FF9800" BorderThickness="4">
+            <DockPanel LastChildFill="True">
+                <Grid DockPanel.Dock="Top" Height="40" Background="#808080">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
 
-        <DockPanel LastChildFill="True">
-            <Grid DockPanel.Dock="Top" Height="40" Background="#808080">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-
-                <TextBlock Text="ALTA EMPLEADO"
+                    <TextBlock Text="ALTA EMPLEADO"
                            Foreground="White"
                            VerticalAlignment="Center"
                            HorizontalAlignment="Left"
                            Margin="10,0"/>
-                <TextBlock Text="Pulsa ESC para volver atrás"
+                    <TextBlock Text="Pulsa ESC para volver atrás"
                            Foreground="White"
                            HorizontalAlignment="Right"
                            VerticalAlignment="Center"
                            Grid.Column="1"
                            Margin="0,0,10,0"/>
-            </Grid>
+                </Grid>
 
-            <Grid Margin="30">
-                <StackPanel>
-                    <TextBlock Text="Apellidos:" 
+                <Grid Margin="30">
+                    <StackPanel>
+                        <TextBlock Text="Apellidos:" 
                        Foreground="#FF9800"/>
-                    <TextBox x:Name="txtApellidos" 
+                        <TextBox x:Name="txtApellidos" 
                      Height="30" 
                      Margin="0,5" 
                      Width="300"
                      HorizontalAlignment="Left"/>
 
-                    <TextBlock Text="Nombre:" 
+                        <TextBlock Text="Nombre:" 
                        Foreground="#FF9800"/>
-                    <TextBox x:Name="txtNombre" 
+                        <TextBox x:Name="txtNombre" 
                      Height="30" 
                      Margin="0,5" 
                      Width="300"
                      HorizontalAlignment="Left"/>
 
-                    <TextBlock Text="DNI:" 
+                        <TextBlock Text="DNI:" 
                        Foreground="#FF9800"/>
-                    <TextBox x:Name="txtDni" 
+                        <TextBox x:Name="txtDni" 
                      Height="30" 
                      Margin="0,5" 
                      Width="300"
                      HorizontalAlignment="Left"/>
 
-                    <TextBlock Text="Usuario:" 
+                        <TextBlock Text="Usuario:" 
                        Foreground="#FF9800"/>
-                    <TextBox x:Name="txtUsername" 
+                        <TextBox x:Name="txtUsername" 
                      Height="30" 
                      Margin="0,5" 
                      Width="300" 
                      HorizontalAlignment="Left"/>
 
-                    <TextBlock Text="Contraseña:" 
+                        <TextBlock Text="Contraseña:" 
                        Foreground="#FF9800"/>
-                    <TextBox x:Name="txtPassword" 
+                        <TextBox x:Name="txtPassword" 
                      Height="30"
                      Margin="0,5" 
                      Width="300"
                      HorizontalAlignment="Left"/>
 
-                    <TextBlock Text="Puesto:" Foreground="#FF9800"/>
-                    <ComboBox x:Name="cmbRol"
+                        <TextBlock Text="Puesto:" Foreground="#FF9800"/>
+                        <ComboBox x:Name="cmbRol"
                       Height="30"
                       Margin="0,5"
                       DisplayMemberPath="Nombre"
                       SelectedValuePath="Id"
                       Width="300"
                       HorizontalAlignment="Left"/>
-                </StackPanel>
+                    </StackPanel>
 
-                <Button Content="Dar de alta"
+                    <Button Content="Dar de alta"
                 x:Name="btnAltaEmpleado"
                 Click="btnAltaEmpleado_Click"
                 Grid.Row="7" Grid.ColumnSpan="2"
@@ -113,7 +113,8 @@
                 FontWeight="Bold"
                 HorizontalAlignment="Right"        
                 VerticalAlignment="Bottom"/>
-            </Grid>
-        </DockPanel>
+                </Grid>
+            </DockPanel>
+        </Border>
     </Grid>
 </Window>

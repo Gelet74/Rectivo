@@ -34,31 +34,31 @@
     </Window.Resources>
 
     <Grid>
+        <Border BorderBrush="#FF9800" BorderThickness="4">
+            <DockPanel LastChildFill="True">
+                <Grid DockPanel.Dock="Top" Height="40" Background="#808080">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
 
-        <DockPanel LastChildFill="True">
-            <Grid DockPanel.Dock="Top" Height="40" Background="#808080">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-
-                <TextBlock Text="SALIDA ALMACÉN"
+                    <TextBlock Text="SALIDA ALMACÉN"
                        Foreground="White"
                        VerticalAlignment="Center"
                        HorizontalAlignment="Left"
                        Margin="10,0"/>
-                <TextBlock Text="Pulsa ESC para volver atrás"
+                    <TextBlock Text="Pulsa ESC para volver atrás"
                        Foreground="White"
                        HorizontalAlignment="Right"
                        VerticalAlignment="Center"
                        Grid.Column="1"
                        Margin="0,0,10,0"/>
-            </Grid>
+                </Grid>
 
-            <Grid Margin="30">
-                <StackPanel>
-                    <TextBlock Text="Código del artículo:" Foreground="#FF9800"/>
-                    <ComboBox x:Name="cmbCodigo" 
+                <Grid Margin="30">
+                    <StackPanel>
+                        <TextBlock Text="Código del artículo:" Foreground="#FF9800"/>
+                        <ComboBox x:Name="cmbCodigo" 
                       Height="30" 
                       Margin="0,5"
                       DisplayMemberPath="Codigo"
@@ -67,8 +67,8 @@
                       Cursor="Hand"
                       HorizontalAlignment="Left"/>
 
-                    <TextBlock Text="Descripción 1:" Foreground="#FF9800"/>
-                    <ComboBox x:Name="cmbDescrip1" 
+                        <TextBlock Text="Descripción 1:" Foreground="#FF9800"/>
+                        <ComboBox x:Name="cmbDescrip1" 
                       Height="30" 
                       HorizontalAlignment="Left"
                       Width="180"
@@ -76,8 +76,8 @@
                       Margin="0,5"
                       SelectionChanged="cmbDescrip1_SelectionChanged"/>
 
-                    <TextBlock Text="Descripción 2:" Foreground="#FF9800"/>
-                    <ComboBox x:Name="cmbDescrip2" 
+                        <TextBlock Text="Descripción 2:" Foreground="#FF9800"/>
+                        <ComboBox x:Name="cmbDescrip2" 
                       Height="30" 
                       Margin="0,5"
                       HorizontalAlignment="Left"
@@ -85,35 +85,35 @@
                       Width="180"
                       SelectionChanged="cmbDescrip2_SelectionChanged"/>
 
-                    <TextBlock Text="Cantidad:" Foreground="#FF9800"/>
-                    <TextBox x:Name="txtCantidad" 
+                        <TextBlock Text="Cantidad:" Foreground="#FF9800"/>
+                        <TextBox x:Name="txtCantidad" 
                      Height="30" 
                      Margin="0,5" 
                      Width="180"
                      HorizontalAlignment="Left"/>
 
-                    <TextBlock Text="Letra pasillo:" Foreground="#FF9800"/>
-                    <TextBox x:Name="txtPasillo" 
+                        <TextBlock Text="Letra pasillo:" Foreground="#FF9800"/>
+                        <TextBox x:Name="txtPasillo" 
                      Height="30" 
                      Margin="0,5"
                      Width="180"
                      HorizontalAlignment="Left"/>
 
-                    <TextBlock Text="Número estantería:" Foreground="#FF9800"/>
-                    <TextBox x:Name="txtEstanteria" 
+                        <TextBlock Text="Número estantería:" Foreground="#FF9800"/>
+                        <TextBox x:Name="txtEstanteria" 
                      Height="30" 
                      Margin="0,5"
                      Width="180"
                      HorizontalAlignment="Left"/>
 
-                    <TextBlock Text="Hueco:" Foreground="#FF9800"/>
-                    <TextBox x:Name="txtHueco" 
+                        <TextBlock Text="Hueco:" Foreground="#FF9800"/>
+                        <TextBox x:Name="txtHueco" 
                      Height="30" 
                      Margin="0,5"
                      Width="180"
                      HorizontalAlignment="Left"/>
-                </StackPanel>
-                <Button Content="Restar al almacén"
+                    </StackPanel>
+                    <Button Content="Restar al almacén"
                 x:Name="btnRestarAlmacen"
                 Click="btnRestarAlmacen_Click"
                 Grid.Row="7" Grid.ColumnSpan="2"
@@ -125,7 +125,8 @@
                 Foreground="#ff9800"
                 FontWeight="Bold"/>
 
-            </Grid>
-        </DockPanel>
+                </Grid>
+            </DockPanel>
+        </Border>
     </Grid>
 </Window>
