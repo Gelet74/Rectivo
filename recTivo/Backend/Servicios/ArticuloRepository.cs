@@ -1,8 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using recTivo.Backend.Modelos;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Linq;
 
 namespace recTivo.Backend.Repos
 {

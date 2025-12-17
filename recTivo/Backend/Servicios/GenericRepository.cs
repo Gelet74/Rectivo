@@ -42,6 +42,7 @@ namespace recTivo.Backend.Repos
         {
             _logger?.LogInformation("Agregando nuevo {Entity}", typeof(T).Name);
             await _dbSet.AddAsync(entity);
+            await SaveChangesAsync();
         }
 
         public virtual void Update(T entity)
@@ -92,6 +93,7 @@ namespace recTivo.Backend.Repos
         }
         public virtual async Task AddAsync(T[] entities)
         {
+            _logger?.LogInformation("Agregando múltiples {Entity}", typeof(T).Name);
             await _dbSet.AddRangeAsync(entities);
             await SaveChangesAsync();
         }

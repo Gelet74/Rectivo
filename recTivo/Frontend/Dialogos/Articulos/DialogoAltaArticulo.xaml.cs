@@ -1,6 +1,4 @@
 ﻿using di.proyecto.clase._2025.Frontend.Mensajes;
-using recTivo.Backend.Modelos;
-using recTivo.Backend.Repos;
 using recTivo.Frontend.Dialogos.VentanasInicio;
 using recTivo.MVVM;
 using System.Windows;
@@ -8,25 +6,22 @@ using System.Windows.Input;
 
 namespace recTivo.Frontend.Dialogos.Articulos
 {
+    /// <summary>
+    /// Interaction logic for DialogoArticulo.xaml
+    /// </summary>
     public partial class DialogoAltaArticulo : Window
     {
-        private readonly MVArticulo _vm;
-
-        public DialogoAltaArticulo()
+        private MVArticulo _mvArticulo;
+        public DialogoAltaArticulo(MVArticulo mvArticulo)
         {
             InitializeComponent();
 
-            // 👇 Instanciamos manualmente el contexto y el repositorio
-            var context = new RectivoContext();
-            var repo = new ArticuloRepository(context);
-
-            _vm = new MVArticulo(repo);
-            DataContext = _vm;
+            _mvArticulo = mvArticulo;
         }
 
         private async void btnAltaArticulo_Click(object sender, RoutedEventArgs e)
         {
-            bool ok = await _vm.GuardarAsync();
+            bool ok = await _mvArticulo.GuardarAsync();
             if (ok)
             {
                 MensajeInformacion.Mostrar("Éxito","Artículo dado de alta correctamente");
