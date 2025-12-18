@@ -1,4 +1,5 @@
-﻿using recTivo.Backend.Modelos;
+﻿using Microsoft.EntityFrameworkCore;
+using recTivo.Backend.Modelos;
 using recTivo.Frontend.Dialogos.VentanasInicio;
 using System.Windows;
 using System.Windows.Input;
@@ -11,9 +12,11 @@ namespace recTivo.Frontend.Dialogos.Empleado
     /// </summary>
     public partial class DialogoAltaEmpleado : Window
     {
-        public DialogoAltaEmpleado()
+        private RectivoContext _context;
+        public DialogoAltaEmpleado(RectivoContext context)
         {
             InitializeComponent();
+            _context = context;
         }
 
 
@@ -54,8 +57,7 @@ namespace recTivo.Frontend.Dialogos.Empleado
         {
             try
             {
-                using var db = new RectivoContext();
-                var roles = db.Rols.ToList();
+                var roles = _context.Rols.ToList();
                 cmbRol.ItemsSource = roles;
             }
             catch (Exception ex)
@@ -98,9 +100,8 @@ namespace recTivo.Frontend.Dialogos.Empleado
                     Estado = "activo"
                 };
 
-                var db = new RectivoContext();
-                db.Empleados.Add(empleado);
-                db.SaveChanges();
+                _context.Empleados.Add(empleado);
+                _context.SaveChanges();
 
                 MessageBox.Show("Empleado dado de alta correctamente.", "Confirmación", MessageBoxButton.OK, MessageBoxImage.Information);
                 this.Close();

@@ -9,6 +9,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
+using di.proyecto.clase._2025.Frontend.Mensajes;
 
 namespace recTivo.Frontend.Dialogos.Articulos
 {
@@ -16,40 +17,27 @@ namespace recTivo.Frontend.Dialogos.Articulos
     {
         private readonly MVArticulo _vm;
 
-        public DialogoBajaArticulo()
+        public DialogoBajaArticulo(MVArticulo vm)
         {
             InitializeComponent();
-
-            // 👇 Instanciamos manualmente el contexto y el repositorio
-            var context = new RectivoContext();
-            var repo = new ArticuloRepository(context);
-
-            _vm = new MVArticulo(repo);
+            _vm = vm;
             DataContext = _vm;
         }
 
         private async void btnBajaArticulo_Click(object sender, RoutedEventArgs e)
         {
-            string codigo = txtCodigoArticulo.Text.Trim();
-
-            if (!string.IsNullOrEmpty(codigo))
+            bool ok = await _vm.BajaPorCodigoAsync();
+            if (ok)
             {
-                bool ok = await _vm.BajaPorCodigoAsync(codigo);
-                if (ok)
-                {
-                    MessageBox.Show("Artículo dado de baja correctamente");
-                    this.Close();
-                }
-                else
-                {
-                    MessageBox.Show("No se encontró el artículo con ese código");
-                }
+                MensajeError.Mostrar("Error","Artículo dado de baja correctamente");
+                this.Close();
             }
             else
             {
-                MessageBox.Show("Introduce un código válido");
+                MensajeError.Mostrar("Error", "No se encontró el artículo con ese código");
             }
         }
+
 
         protected override void OnPreviewKeyDown(KeyEventArgs e)
         {

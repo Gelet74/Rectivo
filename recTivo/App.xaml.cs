@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using recTivo.Backend.Modelos;
 using recTivo.Backend.Repos;
@@ -8,6 +9,7 @@ using recTivo.Frontend.Dialogos.Articulos;
 using recTivo.Frontend.Dialogos.Clientes;
 using recTivo.Frontend.Dialogos.Empleado;
 using recTivo.Frontend.Dialogos.VentanasInicio;
+using recTivo.MVVM;
 using System;
 using System.Windows;
 
@@ -26,8 +28,11 @@ namespace recTivo
 
         private void ConfigureServices(ServiceCollection services)
         {
-            services.AddDbContext<RectivoContext>();
+            services.AddDbContext<RectivoContext>(options =>
+            options.UseMySQL("server=localhost;database=RECTIVO;user=root;password=mysql;"));
             services.AddLogging(configure => configure.AddConsole());
+            services.AddTransient<MVArticulo>();
+
 
             services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));
             services.AddScoped<IRepository<Articulo>, ArticuloRepository>();

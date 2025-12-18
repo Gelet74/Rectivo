@@ -20,10 +20,10 @@ namespace recTivo.Frontend.Dialogos
         private RectivoContext _context;
         private List<Articulo> _articulos;
        
-        public DialogoEntradaAlmacen()
+        public DialogoEntradaAlmacen(RectivoContext context)
         {
             InitializeComponent();
-            _context = new RectivoContext();
+            _context = context;
         }
 
         private async void DialEntradaAlmacen_Loaded(object sender, RoutedEventArgs e)

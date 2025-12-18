@@ -7,16 +7,18 @@ using System.Windows.Input;
 namespace recTivo.Frontend.Dialogos.Articulos
 {
     /// <summary>
-    /// Interaction logic for DialogoArticulo.xaml
+    /// Interaction logic for DialogoAltaArticulo.xaml
     /// </summary>
     public partial class DialogoAltaArticulo : Window
     {
         private MVArticulo _mvArticulo;
+
         public DialogoAltaArticulo(MVArticulo mvArticulo)
         {
             InitializeComponent();
 
             _mvArticulo = mvArticulo;
+            DataContext = _mvArticulo; // 👈 Enlaza los TextBox con MVArticulo
         }
 
         private async void btnAltaArticulo_Click(object sender, RoutedEventArgs e)
@@ -24,10 +26,11 @@ namespace recTivo.Frontend.Dialogos.Articulos
             bool ok = await _mvArticulo.GuardarAsync();
             if (ok)
             {
-                MensajeInformacion.Mostrar("Éxito","Artículo dado de alta correctamente");
+                MensajeInformacion.Mostrar("Éxito", "Artículo de prueba guardado correctamente");
                 this.Close();
             }
         }
+
 
         private bool _escapeEnCurso = false;
         protected override void OnPreviewKeyDown(KeyEventArgs e)

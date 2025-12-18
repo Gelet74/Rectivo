@@ -1,11 +1,6 @@
-﻿using MahApps.Metro.Controls;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using recTivo.Backend.Modelos;
 using recTivo.Frontend.Dialogos.VentanasInicio;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -19,10 +14,10 @@ namespace recTivo.Frontend.Dialogos
     {
         private RectivoContext _context;
         private List<Articulo> _articulos;
-        public DialogoSalidaAlmacen()
+        public DialogoSalidaAlmacen(RectivoContext context)
         {
             InitializeComponent();
-            _context = new RectivoContext();
+            _context = context;
         }
 
         private async void DialSalidaAlmacen_Loaded(object sender, RoutedEventArgs e)

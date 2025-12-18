@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using recTivo.Backend.Modelos;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
@@ -8,19 +9,17 @@ namespace recTivo.Backend.Repos
 {
     public class GenericRepository<T> : IRepository<T> where T : class
     {
-        protected readonly DbContext _context;
+        protected readonly RectivoContext _context;
         protected readonly DbSet<T> _dbSet;
         protected readonly ILogger<GenericRepository<T>>? _logger;
 
-        // Constructor sin logger
-        public GenericRepository(DbContext context)
+        public GenericRepository(RectivoContext context)
         {
             _context = context;
             _dbSet = _context.Set<T>();
         }
 
-        // Constructor con logger
-        public GenericRepository(DbContext context, ILogger<GenericRepository<T>> logger)
+        public GenericRepository(RectivoContext context, ILogger<GenericRepository<T>> logger)
             : this(context)
         {
             _logger = logger;

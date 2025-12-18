@@ -5,7 +5,8 @@ namespace recTivo.Backend.Repos
 {
     public class ArticuloRepository : GenericRepository<Articulo>, IArticuloRepository
     {
-        public ArticuloRepository(DbContext context) : base(context) { }
+        public ArticuloRepository(RectivoContext context) : base(context) { }
+
 
         // Buscar por código
         public async Task<Articulo?> GetByCodigoAsync(string codigo)

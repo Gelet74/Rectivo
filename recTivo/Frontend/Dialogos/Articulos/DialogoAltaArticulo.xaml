@@ -42,7 +42,7 @@
                                Margin="0,0,10,0"/>
                 </Grid>
 
-                <!-- Formulario -->
+                
                 <Grid Margin="30">
                     <StackPanel>
                         <TextBlock Text="Código:" Foreground="#FF9800"/>
@@ -79,7 +79,7 @@
                             Click="btnAltaArticulo_Click"
                             Height="30" Width="160"
                             HorizontalAlignment="Right"
-                            Margin="0,0,50,23"
+                            Margin="0,0,132,23"
                             VerticalAlignment="Bottom"
                             Background="#E0E0E0"
                             Foreground="#ff9800"

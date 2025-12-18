@@ -6,10 +6,6 @@ namespace recTivo.Backend.Modelos
 {
     public partial class RectivoContext : DbContext
     {
-        public RectivoContext()
-        {
-        }
-
         public RectivoContext(DbContextOptions<RectivoContext> options)
             : base(options)
         {
@@ -24,15 +20,60 @@ namespace recTivo.Backend.Modelos
         public virtual DbSet<Rol> Rols { get; set; } = null!;
         public virtual DbSet<Ubicacion> Ubicacion { get; set; } = null!;
         public virtual DbSet<ClienteHasArticulo> ClienteHasArticulos { get; set; } = null!;
+        public virtual DbSet<Escandallo> Escandallos { get; set; } = null!;
+        public virtual DbSet<ComponenteEscandallo> ComponenteEscandallos { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            var conn = "server=localhost;database=RECTIVO;user=root;password=mysql;";
-            optionsBuilder.UseMySQL(conn);
+            if (!optionsBuilder.IsConfigured)
+            {
+                var conn = "server=localhost;database=RECTIVO;user=root;password=mysql;";
+                optionsBuilder.UseMySQL(conn);
+            }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Articulo>(entity =>
+            {
+                entity.ToTable("articulo");
+
+                entity.HasKey(a => a.IdArticulo).HasName("PRIMARY");
+
+                entity.Property(a => a.IdArticulo).HasColumnName("id_articulo");
+
+                entity.Property(a => a.Codigo)
+                      .HasColumnName("codigo")
+                      .HasMaxLength(10)
+                      .IsRequired();
+
+                entity.Property(a => a.Descrip)
+                      .HasColumnName("descrip")
+                      .HasMaxLength(50)
+                      .IsRequired();
+
+                entity.Property(a => a.Descrip2)
+                      .HasColumnName("descrip2")
+                      .HasMaxLength(50);
+
+                entity.Property(a => a.Stock)
+                      .HasColumnName("stock")
+                      .HasDefaultValue(0);
+
+                entity.Property(a => a.Pvp)
+                      .HasColumnName("pvp");
+
+                entity.Property(a => a.IdUbicacion)
+                      .HasColumnName("id_ubicacion");
+
+                entity.HasOne(a => a.Ubicacion)
+                      .WithMany()
+                      .HasForeignKey(a => a.IdUbicacion)
+                      .HasPrincipalKey(u => u.IdUbicacion)
+                      .HasConstraintName("FK_articulo_ubicacion");
+            });
+
+
             // ===========================
             // CONFIGURACIÓN DE ORDEN
             // ===========================
@@ -68,12 +109,34 @@ namespace recTivo.Backend.Modelos
             // ===========================
             // CONFIGURACIÓN DE EMPLEADO
             // ===========================
-            modelBuilder.Entity<Empleado>().ToTable("empleado");
+            modelBuilder.Entity<Empleado>(entity =>
+            {
+                entity.ToTable("empleado");
 
-            modelBuilder.Entity<Empleado>()
-                        .HasOne(e => e.Rol)
-                        .WithMany(r => r.Empleados)
-                        .HasForeignKey(e => e.IdRol);
+                entity.HasOne(e => e.Rol)
+                      .WithMany(r => r.Empleados)
+                      .HasForeignKey(e => e.IdRol);
+            });
+
+            modelBuilder.Entity<Ubicacion>(entity =>
+            {
+                entity.ToTable("ubicacion");
+
+                entity.HasKey(u => u.IdUbicacion).HasName("PRIMARY");
+
+                entity.Property(u => u.IdUbicacion).HasColumnName("ID_UBICACION");
+
+                entity.Property(u => u.Numero).HasColumnName("NUMERO");
+                entity.Property(u => u.LetraPasillo).HasColumnName("LETRA_PASILLO").HasMaxLength(10);
+                entity.Property(u => u.NumeroEstanteria).HasColumnName("NUMERO_ESTANTERIA");
+
+                entity.HasMany(u => u.Articulos)
+                      .WithOne(a => a.Ubicacion)
+                      .HasForeignKey(a => a.IdUbicacion)
+                      .IsRequired(false)
+                      .HasConstraintName("FK_articulo_ubicacion");
+            });
+
 
             // ===========================
             // CONFIGURACIÓN DE CLIENTE_HAS_ARTICULO
@@ -94,9 +157,8 @@ namespace recTivo.Backend.Modelos
                     .HasForeignKey(e => e.ArticuloIdArticulo);
             });
 
-
             // ===========================
-            // CONFIGURACIÓN DE ESCANDALLO (NUEVO)
+            // CONFIGURACIÓN DE ESCANDALLO
             // ===========================
             modelBuilder.Entity<Escandallo>(entity =>
             {
@@ -110,9 +172,8 @@ namespace recTivo.Backend.Modelos
                 entity.Property(e => e.Descripcion2).HasMaxLength(50).HasColumnName("Descripcion2");
             });
 
-
             // ===========================
-            // CONFIGURACIÓN DE COMPONENTE ESCANDALLO (NUEVO)
+            // CONFIGURACIÓN DE COMPONENTE ESCANDALLO
             // ===========================
             modelBuilder.Entity<ComponenteEscandallo>(entity =>
             {
@@ -135,14 +196,8 @@ namespace recTivo.Backend.Modelos
                     .HasConstraintName("fk_componenteescandallo_escandallo");
             });
 
-
             OnModelCreatingPartial(modelBuilder);
         }
-
-        public virtual DbSet<Escandallo> Escandallos { get; set; } = null!;
-        public virtual DbSet<ComponenteEscandallo> ComponenteEscandallos { get; set; } = null!;
-
-
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
     }

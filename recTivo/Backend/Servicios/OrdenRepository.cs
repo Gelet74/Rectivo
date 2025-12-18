@@ -6,7 +6,7 @@ namespace recTivo.Backend.Repos;
 
 public class OrdenRepository : GenericRepository<Orden>, IOrdenRepository
 {
-    public OrdenRepository(DbContext context) : base(context) { }
+    public OrdenRepository(RectivoContext context) : base(context) { }
 
     public async Task<Orden?> GetByCodigoAsync(string codigo)
         => await _dbSet.FirstOrDefaultAsync(o => o.Codigo == codigo);
