@@ -1,8 +1,9 @@
-﻿using recTivo.Backend.Modelos;
+﻿using di.proyecto.clase._2025.Frontend.Mensajes;
+using Microsoft.EntityFrameworkCore;
+using recTivo.Backend.Modelos;
 using recTivo.Backend.Repos;
 using recTivo.MVVM.Base;
-using di.proyecto.clase._2025.Frontend.Mensajes;
-using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -57,6 +58,12 @@ namespace recTivo.MVVM
             _articulo = new Articulo();
             LoadCodigos();
         }
+        public decimal? PrecioCompra
+        {
+            get => _articulo.PrecioCompra;
+            set { _articulo.PrecioCompra = value; OnPropertyChanged(); }
+        }
+
 
         public async Task Inicializa()
         {
@@ -77,7 +84,7 @@ namespace recTivo.MVVM
                 MensajeError.Mostrar("GESTIÓN ARTÍCULOS", "Error al cargar datos\nNo puedo conectar con la base de datos", 0);
             }
         }
-                
+
         private async void LoadCodigos()
         {
             try
@@ -122,7 +129,6 @@ namespace recTivo.MVVM
             set { _articulo.Stock = value; OnPropertyChanged(); }
         }
 
-        
         public async Task<bool> BajaPorCodigoAsync()
         {
             try
@@ -146,9 +152,6 @@ namespace recTivo.MVVM
             }
         }
 
-
-
-
         public async Task<bool> GuardarAsync()
         {
             try
@@ -159,6 +162,63 @@ namespace recTivo.MVVM
             catch (Exception ex)
             {
                 MensajeError.Mostrar("Error", $"Error al guardar artículo: {ex.Message}");
+                return false;
+            }
+        }
+
+        public async Task<bool> CargarArticuloSeleccionadoAsync()
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(CodigoSeleccionado))
+                    return false;
+
+                string codigo = CodigoSeleccionado.Trim().ToUpper();
+
+                var art = await _articuloRepository.GetByCodigoAsync(codigo);
+
+                if (art == null)
+                {
+                    MensajeError.Mostrar("DEBUG", $"GetByCodigoAsync devolvió null para '{codigo}'");
+                    return false;
+                }
+
+                // Cargamos el artículo en el ViewModel
+                _articulo = art;
+
+                // Notificar todas las propiedades enlazadas al XAML
+                OnPropertyChanged(nameof(Codigo));
+                OnPropertyChanged(nameof(Descrip));
+                OnPropertyChanged(nameof(Descrip2));
+                OnPropertyChanged(nameof(Pvp));
+                OnPropertyChanged(nameof(Stock));
+                OnPropertyChanged(nameof(PrecioCompra));
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                MensajeError.Mostrar("Error", $"Error al cargar artículo: {ex.Message}");
+                return false;
+            }
+        }
+
+
+
+
+        // ============================
+        // NUEVO: Modificar artículo
+        // ============================
+        public async Task<bool> ModificarAsync()
+        {
+            try
+            {
+                await _articuloRepository.UpdateAsync(articulo);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                MensajeError.Mostrar("Error", $"Error al modificar artículo: {ex.Message}");
                 return false;
             }
         }

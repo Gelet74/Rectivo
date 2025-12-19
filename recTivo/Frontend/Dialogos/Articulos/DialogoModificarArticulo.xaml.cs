@@ -1,17 +1,9 @@
-﻿using recTivo.Frontend.Dialogos.VentanasInicio;
-using System;
-using System.Collections.Generic;
+﻿using di.proyecto.clase._2025.Frontend.Mensajes;
+using recTivo.Frontend.Dialogos.VentanasInicio;
+using recTivo.MVVM;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace recTivo.Frontend.Dialogos.Articulos
 {
@@ -20,10 +12,18 @@ namespace recTivo.Frontend.Dialogos.Articulos
     /// </summary>
     public partial class DialogoModificarArticulo : Window
     {
-        public DialogoModificarArticulo()
+        private readonly MVArticulo _vm;
+
+        public DialogoModificarArticulo(MVArticulo vm)
         {
             InitializeComponent();
+            _vm = vm;
+            DataContext = _vm;
+
+            this.PreviewKeyDown += DialogoModificarArticulo_PreviewKeyDown;
         }
+
+        // ESC con confirmación
         protected override void OnPreviewKeyDown(KeyEventArgs e)
         {
             base.OnPreviewKeyDown(e);
@@ -44,9 +44,7 @@ namespace recTivo.Frontend.Dialogos.Articulos
                         .FirstOrDefault();
 
                     if (main != null)
-                    {
                         main.Activate();
-                    }
 
                     this.Close();
                 }
@@ -54,6 +52,43 @@ namespace recTivo.Frontend.Dialogos.Articulos
                 e.Handled = true;
             }
         }
+
+        private void DialogoModificarArticulo_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape)
+                this.Close();
+        }
+
+        // BOTÓN: Cargar artículo (llamado desde XAML: Click="btnCargarArticulo_Click")
+        private async void btnCargarArticulo_Click(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrEmpty(_vm.CodigoSeleccionado))
+            {
+                MensajeError.Mostrar("MODIFICAR ARTÍCULO", "Debes seleccionar un código primero.");
+                return;
+            }
+
+            var encontrado = await _vm.CargarArticuloSeleccionadoAsync();
+
+            if (!encontrado)
+            {
+                MensajeError.Mostrar("MODIFICAR ARTÍCULO", "No se ha encontrado ningún artículo con ese código.");
+                panelDatos.Visibility = Visibility.Collapsed;
+                return;
+            }
+
+            // Si se ha encontrado, mostramos el panel de datos
+            panelDatos.Visibility = Visibility.Visible;
+            panelDatos.UpdateLayout();
+        }
+
+        // BOTÓN: Guardar cambios (Click="btnModificarArticulo_Click")
+        private async void btnModificarArticulo_Click(object sender, RoutedEventArgs e)
+        {
+            var ok = await _vm.ModificarAsync();
+
+            if (ok)
+                this.Close();
+        }
     }
 }
-

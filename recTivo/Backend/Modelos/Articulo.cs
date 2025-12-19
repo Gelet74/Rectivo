@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Collections.Generic;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace recTivo.Backend.Modelos
 {
@@ -14,6 +12,9 @@ namespace recTivo.Backend.Modelos
         public int? Stock { get; set; } = 0;
         public double? Pvp { get; set; }
         public int? IdUbicacion { get; set; }
+
+        [Column("precio_compra")]
+        public decimal? PrecioCompra { get; set; }
 
         public virtual Ubicacion? Ubicacion { get; set; }
         public virtual ICollection<ClienteHasArticulo> ClienteHasArticulos { get; set; } = new List<ClienteHasArticulo>();

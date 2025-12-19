@@ -10,7 +10,14 @@ namespace recTivo.Backend.Repos
 
         // Buscar por código
         public async Task<Articulo?> GetByCodigoAsync(string codigo)
-            => await _dbSet.FirstOrDefaultAsync(a => a.Codigo == codigo);
+        {
+            codigo = codigo.Trim().ToUpper();
+
+            return await _dbSet
+                 .FirstOrDefaultAsync(a => a.Codigo.Trim().ToUpper() == codigo);
+        }
+
+
 
         // Obtener todos los artículos por ID de ubicación
         public async Task<IEnumerable<Articulo>> GetByUbicacionAsync(int idUbicacion)
