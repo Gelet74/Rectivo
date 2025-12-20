@@ -29,7 +29,6 @@
         <Border BorderBrush="#FF9800" BorderThickness="4">
             <DockPanel LastChildFill="True">
 
-                <!-- CABECERA -->
                 <Grid DockPanel.Dock="Top" Height="40" Background="#808080">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
@@ -49,12 +48,10 @@
                                Grid.Column="1"
                                Margin="0,0,10,0"/>
                 </Grid>
-
-                <!-- CONTENIDO -->
+                
                 <Grid Margin="30">
                     <StackPanel>
-
-                        <!-- FASE 1: Seleccionar código -->
+                        
                         <TextBlock Text="Selecciona código:" Foreground="#FF9800"/>
                         <ComboBox ItemsSource="{Binding CodigosArticulos}"
                                   SelectedItem="{Binding CodigoSeleccionado}"
@@ -71,8 +68,7 @@
                                 Background="#E0E0E0"
                                 Foreground="#FF9800"
                                 FontWeight="Bold" Cursor="Hand"/>
-
-                        <!-- FASE 2: Datos del artículo -->
+                        
                         <StackPanel x:Name="panelDatos" Visibility="Hidden">
 
                             <TextBlock Text="Código:" Foreground="#FF9800"/>
@@ -89,10 +85,6 @@
 
                             <TextBlock Text="PVP:" Foreground="#FF9800"/>
                             <TextBox Text="{Binding Pvp, UpdateSourceTrigger=PropertyChanged}"
-                                     Width="100" Height="30" Margin="0,5"/>
-
-                            <TextBlock Text="Stock:" Foreground="#FF9800"/>
-                            <TextBox Text="{Binding Stock, UpdateSourceTrigger=PropertyChanged}"
                                      Width="100" Height="30" Margin="0,5"/>
                             
                             <TextBlock Text="Precio compra:" Foreground="#FF9800"/>

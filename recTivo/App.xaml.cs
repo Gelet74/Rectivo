@@ -29,7 +29,9 @@ namespace recTivo
         private void ConfigureServices(ServiceCollection services)
         {
             services.AddDbContext<RectivoContext>(options =>
-            options.UseMySQL("server=localhost;database=RECTIVO;user=root;password=mysql;"));
+            options.UseMySQL("server=localhost;database=RECTIVO;user=root;password=mysql;Allow User Variables=True;Treat Tiny As Boolean=False;Default Command Timeout=60;"),
+            ServiceLifetime.Transient);
+
             services.AddLogging(configure => configure.AddConsole());
             services.AddTransient<MVArticulo>();
 

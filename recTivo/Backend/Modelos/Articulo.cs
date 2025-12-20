@@ -8,6 +8,7 @@ namespace recTivo.Backend.Modelos
         public int IdArticulo { get; set; }
         public string Codigo { get; set; } = null!;
         public string Descrip { get; set; } = null!;
+        [Column("DESCRIP2")]
         public string? Descrip2 { get; set; }
         public int? Stock { get; set; } = 0;
         public double? Pvp { get; set; }

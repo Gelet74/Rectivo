@@ -18,7 +18,7 @@ namespace recTivo.Frontend.Dialogos.Articulos
             InitializeComponent();
 
             _mvArticulo = mvArticulo;
-            DataContext = _mvArticulo; // 👈 Enlaza los TextBox con MVArticulo
+            DataContext = _mvArticulo; 
         }
 
         private async void btnAltaArticulo_Click(object sender, RoutedEventArgs e)

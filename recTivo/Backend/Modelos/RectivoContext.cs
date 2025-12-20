@@ -34,6 +34,8 @@ namespace recTivo.Backend.Modelos
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Cliente>().ToTable("cliente");
+
             modelBuilder.Entity<Articulo>(entity =>
             {
                 entity.ToTable("articulo");
@@ -168,8 +170,8 @@ namespace recTivo.Backend.Modelos
 
                 entity.Property(e => e.IdEscandallo).HasColumnName("IdEscandallo");
                 entity.Property(e => e.CodigoProducto).HasMaxLength(10).HasColumnName("CodigoProducto");
-                entity.Property(e => e.NombreProducto).HasMaxLength(50).HasColumnName("NombreProducto");
-                entity.Property(e => e.Descripcion2).HasMaxLength(50).HasColumnName("Descripcion2");
+                entity.Property(e => e.NombreProducto).HasMaxLength(50).HasColumnName("Descrip");
+                entity.Property(e => e.Descripcion2).HasMaxLength(50).HasColumnName("Descrip2");
             });
 
             // ===========================
@@ -184,8 +186,8 @@ namespace recTivo.Backend.Modelos
                 entity.Property(e => e.IdComponente).HasColumnName("IdComponente");
                 entity.Property(e => e.IdEscandallo).HasColumnName("IdEscandallo");
                 entity.Property(e => e.CodigoArticulo).HasMaxLength(10).HasColumnName("CodigoArticulo");
-                entity.Property(e => e.Descripcion).HasMaxLength(50).HasColumnName("Descripcion");
-                entity.Property(e => e.Descripcion2).HasMaxLength(50).HasColumnName("Descripcion2");
+                entity.Property(e => e.Descripcion).HasMaxLength(50).HasColumnName("Descrip");
+                entity.Property(e => e.Descripcion2).HasMaxLength(50).HasColumnName("Descrip2");
                 entity.Property(e => e.Cantidad).HasColumnName("Cantidad");
                 entity.Property(e => e.PrecioUnitario).HasColumnType("decimal(10,2)").HasColumnName("PrecioUnitario");
 

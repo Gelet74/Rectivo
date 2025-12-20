@@ -3,13 +3,57 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:recTivo.Frontend.Dialogos.Articulos"
         mc:Ignorable="d"
         ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen"
         Background="#2D2D30"
-        Title="Pulsa ESC para volver atrás" Height="500" Width="600">
-    <Grid>
+        Title="Listado de Artículos"
+        Height="500" Width="1200">
+
+    <Grid Margin="20">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="50"/>
+        </Grid.RowDefinitions>
         
+        <TextBlock Text="LISTADO DE ARTÍCULOS"
+                   Foreground="#FF9800"
+                   FontSize="20"
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Left"/>
+        
+        <DataGrid Grid.Row="1"
+                  ItemsSource="{Binding ListaArticulos}"
+                  AutoGenerateColumns="False"
+                  Background="#E0E0E0"
+                  Foreground="Black"
+                  HeadersVisibility="Column"
+                  CanUserAddRows="False"
+                  CanUserDeleteRows="False"
+                  IsReadOnly="True">
+
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Código" Binding="{Binding Codigo}" Width="*"/>
+                <DataGridTextColumn Header="Descripción" Binding="{Binding Descrip}" Width="2*"/>
+                <DataGridTextColumn Header="Descripción 2" Binding="{Binding Descrip2}" Width="2*"/>
+                <DataGridTextColumn Header="Stock" Binding="{Binding Stock}" Width="*"/>
+                <DataGridTextColumn Header="PVP" Binding="{Binding Pvp}" Width="*"/>
+                <DataGridTextColumn Header="Precio de compra" Binding="{Binding PrecioCompra}" Width="*"/> 
+            </DataGrid.Columns>
+
+        </DataGrid>
+       
+        <Button Grid.Row="2"
+                Content="Cerrar"
+                Width="120"
+                Height="30"
+                HorizontalAlignment="Right"
+                Background="#E0E0E0"
+                Foreground="#FF9800"
+                FontWeight="Bold"
+                Name="btnCerrar"
+                Click="btnCerrar_Click"/>
     </Grid>
 </Window>
