@@ -32,6 +32,17 @@ public class EmpleadoRepository : GenericRepository<Empleado>
 
         return null;
     }
+    public async Task DeleteAsync(int id)
+    {
+        var empleado = await _dbSet.FindAsync(id);
+
+        if (empleado != null)
+        {
+            _dbSet.Remove(empleado);
+            await _context.SaveChangesAsync();
+        }
+    }
+
 
 
 }

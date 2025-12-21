@@ -34,6 +34,8 @@ namespace recTivo
 
             services.AddLogging(configure => configure.AddConsole());
             services.AddTransient<MVArticulo>();
+            services.AddScoped<MVEmpleado>();
+
 
 
             services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));
@@ -73,6 +75,8 @@ namespace recTivo
             services.AddTransient<DialogoModificarEmpleado>();
 
             services.AddTransient<ConfirmacionDialogo>();
+            services.AddScoped<RolRepository>();
+
 
         }
 

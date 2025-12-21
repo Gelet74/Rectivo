@@ -1,116 +1,67 @@
-﻿using Microsoft.EntityFrameworkCore;
-using recTivo.Backend.Modelos;
+﻿using di.proyecto.clase._2025.Frontend.Mensajes;
 using recTivo.Frontend.Dialogos.VentanasInicio;
+using recTivo.MVVM;
 using System.Windows;
 using System.Windows.Input;
 
-
 namespace recTivo.Frontend.Dialogos.Empleado
 {
-    /// <summary>
-    /// Lógica de interacción para DialogoAltaEmpleado.xaml
-    /// </summary>
     public partial class DialogoAltaEmpleado : Window
     {
-        private RectivoContext _context;
-        public DialogoAltaEmpleado(RectivoContext context)
+        private readonly MVEmpleado _vm;
+
+        public DialogoAltaEmpleado(MVEmpleado vm)
         {
             InitializeComponent();
-            _context = context;
+            _vm = vm;
+            DataContext = _vm;
+
+            Loaded += async (_, __) => await _vm.Inicializa();
         }
 
-
-        protected override void OnPreviewKeyDown(KeyEventArgs e)
+        private async void btnAltaEmpleado_Click(object sender, RoutedEventArgs e)
         {
-            base.OnPreviewKeyDown(e);
-
-            if (e.Key == Key.Escape)
+            bool ok = await _vm.GuardarAsync();
+            if (ok)
             {
-                var dialog = new ConfirmacionDialogo
-                {
-                    Owner = this
-                };
-
-                bool? result = dialog.ShowDialog();
-
-                if (result == true && dialog.Confirmado)
-                {
-                    var main = Application.Current.Windows
-                        .OfType<MainWindow>()
-                        .FirstOrDefault();
-
-                    if (main != null)
-                    {
-                        main.Activate();
-                    }
-
-                    this.Close();
-                }
-
-                e.Handled = true;
-            }
-        }
-
-
-
-        private void DialAltaEmpleado_Loaded(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                var roles = _context.Rols.ToList();
-                cmbRol.ItemsSource = roles;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error cargando roles: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-        }
-
-
-        private void btnAltaEmpleado_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                if (string.IsNullOrWhiteSpace(txtApellidos.Text) ||
-                    string.IsNullOrWhiteSpace(txtNombre.Text) ||
-                    string.IsNullOrWhiteSpace(txtDni.Text) ||
-                    string.IsNullOrWhiteSpace(txtUsername.Text) ||
-                    string.IsNullOrWhiteSpace(txtPassword.Text) ||
-                    cmbRol.SelectedValue == null)
-                {
-                    MessageBox.Show("Por favor, completa, todos los campos son obligatorios.", "Campos incompletos", MessageBoxButton.OK, MessageBoxImage.Warning);
-                    return;
-                }
-                
-                if (txtDni.Text.Length < 9)
-                {
-                    MessageBox.Show("El DNI debe tener al menos 9 caracteres.", "DNI inválido", MessageBoxButton.OK, MessageBoxImage.Warning);
-                    return;
-                }
-
-                              
-                var empleado = new recTivo.Backend.Modelos.Empleado
-                {
-                    Apellidos = txtApellidos.Text.Trim(),
-                    Nombre = txtNombre.Text.Trim(),
-                    Dni = txtDni.Text.Trim(),
-                    Username = txtUsername.Text.Trim(),
-                    Password = txtPassword.Text, 
-                    IdRol = (int?)cmbRol.SelectedValue,
-                    Estado = "activo"
-                };
-
-                _context.Empleados.Add(empleado);
-                _context.SaveChanges();
-
-                MessageBox.Show("Empleado dado de alta correctamente.", "Confirmación", MessageBoxButton.OK, MessageBoxImage.Information);
+                MensajeInformacion.Mostrar("ÉXITO", "Empleado guardado correctamente");
                 this.Close();
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error al dar de alta: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
         }
 
+        private bool _escapeEnCurso = false;
+        protected override void OnPreviewKeyDown(KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape)
+            {
+                if (_escapeEnCurso)
+                {
+                    e.Handled = true;
+                    return;
+                }
+
+                _escapeEnCurso = true;
+                e.Handled = true;
+
+                try
+                {
+                    var dialog = new ConfirmacionDialogo { Owner = this };
+                    bool? result = dialog.ShowDialog();
+
+                    if (result == true && dialog.Confirmado)
+                    {
+                        this.Close();
+                    }
+                }
+                finally
+                {
+                    _escapeEnCurso = false;
+                }
+            }
+            else
+            {
+                base.OnPreviewKeyDown(e);
+            }
+        }
     }
 }

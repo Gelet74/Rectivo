@@ -6,8 +6,6 @@
         ResizeMode="NoResize"
         WindowStyle="None"
         WindowStartupLocation="CenterScreen"
-        x:Name="DialAltaEmpleado"
-        Loaded="DialAltaEmpleado_Loaded"
         Background="#2D2D30">
 
     <Window.Resources>
@@ -31,6 +29,7 @@
     <Grid>
         <Border BorderBrush="#FF9800" BorderThickness="4">
             <DockPanel LastChildFill="True">
+               
                 <Grid DockPanel.Dock="Top" Height="40" Background="#808080">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
@@ -38,82 +37,80 @@
                     </Grid.ColumnDefinitions>
 
                     <TextBlock Text="ALTA EMPLEADO"
-                           Foreground="White"
-                           VerticalAlignment="Center"
-                           HorizontalAlignment="Left"
-                           Margin="10,0"/>
-                    <TextBlock Text="Pulsa ESC para volver atrás"
-                           Foreground="White"
-                           HorizontalAlignment="Right"
-                           VerticalAlignment="Center"
-                           Grid.Column="1"
-                           Margin="0,0,10,0"/>
-                </Grid>
+                               Foreground="White"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Left"
+                               Margin="10,0"/>
 
+                    <TextBlock Text="Pulsa ESC para volver atrás"
+                               Foreground="White"
+                               HorizontalAlignment="Right"
+                               VerticalAlignment="Center"
+                               Grid.Column="1"
+                               Margin="0,0,10,0"/>
+                </Grid>
+                
                 <Grid Margin="30">
                     <StackPanel>
-                        <TextBlock Text="Apellidos:" 
-                       Foreground="#FF9800"/>
-                        <TextBox x:Name="txtApellidos" 
-                     Height="30" 
-                     Margin="0,5" 
-                     Width="300"
-                     HorizontalAlignment="Left"/>
 
-                        <TextBlock Text="Nombre:" 
-                       Foreground="#FF9800"/>
-                        <TextBox x:Name="txtNombre" 
-                     Height="30" 
-                     Margin="0,5" 
-                     Width="300"
-                     HorizontalAlignment="Left"/>
+                        <TextBlock Text="Apellidos:" Foreground="#FF9800"/>
+                        <TextBox Text="{Binding Apellidos}" 
+                                 Height="30" 
+                                 Margin="0,5" 
+                                 HorizontalAlignment="Left"
+                                 Width="300"/>
 
-                        <TextBlock Text="DNI:" 
-                       Foreground="#FF9800"/>
-                        <TextBox x:Name="txtDni" 
-                     Height="30" 
-                     Margin="0,5" 
-                     Width="300"
-                     HorizontalAlignment="Left"/>
+                        <TextBlock Text="Nombre:" Foreground="#FF9800"/>
+                        <TextBox Text="{Binding Nombre}"
+                                 Height="30" 
+                                 Margin="0,5" 
+                                 HorizontalAlignment="Left"
+                                 Width="300"/>
 
-                        <TextBlock Text="Usuario:" 
-                       Foreground="#FF9800"/>
-                        <TextBox x:Name="txtUsername" 
-                     Height="30" 
-                     Margin="0,5" 
-                     Width="300" 
-                     HorizontalAlignment="Left"/>
+                        <TextBlock Text="DNI:" Foreground="#FF9800"/>
+                        <TextBox Text="{Binding Dni}" 
+                                 Height="30" 
+                                 Margin="0,5"
+                                 HorizontalAlignment="Left"
+                                 Width="300"/>
 
-                        <TextBlock Text="Contraseña:" 
-                       Foreground="#FF9800"/>
-                        <TextBox x:Name="txtPassword" 
-                     Height="30"
-                     Margin="0,5" 
-                     Width="300"
-                     HorizontalAlignment="Left"/>
+                        <TextBlock Text="Usuario:" Foreground="#FF9800"/>
+                        <TextBox Text="{Binding Username}" 
+                                 Height="30" 
+                                 Margin="0,5" 
+                                 HorizontalAlignment="Left"
+                                 Width="300"/>
+
+                        <TextBlock Text="Contraseña:" Foreground="#FF9800"/>
+                        <TextBox Text="{Binding Password}" 
+                                 Height="30" 
+                                 Margin="0,5" 
+                                 HorizontalAlignment="Left"
+                                 Width="300"/>
 
                         <TextBlock Text="Puesto:" Foreground="#FF9800"/>
-                        <ComboBox x:Name="cmbRol"
-                      Height="30"
-                      Margin="0,5"
-                      DisplayMemberPath="Nombre"
-                      SelectedValuePath="Id"
-                      Width="300"
-                      HorizontalAlignment="Left"/>
+                        <ComboBox ItemsSource="{Binding ListaRoles}"
+                                  SelectedValue="{Binding IdRol}"
+                                  DisplayMemberPath="Nombre"
+                                  SelectedValuePath="Id"
+                                  HorizontalAlignment="Left"
+                                  Height="30"
+                                  Margin="0,5"
+                                  Width="300"/>
                     </StackPanel>
 
                     <Button Content="Dar de alta"
-                x:Name="btnAltaEmpleado"
-                Click="btnAltaEmpleado_Click"
-                Grid.Row="7" Grid.ColumnSpan="2"
-                Height="30" Width="200"
-                Margin="0,0,10,67"
-                Background="#E0E0E0"
-                Foreground="#ff9800"
-                FontWeight="Bold"
-                HorizontalAlignment="Right"        
-                VerticalAlignment="Bottom"/>
+                            Click="btnAltaEmpleado_Click"
+                            Command="{Binding GuardarNuevoCommand}"
+                            Height="30" Width="200"
+                            Margin="0,0,10,10"
+                            Background="#E0E0E0"
+                            Foreground="#ff9800"
+                            FontWeight="Bold"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Bottom"/>
                 </Grid>
+
             </DockPanel>
         </Border>
     </Grid>

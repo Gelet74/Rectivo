@@ -1,4 +1,5 @@
-﻿using MahApps.Metro.Controls;
+﻿using di.proyecto.clase._2025.Frontend.Mensajes;
+using MahApps.Metro.Controls;
 using Microsoft.EntityFrameworkCore;
 using recTivo.Backend.Modelos;
 using recTivo.Frontend.Dialogos.VentanasInicio;
@@ -144,14 +145,14 @@ namespace recTivo.Frontend.Dialogos
                
                 if (cmbCodigo.SelectedItem is not Articulo articuloSeleccionado)
                 {
-                    MessageBox.Show("Debes seleccionar un artículo válido.", "Aviso", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MensajeError.Mostrar("ERROR", "Debes seleccionar un artículo válido.");
                     return;
                 }
 
                
                 if (!int.TryParse(txtCantidad.Text, out int cantidad) || cantidad <= 0)
                 {
-                    MessageBox.Show("Introduce una cantidad válida.", "Aviso", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MensajeAdvertencia.Mostrar("AVISO", "Introduce una cantidad válida.");
                     return;
                 }
 
@@ -162,7 +163,7 @@ namespace recTivo.Frontend.Dialogos
 
                 if (string.IsNullOrEmpty(pasillo) || string.IsNullOrEmpty(estanteria) || string.IsNullOrEmpty(hueco))
                 {
-                    MessageBox.Show("Debes indicar pasillo, estantería y hueco.", "Aviso", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MensajeAdvertencia.Mostrar("AVISO", "Debes indicar pasillo, estantería y hueco.");
                     return;
                 }
 
@@ -197,12 +198,9 @@ namespace recTivo.Frontend.Dialogos
                 await _context.SaveChangesAsync();
 
                
-                MessageBox.Show(
+                MensajeAdvertencia.Mostrar("ÉXITO",
                     $"Se añadieron {cantidad} unidades del artículo {articuloSeleccionado.Codigo} " +
-                    $"al pasillo {pasillo}, estantería {estanteria}, hueco {hueco}.",
-                    "Éxito",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Information);
+                    $"al pasillo {pasillo}, estantería {estanteria}, hueco {hueco}.");
 
                 
                 txtCantidad.Clear();
@@ -215,7 +213,7 @@ namespace recTivo.Frontend.Dialogos
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al añadir al almacén: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MensajeError.Mostrar("ERROR", $"Error al añadir al almacén: {ex.Message}");
             }
         }
     }

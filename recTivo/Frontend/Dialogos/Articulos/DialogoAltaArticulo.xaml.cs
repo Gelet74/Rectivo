@@ -26,7 +26,7 @@ namespace recTivo.Frontend.Dialogos.Articulos
             bool ok = await _mvArticulo.GuardarAsync();
             if (ok)
             {
-                MensajeInformacion.Mostrar("Éxito", "Artículo de prueba guardado correctamente");
+                MensajeInformacion.Mostrar("ÉXITO", "Artículo guardado correctamente");
                 this.Close();
             }
         }
