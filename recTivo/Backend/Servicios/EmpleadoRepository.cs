@@ -32,6 +32,13 @@ public class EmpleadoRepository : GenericRepository<Empleado>
 
         return null;
     }
+    public async Task<IEnumerable<Empleado>> GetAllAsync()
+    {
+        return await _context.Empleados
+                             .Include(e => e.Rol)
+                             .ToListAsync();
+    }
+
     public async Task DeleteAsync(int id)
     {
         var empleado = await _dbSet.FindAsync(id);
@@ -42,8 +49,4 @@ public class EmpleadoRepository : GenericRepository<Empleado>
             await _context.SaveChangesAsync();
         }
     }
-
-
-
 }
-

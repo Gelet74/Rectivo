@@ -1,28 +1,21 @@
 ﻿using recTivo.Frontend.Dialogos.VentanasInicio;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using recTivo.MVVM;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace recTivo.Frontend.Dialogos.Empleado
 {
-    /// <summary>
-    /// Lógica de interacción para DialogoConsultaEmpleado.xaml
-    /// </summary>
     public partial class DialogoConsultaEmpleado : Window
     {
-        public DialogoConsultaEmpleado()
+        private readonly MVEmpleado _vm;
+
+        public DialogoConsultaEmpleado(MVEmpleado vm)
         {
             InitializeComponent();
+            _vm = vm;
+            DataContext = _vm;
+
+            Loaded += async (_, __) => await _vm.Inicializa();
         }
         protected override void OnPreviewKeyDown(KeyEventArgs e)
         {
@@ -55,5 +48,9 @@ namespace recTivo.Frontend.Dialogos.Empleado
             }
         }
 
+        private void DataGrid_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+
+        }
     }
 }

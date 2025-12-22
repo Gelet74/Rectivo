@@ -35,6 +35,12 @@ public partial class Empleado
     [Column("ESTADO")]
     public string Estado { get; set; } = "activo";
 
+    [NotMapped]
+    public string NombreCompleto => $"{Nombre} {Apellidos}";
+
+
+
+
 
     public virtual ICollection<Orden> Ordens { get; set; } = new List<Orden>();
 }

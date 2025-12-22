@@ -1,28 +1,22 @@
-﻿using recTivo.Frontend.Dialogos.VentanasInicio;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using di.proyecto.clase._2025.Frontend.Mensajes;
+using recTivo.Frontend.Dialogos.VentanasInicio;
+using recTivo.MVVM;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace recTivo.Frontend.Dialogos.Clientes
 {
-    /// <summary>
-    /// Lógica de interacción para DialogoAltaClientes.xaml
-    /// </summary>
-    public partial class DialogoAltaClientes : Window
+    public partial class DialogoAltaCliente : Window
     {
-        public DialogoAltaClientes()
+        private readonly MVCliente _vm;
+
+        public DialogoAltaCliente(MVCliente vm)
         {
             InitializeComponent();
+            _vm = vm;
+            DataContext = _vm;
+
+            Loaded += (_, __) => _vm.LimpiarCampos();
         }
 
         protected override void OnPreviewKeyDown(KeyEventArgs e)
@@ -31,11 +25,7 @@ namespace recTivo.Frontend.Dialogos.Clientes
 
             if (e.Key == Key.Escape)
             {
-                var dialog = new ConfirmacionDialogo
-                {
-                    Owner = this
-                };
-
+                var dialog = new ConfirmacionDialogo { Owner = this };
                 bool? result = dialog.ShowDialog();
 
                 if (result == true && dialog.Confirmado)
@@ -44,15 +34,22 @@ namespace recTivo.Frontend.Dialogos.Clientes
                         .OfType<MainWindow>()
                         .FirstOrDefault();
 
-                    if (main != null)
-                    {
-                        main.Activate();
-                    }
-
+                    main?.Activate();
                     this.Close();
                 }
 
                 e.Handled = true;
+            }
+        }
+
+        private async void btnGuardarCliente_Click(object sender, RoutedEventArgs e)
+        {
+            var ok = await _vm.GuardarAsync();
+
+            if (ok)
+            {
+                MensajeInformacion.Mostrar("ÉXITO", "Cliente guardado correctamente.");
+                this.Close();
             }
         }
     }

@@ -30,4 +30,8 @@ public class Cliente
 
     [Column("TELEFONO")]
     public string? Telefono { get; set; }
+
+    [NotMapped]
+    public string NombreCompleto => $"{Nombre} {Apellido1} {Apellido2}".Trim();
+
 }

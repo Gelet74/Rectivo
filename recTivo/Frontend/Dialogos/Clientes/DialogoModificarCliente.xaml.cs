@@ -1,58 +1,94 @@
-﻿using recTivo.Frontend.Dialogos.VentanasInicio;
-using System;
-using System.Collections.Generic;
+﻿using di.proyecto.clase._2025.Frontend.Mensajes;
+using recTivo.Frontend.Dialogos.VentanasInicio;
+using recTivo.MVVM;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace recTivo.Frontend.Dialogos.Clientes
 {
-    /// <summary>
-    /// Lógica de interacción para DialogoModificarCliente.xaml
-    /// </summary>
     public partial class DialogoModificarCliente : Window
     {
-        public DialogoModificarCliente()
+        private readonly MVCliente _vm;
+        private bool _escapeEnCurso = false;
+
+        public DialogoModificarCliente(MVCliente vm)
         {
             InitializeComponent();
+            _vm = vm;
+            DataContext = _vm;
+
+            Loaded += async (_, __) =>
+            {
+                panelEdicion.Visibility = Visibility.Collapsed;
+                await _vm.Inicializa();
+                _vm.LimpiarCampos();
+            };
+        }
+
+        private async void btnCargarCliente_Click(object sender, RoutedEventArgs e)
+        {
+            if (_vm.ClienteSeleccionado == null)
+            {
+                MensajeInformacion.Mostrar("AVISO", "Selecciona un cliente.");
+                return;
+            }
+
+            await _vm.CargarClienteSeleccionadoAsync();
+            panelEdicion.Visibility = Visibility.Visible;
+        }
+
+        private async void btnGuardarCambios_Click(object sender, RoutedEventArgs e)
+        {
+            bool ok = await _vm.ModificarClienteAsync();
+
+            if (ok)
+            {
+                MensajeInformacion.Mostrar("ÉXITO", "Cliente modificado correctamente.");
+                Close();
+            }
+            else
+            {
+                MensajeError.Mostrar("ERROR", "No se pudo modificar el cliente.");
+            }
         }
 
         protected override void OnPreviewKeyDown(KeyEventArgs e)
         {
-            base.OnPreviewKeyDown(e);
-
             if (e.Key == Key.Escape)
             {
-                var dialog = new ConfirmacionDialogo
+                if (_escapeEnCurso)
                 {
-                    Owner = this
-                };
-
-                bool? result = dialog.ShowDialog();
-
-                if (result == true && dialog.Confirmado)
-                {
-                    var main = Application.Current.Windows
-                        .OfType<MainWindow>()
-                        .FirstOrDefault();
-
-                    if (main != null)
-                    {
-                        main.Activate();
-                    }
-
-                    this.Close();
+                    e.Handled = true;
+                    return;
                 }
 
+                _escapeEnCurso = true;
                 e.Handled = true;
+
+                try
+                {
+                    var dialog = new ConfirmacionDialogo { Owner = this };
+                    bool? result = dialog.ShowDialog();
+
+                    if (result == true && dialog.Confirmado)
+                    {
+                        var main = Application.Current.Windows
+                            .OfType<MainWindow>()
+                            .FirstOrDefault();
+
+                        main?.Activate();
+                        Close();
+                    }
+                }
+                finally
+                {
+                    _escapeEnCurso = false;
+                }
+            }
+            else
+            {
+                base.OnPreviewKeyDown(e);
             }
         }
     }

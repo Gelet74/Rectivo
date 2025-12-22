@@ -25,13 +25,14 @@ namespace recTivo.Frontend.Dialogos.Empleado
         // ✅ Botón Dar de Baja
         private async void btnBajaEmpleado_Click(object sender, RoutedEventArgs e)
         {
-            if (_vm.IdEmpleadoSeleccionado == null)
+            if (_vm.EmpleadoSeleccionado == null)
             {
                 MensajeInformacion.Mostrar("AVISO", "Selecciona un empleado.");
                 return;
             }
 
-            bool ok = await _vm.EliminarAsync(_vm.IdEmpleadoSeleccionado.Value);
+            bool ok = await _vm.EliminarAsync(_vm.EmpleadoSeleccionado.Id);
+
 
             if (ok)
             {

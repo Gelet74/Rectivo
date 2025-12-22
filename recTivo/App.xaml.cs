@@ -34,7 +34,8 @@ namespace recTivo
 
             services.AddLogging(configure => configure.AddConsole());
             services.AddTransient<MVArticulo>();
-            services.AddScoped<MVEmpleado>();
+            services.AddTransient<MVEmpleado>();
+            services.AddTransient<MVCliente>();
 
 
 
@@ -64,7 +65,7 @@ namespace recTivo
             services.AddTransient<DialogoModificarArticulo>();
             services.AddTransient<DialogoListarArticulo>();
 
-            services.AddTransient<DialogoAltaClientes>();
+            services.AddTransient<DialogoAltaCliente>();
             services.AddTransient<DialogoBajaCliente>();
             services.AddTransient<DialogoConsultaCliente>();
             services.AddTransient<DialogoModificarCliente>();

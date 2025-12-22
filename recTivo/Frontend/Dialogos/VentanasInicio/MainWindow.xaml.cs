@@ -94,7 +94,7 @@ namespace recTivo
             switch (opcion)
             {
                 case "Dar de alta":
-                    var altaCliente = _serviceProvider.GetService<DialogoAltaClientes>();
+                    var altaCliente = _serviceProvider.GetService<DialogoAltaCliente>();
                     altaCliente.Owner = this;
                     altaCliente.ShowDialog();
                     break;
