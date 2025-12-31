@@ -38,6 +38,13 @@ namespace recTivo.Backend.Repos
                                  .FirstOrDefaultAsync(e => e.IdEscandallo == id);
         }
 
+        public async Task InsertComponenteAsync(ComponenteEscandallo comp)
+        {
+            await _context.ComponenteEscandallos.AddAsync(comp);
+            await _context.SaveChangesAsync();
+        }
+
+
         /// <summary>
         /// Método personalizado: obtener escandallo por CódigoProducto
         /// </summary>

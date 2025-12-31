@@ -8,6 +8,7 @@ using recTivo.Frontend.Dialogos;
 using recTivo.Frontend.Dialogos.Articulos;
 using recTivo.Frontend.Dialogos.Clientes;
 using recTivo.Frontend.Dialogos.Empleado;
+using recTivo.Frontend.Dialogos.Escandallo;
 using recTivo.Frontend.Dialogos.VentanasInicio;
 using recTivo.MVVM;
 using System;
@@ -74,6 +75,11 @@ namespace recTivo
             services.AddTransient<DialogoBajaEmpleado>();
             services.AddTransient<DialogoConsultaEmpleado>();
             services.AddTransient<DialogoModificarEmpleado>();
+
+            services.AddTransient<DialogoAltaEscandallo>();
+            services.AddTransient<DialogoModificarEscandallo>();
+            services.AddTransient<DialogoListarEscandallo>();
+
 
             services.AddTransient<ConfirmacionDialogo>();
             services.AddScoped<RolRepository>();

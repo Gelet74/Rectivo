@@ -4,8 +4,7 @@
         Title="Pulsa ESC para volver atrás"
         Height="500" Width="600"
         ResizeMode="NoResize"
-        x:Name="DialEntradaAlmacen"
-        
+        x:Name="DialEntradaAlmacen"        
         Loaded="DialEntradaAlmacen_Loaded"
         WindowStartupLocation="CenterScreen"
         Background="#2D2D30"

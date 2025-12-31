@@ -71,7 +71,7 @@ namespace di.proyecto.clase._2025.Frontend.Mensajes
             {
                 case TipoMensaje.Informacion:
                     ColorDistintivo = new SolidColorBrush(Color.FromRgb(33, 150, 243)); // Azul
-                    Imagen = CargarIcono("info");
+                    Imagen = CargarIcono("exito");
                     break;
 
                 case TipoMensaje.Advertencia:

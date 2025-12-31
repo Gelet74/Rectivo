@@ -168,6 +168,37 @@
             </Expander>
 
             <Expander HorizontalAlignment="Left" 
+          IsExpanded="False" Width="170" 
+          Style="{StaticResource MaterialDesignExpander}" 
+          Foreground="White" 
+          Background="#ff9800" 
+          Cursor="Hand">
+                <Expander.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/Recursos/Iconos/escandallo.png" 
+                               Width="35" 
+                               Height="35" 
+                               Margin="-10,0,0,0"/>
+                        <TextBlock Text="Escandallos" 
+                                   VerticalAlignment="Center" 
+                                   Foreground="White" 
+                                   Margin="8,0,0,0"
+                                   FontWeight="Bold"/>
+                    </StackPanel>
+                </Expander.Header>
+                <ListView x:Name="escandallos" 
+                          PreviewKeyDown="Menu_PreviewKeyDown"
+                          SelectionChanged="escandallos_SelectionChanged" 
+                          Style="{StaticResource MaterialDesignListView}" 
+                          Foreground="White" 
+                          ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                    <ListViewItem Content="Dar de alta" Padding="20 5"/>
+                    <ListViewItem Content="Modificar" Padding="20 5"/>
+                    <ListViewItem Content="Listar escandallo" Padding="20 5"/>
+                </ListView>
+            </Expander>
+
+            <Expander HorizontalAlignment="Left" 
                       IsExpanded="False" 
                       Width="170" 
                       Style="{StaticResource MaterialDesignExpander}" 

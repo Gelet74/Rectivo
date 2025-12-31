@@ -463,3 +463,9 @@ D:\gelet\escritorio\DI\recTivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogo
 D:\gelet\escritorio\DI\recTivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\Clientes\DialogoConsultaCliente.baml
 D:\gelet\escritorio\DI\recTivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\Clientes\DialogoModificarCliente.baml
 D:\gelet\escritorio\DI\recTivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\VentanasInicio\ConfirmacionDialogo.baml
+D:\gelet\escritorio\DI\recTivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\Escandallo\DialogoAltaEscandallo.g.cs
+D:\gelet\escritorio\DI\recTivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\Escandallo\DialogoListarEscandallo.g.cs
+D:\gelet\escritorio\DI\recTivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\Escandallo\DialogoModificarEscandallo.g.cs
+D:\gelet\escritorio\DI\recTivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\Escandallo\DialogoAltaEscandallo.baml
+D:\gelet\escritorio\DI\recTivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\Escandallo\DialogoListarEscandallo.baml
+D:\gelet\escritorio\DI\recTivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\Escandallo\DialogoModificarEscandallo.baml

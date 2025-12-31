@@ -13,6 +13,14 @@ namespace recTivo.Backend.Modelos
         public double Cantidad { get; set; }
         public decimal PrecioUnitario { get; set; }
 
+        [NotMapped]
+        public string? NombreComponente { get; set; }
+
+
         public Escandallo Escandallo { get; set; }
+
+        [NotMapped]
+        public string Codigo { get; set; } = string.Empty;
+
     }
 }

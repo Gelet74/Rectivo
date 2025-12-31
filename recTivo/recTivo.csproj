@@ -21,6 +21,8 @@
     <None Remove="Recursos\Iconos\Clientes.png" />
     <None Remove="Recursos\Iconos\Empleado.png" />
     <None Remove="Recursos\Iconos\error.jpg" />
+    <None Remove="Recursos\Iconos\escandallo.png" />
+    <None Remove="Recursos\Iconos\exito.jpg" />
     <None Remove="Recursos\Iconos\Ordenes.png" />
     <None Remove="Recursos\Iconos\Rectivo.jpg" />
     <None Remove="Recursos\Iconos\rectivo_icon.png" />
@@ -55,6 +57,8 @@
     <Resource Include="Recursos\Iconos\Clientes.png" />
     <Resource Include="Recursos\Iconos\Empleado.png" />
     <Resource Include="Recursos\Iconos\error.jpg" />
+    <Resource Include="Recursos\Iconos\escandallo.png" />
+    <Resource Include="Recursos\Iconos\exito.jpg" />
     <Resource Include="Recursos\Iconos\Ordenes.png" />
     <Resource Include="Recursos\Iconos\Rectivo.jpg" />
     <Resource Include="Recursos\Iconos\rectivo_icon.png" />

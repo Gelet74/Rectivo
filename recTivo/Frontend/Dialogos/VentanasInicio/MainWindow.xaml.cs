@@ -4,6 +4,7 @@ using recTivo.Frontend.Dialogos;
 using recTivo.Frontend.Dialogos.Articulos;
 using recTivo.Frontend.Dialogos.Clientes;
 using recTivo.Frontend.Dialogos.Empleado;
+using recTivo.Frontend.Dialogos.Escandallo;
 using recTivo.Frontend.Dialogos.VentanasInicio;
 using System;
 using System.Windows;
@@ -46,6 +47,7 @@ namespace recTivo
 
             almacen.SelectedItem = null;
         }
+
 
         private void articulos_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -186,6 +188,37 @@ namespace recTivo
             {
                 Application.Current.Shutdown();
             }
-        }          
+        }
+
+        private void escandallos_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (escandallos.SelectedItem is not ListViewItem item)
+                return;
+
+            string opcion = item.Content.ToString();
+
+            switch (opcion)
+            {
+                case "Dar de alta":
+                    var altaEscandallo = _serviceProvider.GetService<DialogoAltaEscandallo>();
+                    altaEscandallo.Owner = this;
+                    altaEscandallo.ShowDialog();
+                    break;
+
+                case "Modificar":
+                    var modificarEscandallo = _serviceProvider.GetService<DialogoModificarEscandallo>();
+                    modificarEscandallo.Owner = this;
+                    modificarEscandallo.ShowDialog();
+                    break;
+
+                case "Listar escandallo":
+                    var listarEscandallo = _serviceProvider.GetService<DialogoListarEscandallo>();
+                    listarEscandallo.Owner = this;
+                    listarEscandallo.ShowDialog();
+                    break;
+            }
+
+            escandallos.SelectedItem = null;
+        }
     }
 }

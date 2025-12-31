@@ -1,7 +1,6 @@
 ﻿<Window x:Class="recTivo.Frontend.Dialogos.Empleado.DialogoAltaEmpleado"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Pulsa ESC para volver atrás"
         Height="500" Width="600"
         ResizeMode="NoResize"
         WindowStyle="None"
