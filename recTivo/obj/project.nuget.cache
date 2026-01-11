@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "I3n+KpxITyM=",
+  "dgSpecHash": "40kEvI3+jME=",
   "success": true,
-  "projectFilePath": "D:\\gelet\\escritorio\\DI\\recTivo\\recTivo\\recTivo.csproj",
+  "projectFilePath": "D:\\gelet\\escritorio\\DI\\Rectivo\\recTivo\\recTivo.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Angel\\.nuget\\packages\\bouncycastle.cryptography\\2.6.2\\bouncycastle.cryptography.2.6.2.nupkg.sha512",
     "C:\\Users\\Angel\\.nuget\\packages\\castle.core\\5.1.1\\castle.core.5.1.1.nupkg.sha512",

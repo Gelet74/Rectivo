@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-D:\gelet\escritorio\DI\recTivo\recTivo\obj\Debug\net8.0-windows\
+D:\gelet\escritorio\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\
 recTivo
 none
 false
 TRACE;DEBUG;NET;NET8_0;NETCOREAPP;WINDOWS;WINDOWS7_0;NET5_0_OR_GREATER;NET6_0_OR_GREATER;NET7_0_OR_GREATER;NET8_0_OR_GREATER;NETCOREAPP3_0_OR_GREATER;NETCOREAPP3_1_OR_GREATER;WINDOWS7_0_OR_GREATER
-D:\gelet\escritorio\DI\recTivo\recTivo\App.xaml
+D:\gelet\escritorio\DI\Rectivo\recTivo\App.xaml
 22-1024423847
 
 65-1784858928
 2321532263481
 Frontend\Dialogos\Almacen\DialogoEntradaAlmacen.xaml;Frontend\Dialogos\Almacen\DialogoSalidaAlmacen.xaml;Frontend\Dialogos\Articulos\DialogoAltaArticulo.xaml;Frontend\Dialogos\Articulos\DialogoBajaArticulo.xaml;Frontend\Dialogos\Articulos\DialogoListarArticulo.xaml;Frontend\Dialogos\Articulos\DialogoModificarArticulo.xaml;Frontend\Dialogos\Clientes\DialogoAltaCliente.xaml;Frontend\Dialogos\Clientes\DialogoBajaCliente.xaml;Frontend\Dialogos\Clientes\DialogoConsultaCliente.xaml;Frontend\Dialogos\Clientes\DialogoModificarCliente.xaml;Frontend\Dialogos\Empleado\DialogoAltaEmpleado.xaml;Frontend\Dialogos\Empleado\DialogoBajaEmpleado.xaml;Frontend\Dialogos\Empleado\DialogoConsultaEmpleado.xaml;Frontend\Dialogos\Empleado\DialogoModificarEmpleado.xaml;Frontend\Dialogos\Escandallo\DialogoAltaEscandallo.xaml;Frontend\Dialogos\Escandallo\DialogoListarEscandallo.xaml;Frontend\Dialogos\Escandallo\DialogoModificarEscandallo.xaml;Frontend\Dialogos\VentanasInicio\ConfirmacionDialogo.xaml;Frontend\Dialogos\VentanasInicio\Inicio.xaml;Frontend\Dialogos\VentanasInicio\Login.xaml;Frontend\Dialogos\VentanasInicio\MainWindow.xaml;Frontend\Mensajes\VentanaMensaje.xaml;
 
-False
+True
 

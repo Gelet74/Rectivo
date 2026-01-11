@@ -31,12 +31,16 @@ namespace recTivo.Backend.Modelos
 
         [Column("LETRA_PASILLO")]
         [StringLength(10)]
+        [Required(ErrorMessage = "La letra es un campo obligatorio")]
+
         public string? LetraPasillo { get; set; }
 
         [Column("NUMERO_ESTANTERIA")]
         public int? NumeroEstanteria { get; set; }
+        [Required(ErrorMessage = "El número es un campo obligatorio")]
 
         [Column("HUECO")]
         public int? Hueco { get; set; }
+        [Required(ErrorMessage = "El hueco es un campo obligatorio")]
     }
 }

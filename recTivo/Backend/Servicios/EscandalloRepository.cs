@@ -56,6 +56,18 @@ namespace recTivo.Backend.Repos
         }
 
         /// <summary>
+        /// Obtiene todos los componentes de un escandallo por su IdEscandallo
+        /// </summary>
+        public async Task<List<ComponenteEscandallo>> GetComponentesByEscandalloAsync(int idEscandallo)
+        {
+            return await _context.ComponenteEscandallos
+                                 .Where(c => c.IdEscandallo == idEscandallo)
+                                 .OrderBy(c => c.CodigoArticulo)
+                                 .ToListAsync();
+        }
+
+
+        /// <summary>
         /// Elimina un escandallo por entidad
         /// </summary>
         public override void Remove(Escandallo entidad)

@@ -90,10 +90,12 @@
 
                         <TextBlock Text="Letra pasillo:" Foreground="#FF9800"/>
                         <TextBox x:Name="txtPasillo" 
-                     Height="30" 
-                     Margin="0,5"
-                     Width="180"
-                     HorizontalAlignment="Left"/>
+                                 Text="{Binding vistaArticuloUbicacion.letra_pasillo,ValidatesOnDataErrors=True,
+                                 NotifyOnValidationError=True, UpdateSourceTrigger=PropertyChanged}"
+                                 Height="30" 
+                                 Margin="0,5"
+                                 Width="180"
+                                 HorizontalAlignment="Left"/>
 
                         <TextBlock Text="Número estantería:" Foreground="#FF9800"/>
                         <TextBox x:Name="txtEstanteria" 

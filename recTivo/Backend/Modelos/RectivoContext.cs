@@ -191,12 +191,17 @@ namespace recTivo.Backend.Modelos
                 entity.Property(e => e.Cantidad).HasColumnName("Cantidad");
                 entity.Property(e => e.PrecioUnitario).HasColumnType("decimal(10,2)").HasColumnName("PrecioUnitario");
 
+                // 🔥 FALTABA ESTO → activa la jerarquía
+                entity.Property(e => e.CodigoComponentePadre).HasColumnName("CodigoComponentePadre");
+
+
                 entity.HasOne(e => e.Escandallo)
                     .WithMany(p => p.Componentes)
                     .HasForeignKey(e => e.IdEscandallo)
                     .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("fk_componenteescandallo_escandallo");
             });
+
 
             OnModelCreatingPartial(modelBuilder);
         }

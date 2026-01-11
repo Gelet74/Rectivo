@@ -1,12 +1,105 @@
 ﻿<Window x:Class="recTivo.Frontend.Dialogos.Escandallo.DialogoListarEscandallo"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:recTivo.Frontend.Dialogos.Escandallo"
-        mc:Ignorable="d"
-        Title="DialogoListarEscandallo" Height="450" Width="800">
+        xmlns:modelos="clr-namespace:recTivo.Backend.Modelos"
+        ResizeMode="NoResize"
+        WindowStyle="None"
+        WindowStartupLocation="CenterScreen"
+        Background="#2D2D30"
+        Height="600" Width="900">
+
+    <Window.Resources>
+        <Style TargetType="TextBox">
+            <Setter Property="Background" Value="#E0E0E0"/>
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="BorderBrush" Value="#E0E0E0"/>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="Padding" Value="5"/>
+        </Style>
+
+        <Style TargetType="Button">
+            <Setter Property="Background" Value="#FF9800"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Padding" Value="8,4"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="BorderBrush" Value="#FF9800"/>
+            <Setter Property="BorderThickness" Value="2"/>
+        </Style>
+    </Window.Resources>
+
     <Grid>
-        
+        <Border BorderBrush="#FF9800" BorderThickness="4">
+            <DockPanel LastChildFill="True">
+
+                <!-- CABECERA -->
+                <Grid DockPanel.Dock="Top" Height="40" Background="#808080">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Text="LISTAR ESCANDALLO"
+                               Foreground="White"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Left"
+                               Margin="10,0"/>
+
+                    <TextBlock Text="Pulsa ESC para volver atrás"
+                               Foreground="White"
+                               HorizontalAlignment="Right"
+                               VerticalAlignment="Center"
+                               Grid.Column="1"
+                               Margin="0,0,10,0"/>
+                </Grid>
+
+                <!-- CONTENIDO -->
+                <StackPanel Margin="20" Orientation="Vertical">
+
+                    <!-- Selección de artículo -->
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <TextBlock Text="Código artículo:" 
+                                   Foreground="White"
+                                   VerticalAlignment="Center"
+                                   Margin="0,0,10,0"/>
+
+                        <TextBox Width="150"
+                                 Text="{Binding CodigoSeleccionado}"/>
+
+                        <Button Content="Cargar"
+                                Width="120"
+                                Click="BtnCargar_Click"/>
+                    </StackPanel>
+
+                    <!-- Descripción -->
+                    <TextBlock Text="{Binding DescripcionArticulo}"
+                               Foreground="White"
+                               Margin="0,10,0,10"/>
+
+                    <!-- TREEVIEW -->
+                    <TreeView ItemsSource="{Binding EscandalloActual}"
+                              Background="#E0E0E0"
+                              Foreground="Black"
+                              SelectedItemChanged="TreeView_SelectedItemChanged"
+                              Height="400">
+
+                        <TreeView.ItemTemplate>
+                            <HierarchicalDataTemplate DataType="{x:Type modelos:ComponenteEscandallo}"
+                                                      ItemsSource="{Binding Hijos}">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding CodigoArticulo}" FontWeight="Bold" Margin="5,0"/>
+                                    <TextBlock Text=" - " />
+                                    <TextBlock Text="{Binding Descripcion}" />
+                                    <TextBlock Text=" | Cant: " />
+                                    <TextBlock Text="{Binding Cantidad}" />
+                                </StackPanel>
+                            </HierarchicalDataTemplate>
+                        </TreeView.ItemTemplate>
+
+                    </TreeView>
+
+                </StackPanel>
+
+            </DockPanel>
+        </Border>
     </Grid>
 </Window>

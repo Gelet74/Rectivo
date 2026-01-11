@@ -6,21 +6,29 @@ namespace recTivo.Backend.Modelos
     {
         public int IdComponente { get; set; }
         public int IdEscandallo { get; set; }
+
+        // Código del artículo componente (clave real)
         public string CodigoArticulo { get; set; }
+
         public string Descripcion { get; set; }
+
         [Column("Descrip2")]
         public string Descripcion2 { get; set; }
+
         public double Cantidad { get; set; }
         public decimal PrecioUnitario { get; set; }
 
-        [NotMapped]
-        public string? NombreComponente { get; set; }
-
-
         public Escandallo Escandallo { get; set; }
 
-        [NotMapped]
-        public string Codigo { get; set; } = string.Empty;
+        // Código del padre (si es null → es raíz)
+        public string? CodigoComponentePadre { get; set; }
 
+        // Hijos en memoria (no en BD)
+        [NotMapped]
+        public List<ComponenteEscandallo> Hijos { get; set; } = new();
+
+        // Nombre opcional para mostrar
+        [NotMapped]
+        public string? NombreComponente { get; set; }
     }
 }

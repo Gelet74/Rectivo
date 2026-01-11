@@ -1,15 +1,15 @@
 {
   "format": 1,
   "restore": {
-    "D:\\gelet\\escritorio\\DI\\recTivo\\recTivo\\recTivo.csproj": {}
+    "D:\\gelet\\escritorio\\DI\\Rectivo\\recTivo\\recTivo.csproj": {}
   },
   "projects": {
-    "D:\\gelet\\escritorio\\DI\\recTivo\\recTivo\\recTivo.csproj": {
+    "D:\\gelet\\escritorio\\DI\\Rectivo\\recTivo\\recTivo.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\gelet\\escritorio\\DI\\recTivo\\recTivo\\recTivo.csproj",
+        "projectUniqueName": "D:\\gelet\\escritorio\\DI\\Rectivo\\recTivo\\recTivo.csproj",
         "projectName": "recTivo",
-        "projectPath": "D:\\gelet\\escritorio\\DI\\recTivo\\recTivo\\recTivo.csproj",
+        "projectPath": "D:\\gelet\\escritorio\\DI\\Rectivo\\recTivo\\recTivo.csproj",
         "packagesPath": "C:\\Users\\Angel\\.nuget\\packages\\",
         "outputPath": "D:\\gelet\\escritorio\\DI\\recTivo\\recTivo\\obj\\",
         "projectStyle": "PackageReference",

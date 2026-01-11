@@ -1,27 +1,68 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using recTivo.Backend.Modelos;
+using recTivo.Frontend.Dialogos.VentanasInicio;
+using recTivo.MVVM;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace recTivo.Frontend.Dialogos.Escandallo
 {
-    /// <summary>
-    /// Lógica de interacción para DialogoListarEscandallo.xaml
-    /// </summary>
     public partial class DialogoListarEscandallo : Window
     {
-        public DialogoListarEscandallo()
+        private readonly MVArticulo _vm;
+        public DialogoListarEscandallo(MVArticulo vm)
         {
             InitializeComponent();
+            _vm = vm;
+            DataContext = _vm;
+            Loaded += async (_, __) => await _vm.Inicializa();
+        }
+
+        private async void BtnCargar_Click(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is MVArticulo vm)
+                await vm.CargarEscandalloAsync(vm.CodigoSeleccionado);
+        }
+
+        private void TreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            if (DataContext is MVArticulo vm)
+                vm.ComponenteSeleccionado = e.NewValue as ComponenteEscandallo;
+        }
+
+        private bool _escapeEnCurso = false;
+
+        protected override void OnPreviewKeyDown(KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape)
+            {
+                if (_escapeEnCurso)
+                {
+                    e.Handled = true;
+                    return;
+                }
+
+                _escapeEnCurso = true;
+                e.Handled = true;
+
+                try
+                {
+                    var dialog = new ConfirmacionDialogo { Owner = this };
+                    bool? result = dialog.ShowDialog();
+
+                    if (result == true && dialog.Confirmado)
+                    {
+                        this.Close();
+                    }
+                }
+                finally
+                {
+                    _escapeEnCurso = false;
+                }
+            }
+            else
+            {
+                base.OnPreviewKeyDown(e);
+            }
         }
     }
 }
