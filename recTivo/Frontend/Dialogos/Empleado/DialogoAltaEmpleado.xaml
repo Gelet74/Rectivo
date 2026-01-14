@@ -53,14 +53,18 @@
                     <StackPanel>
 
                         <TextBlock Text="Apellidos:" Foreground="#FF9800"/>
-                        <TextBox Text="{Binding Apellidos}" 
+                        <TextBox Text="{Binding Apellidos,
+                                 ValidatesOnDataErrors=True,NotifyOnValidationError=True, 
+                                 UpdateSourceTrigger=PropertyChanged}"
                                  Height="30" 
                                  Margin="0,5" 
                                  HorizontalAlignment="Left"
                                  Width="300"/>
 
                         <TextBlock Text="Nombre:" Foreground="#FF9800"/>
-                        <TextBox Text="{Binding Nombre}"
+                        <TextBox Text="{Binding Nombre,
+                                 ValidatesOnDataErrors=True,NotifyOnValidationError=True, 
+                                 UpdateSourceTrigger=PropertyChanged}"
                                  Height="30" 
                                  Margin="0,5" 
                                  HorizontalAlignment="Left"
@@ -74,14 +78,18 @@
                                  Width="300"/>
 
                         <TextBlock Text="Usuario:" Foreground="#FF9800"/>
-                        <TextBox Text="{Binding Username}" 
+                        <TextBox Text="{Binding Username,
+                                 ValidatesOnDataErrors=True,NotifyOnValidationError=True, 
+                                 UpdateSourceTrigger=PropertyChanged}" 
                                  Height="30" 
                                  Margin="0,5" 
                                  HorizontalAlignment="Left"
                                  Width="300"/>
 
                         <TextBlock Text="Contraseña:" Foreground="#FF9800"/>
-                        <TextBox Text="{Binding Password}" 
+                        <TextBox Text="{Binding Password,
+                                 ValidatesOnDataErrors=True,NotifyOnValidationError=True, 
+                                 UpdateSourceTrigger=PropertyChanged}" 
                                  Height="30" 
                                  Margin="0,5" 
                                  HorizontalAlignment="Left"
@@ -107,7 +115,8 @@
                             Foreground="#ff9800"
                             FontWeight="Bold"
                             HorizontalAlignment="Center"
-                            VerticalAlignment="Bottom"/>
+                            IsEnabled="{Binding HasErrors}"
+                            VerticalAlignment="Bottom" Cursor="Hand"/>
                 </Grid>
 
             </DockPanel>

@@ -1,12 +1,9 @@
 ﻿using di.proyecto.clase._2025.Frontend.Mensajes;
-using MahApps.Metro.Controls;
 using Microsoft.EntityFrameworkCore;
 using recTivo.Backend.Modelos;
 using recTivo.Frontend.Dialogos.VentanasInicio;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using recTivo.MVVM;
+using recTivo.MVVM.Base;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -29,6 +26,12 @@ namespace recTivo.Frontend.Dialogos
 
         private async void DialEntradaAlmacen_Loaded(object sender, RoutedEventArgs e)
         {
+            if (DataContext is MVBase vm)
+            {
+                this.AddHandler(Validation.ErrorEvent, new RoutedEventHandler(vm.OnErrorEvent));
+            }
+
+
             _articulos = await _context.Articulos
                 .Where(a =>
                     a.Codigo.StartsWith("PS") ||
@@ -40,14 +43,12 @@ namespace recTivo.Frontend.Dialogos
             
             cmbCodigo.ItemsSource = _articulos;
             cmbCodigo.DisplayMemberPath = "Codigo";
-
            
             cmbDescrip1.ItemsSource = _articulos
                 .Select(a => a.Descrip)
                 .Distinct()
                 .OrderBy(d => d)
                 .ToList();
-
             
             cmbDescrip2.ItemsSource = _articulos
                 .Select(a => a.Descrip2)

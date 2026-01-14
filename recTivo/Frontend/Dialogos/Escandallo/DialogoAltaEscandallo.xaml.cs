@@ -1,4 +1,5 @@
-﻿using recTivo.Frontend.Dialogos.VentanasInicio;
+﻿using di.proyecto.clase._2025.Frontend.Mensajes;
+using recTivo.Frontend.Dialogos.VentanasInicio;
 using recTivo.MVVM;
 using System.Windows;
 using System.Windows.Input;
@@ -62,6 +63,19 @@ namespace recTivo.Frontend.Dialogos.Escandallo
         {
             _vm.AñadirComponente();
         }
+
+        private async void BtnCargarEscandallo_Click(object sender, RoutedEventArgs e)
+        {
+            if (_vm.ArticuloFinal == null)
+            {
+                MensajeInformacion.Mostrar("Aviso","Selecciona primero un artículo.");
+                return;
+            }
+
+            await _vm.CargarEscandalloAsync(_vm.ArticuloFinal.Codigo);
+        }
+
+
 
         // ================================
         //   AÑADIR SUBCOMPONENTE

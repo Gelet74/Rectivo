@@ -7,11 +7,11 @@ using System.Windows.Controls;
 namespace recTivo.MVVM.Base{
         public class MVBase : ValidatableViewModel
     {
+       
         /// <summary>
         /// Botón del formulario que queremos que se active/desactive en función
         /// de si hay errores en la validación de los campos
-        /// </summary>
-        public bool HasErrors => errorCount > 0;
+        /// </summary>    
 
         
         /// <summary>
@@ -64,7 +64,7 @@ namespace recTivo.MVVM.Base{
                         throw new Exception("Acción desconocida");
                     }
             }
-            //btnGuardar.IsEnabled = errorCount == 0;
+            UpdateHasErrors();
         }
         // Métodos CRUD genéricos asíncronos con manejo de excepciones
         /// <summary>
@@ -128,6 +128,20 @@ namespace recTivo.MVVM.Base{
                 return false;
             }
         }
+
+        public bool HasErrors
+        {
+            get => _hasErrors;
+            set => SetProperty(ref _hasErrors, value);
+        }
+        private bool _hasErrors;
+
+        private void UpdateHasErrors()
+        {
+            HasErrors = errorCount == 0;
+
+        }
+
 
         protected async Task<bool> DeleteAsync<T>(IRepository<T> repo, int id) where T : class
         {

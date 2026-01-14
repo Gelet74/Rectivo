@@ -1,8 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using recTivo.MVVM.Base;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace recTivo.Backend.Modelos
 {
-    public class Escandallo
+    public class Escandallo : ValidatableViewModel
     {
         public int IdEscandallo { get; set; }
         public string CodigoProducto { get; set; }

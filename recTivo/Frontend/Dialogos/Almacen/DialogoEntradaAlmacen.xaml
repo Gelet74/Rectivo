@@ -56,21 +56,21 @@
                     <StackPanel>
                         <TextBlock Text="Código del artículo:" Foreground="#FF9800"/>
                         <ComboBox x:Name="cmbCodigo" 
-                      Height="30" 
-                      Margin="0,5"
-                      DisplayMemberPath="Codigo"
-                      SelectionChanged="cmbCodigo_SelectionChanged"
-                      Width="180"
-                      HorizontalAlignment="Left"/>
+                                  Height="30" 
+                                  Margin="0,5"
+                                  DisplayMemberPath="Codigo"
+                                  SelectionChanged="cmbCodigo_SelectionChanged"
+                                  Width="180"
+                                  HorizontalAlignment="Left"/>
 
                         <TextBlock Text="Descripción 1:" Foreground="#FF9800"/>
                         <ComboBox x:Name="cmbDescrip1" 
-                      Height="30" 
-                      HorizontalAlignment="Left"
-                      Margin="0,5"
-                      SelectionChanged="cmbDescrip1_SelectionChanged" 
-                      Cursor="Hand"
-                      Width="180"/>
+                                  Height="30" 
+                                  HorizontalAlignment="Left"
+                                  Margin="0,5"
+                                  SelectionChanged="cmbDescrip1_SelectionChanged" 
+                                  Cursor="Hand"
+                                  Width="180"/>
 
                         <TextBlock Text="Descripción 2:" Foreground="#FF9800"/>
                         <ComboBox x:Name="cmbDescrip2" 
@@ -83,14 +83,14 @@
 
                         <TextBlock Text="Cantidad:" Foreground="#FF9800"/>
                         <TextBox x:Name="txtCantidad" 
-                     Height="30" 
-                     Margin="0,5" 
-                     Width="180"
-                     HorizontalAlignment="Left"/>
+                                 Height="30" 
+                                 Margin="0,5" 
+                                 Width="180"
+                                 HorizontalAlignment="Left"/>
 
                         <TextBlock Text="Letra pasillo:" Foreground="#FF9800"/>
                         <TextBox x:Name="txtPasillo" 
-                                 Text="{Binding vistaArticuloUbicacion.letra_pasillo,ValidatesOnDataErrors=True,
+                                 Text="{Binding vistaArticuloUbicacion.LetraPasillo,ValidatesOnDataErrors=True,
                                  NotifyOnValidationError=True, UpdateSourceTrigger=PropertyChanged}"
                                  Height="30" 
                                  Margin="0,5"
@@ -99,29 +99,28 @@
 
                         <TextBlock Text="Número estantería:" Foreground="#FF9800"/>
                         <TextBox x:Name="txtEstanteria" 
-                     Height="30" 
-                     Margin="0,5"
-                     Width="180"
-                     HorizontalAlignment="Left"/>
+                                 Height="30" 
+                                 Margin="0,5"
+                                 Width="180"
+                                 HorizontalAlignment="Left"/>
 
                         <TextBlock Text="Hueco:" Foreground="#FF9800"/>
                         <TextBox x:Name="txtHueco" 
-                     Height="30" 
-                     Margin="0,5"
-                     Width="180"
-                     HorizontalAlignment="Left"/>
+                                 Height="30" 
+                                 Margin="0,5"
+                                 Width="180"
+                                 HorizontalAlignment="Left"/>
                     </StackPanel>
                     <Button Content="Añadir al almacén"
-                x:Name="btnAnadirAlmacen"
-                Click="btnAnadirAlmacen_Click"
-                Height="30" Width="180"
-                HorizontalAlignment="Right"
-                Margin="0,0,50,12"
-                VerticalAlignment="Bottom"
-                Background="#E0E0E0"
-                Foreground="#ff9800"
-                FontWeight="Bold"/>
-
+                            x:Name="btnAnadirAlmacen"
+                            Click="btnAnadirAlmacen_Click"
+                            Height="30" Width="180"
+                            HorizontalAlignment="Right"
+                            Margin="0,0,50,5"
+                            VerticalAlignment="Bottom"
+                            Background="#E0E0E0"
+                            Foreground="#ff9800"
+                            FontWeight="Bold"/>
                 </Grid>
             </DockPanel>
         </Border>

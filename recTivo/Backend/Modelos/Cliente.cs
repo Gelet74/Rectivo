@@ -1,8 +1,9 @@
 ﻿using recTivo.Backend.Modelos;
+using recTivo.MVVM.Base;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-public class Cliente
+public class Cliente : ValidatableViewModel
 {
     public virtual ICollection<ClienteHasArticulo> ClienteHasArticulos { get; set; } = new List<ClienteHasArticulo>();
     

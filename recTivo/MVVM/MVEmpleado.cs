@@ -9,6 +9,13 @@ namespace recTivo.MVVM
         private readonly EmpleadoRepository _empleadoRepository;
         private readonly RolRepository _rolRepository;
 
+        private Empleado _empleado;
+        public Empleado Empleado
+        {
+            get => _empleado;
+            set => SetProperty(ref _empleado, value);
+        }
+
         public MVEmpleado(EmpleadoRepository empleadoRepository, RolRepository rolRepository)
         {
             _empleadoRepository = empleadoRepository;
@@ -109,6 +116,9 @@ namespace recTivo.MVVM
      
         public async Task<bool> GuardarAsync()
         {
+            bool correcto = true;      
+
+            
             var empleado = new Empleado
             {
                 Apellidos = Apellidos,

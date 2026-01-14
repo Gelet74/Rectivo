@@ -1,8 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using recTivo.MVVM.Base;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace recTivo.Backend.Modelos
 {
-    public class ComponenteEscandallo
+    public class ComponenteEscandallo : ValidatableViewModel
     {
         public int IdComponente { get; set; }
         public int IdEscandallo { get; set; }
@@ -21,7 +22,7 @@ namespace recTivo.Backend.Modelos
         public Escandallo Escandallo { get; set; }
 
         // Código del padre (si es null → es raíz)
-        public string? CodigoComponentePadre { get; set; }
+        public String? CodigoComponentePadre { get; set; }
 
         // Hijos en memoria (no en BD)
         [NotMapped]
@@ -30,5 +31,7 @@ namespace recTivo.Backend.Modelos
         // Nombre opcional para mostrar
         [NotMapped]
         public string? NombreComponente { get; set; }
+
+    
     }
 }

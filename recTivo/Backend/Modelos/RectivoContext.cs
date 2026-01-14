@@ -191,7 +191,6 @@ namespace recTivo.Backend.Modelos
                 entity.Property(e => e.Cantidad).HasColumnName("Cantidad");
                 entity.Property(e => e.PrecioUnitario).HasColumnType("decimal(10,2)").HasColumnName("PrecioUnitario");
 
-                // 🔥 FALTABA ESTO → activa la jerarquía
                 entity.Property(e => e.CodigoComponentePadre).HasColumnName("CodigoComponentePadre");
 
 

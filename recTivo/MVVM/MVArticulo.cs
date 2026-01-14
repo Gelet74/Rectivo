@@ -93,20 +93,20 @@ namespace recTivo.MVVM
                 return;
             }
 
-            if (!string.IsNullOrWhiteSpace(ComponenteNuevo.Codigo) &&
+            if (!string.IsNullOrWhiteSpace(ComponenteNuevo.CodigoArticulo) &&
                 ComponenteNuevo.Cantidad > 0)
             {
-                if (ComponenteNuevo.Codigo.StartsWith("PT"))
+                if (ComponenteNuevo.CodigoArticulo.StartsWith("PT"))
                 {
                     MensajeError.Mostrar("ESCANDALLO", "Un artículo PT no puede ser componente.");
                     return;
                 }
 
-                var articulo = ListaArticulos.FirstOrDefault(a => a.Codigo == ComponenteNuevo.Codigo);
+                var articulo = ListaArticulos.FirstOrDefault(a => a.Codigo == ComponenteNuevo.CodigoArticulo);
 
                 Componentes.Add(new ComponenteEscandallo
                 {
-                    Codigo = ComponenteNuevo.Codigo,
+                    CodigoArticulo = ComponenteNuevo.CodigoArticulo,
                     Cantidad = ComponenteNuevo.Cantidad,
                     Descripcion = articulo?.Descrip ?? "",
                     Descripcion2 = articulo?.Descrip2 ?? "",
@@ -129,24 +129,24 @@ namespace recTivo.MVVM
                 return;
             }
 
-            if (string.IsNullOrWhiteSpace(ComponenteNuevo.Codigo) ||
+            if (string.IsNullOrWhiteSpace(ComponenteNuevo.CodigoArticulo) ||
                 ComponenteNuevo.Cantidad <= 0)
             {
                 MensajeError.Mostrar("ESCANDALLO", "Código o cantidad inválidos.");
                 return;
             }
 
-            if (ComponenteNuevo.Codigo.StartsWith("PT"))
+            if (ComponenteNuevo.CodigoArticulo.StartsWith("PT"))
             {
                 MensajeError.Mostrar("ESCANDALLO", "Un artículo PT no puede ser hijo.");
                 return;
             }
 
-            var articulo = ListaArticulos.FirstOrDefault(a => a.Codigo == ComponenteNuevo.Codigo);
+            var articulo = ListaArticulos.FirstOrDefault(a => a.Codigo == ComponenteNuevo.CodigoArticulo);
 
             var nuevo = new ComponenteEscandallo
             {
-                Codigo = ComponenteNuevo.Codigo,
+                CodigoArticulo = ComponenteNuevo.CodigoArticulo,
                 Cantidad = ComponenteNuevo.Cantidad,
                 Descripcion = articulo?.Descrip ?? "",
                 Descripcion2 = articulo?.Descrip2 ?? "",
@@ -222,7 +222,7 @@ namespace recTivo.MVVM
             int idEscandallo,
             string codigoPadre)
         {
-            var articuloComp = await _articuloRepository.GetByCodigoAsync(comp.Codigo);
+            var articuloComp = await _articuloRepository.GetByCodigoAsync(comp.CodigoArticulo);
             if (articuloComp == null)
                 return;
 
