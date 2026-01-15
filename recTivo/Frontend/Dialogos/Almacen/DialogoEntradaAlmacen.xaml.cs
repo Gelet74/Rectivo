@@ -58,6 +58,24 @@ namespace recTivo.Frontend.Dialogos
                 .ToList();
         }
 
+        private void txtPasillo_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            var tb = sender as TextBox;
+
+            if (tb == null)
+                return;
+
+            int caret = tb.CaretIndex; 
+
+            string mayus = tb.Text.ToUpper();
+
+            if (tb.Text != mayus)
+            {
+                tb.Text = mayus;
+                tb.CaretIndex = caret; 
+            }
+        }
+
 
         private void cmbDescrip1_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -199,7 +217,7 @@ namespace recTivo.Frontend.Dialogos
                 await _context.SaveChangesAsync();
 
                
-                MensajeAdvertencia.Mostrar("ÉXITO",
+                MensajeInformacion.Mostrar("ÉXITO",
                     $"Se añadieron {cantidad} unidades del artículo {articuloSeleccionado.Codigo} " +
                     $"al pasillo {pasillo}, estantería {estanteria}, hueco {hueco}.");
 

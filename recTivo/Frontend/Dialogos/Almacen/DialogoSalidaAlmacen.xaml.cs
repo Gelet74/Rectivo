@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using di.proyecto.clase._2025.Frontend.Mensajes;
+using Microsoft.EntityFrameworkCore;
 using recTivo.Backend.Modelos;
 using recTivo.Frontend.Dialogos.VentanasInicio;
 using System.Windows;
@@ -127,6 +128,25 @@ namespace recTivo.Frontend.Dialogos
             }
         }
 
+        private void txtPasillo_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            var tb = sender as TextBox;
+
+            if (tb == null)
+                return;
+
+            int caret = tb.CaretIndex; 
+
+            string mayus = tb.Text.ToUpper();
+
+            if (tb.Text != mayus)
+            {
+                tb.Text = mayus;
+                tb.CaretIndex = caret;
+            }
+        }
+
+
         private async void btnRestarAlmacen_Click(object sender, RoutedEventArgs e)
         {
 
@@ -135,14 +155,14 @@ namespace recTivo.Frontend.Dialogos
                 
                 if (cmbCodigo.SelectedItem is not Articulo articuloSeleccionado)
                 {
-                    MessageBox.Show("Debes seleccionar un artículo válido.", "Aviso", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MensajeAdvertencia.Mostrar("Aviso", "Debes seleccionar un artículo válido.");
                     return;
                 }
 
                
                 if (!int.TryParse(txtCantidad.Text, out int cantidad) || cantidad <= 0)
                 {
-                    MessageBox.Show("Introduce una cantidad válida.", "Aviso", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MensajeAdvertencia.Mostrar("Aviso", "Introduce una cantidad válida.");
                     return;
                 }
 
@@ -153,7 +173,7 @@ namespace recTivo.Frontend.Dialogos
 
                 if (string.IsNullOrEmpty(pasillo) || string.IsNullOrEmpty(estanteria) || string.IsNullOrEmpty(hueco))
                 {
-                    MessageBox.Show("Debes indicar pasillo, estantería y hueco.", "Aviso", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MensajeAdvertencia.Mostrar("Aviso", "Debes indicar pasillo, estantería y hueco.");
                     return;
                 }
                
@@ -176,13 +196,10 @@ namespace recTivo.Frontend.Dialogos
 
                 if ((articuloSeleccionado.Stock ?? 0) < cantidad)
                 {
-                    MessageBox.Show(
+                    MensajeAdvertencia.Mostrar("Aviso",
                         $"No hay suficiente stock del artículo {articuloSeleccionado.Codigo}. " +
                         $"Stock actual: {articuloSeleccionado.Stock ?? 0}, " +
-                        $"Cantidad solicitada: {cantidad}.",
-                        "Aviso",
-                        MessageBoxButton.OK,
-                        MessageBoxImage.Warning);
+                        $"Cantidad solicitada: {cantidad}.");
                     return;
                 }
                 articuloSeleccionado.Stock = (articuloSeleccionado.Stock ?? 0) - cantidad;
@@ -191,13 +208,10 @@ namespace recTivo.Frontend.Dialogos
                 _context.Articulos.Update(articuloSeleccionado);
                 await _context.SaveChangesAsync();
 
-                
-                MessageBox.Show(
+
+                MensajeInformacion.Mostrar("Éxito",
                     $"Se restaron {cantidad} unidades del artículo {articuloSeleccionado.Codigo} " +
-                    $"del pasillo {pasillo}, estantería {estanteria}, hueco {hueco}.",
-                    "Éxito",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Information);
+                    $"del pasillo {pasillo}, estantería {estanteria}, hueco {hueco}.");
 
                 
                 txtCantidad.Clear();
@@ -210,7 +224,7 @@ namespace recTivo.Frontend.Dialogos
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al restarr al almacén: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MensajeError.Mostrar("Error", $"Error al restarr al almacén: {ex.Message}");
             }
         }
 

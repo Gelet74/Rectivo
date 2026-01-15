@@ -93,6 +93,7 @@
                                  Text="{Binding vistaArticuloUbicacion.LetraPasillo,ValidatesOnDataErrors=True,
                                  NotifyOnValidationError=True, UpdateSourceTrigger=PropertyChanged}"
                                  Height="30" 
+                                 TextChanged="txtPasillo_TextChanged"
                                  Margin="0,5"
                                  Width="180"
                                  HorizontalAlignment="Left"/>
