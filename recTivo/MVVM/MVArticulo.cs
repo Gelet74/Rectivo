@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace recTivo.MVVM
 {
@@ -73,6 +74,8 @@ namespace recTivo.MVVM
             }
         }
 
+
+
         public string DescripcionFinal => ArticuloFinal?.Descrip ?? "";
         public string Descripcion2Final => ArticuloFinal?.Descrip2 ?? "";
 
@@ -110,7 +113,7 @@ namespace recTivo.MVVM
                     Cantidad = ComponenteNuevo.Cantidad,
                     Descripcion = articulo?.Descrip ?? "",
                     Descripcion2 = articulo?.Descrip2 ?? "",
-                    Hijos = new List<ComponenteEscandallo>()
+                    Hijos = new ObservableCollection<ComponenteEscandallo>()
                 });
 
                 ComponenteNuevo = new ComponenteEscandallo() { Cantidad = 1 };
@@ -123,11 +126,14 @@ namespace recTivo.MVVM
         // ------------------------------------------------------------
         public void AñadirSubcomponente()
         {
-            if (ComponentePadreSeleccionado == null)
+            string codigoPadre = ComponentePadreSeleccionado?.CodigoArticulo ?? ArticuloFinal?.Codigo;
+
+            if (string.IsNullOrWhiteSpace(codigoPadre))
             {
-                MensajeError.Mostrar("ESCANDALLO", "Debes seleccionar un componente padre.");
+                MensajeError.Mostrar("ESCANDALLO", "No se ha definido un componente padre válido.");
                 return;
             }
+
 
             if (string.IsNullOrWhiteSpace(ComponenteNuevo.CodigoArticulo) ||
                 ComponenteNuevo.Cantidad <= 0)
@@ -138,7 +144,7 @@ namespace recTivo.MVVM
 
             if (ComponenteNuevo.CodigoArticulo.StartsWith("PT"))
             {
-                MensajeError.Mostrar("ESCANDALLO", "Un artículo PT no puede ser hijo.");
+                MensajeError.Mostrar("Error", "Un artículo PT no puede ser hijo.");
                 return;
             }
 
@@ -151,7 +157,7 @@ namespace recTivo.MVVM
                 Descripcion = articulo?.Descrip ?? "",
                 Descripcion2 = articulo?.Descrip2 ?? "",
                 CodigoComponentePadre = ComponentePadreSeleccionado.CodigoArticulo,
-                Hijos = new List<ComponenteEscandallo>()
+                Hijos = new ObservableCollection<ComponenteEscandallo>()
             };
 
             ComponentePadreSeleccionado.Hijos.Add(nuevo);
@@ -172,12 +178,6 @@ namespace recTivo.MVVM
                 if (ArticuloFinal == null || string.IsNullOrWhiteSpace(ArticuloFinal.Codigo))
                 {
                     MensajeError.Mostrar("ESCANDALLO", "Debes seleccionar un artículo final.");
-                    return;
-                }
-
-                if (!ArticuloFinal.Codigo.StartsWith("PT"))
-                {
-                    MensajeError.Mostrar("ESCANDALLO", "El artículo raíz debe empezar por PT.");
                     return;
                 }
 
@@ -418,7 +418,7 @@ namespace recTivo.MVVM
             }
             catch (Exception ex)
             {
-                MensajeError.Mostrar("GESTIÓN ARTÍCULOS", $"Error al cargar datos\n{ex.Message}", 0);
+                MensajeError.Mostrar("Error", $"Error al cargar datos\n{ex.Message}", 0);
             }
         }
 
@@ -471,12 +471,6 @@ namespace recTivo.MVVM
                     return;
                 }
 
-                if (!codigo.StartsWith("PT"))
-                {
-                    MensajeError.Mostrar("ESCANDALLO", "Solo se pueden cargar escandallos de artículos PT.");
-                    return;
-                }
-
                 var esc = await _escandalloRepository
                     .Query()
                     .FirstOrDefaultAsync(e => e.CodigoProducto == codigo);
@@ -487,7 +481,6 @@ namespace recTivo.MVVM
                     return;
                 }
 
-                // Cargar artículo raíz
                 ArticuloFinal = await _articuloRepository.GetByCodigoAsync(esc.CodigoProducto);
                 OnPropertyChanged(nameof(ArticuloFinal));
                 OnPropertyChanged(nameof(DescripcionFinal));
@@ -496,16 +489,9 @@ namespace recTivo.MVVM
                 DescripcionArticulo = $"{ArticuloFinal.Descrip} - {ArticuloFinal.Descrip2}";
 
                 var componentes = await _escandalloRepository
-                    .GetComponentesByEscandalloAsync(esc.IdEscandallo);
+                    .GetComponentesByEscandalloAsync(esc.IdEscandallo);         
 
-                var raiz = componentes
-                    .Where(c => c.CodigoComponentePadre == null)
-                    .ToList();
-
-                foreach (var comp in raiz)
-                    ConstruirHijos(comp, componentes);
-
-                EscandalloActual = new ObservableCollection<ComponenteEscandallo>(raiz);
+                ConstruirJerarquia(componentes);
             }
             catch (Exception ex)
             {
@@ -513,14 +499,44 @@ namespace recTivo.MVVM
             }
         }
 
-        private void ConstruirHijos(ComponenteEscandallo padre, List<ComponenteEscandallo> todos)
+        public IEnumerable<Articulo> ArticulosPT =>
+        ListaArticulos?.Where(a => a.Codigo != null && a.Codigo.StartsWith("PT")) ?? Enumerable.Empty<Articulo>();
+
+
+
+
+        private void ConstruirJerarquia(List<ComponenteEscandallo> planos)
         {
-            padre.Hijos = todos
-                .Where(c => c.CodigoComponentePadre == padre.CodigoArticulo)
+            // Inicializa la colección de hijos en todos los nodos
+            foreach (var comp in planos)
+                comp.Hijos = new ObservableCollection<ComponenteEscandallo>();
+
+            // Crea un mapa para acceso rápido por código
+            var mapa = planos.ToDictionary(c => c.CodigoArticulo, c => c);
+
+            // Enlaza cada componente con su padre
+            foreach (var comp in planos)
+            {
+                if (!string.IsNullOrWhiteSpace(comp.CodigoComponentePadre) &&
+                    mapa.TryGetValue(comp.CodigoComponentePadre, out var padre))
+                {
+                    padre.Hijos.Add(comp);
+                }
+            }
+
+            // Extrae los nodos raíz (sin padre)
+            var raiz = planos
+                .Where(c => string.IsNullOrWhiteSpace(c.CodigoComponentePadre))
                 .ToList();
 
-            foreach (var hijo in padre.Hijos)
-                ConstruirHijos(hijo, todos);
+            // Rellena la colección observable que usa el TreeView
+            Componentes.Clear();
+            foreach (var r in raiz)
+                Componentes.Add(r);
+
+            OnPropertyChanged(nameof(Componentes));
         }
+
+
     }
 }

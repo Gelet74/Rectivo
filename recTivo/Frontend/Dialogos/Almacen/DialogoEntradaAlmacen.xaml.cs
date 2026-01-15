@@ -211,6 +211,17 @@ namespace recTivo.Frontend.Dialogos
 
                
                 articuloSeleccionado.Stock = (articuloSeleccionado.Stock ?? 0) + cantidad;
+
+                if (articuloSeleccionado.Stock == 0) 
+                { 
+                    articuloSeleccionado.IdUbicacion = null;
+                }
+                else
+                {
+                    articuloSeleccionado.IdUbicacion = ubicacion.IdUbicacion;
+                }
+                _context.Articulos.Update(articuloSeleccionado); 
+                await _context.SaveChangesAsync();
                 articuloSeleccionado.IdUbicacion = ubicacion.IdUbicacion;
 
                 _context.Articulos.Update(articuloSeleccionado);

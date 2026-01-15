@@ -98,12 +98,16 @@
                         <StackPanel Width="200">
                             <TextBlock Text="Código componente:" Foreground="White"/>
                             <ComboBox ItemsSource="{Binding CodigosArticulos}"
-                                      SelectedItem="{Binding ComponenteNuevo.Codigo}"/>
+                                      SelectedItem="{Binding ComponenteNuevo.CodigoArticulo, Mode=TwoWay}"/>
                         </StackPanel>
 
                         <StackPanel Width="120" Margin="20,0,0,0">
                             <TextBlock Text="Cantidad:" Foreground="White"/>
-                            <TextBox Text="{Binding ComponenteNuevo.Cantidad}" Margin="0,3,0,0"/>
+                            <TextBox PreviewTextInput="NumericTextBox_PreviewTextInput"
+                                     TextChanged="NumericTextBox_TextChanged"
+                                     Text="{Binding ComponenteNuevo.Cantidad, Mode=TwoWay,
+                                     UpdateSourceTrigger=LostFocus, StringFormat=F3}"
+                                     Margin="0,3,0,0"/>    
                         </StackPanel>
 
                         <Button Content="Añadir raíz"
@@ -130,7 +134,7 @@
                             <HierarchicalDataTemplate DataType="{x:Type modelos:ComponenteEscandallo}"
                                                       ItemsSource="{Binding Hijos}">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="{Binding Codigo}" FontWeight="Bold" Margin="5,0"/>
+                                    <TextBlock Text="{Binding CodigoArticulo}" FontWeight="Bold" Margin="5,0"/>
                                     <TextBlock Text=" - " />
                                     <TextBlock Text="{Binding Descripcion}" />
                                     <TextBlock Text=" | Cant: " />

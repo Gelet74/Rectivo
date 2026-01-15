@@ -2,6 +2,7 @@
 using recTivo.Frontend.Dialogos.VentanasInicio;
 using recTivo.MVVM;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace recTivo.Frontend.Dialogos.Escandallo
@@ -66,14 +67,36 @@ namespace recTivo.Frontend.Dialogos.Escandallo
 
         private async void BtnCargarEscandallo_Click(object sender, RoutedEventArgs e)
         {
-            if (_vm.ArticuloFinal == null)
+            if (DataContext is MVArticulo vm)
             {
-                MensajeInformacion.Mostrar("Aviso","Selecciona primero un artículo.");
-                return;
-            }
+                var articulo = vm.ArticuloFinal;
+                if (articulo == null)
+                {
+                    MensajeError.Mostrar("ESCANDALLO", "Selecciona un artículo válido.");
+                    return;
+                }
 
-            await _vm.CargarEscandalloAsync(_vm.ArticuloFinal.Codigo);
+                await vm.CargarEscandalloAsync(articulo.Codigo);
+            }
         }
+
+        private void NumericTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            var textBox = sender as TextBox;
+            if (textBox.Text.Contains("."))
+            {
+                int selectionStart = textBox.SelectionStart;
+                textBox.Text = textBox.Text.Replace(".", ",");
+                textBox.SelectionStart = selectionStart;
+            }
+        }
+
+        private void NumericTextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            // Solo rechazar si NO es dígito, coma o punto
+            e.Handled = !(char.IsDigit(e.Text, 0) || e.Text == "," || e.Text == ".");
+        }
+
 
 
 

@@ -2,6 +2,7 @@
 using recTivo.Frontend.Dialogos.VentanasInicio;
 using recTivo.MVVM;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace recTivo.Frontend.Dialogos.Escandallo
@@ -17,11 +18,30 @@ namespace recTivo.Frontend.Dialogos.Escandallo
             Loaded += async (_, __) => await _vm.Inicializa();
         }
 
+        private void txtCodigo_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            var tb = sender as TextBox;
+
+            if (tb == null)
+                return;
+
+            int caret = tb.CaretIndex;
+
+            string mayus = tb.Text.ToUpper();
+
+            if (tb.Text != mayus)
+            {
+                tb.Text = mayus;
+                tb.CaretIndex = caret;
+            }
+        }
+
         private async void BtnCargar_Click(object sender, RoutedEventArgs e)
         {
             if (DataContext is MVArticulo vm)
                 await vm.CargarEscandalloAsync(vm.CodigoSeleccionado);
         }
+
 
         private void TreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {

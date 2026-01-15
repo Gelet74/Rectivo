@@ -62,11 +62,15 @@
                                    VerticalAlignment="Center"
                                    Margin="0,0,10,0"/>
 
-                        <TextBox Width="150"
-                                 Text="{Binding CodigoSeleccionado}"/>
+                        <TextBox x:Name="txtCodigoArticulo"
+                                 Width="150"
+                                 TextChanged="txtCodigo_TextChanged"
+                                 Text="{Binding CodigoSeleccionado, UpdateSourceTrigger=PropertyChanged}"/>
+
 
                         <Button Content="Cargar"
                                 Width="120"
+                                IsDefault="True"
                                 Click="BtnCargar_Click"/>
                     </StackPanel>
 
@@ -76,7 +80,7 @@
                                Margin="0,10,0,10"/>
 
                     <!-- TREEVIEW -->
-                    <TreeView ItemsSource="{Binding EscandalloActual}"
+                    <TreeView ItemsSource="{Binding Componentes}"
                               Background="#E0E0E0"
                               Foreground="Black"
                               SelectedItemChanged="TreeView_SelectedItemChanged"

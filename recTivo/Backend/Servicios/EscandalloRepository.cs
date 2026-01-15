@@ -66,6 +66,13 @@ namespace recTivo.Backend.Repos
                                  .ToListAsync();
         }
 
+        public override async Task AddAsync(Escandallo esc)
+        {
+            await _context.Escandallos.AddAsync(esc);
+            await _context.SaveChangesAsync();
+        }
+
+
 
         /// <summary>
         /// Elimina un escandallo por entidad

@@ -1,4 +1,5 @@
 ﻿using recTivo.MVVM.Base;
+using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace recTivo.Backend.Modelos
@@ -25,8 +26,9 @@ namespace recTivo.Backend.Modelos
         public String? CodigoComponentePadre { get; set; }
 
         // Hijos en memoria (no en BD)
-        [NotMapped]
-        public List<ComponenteEscandallo> Hijos { get; set; } = new();
+        [NotMapped]       
+        public ObservableCollection<ComponenteEscandallo> Hijos { get; set; } = new();
+
 
         // Nombre opcional para mostrar
         [NotMapped]
