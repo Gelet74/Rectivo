@@ -9,24 +9,24 @@ namespace recTivo.Frontend.Dialogos.Escandallo
 {
     public partial class DialogoListarEscandallo : Window
     {
-        private readonly MVArticulo _vm;
-        public DialogoListarEscandallo(MVArticulo vm)
+        private readonly MVEscandallo _vm;
+
+        public DialogoListarEscandallo(MVEscandallo vm)
         {
             InitializeComponent();
             _vm = vm;
             DataContext = _vm;
+
             Loaded += async (_, __) => await _vm.Inicializa();
         }
 
         private void txtCodigo_TextChanged(object sender, TextChangedEventArgs e)
         {
             var tb = sender as TextBox;
-
             if (tb == null)
                 return;
 
             int caret = tb.CaretIndex;
-
             string mayus = tb.Text.ToUpper();
 
             if (tb.Text != mayus)
@@ -38,17 +38,24 @@ namespace recTivo.Frontend.Dialogos.Escandallo
 
         private async void BtnCargar_Click(object sender, RoutedEventArgs e)
         {
-            if (DataContext is MVArticulo vm)
-                await vm.CargarEscandalloAsync(vm.CodigoSeleccionado);
-        }
+            var codigo = _vm.ArticuloFinal?.Codigo;
+            if (string.IsNullOrWhiteSpace(codigo))
+            {
+                // Si quieres, puedes mostrar un mensaje aquí
+                return;
+            }
 
+            await _vm.CargarEscandallo(codigo);
+        }
 
         private void TreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-            if (DataContext is MVArticulo vm)
-                vm.ComponenteSeleccionado = e.NewValue as ComponenteEscandallo;
+            _vm.ComponentePadreSeleccionado = e.NewValue as ComponenteEscandallo;
         }
 
+        // ================================
+        //   MANEJO DE ESCAPE
+        // ================================
         private bool _escapeEnCurso = false;
 
         protected override void OnPreviewKeyDown(KeyEventArgs e)
@@ -70,9 +77,7 @@ namespace recTivo.Frontend.Dialogos.Escandallo
                     bool? result = dialog.ShowDialog();
 
                     if (result == true && dialog.Confirmado)
-                    {
                         this.Close();
-                    }
                 }
                 finally
                 {

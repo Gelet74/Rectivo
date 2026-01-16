@@ -45,7 +45,7 @@
                             <DataGridTextColumn Header="Nombre" Binding="{Binding Nombre}" Width="100"/>
                             <DataGridTextColumn Header="Apellidos" Binding="{Binding Apellidos}" Width="130"/>
                             <DataGridTextColumn Header="DNI" Binding="{Binding Dni}" Width="110"/>
-                            <DataGridTextColumn Header="Rol" Binding="{Binding Rol.NombreRol}" Width="110"/>
+                            <DataGridTextColumn Header="Rol" Binding="{Binding Rol.NombreRol}" Width="120"/>
                             <DataGridTextColumn Header="Usuario" Binding="{Binding Username}" Width="110"/>
                             <DataGridTextColumn Header="Contraseña" Binding="{Binding Password}" Width="120"/>
                             <DataGridTextColumn Header="Estado" Binding="{Binding Estado}" Width="110"/>

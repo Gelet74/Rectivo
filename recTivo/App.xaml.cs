@@ -37,6 +37,16 @@ namespace recTivo
             services.AddTransient<MVArticulo>();
             services.AddTransient<MVEmpleado>();
             services.AddTransient<MVCliente>();
+            services.AddTransient<MVEscandallo>(provider =>
+            {
+                return new MVEscandallo(
+                    provider.GetRequiredService<EscandalloRepository>(),
+                    provider.GetRequiredService<ArticuloRepository>(),
+                    provider.GetRequiredService<OrdenRepository>()
+                );
+            });
+
+
 
 
 
@@ -74,7 +84,13 @@ namespace recTivo
             services.AddTransient<DialogoConsultaEmpleado>();
             services.AddTransient<DialogoModificarEmpleado>();
 
-            services.AddTransient<DialogoAltaEscandallo>();
+            services.AddTransient<DialogoAltaEscandallo>(provider =>
+            {
+                return new DialogoAltaEscandallo(
+                    provider.GetRequiredService<MVEscandallo>()
+                );
+            });
+
             services.AddTransient<DialogoModificarEscandallo>();
             services.AddTransient<DialogoListarEscandallo>();
 

@@ -16,5 +16,5 @@ C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\App.xaml
 2321236926000
 Frontend\Dialogos\Almacen\DialogoEntradaAlmacen.xaml;Frontend\Dialogos\Almacen\DialogoSalidaAlmacen.xaml;Frontend\Dialogos\Articulos\DialogoAltaArticulo.xaml;Frontend\Dialogos\Articulos\DialogoBajaArticulo.xaml;Frontend\Dialogos\Articulos\DialogoListarArticulo.xaml;Frontend\Dialogos\Articulos\DialogoModificarArticulo.xaml;Frontend\Dialogos\Clientes\DialogoAltaCliente.xaml;Frontend\Dialogos\Clientes\DialogoConsultaCliente.xaml;Frontend\Dialogos\Clientes\DialogoModificarCliente.xaml;Frontend\Dialogos\Empleado\DialogoAltaEmpleado.xaml;Frontend\Dialogos\Empleado\DialogoConsultaEmpleado.xaml;Frontend\Dialogos\Empleado\DialogoModificarEmpleado.xaml;Frontend\Dialogos\Escandallo\DialogoAltaEscandallo.xaml;Frontend\Dialogos\Escandallo\DialogoListarEscandallo.xaml;Frontend\Dialogos\Escandallo\DialogoModificarEscandallo.xaml;Frontend\Dialogos\VentanasInicio\ConfirmacionDialogo.xaml;Frontend\Dialogos\VentanasInicio\Inicio.xaml;Frontend\Dialogos\VentanasInicio\Login.xaml;Frontend\Dialogos\VentanasInicio\MainWindow.xaml;Frontend\Mensajes\VentanaMensaje.xaml;
 
-True
+False
 

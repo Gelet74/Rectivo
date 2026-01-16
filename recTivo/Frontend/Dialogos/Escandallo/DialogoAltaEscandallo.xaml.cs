@@ -9,9 +9,9 @@ namespace recTivo.Frontend.Dialogos.Escandallo
 {
     public partial class DialogoAltaEscandallo : Window
     {
-        private readonly MVArticulo _vm;
+        private readonly MVEscandallo _vm;
 
-        public DialogoAltaEscandallo(MVArticulo vm)
+        public DialogoAltaEscandallo(MVEscandallo vm)
         {
             InitializeComponent();
             _vm = vm;
@@ -65,21 +65,24 @@ namespace recTivo.Frontend.Dialogos.Escandallo
             _vm.AñadirComponente();
         }
 
+        // ================================
+        //   CARGAR ESCANDALLO
+        // ================================
         private async void BtnCargarEscandallo_Click(object sender, RoutedEventArgs e)
         {
-            if (DataContext is MVArticulo vm)
+            var articulo = _vm.ArticuloFinal;
+            if (articulo == null)
             {
-                var articulo = vm.ArticuloFinal;
-                if (articulo == null)
-                {
-                    MensajeError.Mostrar("ESCANDALLO", "Selecciona un artículo válido.");
-                    return;
-                }
-
-                await vm.CargarEscandalloAsync(articulo.Codigo);
+                MensajeError.Mostrar("ESCANDALLO", "Selecciona un artículo válido.");
+                return;
             }
+
+            await _vm.CargarEscandallo(articulo.Codigo);
         }
 
+        // ================================
+        //   VALIDACIÓN NUMÉRICA
+        // ================================
         private void NumericTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             var textBox = sender as TextBox;
@@ -93,12 +96,8 @@ namespace recTivo.Frontend.Dialogos.Escandallo
 
         private void NumericTextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
-            // Solo rechazar si NO es dígito, coma o punto
             e.Handled = !(char.IsDigit(e.Text, 0) || e.Text == "," || e.Text == ".");
         }
-
-
-
 
         // ================================
         //   AÑADIR SUBCOMPONENTE
@@ -113,8 +112,7 @@ namespace recTivo.Frontend.Dialogos.Escandallo
         // ================================
         private void TreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-            if (DataContext is MVArticulo vm)
-                vm.ComponentePadreSeleccionado = e.NewValue as recTivo.Backend.Modelos.ComponenteEscandallo;
+            _vm.ComponentePadreSeleccionado = e.NewValue as recTivo.Backend.Modelos.ComponenteEscandallo;
         }
 
         // ================================

@@ -170,7 +170,6 @@
                               Foreground="White" 
                               ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                         <ListViewItem Content="Dar de alta" Padding="20 5"/>
-                        <ListViewItem Content="Dar de baja" Padding="20 5"/>
                         <ListViewItem Content="Modificar" Padding="20 5"/>
                         <ListViewItem Content="Listar empleados" Padding="20 5"/>
                     </ListView>

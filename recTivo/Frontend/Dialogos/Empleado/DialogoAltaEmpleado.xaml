@@ -8,6 +8,8 @@
         Background="#2D2D30">
 
     <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
+        
         <Style TargetType="TextBox">
             <Setter Property="Background" Value="#E0E0E0"/>
             <Setter Property="Foreground" Value="Black"/>
@@ -122,7 +124,7 @@
                             Background="#E0E0E0"
                             Foreground="#ff9800"
                             FontWeight="Bold"
-                            IsEnabled="{Binding HasErrors}"
+                            IsEnabled="{Binding HasErrors, Converter={StaticResource BoolToVis}, ConverterParameter=Invert}"
                             HorizontalAlignment="Center"
                             VerticalAlignment="Bottom" Cursor="Hand"/>
                 </Grid>

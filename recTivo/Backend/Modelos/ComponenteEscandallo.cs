@@ -15,10 +15,10 @@ namespace recTivo.Backend.Modelos
         public string Descripcion { get; set; }
 
         [Column("Descrip2")]
-        public string Descripcion2 { get; set; }
+        public string? Descripcion2 { get; set; }
 
-        public double Cantidad { get; set; }
-        public decimal PrecioUnitario { get; set; }
+        public double? Cantidad { get; set; }
+        public decimal? PrecioUnitario { get; set; }
 
         public Escandallo Escandallo { get; set; }
 

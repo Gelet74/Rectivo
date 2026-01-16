@@ -21,7 +21,6 @@
         <Border BorderBrush="#FF9800" BorderThickness="4">
             <DockPanel LastChildFill="True">
 
-                <!-- Cabecera -->
                 <Grid DockPanel.Dock="Top" Height="40" Background="#808080">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
@@ -49,21 +48,21 @@
                                  HorizontalAlignment="Left"
                                  Height="30" 
                                  Margin="0,5" 
-                                 Width="300"/>
+                                 Width="450"/>
 
                         <TextBlock Text="Descripción 1:" Foreground="#FF9800"/>
                         <TextBox Text="{Binding Descrip, UpdateSourceTrigger=PropertyChanged}"
                                  HorizontalAlignment="Left"
                                  Height="30" 
                                  Margin="0,5" 
-                                 Width="300"/>
+                                 Width="450"/>
 
                         <TextBlock Text="Descripción 2:" Foreground="#FF9800"/>
                         <TextBox Text="{Binding Descrip2, UpdateSourceTrigger=PropertyChanged}"
                                  HorizontalAlignment="Left"
                                  Height="30"
                                  Margin="0,5" 
-                                 Width="300"/>
+                                 Width="450"/>
 
                         <TextBlock Text="PVP:" Foreground="#FF9800"/>
                         <TextBox Text="{Binding Pvp, UpdateSourceTrigger=PropertyChanged}"
@@ -78,7 +77,7 @@
                             Click="btnAltaArticulo_Click"
                             Height="30" Width="160"
                             HorizontalAlignment="Right"
-                            Margin="0,0,132,23"
+                            Margin="0,0,0,23"
                             VerticalAlignment="Bottom"
                             Background="#E0E0E0"
                             Foreground="#ff9800"

@@ -4,7 +4,6 @@
         Title="Pulsa ESC para volver atrás"
         Height="400" Width="500"
         ResizeMode="NoResize"
-        Loaded="DialEntradaAlmacen_Loaded"
         WindowStartupLocation="CenterScreen"
         Background="#2D2D30"
         WindowStyle="None">

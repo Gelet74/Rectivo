@@ -1,15 +1,13 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using di.proyecto.clase._2025.Frontend.Mensajes;
+using Microsoft.EntityFrameworkCore;
 using recTivo.Backend.Modelos;
 using recTivo.Backend.Repos;
 using recTivo.MVVM.Base;
-using di.proyecto.clase._2025.Frontend.Mensajes;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace recTivo.MVVM
 {
-    internal class MVEscandallo : MVBase
+    public class MVEscandallo : MVBase
     {
         private readonly EscandalloRepository _escandalloRepository;
         private readonly ArticuloRepository _articuloRepository;
