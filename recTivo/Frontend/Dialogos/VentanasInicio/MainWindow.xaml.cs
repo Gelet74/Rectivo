@@ -5,7 +5,9 @@ using recTivo.Frontend.Dialogos.Articulos;
 using recTivo.Frontend.Dialogos.Clientes;
 using recTivo.Frontend.Dialogos.Empleado;
 using recTivo.Frontend.Dialogos.Escandallo;
+using recTivo.Frontend.Dialogos.Ordenes;
 using recTivo.Frontend.Dialogos.VentanasInicio;
+using recTivo.Frontend.Dialogos.Ventas;
 using System;
 using System.Windows;
 using System.Windows.Controls;
@@ -47,6 +49,47 @@ namespace recTivo
 
             almacen.SelectedItem = null;
         }
+
+        private void BtnCrearArticulo_Click(object sender, RoutedEventArgs e)
+        {
+            var altaArticulo = _serviceProvider.GetService<DialogoAltaArticulo>();
+            altaArticulo.Owner = this;
+            altaArticulo.ShowDialog();
+        }
+
+        private void BtnCrearCliente_Click(object sender, RoutedEventArgs e)
+        {
+            var altaCliente = _serviceProvider.GetService<DialogoAltaCliente>();
+            altaCliente.Owner = this;
+            altaCliente.ShowDialog();
+        }
+
+        private void BtnCrearEscandallo_Click(object sender, RoutedEventArgs e)
+        {
+            var altaEscandallo = _serviceProvider.GetService<DialogoAltaEscandallo>();
+            altaEscandallo.Owner = this;
+            altaEscandallo.ShowDialog();
+        }
+
+        private void BtnCrearPedido_Click(object sender, RoutedEventArgs e)
+        {
+            var dlg = new DialogoCrearPedido();
+            dlg.ShowDialog();
+        }
+
+        private void BtnProcesarOrden_Click(object sender, RoutedEventArgs e)
+        {
+            var dlg = new DialogoProcesarOrden();
+            dlg.ShowDialog();
+        }
+
+        private void BtnCrearEmpleado_Click(object sender, RoutedEventArgs e)
+        {
+            var altaEmpleado = _serviceProvider.GetService<DialogoAltaEmpleado>();
+            altaEmpleado.Owner = this;
+            altaEmpleado.ShowDialog();
+        }
+
 
 
         private void articulos_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -150,7 +193,24 @@ namespace recTivo
 
         private void ordenes_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (empleados.SelectedItem is not ListViewItem item)
+                return;
 
+            string opcion = item.Content.ToString();
+
+            switch (opcion)
+            {
+                case "Procesar Orden":
+                    var procesarOrden = _serviceProvider.GetService<DialogoProcesarOrden>();
+                    procesarOrden.Owner = this;
+                    procesarOrden.ShowDialog();
+                    break;
+
+           
+            }
+
+            empleados.SelectedItem = null;
+        
         }
 
         private void ventas_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -208,5 +268,6 @@ namespace recTivo
 
             escandallos.SelectedItem = null;
         }
+              
     }
 }

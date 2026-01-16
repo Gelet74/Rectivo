@@ -1,11 +1,13 @@
 ﻿
-FC:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\App.xaml;;
-FC:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\Frontend\Dialogos\Escandallo\DialogoAltaEscandallo.xaml;;
-FC:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\Frontend\Dialogos\Escandallo\DialogoListarEscandallo.xaml;;
-FC:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\Frontend\Dialogos\Escandallo\DialogoModificarEscandallo.xaml;;
-FC:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\Frontend\Dialogos\VentanasInicio\ConfirmacionDialogo.xaml;;
-FC:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\Frontend\Dialogos\VentanasInicio\Inicio.xaml;;
-FC:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\Frontend\Dialogos\VentanasInicio\Login.xaml;;
-FC:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\Frontend\Dialogos\VentanasInicio\MainWindow.xaml;;
-FC:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\Frontend\Mensajes\VentanaMensaje.xaml;;
+FD:\gelet\escritorio\DI\recTivo\recTivo\App.xaml;;
+FD:\gelet\escritorio\DI\recTivo\recTivo\Frontend\Dialogos\Escandallo\DialogoAltaEscandallo.xaml;;
+FD:\gelet\escritorio\DI\recTivo\recTivo\Frontend\Dialogos\Escandallo\DialogoListarEscandallo.xaml;;
+FD:\gelet\escritorio\DI\recTivo\recTivo\Frontend\Dialogos\Escandallo\DialogoModificarEscandallo.xaml;;
+FD:\gelet\escritorio\DI\recTivo\recTivo\Frontend\Dialogos\VentanasInicio\ConfirmacionDialogo.xaml;;
+FD:\gelet\escritorio\DI\recTivo\recTivo\Frontend\Dialogos\VentanasInicio\Inicio.xaml;;
+FD:\gelet\escritorio\DI\recTivo\recTivo\Frontend\Dialogos\VentanasInicio\Login.xaml;;
+FD:\gelet\escritorio\DI\recTivo\recTivo\Frontend\Dialogos\VentanasInicio\MainWindow.xaml;;
+FD:\gelet\escritorio\DI\recTivo\recTivo\Frontend\Mensajes\VentanaMensaje.xaml;;
+FD:\gelet\escritorio\DI\recTivo\recTivo\Frontend\Dialogos\Ordenes\DialogoProcesarOrden.xaml;;
+FD:\gelet\escritorio\DI\recTivo\recTivo\Frontend\Dialogos\Ventas\DialogoCrearPedido.xaml;;
 

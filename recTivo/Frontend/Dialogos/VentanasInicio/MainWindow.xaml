@@ -9,7 +9,7 @@
         mc:Ignorable="d"
         WindowStyle="None"
         Icon="/Recursos/Iconos/rectivo_logo_fondo.png"         
-        Height="450" Width="950">
+        Height="600" Width="1000">
 
     <Grid Background="#2D2D30">
         <Grid.ColumnDefinitions>
@@ -22,6 +22,9 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
+        <!-- ============================
+             SIDEBAR IZQUIERDA
+             ============================ -->
         <Border Grid.RowSpan="2"
                 Grid.Column="0"
                 Background="#ff9800">
@@ -51,6 +54,11 @@
                            Height="8" 
                            HorizontalAlignment="Left"/>
 
+                <!-- ============================
+                     MENÚS
+                     ============================ -->
+
+                <!-- Almacén -->
                 <Expander HorizontalAlignment="Left" 
                           IsExpanded="False" 
                           Width="170" 
@@ -63,9 +71,9 @@
                             <Image Source="/Recursos/Iconos/Almacen.png" 
                                    Width="30" Height="30" Margin="-5,0,0,0"/>
                             <TextBlock Text="Almacén" 
-                                       VerticalAlignment="Center" 
-                                       Foreground="White" 
-                                       Margin="10,0,0,0" 
+                                       VerticalAlignment="Center"
+                                       Foreground="White"
+                                       Margin="10,0,0,0"
                                        FontWeight="Bold"/>
                         </StackPanel>
                     </Expander.Header>
@@ -81,6 +89,7 @@
                     </ListView>
                 </Expander>
 
+                <!-- Artículos -->
                 <Expander HorizontalAlignment="Left" 
                           IsExpanded="False" 
                           Width="170" 
@@ -93,9 +102,9 @@
                             <Image Source="/Recursos/Iconos/Articulos.png" 
                                    Width="30" Height="30" Margin="-5,0,0,0"/>
                             <TextBlock Text="Artículos" 
-                                       VerticalAlignment="Center" 
-                                       Foreground="White" 
-                                       Margin="10,0,0,0" 
+                                       VerticalAlignment="Center"
+                                       Foreground="White"
+                                       Margin="10,0,0,0"
                                        FontWeight="Bold"/>
                         </StackPanel>
                     </Expander.Header>
@@ -114,6 +123,7 @@
                     </ListView>
                 </Expander>
 
+                <!-- Clientes -->
                 <Expander HorizontalAlignment="Left" 
                           IsExpanded="False" 
                           Width="170" 
@@ -126,9 +136,9 @@
                             <Image Source="/Recursos/Iconos/Clientes.png" 
                                    Width="30" Height="30" Margin="-5,0,0,0"/>
                             <TextBlock Text="Clientes" 
-                                       VerticalAlignment="Center" 
-                                       Foreground="White" 
-                                       Margin="10,0,0,0" 
+                                       VerticalAlignment="Center"
+                                       Foreground="White"
+                                       Margin="10,0,0,0"
                                        FontWeight="Bold"/>
                         </StackPanel>
                     </Expander.Header>
@@ -145,6 +155,7 @@
                     </ListView>
                 </Expander>
 
+                <!-- Empleados -->
                 <Expander HorizontalAlignment="Left" 
                           IsExpanded="False" Width="170" 
                           Style="{StaticResource MaterialDesignExpander}" 
@@ -156,9 +167,9 @@
                             <Image Source="/Recursos/Iconos/Empleado.png" 
                                    Width="30" Height="30" Margin="-5,0,0,0"/>
                             <TextBlock Text="Empleados" 
-                                       VerticalAlignment="Center" 
-                                       Foreground="White" 
-                                       Margin="10,0,0,0" 
+                                       VerticalAlignment="Center"
+                                       Foreground="White"
+                                       Margin="10,0,0,0"
                                        FontWeight="Bold"/>
                         </StackPanel>
                     </Expander.Header>
@@ -175,6 +186,7 @@
                     </ListView>
                 </Expander>
 
+                <!-- Escandallos -->
                 <Expander HorizontalAlignment="Left" 
                           IsExpanded="False" Width="170" 
                           Style="{StaticResource MaterialDesignExpander}" 
@@ -186,8 +198,8 @@
                             <Image Source="/Recursos/Iconos/escandallo.png" 
                                    Width="35" Height="35" Margin="-10,0,0,0"/>
                             <TextBlock Text="Escandallos" 
-                                       VerticalAlignment="Center" 
-                                       Foreground="White" 
+                                       VerticalAlignment="Center"
+                                       Foreground="White"
                                        Margin="8,0,0,0"
                                        FontWeight="Bold"/>
                         </StackPanel>
@@ -205,6 +217,7 @@
                     </ListView>
                 </Expander>
 
+                <!-- Órdenes -->
                 <Expander HorizontalAlignment="Left" 
                           IsExpanded="False" 
                           Width="170" 
@@ -217,9 +230,9 @@
                             <Image Source="/Recursos/Iconos/Ordenes.png" 
                                    Width="30" Height="30" Margin="-5,0,0,0"/>
                             <TextBlock Text="Órdenes" 
-                                       VerticalAlignment="Center" 
-                                       Foreground="White" 
-                                       Margin="10,0,0,0" 
+                                       VerticalAlignment="Center"
+                                       Foreground="White"
+                                       Margin="10,0,0,0"
                                        FontWeight="Bold"/>
                         </StackPanel>
                     </Expander.Header>
@@ -236,6 +249,7 @@
                     </ListView>
                 </Expander>
 
+                <!-- Ventas -->
                 <Expander HorizontalAlignment="Left" 
                           IsExpanded="False" 
                           Width="170" 
@@ -248,9 +262,9 @@
                             <Image Source="/Recursos/Iconos/Ventas.png" 
                                    Width="30" Height="30" Margin="-5,0,0,0"/>
                             <TextBlock Text="Ventas" 
-                                       VerticalAlignment="Center" 
-                                       Foreground="White" 
-                                       Margin="10,0,0,0" 
+                                       VerticalAlignment="Center"
+                                       Foreground="White"
+                                       Margin="10,0,0,0"
                                        FontWeight="Bold"/>
                         </StackPanel>
                     </Expander.Header>
@@ -271,7 +285,7 @@
         </Border>
 
         <!-- ============================
-             BOTÓN SALIR ABAJO IZQUIERDA
+             BOTÓN SALIR
              ============================ -->
         <Button Grid.Row="1"
                 Grid.Column="0"
@@ -302,6 +316,146 @@
                            Width="50"/>
             </StackPanel>
         </Button>
+
+        <!-- ============================
+             DASHBOARD DERECHA
+             ============================ -->
+        <Grid Grid.Column="1" Margin="20">
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- CABECERA -->
+            <StackPanel Orientation="Vertical">
+                <TextBlock Text="Panel principal"
+                           FontSize="26"
+                           FontWeight="Bold"
+                           Foreground="White"/>
+
+                <TextBlock FontSize="16" Margin="0,5,0,20" Foreground="White">
+                          <Run Text="Bienvenido, "/>
+                          <Run Text="{Binding UsuarioLogueado}"/>
+                </TextBlock>
+
+            </StackPanel>
+
+            <!-- TARJETAS -->
+            <UniformGrid Grid.Row="1" Columns="3" Margin="0,10,0,0" HorizontalAlignment="Stretch">
+
+                <!-- Artículos -->
+                <Border Background="#3A3A3C" CornerRadius="8" Padding="15" Margin="10">
+                    <StackPanel>
+                        <TextBlock Text="Artículos" Foreground="#FF9800" FontSize="16" FontWeight="Bold"/>
+                        <TextBlock Text="—" Foreground="White" FontSize="28" FontWeight="Bold"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Clientes -->
+                <Border Background="#3A3A3C" CornerRadius="8" Padding="15" Margin="10">
+                    <StackPanel>
+                        <TextBlock Text="Clientes" Foreground="#FF9800" FontSize="16" FontWeight="Bold"/>
+                        <TextBlock Text="—" Foreground="White" FontSize="28" FontWeight="Bold"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Órdenes -->
+                <Border Background="#3A3A3C" CornerRadius="8" Padding="15" Margin="10">
+                    <StackPanel>
+                        <TextBlock Text="Órdenes abiertas" Foreground="#FF9800" FontSize="16" FontWeight="Bold"/>
+                        <TextBlock Text="—" Foreground="White" FontSize="28" FontWeight="Bold"/>
+                    </StackPanel>
+                </Border>
+
+            </UniformGrid>
+
+            <!-- ACCESOS RÁPIDOS -->
+            <StackPanel Grid.Row="2" Margin="0,30,0,0">
+                <TextBlock Text="Accesos rápidos"
+                           FontSize="18"
+                           FontWeight="Bold"
+                           Foreground="White"
+                           Margin="0,0,0,10"/>
+
+                <WrapPanel ItemHeight="60" ItemWidth="180">
+
+                    <!-- Crear artículo -->
+                    <Button Content="Crear artículo"
+                            Width="180"
+                            Height="60"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Margin="10"
+                            Background="#FF9800"
+                            Foreground="White"
+                            FontWeight="Bold"
+                            Click="BtnCrearArticulo_Click"/>
+
+                    <!-- Crear cliente -->
+                    <Button Content="Crear cliente"
+                            Width="180"
+                            Height="60"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Margin="10"
+                            Background="#FF9800"
+                            Foreground="White"
+                            FontWeight="Bold"
+                            Click="BtnCrearCliente_Click"/>
+                    <!-- Crear empleado -->
+                    <Button Content="Crear empleado"
+                            Width="180"
+                            Height="60"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Margin="10"
+                            Background="#FF9800"
+                            Foreground="White"
+                            FontWeight="Bold"
+                            Click="BtnCrearEmpleado_Click"/>
+
+                    <!-- Crear escandallo -->
+                    <Button Content="Crear escandallo"
+                            Width="180"
+                            Height="60"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Margin="10"
+                            Background="#FF9800"
+                            Foreground="White"
+                            FontWeight="Bold"
+                            Click="BtnCrearEscandallo_Click"/>
+
+                    <!-- Procesar orden (deshabilitado) -->
+                    <Button Content="Procesar orden"
+                            Width="180"
+                            Height="60"
+                            Margin="10"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Background="#555"
+                            Foreground="#AAA"
+                            FontWeight="Bold"
+                            IsEnabled="False"/>
+
+                    <!-- Crear pedido (deshabilitado) -->
+                    <Button Content="Crear pedido"
+                            Width="180"
+                            Height="60"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Margin="10"
+                            Background="#555"
+                            Foreground="#AAA"
+                            FontWeight="Bold"
+                            IsEnabled="False"/>
+
+                </WrapPanel>
+            </StackPanel>
+
+        </Grid>
 
     </Grid>
 </mah:MetroWindow>

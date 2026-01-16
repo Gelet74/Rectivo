@@ -47,6 +47,9 @@
     <Compile Update="Frontend\Dialogos\Escandallo\DialogoModificarEscandallo.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Frontend\Dialogos\Ordenes\DialogoProcesarOrden.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Frontend\Dialogos\VentanasInicio\ConfirmacionDialogo.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -54,6 +57,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Frontend\Dialogos\VentanasInicio\Login.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Frontend\Dialogos\Ventas\DialogoCrearPedido.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
