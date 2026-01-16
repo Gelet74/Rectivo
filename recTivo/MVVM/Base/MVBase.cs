@@ -138,7 +138,7 @@ namespace recTivo.MVVM.Base{
 
         private void UpdateHasErrors()
         {
-            HasErrors = errorCount == 0;
+            HasErrors = errorCount > 0;
 
         }
 

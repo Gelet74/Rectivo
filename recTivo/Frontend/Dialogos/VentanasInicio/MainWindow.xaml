@@ -10,282 +10,299 @@
         WindowStyle="None"
         Icon="/Recursos/Iconos/rectivo_logo_fondo.png"         
         Height="450" Width="950">
+
     <Grid Background="#2D2D30">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="170"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <StackPanel Grid.Row="0" Orientation="Vertical" 
-                    HorizontalAlignment="Left" 
-                    Width="170">
-            <Image Source="/Recursos/Iconos/rectivo_logo_sintexto.png" 
-                   Width="40"
-                   Height="40" 
-                   VerticalAlignment="Center" 
-                   HorizontalAlignment="Left" 
-                   Margin="45,10,0,0"/>
-            <TextBlock Text="recTivo" FontSize="20" 
-                       FontWeight="Bold" 
-                       Foreground="#ff9800" 
+        <Border Grid.RowSpan="2"
+                Grid.Column="0"
+                Background="#ff9800">
+
+            <StackPanel Orientation="Vertical"
+                        VerticalAlignment="Stretch"
+                        HorizontalAlignment="Left"
+                        Width="170">
+
+                <Image Source="/Recursos/Iconos/rectivo_logo_sintexto.png" 
+                       Width="40"
+                       Height="40" 
+                       VerticalAlignment="Center" 
                        HorizontalAlignment="Left" 
-                       Margin="30,0,5,0" 
-                       VerticalAlignment="Center"/>
-            <Separator Margin="5,5,20,5" 
-                       Background="#ff9800" 
-                       Width="150" 
-                       Height="8" 
-                       HorizontalAlignment="Left"/>
+                       Margin="45,10,0,0"/>
 
-            <Expander HorizontalAlignment="Left" 
-                      IsExpanded="False" 
-                      Width="170" 
-                      Style="{StaticResource MaterialDesignExpander}" 
-                      Foreground="White" 
-                      Background="#ff9800" 
-                      Cursor="Hand">
-                <Expander.Header>
-                    <StackPanel Orientation="Horizontal">
-                        <Image Source="/Recursos/Iconos/Almacen.png" 
-                               Width="30" 
-                               Height="30" 
-                               Margin="-5,0,0,0"/>
-                        <TextBlock Text="Almacén" 
-                                   VerticalAlignment="Center" 
-                                   Foreground="White" 
-                                   Margin="10,0,0,0" 
-                                   FontWeight="Bold"/>
-                    </StackPanel>
-                </Expander.Header>
-                <ListView x:Name="almacen"
-                          PreviewKeyDown="Menu_PreviewKeyDown"
-                          SelectionChanged="almacen_SelectionChanged" 
-                          Style="{StaticResource MaterialDesignListView}" 
-                          Foreground="White" 
-                          ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-                    <ListViewItem Content="Entradas almacén" Padding="20 5"/>
-                    <ListViewItem Content="Salidas almacén" Padding="20 5"/>
-                </ListView>
-            </Expander>
-
-            <Expander HorizontalAlignment="Left" 
-                      IsExpanded="False" 
-                      Width="170" 
-                      Style="{StaticResource MaterialDesignExpander}" 
-                      Foreground="White" 
-                      Background="#ff9800" 
-                      Cursor="Hand">
-                <Expander.Header>
-                    <StackPanel Orientation="Horizontal">
-                        <Image Source="/Recursos/Iconos/Articulos.png" 
-                               Width="30" 
-                               Height="30" 
-                               Margin="-5,0,0,0"/>
-                        <TextBlock Text="Artículos" 
-                                   VerticalAlignment="Center" 
-                                   Foreground="White" 
-                                   Margin="10,0,0,0" 
-                                   FontWeight="Bold"/>
-                    </StackPanel>
-                </Expander.Header>
-                <ListView x:Name="articulos" 
-                          PreviewKeyDown="Menu_PreviewKeyDown"
-                          SelectionChanged="articulos_SelectionChanged" 
-                          Style="{StaticResource MaterialDesignListView}" 
-                          Foreground="White" 
-                          ScrollViewer.HorizontalScrollBarVisibility="Disabled" 
-                          Cursor="Hand">
-                    <ListViewItem Content="Dar de alta" Padding="20 5"/>
-                    <ListViewItem Content="Dar de baja" Padding="20 5"/>
-                    <ListViewItem Content="Modificar" Padding="20 5"/>
-                    <ListViewItem Content="Listar artículos" Padding="20 5"/>
-                </ListView>
-            </Expander>
-
-            <Expander HorizontalAlignment="Left" 
-                      IsExpanded="False" 
-                      Width="170" 
-                      Style="{StaticResource MaterialDesignExpander}" 
-                      Foreground="White" 
-                      Background="#ff9800" 
-                      Cursor="Hand">
-                <Expander.Header>
-                    <StackPanel Orientation="Horizontal">
-                        <Image Source="/Recursos/Iconos/Clientes.png" 
-                               Width="30" 
-                               Height="30" 
-                               Margin="-5,0,0,0"/>
-                        <TextBlock Text="Clientes" 
-                                   VerticalAlignment="Center" 
-                                   Foreground="White" 
-                                   Margin="10,0,0,0" 
-                                   FontWeight="Bold"/>
-                    </StackPanel>
-                </Expander.Header>
-                <ListView x:Name="clientes" 
-                          PreviewKeyDown="Menu_PreviewKeyDown"
-                          SelectionChanged="clientes_SelectionChanged"
-                          Style="{StaticResource MaterialDesignListView}" 
-                          Foreground="White" 
-                          ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-                    <ListViewItem Content="Dar de alta" Padding="20 5"/>
-                    <ListViewItem Content="Dar de baja" Padding="20 5"/>
-                    <ListViewItem Content="Modificar" Padding="20 5"/>
-                    <ListViewItem Content="Listar clientes" Padding="20 5"/>
-                </ListView>
-            </Expander>
-
-            <Expander HorizontalAlignment="Left" 
-                      IsExpanded="False" Width="170" 
-                      Style="{StaticResource MaterialDesignExpander}" 
-                      Foreground="White" 
-                      Background="#ff9800" 
-                      Cursor="Hand">
-                <Expander.Header>
-                    <StackPanel Orientation="Horizontal">
-                        <Image Source="/Recursos/Iconos/Empleado.png" 
-                               Width="30" 
-                               Height="30" 
-                               Margin="-5,0,0,0"/>
-                        <TextBlock Text="Empleados" 
-                                   VerticalAlignment="Center" 
-                                   Foreground="White" 
-                                   Margin="10,0,0,0" 
-                                   FontWeight="Bold"/>
-                    </StackPanel>
-                </Expander.Header>
-                <ListView x:Name="empleados" 
-                          PreviewKeyDown="Menu_PreviewKeyDown"
-                          SelectionChanged="empleados_SelectionChanged" 
-                          Style="{StaticResource MaterialDesignListView}" 
-                          Foreground="White" 
-                          ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-                    <ListViewItem Content="Dar de alta" Padding="20 5"/>
-                    <ListViewItem Content="Dar de baja" Padding="20 5"/>
-                    <ListViewItem Content="Modificar" Padding="20 5"/>
-                    <ListViewItem Content="Listar empleados" Padding="20 5"/>
-                </ListView>
-            </Expander>
-
-            <Expander HorizontalAlignment="Left" 
-          IsExpanded="False" Width="170" 
-          Style="{StaticResource MaterialDesignExpander}" 
-          Foreground="White" 
-          Background="#ff9800" 
-          Cursor="Hand">
-                <Expander.Header>
-                    <StackPanel Orientation="Horizontal">
-                        <Image Source="/Recursos/Iconos/escandallo.png" 
-                               Width="35" 
-                               Height="35" 
-                               Margin="-10,0,0,0"/>
-                        <TextBlock Text="Escandallos" 
-                                   VerticalAlignment="Center" 
-                                   Foreground="White" 
-                                   Margin="8,0,0,0"
-                                   FontWeight="Bold"/>
-                    </StackPanel>
-                </Expander.Header>
-                <ListView x:Name="escandallos" 
-                          PreviewKeyDown="Menu_PreviewKeyDown"
-                          SelectionChanged="escandallos_SelectionChanged" 
-                          Style="{StaticResource MaterialDesignListView}" 
-                          Foreground="White" 
-                          ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-                    <ListViewItem Content="Dar de alta" Padding="20 5"/>
-                    <ListViewItem Content="Modificar" Padding="20 5"/>
-                    <ListViewItem Content="Listar escandallo" Padding="20 5"/>
-                </ListView>
-            </Expander>
-
-            <Expander HorizontalAlignment="Left" 
-                      IsExpanded="False" 
-                      Width="170" 
-                      Style="{StaticResource MaterialDesignExpander}" 
-                      Foreground="White" 
-                      Background="#ff9800" 
-                      Cursor="Hand">
-                <Expander.Header>
-                    <StackPanel Orientation="Horizontal">
-                        <Image Source="/Recursos/Iconos/Ordenes.png" 
-                               Width="30" Height="30" 
-                               Margin="-5,0,0,0"/>
-                        <TextBlock Text="Órdenes" 
-                                   VerticalAlignment="Center" 
-                                   Foreground="White" 
-                                   Margin="10,0,0,0" 
-                                   FontWeight="Bold"/>
-                    </StackPanel>
-                </Expander.Header>
-                <ListView x:Name="ordenes" 
-                          PreviewKeyDown="Menu_PreviewKeyDown"
-                          SelectionChanged="ordenes_SelectionChanged"
-                          Style="{StaticResource MaterialDesignListView}" 
-                          Foreground="White" 
-                          ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-                    <ListViewItem Content="Procesar orden" Padding="20 5"/>
-                    <ListViewItem Content="Cerrar orden" Padding="20 5"/>
-                    <ListViewItem Content="Listar órdenes" Padding="20 5"/>
-                </ListView>
-            </Expander>
-
-            <Expander HorizontalAlignment="Left" 
-                      IsExpanded="False" 
-                      Width="170" 
-                      Style="{StaticResource MaterialDesignExpander}" 
-                      Foreground="White" 
-                      Background="#ff9800" 
-                      Cursor="Hand">
-                <Expander.Header>
-                    <StackPanel Orientation="Horizontal">
-                        <Image Source="/Recursos/Iconos/Ventas.png" 
-                               Width="30" 
-                               Height="30" 
-                               Margin="-5,0,0,0"/>
-                        <TextBlock Text="Ventas" VerticalAlignment="Center" 
-                                   Foreground="White" 
-                                   Margin="10,0,0,0" 
-                                   FontWeight="Bold"/>
-                    </StackPanel>
-                </Expander.Header>
-                <ListView x:Name="ventas" 
-                          SelectionChanged="ventas_SelectionChanged"
-                          PreviewKeyDown="Menu_PreviewKeyDown"
-                          Style="{StaticResource MaterialDesignListView}" 
-                          Foreground="White" 
-                          ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-                    <ListViewItem Content="Crear pedido" Padding="20 5"/>
-                    <ListViewItem Content="Cerrar pedido" Padding="20 5"/>
-                    <ListViewItem Content="Listar pedidos" Padding="20 5"/>
-                </ListView>
-            </Expander>
-        </StackPanel>
-
-        <Button Grid.Row="1" 
-                Width="160" 
-                x:Name="salir" 
-                Click="salir_Click" 
-                Background="#ff9800" 
-                BorderBrush="Transparent" 
-                HorizontalAlignment="Left" 
-                HorizontalContentAlignment="Left" 
-                VerticalContentAlignment="Center" 
-                Cursor="Hand" 
-                Margin="5,10,0,10">
-            <StackPanel Orientation="Horizontal">
-                <Image Source="/Recursos/Iconos/salir.png" 
-                       Width="40" 
-                       Height="30" 
-                       HorizontalAlignment="Left" 
-                       Margin="-10,0,0,0"/>
-                <TextBlock Text="Salir" 
-                           FontSize="13" 
+                <TextBlock Text="recTivo" FontSize="20" 
                            FontWeight="Bold" 
-                           Margin="5,0,0,0" 
                            Foreground="White" 
-                           Height="15" 
+                           HorizontalAlignment="Left" 
+                           Margin="30,0,5,0" 
+                           VerticalAlignment="Center"/>
+
+                <Separator Margin="5,5,20,5" 
+                           Background="White" 
+                           Width="150" 
+                           Height="8" 
+                           HorizontalAlignment="Left"/>
+
+                <Expander HorizontalAlignment="Left" 
+                          IsExpanded="False" 
+                          Width="170" 
+                          Style="{StaticResource MaterialDesignExpander}" 
+                          Foreground="White" 
+                          Background="#ff9800" 
+                          Cursor="Hand">
+                    <Expander.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="/Recursos/Iconos/Almacen.png" 
+                                   Width="30" Height="30" Margin="-5,0,0,0"/>
+                            <TextBlock Text="Almacén" 
+                                       VerticalAlignment="Center" 
+                                       Foreground="White" 
+                                       Margin="10,0,0,0" 
+                                       FontWeight="Bold"/>
+                        </StackPanel>
+                    </Expander.Header>
+
+                    <ListView x:Name="almacen"
+                              PreviewKeyDown="Menu_PreviewKeyDown"
+                              SelectionChanged="almacen_SelectionChanged" 
+                              Style="{StaticResource MaterialDesignListView}" 
+                              Foreground="White" 
+                              ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                        <ListViewItem Content="Entradas almacén" Padding="20 5"/>
+                        <ListViewItem Content="Salidas almacén" Padding="20 5"/>
+                    </ListView>
+                </Expander>
+
+                <Expander HorizontalAlignment="Left" 
+                          IsExpanded="False" 
+                          Width="170" 
+                          Style="{StaticResource MaterialDesignExpander}" 
+                          Foreground="White" 
+                          Background="#ff9800" 
+                          Cursor="Hand">
+                    <Expander.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="/Recursos/Iconos/Articulos.png" 
+                                   Width="30" Height="30" Margin="-5,0,0,0"/>
+                            <TextBlock Text="Artículos" 
+                                       VerticalAlignment="Center" 
+                                       Foreground="White" 
+                                       Margin="10,0,0,0" 
+                                       FontWeight="Bold"/>
+                        </StackPanel>
+                    </Expander.Header>
+
+                    <ListView x:Name="articulos" 
+                              PreviewKeyDown="Menu_PreviewKeyDown"
+                              SelectionChanged="articulos_SelectionChanged" 
+                              Style="{StaticResource MaterialDesignListView}" 
+                              Foreground="White" 
+                              ScrollViewer.HorizontalScrollBarVisibility="Disabled" 
+                              Cursor="Hand">
+                        <ListViewItem Content="Dar de alta" Padding="20 5"/>
+                        <ListViewItem Content="Dar de baja" Padding="20 5"/>
+                        <ListViewItem Content="Modificar" Padding="20 5"/>
+                        <ListViewItem Content="Listar artículos" Padding="20 5"/>
+                    </ListView>
+                </Expander>
+
+                <Expander HorizontalAlignment="Left" 
+                          IsExpanded="False" 
+                          Width="170" 
+                          Style="{StaticResource MaterialDesignExpander}" 
+                          Foreground="White" 
+                          Background="#ff9800" 
+                          Cursor="Hand">
+                    <Expander.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="/Recursos/Iconos/Clientes.png" 
+                                   Width="30" Height="30" Margin="-5,0,0,0"/>
+                            <TextBlock Text="Clientes" 
+                                       VerticalAlignment="Center" 
+                                       Foreground="White" 
+                                       Margin="10,0,0,0" 
+                                       FontWeight="Bold"/>
+                        </StackPanel>
+                    </Expander.Header>
+
+                    <ListView x:Name="clientes" 
+                              PreviewKeyDown="Menu_PreviewKeyDown"
+                              SelectionChanged="clientes_SelectionChanged"
+                              Style="{StaticResource MaterialDesignListView}" 
+                              Foreground="White" 
+                              ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                        <ListViewItem Content="Dar de alta" Padding="20 5"/>
+                        <ListViewItem Content="Modificar" Padding="20 5"/>
+                        <ListViewItem Content="Listar clientes" Padding="20 5"/>
+                    </ListView>
+                </Expander>
+
+                <Expander HorizontalAlignment="Left" 
+                          IsExpanded="False" Width="170" 
+                          Style="{StaticResource MaterialDesignExpander}" 
+                          Foreground="White" 
+                          Background="#ff9800" 
+                          Cursor="Hand">
+                    <Expander.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="/Recursos/Iconos/Empleado.png" 
+                                   Width="30" Height="30" Margin="-5,0,0,0"/>
+                            <TextBlock Text="Empleados" 
+                                       VerticalAlignment="Center" 
+                                       Foreground="White" 
+                                       Margin="10,0,0,0" 
+                                       FontWeight="Bold"/>
+                        </StackPanel>
+                    </Expander.Header>
+
+                    <ListView x:Name="empleados" 
+                              PreviewKeyDown="Menu_PreviewKeyDown"
+                              SelectionChanged="empleados_SelectionChanged" 
+                              Style="{StaticResource MaterialDesignListView}" 
+                              Foreground="White" 
+                              ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                        <ListViewItem Content="Dar de alta" Padding="20 5"/>
+                        <ListViewItem Content="Dar de baja" Padding="20 5"/>
+                        <ListViewItem Content="Modificar" Padding="20 5"/>
+                        <ListViewItem Content="Listar empleados" Padding="20 5"/>
+                    </ListView>
+                </Expander>
+
+                <Expander HorizontalAlignment="Left" 
+                          IsExpanded="False" Width="170" 
+                          Style="{StaticResource MaterialDesignExpander}" 
+                          Foreground="White" 
+                          Background="#ff9800" 
+                          Cursor="Hand">
+                    <Expander.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="/Recursos/Iconos/escandallo.png" 
+                                   Width="35" Height="35" Margin="-10,0,0,0"/>
+                            <TextBlock Text="Escandallos" 
+                                       VerticalAlignment="Center" 
+                                       Foreground="White" 
+                                       Margin="8,0,0,0"
+                                       FontWeight="Bold"/>
+                        </StackPanel>
+                    </Expander.Header>
+
+                    <ListView x:Name="escandallos" 
+                              PreviewKeyDown="Menu_PreviewKeyDown"
+                              SelectionChanged="escandallos_SelectionChanged" 
+                              Style="{StaticResource MaterialDesignListView}" 
+                              Foreground="White" 
+                              ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                        <ListViewItem Content="Dar de alta" Padding="20 5"/>
+                        <ListViewItem Content="Modificar" Padding="20 5"/>
+                        <ListViewItem Content="Listar escandallo" Padding="20 5"/>
+                    </ListView>
+                </Expander>
+
+                <Expander HorizontalAlignment="Left" 
+                          IsExpanded="False" 
+                          Width="170" 
+                          Style="{StaticResource MaterialDesignExpander}" 
+                          Foreground="White" 
+                          Background="#ff9800" 
+                          Cursor="Hand">
+                    <Expander.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="/Recursos/Iconos/Ordenes.png" 
+                                   Width="30" Height="30" Margin="-5,0,0,0"/>
+                            <TextBlock Text="Órdenes" 
+                                       VerticalAlignment="Center" 
+                                       Foreground="White" 
+                                       Margin="10,0,0,0" 
+                                       FontWeight="Bold"/>
+                        </StackPanel>
+                    </Expander.Header>
+
+                    <ListView x:Name="ordenes" 
+                              PreviewKeyDown="Menu_PreviewKeyDown"
+                              SelectionChanged="ordenes_SelectionChanged"
+                              Style="{StaticResource MaterialDesignListView}" 
+                              Foreground="White" 
+                              ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                        <ListViewItem Content="Procesar orden" Padding="20 5"/>
+                        <ListViewItem Content="Cerrar orden" Padding="20 5"/>
+                        <ListViewItem Content="Listar órdenes" Padding="20 5"/>
+                    </ListView>
+                </Expander>
+
+                <Expander HorizontalAlignment="Left" 
+                          IsExpanded="False" 
+                          Width="170" 
+                          Style="{StaticResource MaterialDesignExpander}" 
+                          Foreground="White" 
+                          Background="#ff9800" 
+                          Cursor="Hand">
+                    <Expander.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="/Recursos/Iconos/Ventas.png" 
+                                   Width="30" Height="30" Margin="-5,0,0,0"/>
+                            <TextBlock Text="Ventas" 
+                                       VerticalAlignment="Center" 
+                                       Foreground="White" 
+                                       Margin="10,0,0,0" 
+                                       FontWeight="Bold"/>
+                        </StackPanel>
+                    </Expander.Header>
+
+                    <ListView x:Name="ventas" 
+                              SelectionChanged="ventas_SelectionChanged"
+                              PreviewKeyDown="Menu_PreviewKeyDown"
+                              Style="{StaticResource MaterialDesignListView}" 
+                              Foreground="White" 
+                              ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                        <ListViewItem Content="Crear pedido" Padding="20 5"/>
+                        <ListViewItem Content="Cerrar pedido" Padding="20 5"/>
+                        <ListViewItem Content="Listar pedidos" Padding="20 5"/>
+                    </ListView>
+                </Expander>
+
+            </StackPanel>
+        </Border>
+
+        <!-- ============================
+             BOTÓN SALIR ABAJO IZQUIERDA
+             ============================ -->
+        <Button Grid.Row="1"
+                Grid.Column="0"
+                Width="160"
+                x:Name="salir"
+                Click="salir_Click"
+                Background="Transparent"
+                BorderBrush="Transparent"
+                HorizontalAlignment="Left"
+                HorizontalContentAlignment="Left"
+                VerticalContentAlignment="Center"
+                Cursor="Hand"
+                Margin="5,10,0,10">
+
+            <StackPanel Orientation="Horizontal">
+                <Image Source="/Recursos/Iconos/salir.png"
+                       Width="40"
+                       Height="30"
+                       HorizontalAlignment="Left"
+                       Margin="-10,0,0,0"/>
+
+                <TextBlock Text="Salir"
+                           FontSize="13"
+                           FontWeight="Bold"
+                           Margin="5,0,0,0"
+                           Foreground="White"
+                           Height="15"
                            Width="50"/>
             </StackPanel>
         </Button>
+
     </Grid>
 </mah:MetroWindow>

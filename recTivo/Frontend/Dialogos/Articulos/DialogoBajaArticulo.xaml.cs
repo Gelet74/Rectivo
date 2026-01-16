@@ -22,6 +22,9 @@ namespace recTivo.Frontend.Dialogos.Articulos
             InitializeComponent();
             _vm = vm;
             DataContext = _vm;
+
+            Loaded += async (_, __) => await _vm.Inicializa();
+
         }
 
         private async void btnBajaArticulo_Click(object sender, RoutedEventArgs e)

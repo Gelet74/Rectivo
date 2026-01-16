@@ -101,12 +101,6 @@ namespace recTivo
                     altaCliente.ShowDialog();
                     break;
 
-                case "Dar de baja":
-                    var bajaCliente = _serviceProvider.GetService<DialogoBajaCliente>();
-                    bajaCliente.Owner = this;
-                    bajaCliente.ShowDialog();
-                    break;
-
                 case "Modificar":
                     var modificarCliente = _serviceProvider.GetService<DialogoModificarCliente>();
                     modificarCliente.Owner = this;
@@ -136,12 +130,6 @@ namespace recTivo
                     var altaEmpleado = _serviceProvider.GetService<DialogoAltaEmpleado>();
                     altaEmpleado.Owner = this;
                     altaEmpleado.ShowDialog();
-                    break;
-
-                case "Dar de baja":
-                    var bajaEmpleado = _serviceProvider.GetService<DialogoBajaEmpleado>();
-                    bajaEmpleado.Owner = this;
-                    bajaEmpleado.ShowDialog();
                     break;
 
                 case "Modificar":

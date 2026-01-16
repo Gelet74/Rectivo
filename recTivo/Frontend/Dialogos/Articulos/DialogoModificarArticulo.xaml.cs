@@ -20,6 +20,8 @@ namespace recTivo.Frontend.Dialogos.Articulos
             _vm = vm;
             DataContext = _vm;
 
+            Loaded += async (_, __) => await _vm.Inicializa();
+
             this.PreviewKeyDown += DialogoModificarArticulo_PreviewKeyDown;
         }
 

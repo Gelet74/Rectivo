@@ -1,7 +1,9 @@
 ﻿using di.proyecto.clase._2025.Frontend.Mensajes;
 using recTivo.Frontend.Dialogos.VentanasInicio;
 using recTivo.MVVM;
+using recTivo.MVVM.Base;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace recTivo.Frontend.Dialogos.Empleado
@@ -17,6 +19,12 @@ namespace recTivo.Frontend.Dialogos.Empleado
             DataContext = _vm;
 
             Loaded += async (_, __) => await _vm.Inicializa();
+        }
+
+        private void OnErrorEvent(object sender, ValidationErrorEventArgs e)
+        { 
+            if (DataContext is MVBase vm) 
+                vm.OnErrorEvent(sender, e); 
         }
 
         private async void btnAltaEmpleado_Click(object sender, RoutedEventArgs e)

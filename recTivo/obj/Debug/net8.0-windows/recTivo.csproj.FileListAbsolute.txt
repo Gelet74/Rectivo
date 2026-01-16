@@ -417,16 +417,15 @@ C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\bin\Debug\net8.0-
 C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\bin\Debug\net8.0-windows\runtimes\win-x64\native\krbcc64.dll
 C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\recTivo.csproj.AssemblyReference.cache
 C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\Almacen\DialogoEntradaAlmacen.baml
+C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\Almacen\DialogoSalidaAlmacen.baml
 C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\Articulos\DialogoAltaArticulo.baml
 C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\Articulos\DialogoBajaArticulo.baml
 C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\Articulos\DialogoListarArticulo.baml
 C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\Articulos\DialogoModificarArticulo.baml
 C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\Clientes\DialogoAltaCliente.baml
-C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\Clientes\DialogoBajaCliente.baml
 C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\Clientes\DialogoConsultaCliente.baml
 C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\Clientes\DialogoModificarCliente.baml
 C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\Empleado\DialogoAltaEmpleado.baml
-C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\Empleado\DialogoBajaEmpleado.baml
 C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\Empleado\DialogoConsultaEmpleado.baml
 C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\Empleado\DialogoModificarEmpleado.baml
 C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\Almacen\DialogoEntradaAlmacen.g.cs
@@ -436,11 +435,9 @@ C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-
 C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\Articulos\DialogoListarArticulo.g.cs
 C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\Articulos\DialogoModificarArticulo.g.cs
 C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\Clientes\DialogoAltaCliente.g.cs
-C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\Clientes\DialogoBajaCliente.g.cs
 C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\Clientes\DialogoConsultaCliente.g.cs
 C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\Clientes\DialogoModificarCliente.g.cs
 C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\Empleado\DialogoAltaEmpleado.g.cs
-C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\Empleado\DialogoBajaEmpleado.g.cs
 C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\Empleado\DialogoConsultaEmpleado.g.cs
 C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\Empleado\DialogoModificarEmpleado.g.cs
 C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\Escandallo\DialogoAltaEscandallo.g.cs
@@ -456,7 +453,6 @@ C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-
 C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\recTivo_MarkupCompile.cache
 C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\recTivo_MarkupCompile.lref
 C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\App.baml
-C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\Almacen\DialogoSalidaAlmacen.baml
 C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\Escandallo\DialogoAltaEscandallo.baml
 C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\Escandallo\DialogoListarEscandallo.baml
 C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\Escandallo\DialogoModificarEscandallo.baml
