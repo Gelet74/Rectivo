@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("recTivo")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+98f749df5ce134b5e17a2ef37ea652c5abcd6a86")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+8a8d96e4d1c45788e5dd37d7f3cde7ef1cb9bfce")]
 [assembly: System.Reflection.AssemblyProductAttribute("recTivo")]
 [assembly: System.Reflection.AssemblyTitleAttribute("recTivo")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
