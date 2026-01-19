@@ -94,8 +94,11 @@
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,10,0,0">
                         <StackPanel Width="200">
                             <TextBlock Text="Código componente:" Foreground="White"/>
-                            <ComboBox ItemsSource="{Binding CodigosArticulos}"
-                                      SelectedItem="{Binding ComponenteNuevo.CodigoArticulo, Mode=TwoWay}"/>
+                            <ComboBox ItemsSource="{Binding ArticulosNoPT}"
+                                      DisplayMemberPath="Codigo"
+                                      SelectedValuePath="Codigo"
+                                      SelectedValue="{Binding ComponenteNuevo.CodigoArticulo, Mode=TwoWay}"/>
+
                         </StackPanel>
 
                         <StackPanel Width="120" Margin="20,0,0,0">

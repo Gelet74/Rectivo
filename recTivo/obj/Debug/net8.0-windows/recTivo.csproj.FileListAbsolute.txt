@@ -473,3 +473,7 @@ D:\gelet\escritorio\DI\recTivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogo
 D:\gelet\escritorio\DI\recTivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\Ventas\DialogoCrearPedido.g.cs
 D:\gelet\escritorio\DI\recTivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\Ordenes\DialogoProcesarOrden.baml
 D:\gelet\escritorio\DI\recTivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\Ventas\DialogoCrearPedido.baml
+C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\Ordenes\DialogoProcesarOrden.g.cs
+C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\Ventas\DialogoCrearPedido.g.cs
+C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\Ordenes\DialogoProcesarOrden.baml
+C:\Users\windows10\Desktop\2º DAM\PROYECTO\DI\Rectivo\recTivo\obj\Debug\net8.0-windows\Frontend\Dialogos\Ventas\DialogoCrearPedido.baml
