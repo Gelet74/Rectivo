@@ -76,8 +76,7 @@ namespace recTivo.Frontend.Dialogos.Empleado {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/recTivo;V1.0.0.0;component/frontend/dialogos/empleado/dialogomodificarempleado.x" +
-                    "aml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/recTivo;component/frontend/dialogos/empleado/dialogomodificarempleado.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\..\..\Frontend\Dialogos\Empleado\DialogoModificarEmpleado.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

@@ -76,8 +76,7 @@ namespace recTivo.Frontend.Dialogos.Clientes {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/recTivo;V1.0.0.0;component/frontend/dialogos/clientes/dialogomodificarcliente.xa" +
-                    "ml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/recTivo;component/frontend/dialogos/clientes/dialogomodificarcliente.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\..\..\Frontend\Dialogos\Clientes\DialogoModificarCliente.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

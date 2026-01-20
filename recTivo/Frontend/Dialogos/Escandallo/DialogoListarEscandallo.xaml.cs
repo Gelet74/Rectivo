@@ -1,4 +1,5 @@
-﻿using recTivo.Backend.Modelos;
+﻿using di.proyecto.clase._2025.Frontend.Mensajes;
+using recTivo.Backend.Modelos;
 using recTivo.Frontend.Dialogos.VentanasInicio;
 using recTivo.MVVM;
 using System.Windows;
@@ -16,36 +17,25 @@ namespace recTivo.Frontend.Dialogos.Escandallo
             InitializeComponent();
             _vm = vm;
             DataContext = _vm;
-
             Loaded += async (_, __) => await _vm.Inicializa();
         }
 
-        private void txtCodigo_TextChanged(object sender, TextChangedEventArgs e)
+        private async void cmbCodigo_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var tb = sender as TextBox;
-            if (tb == null)
-                return;
-
-            int caret = tb.CaretIndex;
-            string mayus = tb.Text.ToUpper();
-
-            if (tb.Text != mayus)
-            {
-                tb.Text = mayus;
-                tb.CaretIndex = caret;
-            }
+            // No hacer nada aquí, solo esperar al botón
         }
 
         private async void BtnCargar_Click(object sender, RoutedEventArgs e)
         {
-            var codigo = _vm.ArticuloFinal?.Codigo;
+            var codigo = _vm.ArticuloSeleccionado?.Codigo; // ← CAMBIO: ArticuloSeleccionado
+
             if (string.IsNullOrWhiteSpace(codigo))
             {
-                // Si quieres, puedes mostrar un mensaje aquí
+                MensajeError.Mostrar("ESCANDALLO", "Selecciona un código de artículo.");
                 return;
             }
 
-            await _vm.CargarEscandallo(codigo);
+            await _vm.CargarEscandalloAsync(codigo); // ← CAMBIO: CargarEscandalloAsync
         }
 
         private void TreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
@@ -53,9 +43,6 @@ namespace recTivo.Frontend.Dialogos.Escandallo
             _vm.ComponentePadreSeleccionado = e.NewValue as ComponenteEscandallo;
         }
 
-        // ================================
-        //   MANEJO DE ESCAPE
-        // ================================
         private bool _escapeEnCurso = false;
 
         protected override void OnPreviewKeyDown(KeyEventArgs e)
