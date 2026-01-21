@@ -32,6 +32,13 @@ public class Cliente : ValidatableViewModel
     [Column("TELEFONO")]
     public string? Telefono { get; set; }
 
+    [Column("username")]
+    public string Usuario { get; set; }
+
+    [Column("password")]
+    public string Password { get; set; }
+
+
     [NotMapped]
     public string NombreCompleto => $"{Nombre} {Apellido1} {Apellido2}".Trim();
 

@@ -34,8 +34,56 @@ namespace recTivo.Backend.Modelos
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Cliente>().ToTable("cliente");
+            // ===========================
+            // CONFIGURACIÓN DE CLIENTE
+            // ===========================
+            modelBuilder.Entity<Cliente>(entity =>
+            {
+                entity.ToTable("cliente");
 
+                entity.HasKey(c => c.IdCliente).HasName("PRIMARY");
+
+                entity.Property(c => c.IdCliente)
+                      .HasColumnName("IDCLIENTE");
+
+                entity.Property(c => c.Nombre)
+                      .HasColumnName("NOMBRE")
+                      .HasMaxLength(50);
+
+                entity.Property(c => c.Apellido1)
+                      .HasColumnName("APELLIDO1")
+                      .HasMaxLength(50);
+
+                entity.Property(c => c.Apellido2)
+                      .HasColumnName("APELLIDO2")
+                      .HasMaxLength(50);
+
+                entity.Property(c => c.NumFactura)
+                      .HasColumnName("NUM_FACTURA");
+
+                entity.Property(c => c.NumPedido)
+                      .HasColumnName("NUM_PEDIDO");
+
+                entity.Property(c => c.Dni)
+                      .HasColumnName("DNI")
+                      .HasMaxLength(20);
+
+                entity.Property(c => c.Telefono)
+                      .HasColumnName("TELEFONO")
+                      .HasMaxLength(20);
+
+                entity.Property(c => c.Usuario)
+                      .HasColumnName("username")
+                      .HasMaxLength(50);
+
+                entity.Property(c => c.Password)
+                      .HasColumnName("password")
+                      .HasMaxLength(255);
+            });
+
+            // ===========================
+            // CONFIGURACIÓN DE ARTÍCULO
+            // ===========================
             modelBuilder.Entity<Articulo>(entity =>
             {
                 entity.ToTable("articulo");

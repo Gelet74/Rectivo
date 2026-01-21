@@ -2,6 +2,7 @@
 using recTivo.Frontend.Dialogos.VentanasInicio;
 using recTivo.MVVM;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace recTivo.Frontend.Dialogos.Clientes
@@ -41,6 +42,13 @@ namespace recTivo.Frontend.Dialogos.Clientes
                 e.Handled = true;
             }
         }
+
+        private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is MVCliente vm)
+                vm.Password = ((PasswordBox)sender).Password;
+        }
+
 
         private async void btnGuardarCliente_Click(object sender, RoutedEventArgs e)
         {

@@ -76,6 +76,13 @@ namespace recTivo.MVVM
             set { _articulo.Codigo = value; OnPropertyChanged(); }
         }
 
+        private int _totalArticulos; 
+        public int TotalArticulos 
+        { 
+            get => _totalArticulos; 
+            set => SetProperty(ref _totalArticulos, value); 
+        }
+
         public string Descrip
         {
             get => _articulo.Descrip;

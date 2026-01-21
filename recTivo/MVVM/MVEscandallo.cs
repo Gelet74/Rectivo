@@ -149,8 +149,13 @@ namespace recTivo.MVVM
                     ArticulosPT.Add(a);
 
                 ArticulosNoPT.Clear();
-                foreach (var a in lista.Where(a => !a.Codigo.StartsWith("PT")))
+                foreach (var a in lista
+                    .Where(a => !a.Codigo.StartsWith("PT"))
+                    .OrderBy(a => a.Codigo))
+                {
                     ArticulosNoPT.Add(a);
+                }
+
 
                 ListaArticulos = lista.ToList();
 

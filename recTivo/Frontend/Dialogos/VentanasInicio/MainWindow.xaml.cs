@@ -1,5 +1,6 @@
 ﻿using MahApps.Metro.Controls;
 using Microsoft.Extensions.DependencyInjection;
+using recTivo.Backend.Repos;
 using recTivo.Frontend.Dialogos;
 using recTivo.Frontend.Dialogos.Articulos;
 using recTivo.Frontend.Dialogos.Clientes;
@@ -9,13 +10,14 @@ using recTivo.Frontend.Dialogos.Ordenes;
 using recTivo.Frontend.Dialogos.VentanasInicio;
 using recTivo.Frontend.Dialogos.Ventas;
 using System;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace recTivo
 {
-    public partial class MainWindow : MetroWindow
+    public partial class MainWindow : MetroWindow, INotifyPropertyChanged
     {
         private readonly IServiceProvider _serviceProvider;
 
@@ -23,106 +25,96 @@ namespace recTivo
         {
             InitializeComponent();
             _serviceProvider = serviceProvider;
+            DataContext = this;
+            _ = CargarTotalesAsync();
         }
+
+        // ============================
+        // PROPIEDADES DE DASHBOARD
+        // ============================
+
+        private int _totalArticulos;
+        public int TotalArticulos
+        {
+            get => _totalArticulos;
+            set
+            {
+                _totalArticulos = value;
+                OnPropertyChanged(nameof(TotalArticulos));
+            }
+        }
+
+        private int _totalClientes;
+        public int TotalClientes
+        {
+            get => _totalClientes;
+            set
+            {
+                _totalClientes = value;
+                OnPropertyChanged(nameof(TotalClientes));
+            }
+        }
+
+        private int _totalEmpleados;
+        public int TotalEmpleados
+        {
+            get => _totalEmpleados;
+            set
+            {
+                _totalEmpleados = value;
+                OnPropertyChanged(nameof(TotalEmpleados));
+            }
+        }
+
+        private async Task CargarTotalesAsync()
+        {
+            var articuloRepo = _serviceProvider.GetService<ArticuloRepository>();
+            var clienteRepo = _serviceProvider.GetService<ClienteRepository>();
+            var empleadoRepo = _serviceProvider.GetService<EmpleadoRepository>();
+
+            TotalArticulos = (await articuloRepo.GetAllAsync()).Count();
+            TotalClientes = (await clienteRepo.GetAllAsync()).Count();
+            TotalEmpleados = (await empleadoRepo.GetAllAsync()).Count();
+        }
+
+        // ============================
+        // EVENTOS DE MENÚ
+        // ============================
 
         private void almacen_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (almacen.SelectedItem is not ListViewItem item)
-                return;
+            if (almacen.SelectedItem is not ListViewItem item) return;
 
-            string opcion = item.Content.ToString();
-
-            switch (opcion)
+            switch (item.Content.ToString())
             {
                 case "Entradas almacén":
-                    var entrada = _serviceProvider.GetService<DialogoEntradaAlmacen>();
-                    entrada.Owner = this;
-                    entrada.ShowDialog();
+                    _serviceProvider.GetService<DialogoEntradaAlmacen>()?.ShowDialog();
                     break;
-
                 case "Salidas almacén":
-                    var salida = _serviceProvider.GetService<DialogoSalidaAlmacen>();
-                    salida.Owner = this;
-                    salida.ShowDialog();
+                    _serviceProvider.GetService<DialogoSalidaAlmacen>()?.ShowDialog();
                     break;
             }
 
             almacen.SelectedItem = null;
         }
 
-        private void BtnCrearArticulo_Click(object sender, RoutedEventArgs e)
-        {
-            var altaArticulo = _serviceProvider.GetService<DialogoAltaArticulo>();
-            altaArticulo.Owner = this;
-            altaArticulo.ShowDialog();
-        }
-
-        private void BtnCrearCliente_Click(object sender, RoutedEventArgs e)
-        {
-            var altaCliente = _serviceProvider.GetService<DialogoAltaCliente>();
-            altaCliente.Owner = this;
-            altaCliente.ShowDialog();
-        }
-
-        private void BtnCrearEscandallo_Click(object sender, RoutedEventArgs e)
-        {
-            var altaEscandallo = _serviceProvider.GetService<DialogoAltaEscandallo>();
-            altaEscandallo.Owner = this;
-            altaEscandallo.ShowDialog();
-        }
-
-        private void BtnCrearPedido_Click(object sender, RoutedEventArgs e)
-        {
-            var dlg = new DialogoCrearPedido();
-            dlg.ShowDialog();
-        }
-
-        private void BtnProcesarOrden_Click(object sender, RoutedEventArgs e)
-        {
-            var dlg = new DialogoProcesarOrden();
-            dlg.ShowDialog();
-        }
-
-        private void BtnCrearEmpleado_Click(object sender, RoutedEventArgs e)
-        {
-            var altaEmpleado = _serviceProvider.GetService<DialogoAltaEmpleado>();
-            altaEmpleado.Owner = this;
-            altaEmpleado.ShowDialog();
-        }
-
-
-
         private void articulos_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (articulos.SelectedItem is not ListViewItem item)
-                return;
+            if (articulos.SelectedItem is not ListViewItem item) return;
 
-            string opcion = item.Content.ToString();
-
-            switch (opcion)
+            switch (item.Content.ToString())
             {
                 case "Dar de alta":
-                    var altaArticulo = _serviceProvider.GetService<DialogoAltaArticulo>();
-                    altaArticulo.Owner = this;
-                    altaArticulo.ShowDialog();
+                    _serviceProvider.GetService<DialogoAltaArticulo>()?.ShowDialog();
                     break;
-
                 case "Dar de baja":
-                    var bajaArticulo = _serviceProvider.GetService<DialogoBajaArticulo>();
-                    bajaArticulo.Owner = this;
-                    bajaArticulo.ShowDialog();
+                    _serviceProvider.GetService<DialogoBajaArticulo>()?.ShowDialog();
                     break;
-
                 case "Modificar":
-                    var modificarArticulo = _serviceProvider.GetService<DialogoModificarArticulo>();
-                    modificarArticulo.Owner = this;
-                    modificarArticulo.ShowDialog();
+                    _serviceProvider.GetService<DialogoModificarArticulo>()?.ShowDialog();
                     break;
-
                 case "Listar artículos":
-                    var listarArticulo = _serviceProvider.GetService<DialogoListarArticulo>();
-                    listarArticulo.Owner = this;
-                    listarArticulo.ShowDialog();
+                    _serviceProvider.GetService<DialogoListarArticulo>()?.ShowDialog();
                     break;
             }
 
@@ -131,143 +123,161 @@ namespace recTivo
 
         private void clientes_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (clientes.SelectedItem is not ListViewItem item)
-                return;
+            if (clientes.SelectedItem is not ListViewItem item) return;
 
-            string opcion = item.Content.ToString();
-
-            switch (opcion)
+            switch (item.Content.ToString())
             {
                 case "Dar de alta":
-                    var altaCliente = _serviceProvider.GetService<DialogoAltaCliente>();
-                    altaCliente.Owner = this;
-                    altaCliente.ShowDialog();
+                    _serviceProvider.GetService<DialogoAltaCliente>()?.ShowDialog();
                     break;
-
                 case "Modificar":
-                    var modificarCliente = _serviceProvider.GetService<DialogoModificarCliente>();
-                    modificarCliente.Owner = this;
-                    modificarCliente.ShowDialog();
+                    _serviceProvider.GetService<DialogoModificarCliente>()?.ShowDialog();
                     break;
-
                 case "Listar clientes":
-                    var listarCliente = _serviceProvider.GetService<DialogoConsultaCliente>();
-                    listarCliente.Owner = this;
-                    listarCliente.ShowDialog();
+                    _serviceProvider.GetService<DialogoConsultaCliente>()?.ShowDialog();
                     break;
             }
 
             clientes.SelectedItem = null;
         }
-              
+
         private void empleados_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (empleados.SelectedItem is not ListViewItem item)
-                return;
+            if (empleados.SelectedItem is not ListViewItem item) return;
 
-            string opcion = item.Content.ToString();
-
-            switch (opcion)
+            switch (item.Content.ToString())
             {
                 case "Dar de alta":
-                    var altaEmpleado = _serviceProvider.GetService<DialogoAltaEmpleado>();
-                    altaEmpleado.Owner = this;
-                    altaEmpleado.ShowDialog();
+                    _serviceProvider.GetService<DialogoAltaEmpleado>()?.ShowDialog();
                     break;
-
                 case "Modificar":
-                    var modificarEmpleado = _serviceProvider.GetService<DialogoModificarEmpleado>();
-                    modificarEmpleado.Owner = this;
-                    modificarEmpleado.ShowDialog();
+                    _serviceProvider.GetService<DialogoModificarEmpleado>()?.ShowDialog();
                     break;
-
                 case "Listar empleados":
-                    var listarEmpleado = _serviceProvider.GetService<DialogoConsultaEmpleado>();
-                    listarEmpleado.Owner = this;
-                    listarEmpleado.ShowDialog();
+                    _serviceProvider.GetService<DialogoConsultaEmpleado>()?.ShowDialog();
                     break;
             }
 
             empleados.SelectedItem = null;
-        }
-
-        private void ordenes_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (empleados.SelectedItem is not ListViewItem item)
-                return;
-
-            string opcion = item.Content.ToString();
-
-            switch (opcion)
-            {
-                case "Procesar Orden":
-                    var procesarOrden = _serviceProvider.GetService<DialogoProcesarOrden>();
-                    procesarOrden.Owner = this;
-                    procesarOrden.ShowDialog();
-                    break;
-
-           
-            }
-
-            empleados.SelectedItem = null;
-        
-        }
-
-        private void ventas_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-        }
-
-        private void Menu_PreviewKeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Escape)
-            {
-                e.Handled = true;
-            }
-        }
-        private void salir_Click(object sender, RoutedEventArgs e)
-        {
-            var dialogo = _serviceProvider.GetService<ConfirmacionDialogo>();
-            dialogo.Owner = this;
-
-            bool? resultado = dialogo.ShowDialog();
-
-            if (resultado == true)
-            {
-                Application.Current.Shutdown();
-            }
         }
 
         private void escandallos_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (escandallos.SelectedItem is not ListViewItem item)
-                return;
+            if (escandallos.SelectedItem is not ListViewItem item) return;
 
-            string opcion = item.Content.ToString();
-
-            switch (opcion)
+            switch (item.Content.ToString())
             {
                 case "Dar de alta":
-                    var altaEscandallo = _serviceProvider.GetService<DialogoAltaEscandallo>();
-                    altaEscandallo.Owner = this;
-                    altaEscandallo.ShowDialog();
+                    _serviceProvider.GetService<DialogoAltaEscandallo>()?.ShowDialog();
                     break;
-
                 case "Modificar":
-                    var modificarEscandallo = _serviceProvider.GetService<DialogoModificarEscandallo>();
-                    modificarEscandallo.Owner = this;
-                    modificarEscandallo.ShowDialog();
+                    _serviceProvider.GetService<DialogoModificarEscandallo>()?.ShowDialog();
                     break;
-
                 case "Listar escandallo":
-                    var listarEscandallo = _serviceProvider.GetService<DialogoListarEscandallo>();
-                    listarEscandallo.Owner = this;
-                    listarEscandallo.ShowDialog();
+                    _serviceProvider.GetService<DialogoListarEscandallo>()?.ShowDialog();
                     break;
             }
 
             escandallos.SelectedItem = null;
         }
-              
+
+        private void ordenes_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (ordenes.SelectedItem is not ListViewItem item) return;
+
+            switch (item.Content.ToString())
+            {
+                case "Procesar orden":
+                    _serviceProvider.GetService<DialogoProcesarOrden>()?.ShowDialog();
+                    break;
+                //case "Cerrar orden":
+                    //_serviceProvider.GetService<DialogoCerrarOrden>()?.ShowDialog();
+                    //break;
+                //case "Listar órdenes":
+                    //_serviceProvider.GetService<DialogoListarOrden>()?.ShowDialog();
+                    //break;
+            }
+
+            ordenes.SelectedItem = null;
+        }
+
+        private void ventas_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (ventas.SelectedItem is not ListViewItem item) return;
+
+            switch (item.Content.ToString())
+            {
+                case "Crear pedido":
+                    _serviceProvider.GetService<DialogoCrearPedido>()?.ShowDialog();
+                    break;
+                //case "Cerrar pedido":
+                    //_serviceProvider.GetService<DialogoCerrarPedido>()?.ShowDialog();
+                    //break;
+                //case "Listar pedidos":
+                    //_serviceProvider.GetService<DialogoListarPedido>()?.ShowDialog();
+                    //break;
+            }
+
+            ventas.SelectedItem = null;
+        }
+
+        // ============================
+        // BOTONES DE ACCESO RÁPIDO
+        // ============================
+
+        private void BtnCrearArticulo_Click(object sender, RoutedEventArgs e)
+        {
+            _serviceProvider.GetService<DialogoAltaArticulo>()?.ShowDialog();
+        }
+
+        private void BtnCrearCliente_Click(object sender, RoutedEventArgs e)
+        {
+            _serviceProvider.GetService<DialogoAltaCliente>()?.ShowDialog();
+        }
+
+        private void BtnCrearEmpleado_Click(object sender, RoutedEventArgs e)
+        {
+            _serviceProvider.GetService<DialogoAltaEmpleado>()?.ShowDialog();
+        }
+
+        private void BtnCrearEscandallo_Click(object sender, RoutedEventArgs e)
+        {
+            _serviceProvider.GetService<DialogoAltaEscandallo>()?.ShowDialog();
+        }
+
+        private void BtnProcesarOrden_Click(object sender, RoutedEventArgs e)
+        {
+            _serviceProvider.GetService<DialogoProcesarOrden>()?.ShowDialog();
+        }
+
+        private void BtnCrearPedido_Click(object sender, RoutedEventArgs e)
+        {
+            _serviceProvider.GetService<DialogoCrearPedido>()?.ShowDialog();
+        }
+
+        private void salir_Click(object sender, RoutedEventArgs e)
+        {
+            var dialogo = _serviceProvider.GetService<ConfirmacionDialogo>();
+            dialogo.Owner = this;
+
+            if (dialogo.ShowDialog() == true)
+                Application.Current.Shutdown();
+        }
+
+        private void Menu_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape)
+                e.Handled = true;
+        }
+
+        // ============================
+        // INotifyPropertyChanged
+        // ============================
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }

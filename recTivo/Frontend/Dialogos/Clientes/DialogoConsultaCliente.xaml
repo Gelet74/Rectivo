@@ -47,14 +47,33 @@
                               CanUserAddRows="False"
                               CanUserDeleteRows="False"
                               IsReadOnly="True"
+                              HorizontalAlignment="Center"
                               RowHeaderWidth="0">
 
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Nombre" Binding="{Binding Nombre}" Width="*"/>
-                            <DataGridTextColumn Header="Apellido 1" Binding="{Binding Apellido1}" Width="*"/>
-                            <DataGridTextColumn Header="Apellido 2" Binding="{Binding Apellido2}" Width="*"/>
-                            <DataGridTextColumn Header="DNI" Binding="{Binding Dni}" Width="120"/>
-                            <DataGridTextColumn Header="Teléfono" Binding="{Binding Telefono}" Width="120"/>
+                            <DataGridTextColumn Header="Nombre" Binding="{Binding Nombre}" 
+                                                Width="*"                                                
+                                                IsReadOnly="True"/>
+                            <DataGridTextColumn Header="Apellido 1" Binding="{Binding Apellido1}" 
+                                                Width="*"
+                                                IsReadOnly="True"/>
+                            <DataGridTextColumn Header="Apellido 2" Binding="{Binding Apellido2}" 
+                                                Width="*"
+                                                IsReadOnly="True"/>
+                            <DataGridTextColumn Header="DNI" Binding="{Binding Dni}" 
+                                                Width="120"
+                                                IsReadOnly="True"/>
+                            <DataGridTextColumn Header="Teléfono" Binding="{Binding Telefono}" 
+                                                Width="120"
+                                                IsReadOnly="True"/>
+                            <DataGridTextColumn Header="Usuario" Binding="{Binding Usuario}" 
+                                                Width="120"
+                                                IsReadOnly="True"/>
+                            <DataGridTextColumn Header="Contraseña" Binding="{Binding Password}" 
+                                                Width="120"
+                                                IsReadOnly="True"/>
+                            
+                            
                         </DataGrid.Columns>
 
                     </DataGrid>

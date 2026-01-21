@@ -73,6 +73,20 @@ namespace recTivo.MVVM
             set => SetProperty(ref _telefono, value);
         }
 
+        private string _usuario;
+        public string Usuario
+        {
+            get => _usuario;
+            set => SetProperty(ref _usuario, value);
+        }
+
+        private string _password;
+        public string Password
+        {
+            get => _password;
+            set => SetProperty(ref _password, value);
+        }
+
         // ============================================================
         // INICIALIZAR
         // ============================================================
@@ -94,7 +108,9 @@ namespace recTivo.MVVM
                 Apellido1 = Apellido1,
                 Apellido2 = Apellido2,
                 Dni = Dni,
-                Telefono = Telefono
+                Telefono = Telefono,
+                Usuario = Usuario,
+                Password = Password
             };
 
             await _clienteRepository.AddAsync(cliente);
@@ -135,12 +151,16 @@ namespace recTivo.MVVM
             Apellido2 = ClienteSeleccionado.Apellido2;
             Dni = ClienteSeleccionado.Dni;
             Telefono = ClienteSeleccionado.Telefono;
+            Usuario = ClienteSeleccionado.Usuario;
+            Password = ClienteSeleccionado.Password;
 
             OnPropertyChanged(nameof(Nombre));
             OnPropertyChanged(nameof(Apellido1));
             OnPropertyChanged(nameof(Apellido2));
             OnPropertyChanged(nameof(Dni));
             OnPropertyChanged(nameof(Telefono));
+            OnPropertyChanged(nameof(Usuario));
+            OnPropertyChanged(nameof(Password));
 
             return true;
         }
@@ -159,11 +179,20 @@ namespace recTivo.MVVM
             ClienteSeleccionado.Apellido2 = Apellido2;
             ClienteSeleccionado.Dni = Dni;
             ClienteSeleccionado.Telefono = Telefono;
+            ClienteSeleccionado.Usuario = Usuario;
+            ClienteSeleccionado.Password = Password;
 
             await _clienteRepository.UpdateAsync(ClienteSeleccionado);
             await Inicializa();
 
             return true;
+        }
+
+        private int _totalClientes; 
+        public int TotalClientes 
+        { 
+            get => _totalClientes; 
+            set => SetProperty(ref _totalClientes, value); 
         }
 
         // ============================================================
@@ -177,6 +206,8 @@ namespace recTivo.MVVM
             Apellido2 = "";
             Dni = "";
             Telefono = "";
+            Usuario = "";
+            Password = "";
             ClienteSeleccionado = null;
 
             OnPropertyChanged(nameof(Nombre));
@@ -184,6 +215,8 @@ namespace recTivo.MVVM
             OnPropertyChanged(nameof(Apellido2));
             OnPropertyChanged(nameof(Dni));
             OnPropertyChanged(nameof(Telefono));
+            OnPropertyChanged(nameof(Usuario));
+            OnPropertyChanged(nameof(Password));
             OnPropertyChanged(nameof(ClienteSeleccionado));
         }
     }
