@@ -101,21 +101,22 @@
 
                         </StackPanel>
 
-                        <StackPanel Width="120" Margin="20,0,0,0">
+                        <StackPanel Width="120" Margin="20,0,0,0" Cursor="">
                             <TextBlock Text="Cantidad:" Foreground="White"/>
-                            <TextBox PreviewTextInput="NumericTextBox_PreviewTextInput"
-                                     TextChanged="NumericTextBox_TextChanged"
-                                     Text="{Binding ComponenteNuevo.Cantidad, Mode=TwoWay,
-                                     UpdateSourceTrigger=LostFocus, StringFormat=F3}"
-                                     Margin="0,3,0,0"/>    
+                            <TextBox Text="{Binding ComponenteNuevo.Cantidad,
+                                     Mode=TwoWay,
+                                     UpdateSourceTrigger=LostFocus}"
+                                     Margin="0,3,0,0"/>
                         </StackPanel>
 
                         <Button Content="Añadir raíz"
                                 Click="BtnAñadir_Click"
+                                Margin="10,0,0,0"
                                 VerticalAlignment="Bottom"/>
 
                         <Button Content="Añadir como hijo"
                                 Click="BtnAñadirHijo_Click"
+                                Margin="10,0,0,0"
                                 VerticalAlignment="Bottom"/>
                     </StackPanel>
 
@@ -124,7 +125,7 @@
                                Foreground="White"
                                Margin="0,20,0,5"/>
 
-                    <TreeView ItemsSource="{Binding Componentes}"
+                    <TreeView ItemsSource="{Binding EscandalloActual}"
                               SelectedItemChanged="TreeView_SelectedItemChanged"
                               Background="#E0E0E0"
                               Foreground="Black"

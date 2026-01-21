@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace recTivo.Backend.Modelos
 {
-    public class ComponenteEscandallo : ValidatableViewModel
+    public class ComponenteEscandallo
     {
         public int IdComponente { get; set; }
         public int IdEscandallo { get; set; }
@@ -17,7 +17,7 @@ namespace recTivo.Backend.Modelos
         [Column("Descrip2")]
         public string? Descripcion2 { get; set; }
 
-        public double? Cantidad { get; set; }
+        public decimal? Cantidad { get; set; }
         public decimal? PrecioUnitario { get; set; }
 
         public Escandallo Escandallo { get; set; }

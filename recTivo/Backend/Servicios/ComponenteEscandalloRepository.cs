@@ -46,6 +46,16 @@ namespace recTivo.Backend.Repos
                                  .ToListAsync();
         }
 
+        public async Task InsertComponenteAsync(ComponenteEscandallo componente)
+        {
+            // Asegurar que EF no intenta mapear propiedades no mapeadas
+            componente.Hijos = null;
+
+            _context.ComponenteEscandall​os.Add(componente);
+            await _context.SaveChangesAsync();
+        }
+
+
         /// <summary>
         /// Elimina un componente por su ID
         /// </summary>

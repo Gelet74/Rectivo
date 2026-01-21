@@ -27,7 +27,7 @@ namespace recTivo.Frontend.Dialogos.Escandallo
 
         private async void BtnCargar_Click(object sender, RoutedEventArgs e)
         {
-            var codigo = _vm.ArticuloSeleccionado?.Codigo; // ← CAMBIO: ArticuloSeleccionado
+            var codigo = _vm.CodigoSeleccionado;
 
             if (string.IsNullOrWhiteSpace(codigo))
             {
@@ -35,8 +35,9 @@ namespace recTivo.Frontend.Dialogos.Escandallo
                 return;
             }
 
-            await _vm.CargarEscandalloAsync(codigo); // ← CAMBIO: CargarEscandalloAsync
+            await _vm.CargarEscandalloAsync(codigo);
         }
+
 
         private void TreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {

@@ -345,36 +345,149 @@
             <!-- TARJETAS -->
             <UniformGrid Grid.Row="1" Columns="4" Margin="0,10,0,0" HorizontalAlignment="Stretch">
 
-                <!-- Artículos -->
-                <Border Background="#3A3A3C" CornerRadius="8" Padding="15" Margin="10">
-                    <StackPanel>
-                        <TextBlock Text="Artículos" Foreground="#FF9800" FontSize="16" FontWeight="Bold"/>
-                        <TextBlock Text="{Binding TotalArticulos}" Foreground="White" FontSize="28" FontWeight="Bold"/>
-                    </StackPanel>
+                <Border Background="#3A3A3C"
+                        CornerRadius="10"
+                        Padding="15"
+                        Margin="10">
+
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- ICONO IZQUIERDA -->
+                        <Image Source="/Recursos/Iconos/Articulos.png"
+                               Width="55"
+                               Height="55"
+                               VerticalAlignment="Center"
+                               Margin="10,0,15,0"/>
+
+                        <StackPanel Grid.Column="1"
+                                    VerticalAlignment="Center">
+
+                            <TextBlock Text="Total Artículos"
+                                       Foreground="#FF9800"
+                                       FontSize="16"
+                                       FontWeight="Bold"
+                                       Margin="20,0,0,5"/>
+
+                            <TextBlock Text="{Binding TotalArticulos}"
+                                       Foreground="White"
+                                       FontSize="32"
+                                       FontWeight="Bold"
+                                       Margin="20,0,0,5"/>
+                        </StackPanel>
+                    </Grid>
                 </Border>
 
                 <!-- Clientes -->
-                <Border Background="#3A3A3C" CornerRadius="8" Padding="15" Margin="10">
-                    <StackPanel>
-                        <TextBlock Text="Clientes" Foreground="#FF9800" FontSize="16" FontWeight="Bold"/>
-                        <TextBlock Text="{Binding TotalClientes}" Foreground="White" FontSize="28" FontWeight="Bold" Cursor=""/>
-                    </StackPanel>
+                <Border Background="#3A3A3C" 
+                        CornerRadius="8" 
+                        Padding="15" 
+                        Margin="10">                  
+                    <Grid>
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- ICONO IZQUIERDA -->
+                        <Image Source="/Recursos/Iconos/Clientes.png"
+                               Width="55"
+                               Height="55"
+                               VerticalAlignment="Center"
+                               Margin="10,0,15,0"/>
+
+                        <StackPanel Grid.Column="1"
+                                    VerticalAlignment="Center">
+
+                            <TextBlock Text="Total Clientes"
+                                       Foreground="#FF9800"
+                                       FontSize="16"
+                                       FontWeight="Bold"
+                                       Margin="20,0,0,5"/>
+
+                            <TextBlock Text="{Binding TotalClientes}"
+                                       Foreground="White"
+                                       FontSize="32"
+                                       FontWeight="Bold"
+                                       Margin="20,0,0,5"/>
+                        </StackPanel>
+                    </Grid>
                 </Border>
 
                 <!-- Órdenes -->
-                <Border Background="#3A3A3C" CornerRadius="8" Padding="15" Margin="10">
-                    <StackPanel>
-                        <TextBlock Text="Órdenes abiertas" Foreground="#FF9800" FontSize="16" FontWeight="Bold"/>
-                        <TextBlock Text="—" Foreground="White" FontSize="28" FontWeight="Bold"/>
-                    </StackPanel>
+                <Border Background="#3A3A3C" 
+                        CornerRadius="8" 
+                        Padding="15" 
+                        Margin="10">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- ICONO IZQUIERDA -->
+                        <Image Source="/Recursos/Iconos/Ordenes.png"
+                           Width="55"
+                           Height="55"
+                           VerticalAlignment="Center"
+                           Margin="10,0,15,0"/>
+
+                        <StackPanel Grid.Column="1"
+                                VerticalAlignment="Center">
+
+                            <TextBlock Text="Órdenes Abiertas"
+                                       Foreground="#FF9800"
+                                       FontSize="16"
+                                       FontWeight="Bold"
+                                       Margin="20,0,0,5"/>
+
+                            <TextBlock Text="-"
+                                       Foreground="White"
+                                       FontSize="32"
+                                       FontWeight="Bold"
+                                       Margin="20,0,0,5"/>
+                        </StackPanel>
+                    </Grid>
+
                 </Border>
 
                 <!-- Empleados -->
-                <Border Background="#3A3A3C" CornerRadius="8" Padding="15" Margin="10">
-                    <StackPanel>
-                        <TextBlock Text="Empleados" Foreground="#FF9800" FontSize="16" FontWeight="Bold"/>
-                        <TextBlock Text="{Binding TotalEmpleados}" Foreground="White" FontSize="28" FontWeight="Bold" Cursor=""/>
+                <Border Background="#3A3A3C" 
+                        CornerRadius="8" 
+                        Padding="15" 
+                        Margin="10">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <!-- ICONO IZQUIERDA -->
+                        <Image Source="/Recursos/Iconos/Empleado.png"
+                               Width="55"
+                               Height="55"
+                               VerticalAlignment="Center"
+                               Margin="10,0,15,0"/>
+
+                        <StackPanel Grid.Column="1"
+                                    VerticalAlignment="Center">
+                            
+                        <TextBlock Text="Total Empleados" 
+                                   Foreground="#FF9800" 
+                                   FontSize="16" 
+                                   FontWeight="Bold"
+                                   Margin="20,0,0,5"/>
+                            
+                        <TextBlock Text="{Binding TotalEmpleados}" 
+                                   Foreground="White" 
+                                   FontSize="28" 
+                                   FontWeight="Bold" 
+                                   Margin="20,0,0,5"/>
                     </StackPanel>
+                    </Grid>
                 </Border>
 
             </UniformGrid>

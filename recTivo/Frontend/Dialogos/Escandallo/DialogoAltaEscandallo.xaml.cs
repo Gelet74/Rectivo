@@ -1,8 +1,8 @@
 ﻿using di.proyecto.clase._2025.Frontend.Mensajes;
+using recTivo.Backend.Modelos;
 using recTivo.Frontend.Dialogos.VentanasInicio;
 using recTivo.MVVM;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace recTivo.Frontend.Dialogos.Escandallo
@@ -80,25 +80,8 @@ namespace recTivo.Frontend.Dialogos.Escandallo
             await _vm.CargarEscandallo(articulo.Codigo);
         }
 
-        // ================================
-        //   VALIDACIÓN NUMÉRICA
-        // ================================
-        private void NumericTextBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            var textBox = sender as TextBox;
-            if (textBox.Text.Contains("."))
-            {
-                int selectionStart = textBox.SelectionStart;
-                textBox.Text = textBox.Text.Replace(".", ",");
-                textBox.SelectionStart = selectionStart;
-            }
-        }
 
-        private void NumericTextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
-        {
-            e.Handled = !(char.IsDigit(e.Text, 0) || e.Text == "," || e.Text == ".");
-        }
-
+   
         // ================================
         //   AÑADIR SUBCOMPONENTE
         // ================================
@@ -112,8 +95,12 @@ namespace recTivo.Frontend.Dialogos.Escandallo
         // ================================
         private void TreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-            _vm.ComponentePadreSeleccionado = e.NewValue as recTivo.Backend.Modelos.ComponenteEscandallo;
+            var seleccionado = e.NewValue as ComponenteEscandallo;
+            _vm.ComponentePadreSeleccionado = seleccionado;
+            _vm.ComponenteSeleccionado = seleccionado;
         }
+
+
 
         // ================================
         //   GUARDAR ESCANDALLO

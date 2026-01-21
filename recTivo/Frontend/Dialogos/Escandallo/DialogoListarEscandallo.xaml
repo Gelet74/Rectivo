@@ -73,9 +73,10 @@
                         <ComboBox x:Name="cmbCodigoArticulo"
                                   Width="150"
                                   ItemsSource="{Binding ListaArticulos}"
-                                  SelectedItem="{Binding ArticuloSeleccionado, Mode=TwoWay}"
                                   DisplayMemberPath="Codigo"
-                                  SelectionChanged="cmbCodigo_SelectionChanged"/>
+                                  SelectedValuePath="Codigo"
+                                  SelectedValue="{Binding CodigoSeleccionado, Mode=TwoWay}"/>
+
 
                         <Button Content="Cargar"
                                 Width="120"
