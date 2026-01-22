@@ -67,8 +67,9 @@
                                 Height="30"
                                 HorizontalAlignment="Left"
                                 Margin="0,10,0,20"
+                                BorderBrush="#FF5722"
                                 Background="#E0E0E0"
-                                Foreground="#FF9800"
+                                Foreground="#FF5722"
                                 FontWeight="Bold" Cursor="Hand"/>
                         
                         <StackPanel x:Name="panelDatos" Visibility="Hidden">
@@ -115,8 +116,9 @@
                                     Height="30"
                                     HorizontalAlignment="Center"
                                     Margin="0,20,0,0"
+                                    BorderBrush="#FF5722"
                                     Background="#E0E0E0"
-                                    Foreground="#FF9800"
+                                    Foreground="#FF5722"
                                     FontWeight="Bold"/>
                         </StackPanel>
 

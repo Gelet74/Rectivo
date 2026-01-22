@@ -12,7 +12,7 @@ namespace recTivo.MVVM
         private Empleado _empleado;
         public Empleado Empleado
         {
-            get => _empleado;
+            get => _empleado ?? (_empleado = new Empleado());
             set => SetProperty(ref _empleado, value);
         }
 
@@ -92,7 +92,7 @@ namespace recTivo.MVVM
             set => SetProperty(ref _password, value);
         }
 
-        private string _estado;
+        private string _estado = "activo";
         public string Estado
         {
             get => _estado;
@@ -127,7 +127,7 @@ namespace recTivo.MVVM
                 Username = Username,
                 Password = Password,
                 IdRol = IdRol,
-                Estado = "activo"
+                Estado = Estado
             };
 
             await _empleadoRepository.AddAsync(empleado);
@@ -145,6 +145,7 @@ namespace recTivo.MVVM
             Password = "";
             Estado = "";
             IdRol = null;
+            Estado = "activo";
 
             RolSeleccionado = null;
             EmpleadoSeleccionado = null;

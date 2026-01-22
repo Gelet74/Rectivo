@@ -39,49 +39,74 @@
                                Grid.Column="1"
                                Margin="0,0,10,0"/>
                 </Grid>
-
-                
                 <Grid Margin="30">
-                    <StackPanel>
-                        <TextBlock Text="Código:" Foreground="#FF9800"/>
-                        <TextBox Text="{Binding Codigo, UpdateSourceTrigger=PropertyChanged}"
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Text="Código:" Foreground="#FF9800"/>
+                    <TextBox Text="{Binding Codigo, UpdateSourceTrigger=PropertyChanged}"
+                                 Grid.Row="1"
                                  HorizontalAlignment="Left"
                                  Height="30" 
                                  Margin="0,5" 
                                  Width="450"/>
 
-                        <TextBlock Text="Descripción 1:" Foreground="#FF9800"/>
-                        <TextBox Text="{Binding Descrip, UpdateSourceTrigger=PropertyChanged}"
+                    <TextBlock Text="Descripción 1:"
+                                   Grid.Row="2"
+                                   Foreground="#FF9800"/>
+                    <TextBox Text="{Binding Descrip, UpdateSourceTrigger=PropertyChanged}"
                                  HorizontalAlignment="Left"
+                                 Grid.Row="3"
+                                 Grid.ColumnSpan="2"
                                  Height="30" 
-                                 Margin="0,5" 
-                                 Width="450"/>
+                                 Margin="0,5,0,5" 
+                                 Width="414"/>
 
-                        <TextBlock Text="Descripción 2:" Foreground="#FF9800"/>
-                        <TextBox Text="{Binding Descrip2, UpdateSourceTrigger=PropertyChanged}"
+                    <TextBlock Text="Descripción 2:"
+                                   Grid.Row="4"
+                                   Foreground="#FF9800"/>
+                    <TextBox Text="{Binding Descrip2, UpdateSourceTrigger=PropertyChanged}"
                                  HorizontalAlignment="Left"
+                                 Grid.ColumnSpan="2"
+                                 Grid.Row="5"
                                  Height="30"
                                  Margin="0,5" 
-                                 Width="450"/>
+                                 Width="414"/>
 
-                        <TextBlock Text="PVP:" Foreground="#FF9800"/>
-                        <TextBox Text="{Binding Pvp, UpdateSourceTrigger=PropertyChanged}"
+                    <TextBlock Text="PVP:" 
+                                   Grid.Row="6"
+                                   Foreground="#FF9800"/>
+                    <TextBox Text="{Binding Pvp, UpdateSourceTrigger=PropertyChanged}"
                                  HorizontalAlignment="Left"
+                                 Grid.Row="7"
                                  Height="30" 
                                  Margin="0,5"
                                  Width="100"/>
-                    </StackPanel>
 
-                    <Button Content="Dar de alta artículo"
-                            x:Name="btnAltaArticulo"
-                            Click="btnAltaArticulo_Click"
-                            Height="30" Width="160"
-                            HorizontalAlignment="Right"
-                            Margin="0,0,0,23"
-                            VerticalAlignment="Bottom"
-                            Background="#E0E0E0"
-                            Foreground="#ff9800"
-                            FontWeight="Bold"/>
+                    <Button Grid.Column="1"
+                                Grid.Row="7"
+                                Content="Dar de alta artículo"
+                                x:Name="btnAltaArticulo"
+                                Click="btnAltaArticulo_Click"
+                                Height="30" Width="180"
+                                HorizontalAlignment="Right"
+                                Margin="0,5,18,0"
+                                VerticalAlignment="Top"
+                                BorderBrush="#FF5722"
+                                Background="#E0E0E0"
+                                Foreground="#FF5722"
+                                FontWeight="Bold"/>
                 </Grid>
             </DockPanel>
         </Border>

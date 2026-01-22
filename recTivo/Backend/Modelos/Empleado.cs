@@ -24,6 +24,7 @@ public partial class Empleado : ValidatableViewModel
 
     [Column("DNI")]
     [StringLength(9)]
+    [Required(ErrorMessage = "El DNI es obligatorio")]
     public string? Dni { get; set; }
 
     [Column("USERNAME")]

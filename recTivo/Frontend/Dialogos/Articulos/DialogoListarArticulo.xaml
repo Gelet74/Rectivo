@@ -49,10 +49,8 @@
                             <DataGridTextColumn Header="PVP" Binding="{Binding Pvp}" Width="*"/>
                             <DataGridTextColumn Header="Precio de compra" Binding="{Binding PrecioCompra}" Width="*"/>
                         </DataGrid.Columns>
-
                     </DataGrid>
                 </Grid>
-
             </DockPanel>
         </Border>
     </Grid>
