@@ -2,14 +2,43 @@
 .vs/
 *.user
 *.suo
+*.userosscache
+*.sln.docstates
 
-# Build
+# Build output
 bin/
 obj/
+[Bb]in/
+[Oo]bj/
+[Bb]uild/
+[Ll]og/
+
+# WPF generated files (SOLO los generados automáticamente)
+*.g.cs
+*.g.i.cs
+*.baml
+
+# .NET build artifacts
+*.dll
+*.exe
+*.pdb
+*.cache
+*.resources
+apphost.exe
+*.deps.json
+*.runtimeconfig.json
+*.sourcelink.json
+
+# Publish output
+publish/
 
 # Rider
 .idea/
 
-# OS
+# OS files
 .DS_Store
 Thumbs.db
+
+# NuGet
+*.nupkg
+packages/
