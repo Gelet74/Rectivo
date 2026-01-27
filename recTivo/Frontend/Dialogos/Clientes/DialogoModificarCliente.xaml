@@ -53,13 +53,15 @@
                 <Grid Margin="30">
                     <StackPanel>
 
-                        <TextBlock Text="Selecciona cliente:" Foreground="#FF9800"/>
+                        <TextBlock Text="Selecciona cliente:" 
+                                   HorizontalAlignment="Center"
+                                   Foreground="#FF9800"/>
                         <ComboBox ItemsSource="{Binding ListaClientes}"
                                   DisplayMemberPath="NombreCompleto"
                                   SelectedItem="{Binding ClienteSeleccionado}"
                                   Width="180"
                                   Height="30"
-                                  HorizontalAlignment="Left"
+                                  HorizontalAlignment="Center"
                                   Margin="0,5"/>
 
                         <Button Content="Cargar cliente"
@@ -67,14 +69,14 @@
                                 Click="btnCargarCliente_Click"
                                 Width="180"
                                 Height="30"
-                                HorizontalAlignment="Left"
+                                HorizontalAlignment="Center"
                                 Margin="0,10,0,20"
                                 BorderBrush="#FF5722"
                                 Background="#E0E0E0"
                                 Foreground="#FF5722"
                                 FontWeight="Bold"/>
 
-                        <StackPanel x:Name="panelEdicion" Visibility="Collapsed">
+                        <StackPanel x:Name="panelEdicion" Visibility="Hidden">
                             <Grid Margin="0,10,0,0">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*" />

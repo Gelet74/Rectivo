@@ -5,7 +5,6 @@
         Height="350" Width="500"
         ResizeMode="NoResize"
         x:Name="DialSalidaAlmacen"
-        Loaded="DialSalidaAlmacen_Loaded"
         WindowStartupLocation="CenterScreen"
         Background="#2D2D30"
         WindowStyle="None">
@@ -64,21 +63,30 @@
 
                         <StackPanel Grid.Column="0" Margin="10,0,10,0">
                             <TextBlock Text="Código del artículo:" Foreground="#FF9800"/>
-                            <ComboBox x:Name="cmbCodigo"
+                            <ComboBox ItemsSource="{Binding CodigosFiltrados}"
+                                      SelectedItem="{Binding CodigoSeleccionado, Mode=TwoWay, 
+                                      UpdateSourceTrigger=PropertyChanged}"
+                                      IsEditable="True"
                                       Height="30"
                                       Margin="0,5"
                                       Width="180"
                                       HorizontalAlignment="Left"/>
 
                             <TextBlock Text="Descripción 1:" Foreground="#FF9800"/>
-                            <ComboBox x:Name="cmbDescrip1"
+                            <ComboBox ItemsSource="{Binding Descrip1Filtradas}"
+                                      SelectedItem="{Binding Descrip1Seleccionada, Mode=TwoWay, 
+                                      UpdateSourceTrigger=PropertyChanged}"
+                                      IsEditable="True"
                                       Height="30"
                                       Margin="0,5"
                                       Width="180"
                                       HorizontalAlignment="Left"/>
 
                             <TextBlock Text="Descripción 2:" Foreground="#FF9800"/>
-                            <ComboBox x:Name="cmbDescrip2"
+                            <ComboBox ItemsSource="{Binding Descrip2Filtradas}"
+                                      SelectedItem="{Binding Descrip2Seleccionada, Mode=TwoWay, 
+                                      UpdateSourceTrigger=PropertyChanged}"
+                                      IsEditable="True"
                                       Height="30"
                                       Margin="0,5"
                                       Width="180"
@@ -126,11 +134,8 @@
                                     Foreground="#FF5722"
                                     FontWeight="Bold"/>
                         </StackPanel>
-                    </Grid>
-
-       
+                    </Grid>       
                 </Grid>
-
             </DockPanel>
         </Border>
     </Grid>

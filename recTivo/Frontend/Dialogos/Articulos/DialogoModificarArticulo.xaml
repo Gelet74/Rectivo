@@ -1,7 +1,7 @@
 ﻿<Window x:Class="recTivo.Frontend.Dialogos.Articulos.DialogoModificarArticulo"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Height="600" Width="450"
+        Height="400" Width="450"
         ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen"
         Background="#2D2D30"
@@ -48,78 +48,96 @@
                                Grid.Column="1"
                                Margin="0,0,10,0"/>
                 </Grid>
-                
+
                 <Grid Margin="30">
                     <StackPanel>
-                        
-                        <TextBlock Text="Selecciona código:" Foreground="#FF9800"/>
+
+                        <TextBlock Text="Selecciona código:" 
+                                   HorizontalAlignment="Center"
+                                   Foreground="#FF9800"/>
                         <ComboBox ItemsSource="{Binding CodigosArticulos}"
                                   SelectedItem="{Binding CodigoSeleccionado}"
-                                  HorizontalAlignment="Left"
-                                  Width="200"
+                                  HorizontalAlignment="Center"
+                                  Width="180"
                                   Height="30"
                                   Margin="0,5"/>
 
                         <Button Content="Cargar artículo"
                                 x:Name="btnCargarArticulo"
                                 Click="btnCargarArticulo_Click"
-                                Width="150"
+                                Width="180"
                                 Height="30"
-                                HorizontalAlignment="Left"
+                                HorizontalAlignment="Center"
                                 Margin="0,10,0,20"
                                 BorderBrush="#FF5722"
                                 Background="#E0E0E0"
                                 Foreground="#FF5722"
                                 FontWeight="Bold" Cursor="Hand"/>
-                        
+
                         <StackPanel x:Name="panelDatos" Visibility="Hidden">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="3*"/>
+                                    <RowDefinition Height="5*"/>
+                                </Grid.RowDefinitions>
+                                <Grid Grid.RowSpan="2">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
 
-                            <TextBlock Text="Código:" Foreground="#FF9800"/>
-                            <TextBox Text="{Binding Codigo, UpdateSourceTrigger=PropertyChanged}"
-                                     Width="300" 
+                                    <StackPanel Grid.Column="0" Margin="0,0,10,0">
+                                        <TextBlock Text="Código:" Foreground="#FF9800"/>
+                                        <TextBox Text="{Binding Codigo, UpdateSourceTrigger=PropertyChanged}"
+                                                 Width="180" 
+                                                 Height="30" 
+                                                 HorizontalAlignment="Left"
+                                                 Margin="0,5"/>
+
+                                        <TextBlock Text="Descripción 1:" Foreground="#FF9800"/>
+                                        <TextBox Text="{Binding Descrip, UpdateSourceTrigger=PropertyChanged}"
+                                     Width="180" 
                                      Height="30" 
                                      HorizontalAlignment="Left"
                                      Margin="0,5"/>
 
-                            <TextBlock Text="Descripción 1:" Foreground="#FF9800"/>
-                            <TextBox Text="{Binding Descrip, UpdateSourceTrigger=PropertyChanged}"
-                                     Width="300" 
+                                        <TextBlock Text="Descripción 2:" Foreground="#FF9800"/>
+                                        <TextBox Text="{Binding Descrip2, UpdateSourceTrigger=PropertyChanged}"
+                                     Width="180" 
+                                     Height="30" 
+                                     HorizontalAlignment="Left"
+                                     Margin="0,5"/>
+                                    </StackPanel>
+
+                                    <StackPanel Grid.Column="1">
+                                        <TextBlock Text="PVP:" Foreground="#FF9800"/>
+                                        <TextBox Text="{Binding Pvp, UpdateSourceTrigger=PropertyChanged}"
+                                     Width="180" 
                                      Height="30" 
                                      HorizontalAlignment="Left"
                                      Margin="0,5"/>
 
-                            <TextBlock Text="Descripción 2:" Foreground="#FF9800"/>
-                            <TextBox Text="{Binding Descrip2, UpdateSourceTrigger=PropertyChanged}"
-                                     Width="300" 
+                                        <TextBlock Text="Precio compra:" Foreground="#FF9800"/>
+                                        <TextBox Text="{Binding PrecioCompra, UpdateSourceTrigger=PropertyChanged}"
+                                     Width="180" 
                                      Height="30" 
                                      HorizontalAlignment="Left"
                                      Margin="0,5"/>
 
-                            <TextBlock Text="PVP:" Foreground="#FF9800"/>
-                            <TextBox Text="{Binding Pvp, UpdateSourceTrigger=PropertyChanged}"
-                                     Width="100" 
-                                     Height="30" 
-                                     HorizontalAlignment="Left"
-                                     Margin="0,5"/>
-                            
-                            <TextBlock Text="Precio compra:" Foreground="#FF9800"/>
-                            <TextBox Text="{Binding PrecioCompra, UpdateSourceTrigger=PropertyChanged}"
-                                     Width="100" 
-                                     Height="30" 
-                                     HorizontalAlignment="Left"
-                                     Margin="0,5"/>
-
-                            <Button Content="Guardar cambios"
+                                        <Button Content="Guardar cambios"
                                     x:Name="btnModificarArticulo"
                                     Click="btnModificarArticulo_Click"
-                                    Width="160"
+                                    Width="180"
                                     Height="30"
                                     HorizontalAlignment="Center"
-                                    Margin="0,20,0,0"
+                                    Margin="0,22,0,0"
                                     BorderBrush="#FF5722"
                                     Background="#E0E0E0"
                                     Foreground="#FF5722"
                                     FontWeight="Bold"/>
+                                    </StackPanel>
+                                </Grid>
+                            </Grid>
                         </StackPanel>
 
                     </StackPanel>

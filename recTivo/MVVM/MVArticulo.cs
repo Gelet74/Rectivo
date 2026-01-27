@@ -2,14 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using recTivo.Backend.Modelos;
 using recTivo.Backend.Repos;
-using recTivo.Backend.Servicios;
 using recTivo.MVVM.Base;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows.Input;
 
 namespace recTivo.MVVM
 {
@@ -22,7 +16,6 @@ namespace recTivo.MVVM
         private readonly EmpleadoRepository _empleadoRepository;
         private readonly OrdenRepository _ordenRepository;
         private readonly RectivoContext _context;
-
 
         private List<Articulo> _listaArticulos;
         private List<Cliente> _listaClientes;
@@ -57,12 +50,18 @@ namespace recTivo.MVVM
         }
         private List<string> _codigosArticulos;
 
+        private string _codigoSeleccionado;
         public string CodigoSeleccionado
         {
             get => _codigoSeleccionado;
-            set => SetProperty(ref _codigoSeleccionado, value);
+            set
+            {
+                if (SetProperty(ref _codigoSeleccionado, value))
+                {
+                    FiltrarPorCodigo();
+                }
+            }
         }
-        private string _codigoSeleccionado;
 
         public decimal? PrecioCompra
         {
@@ -76,11 +75,11 @@ namespace recTivo.MVVM
             set { _articulo.Codigo = value; OnPropertyChanged(); }
         }
 
-        private int _totalArticulos; 
-        public int TotalArticulos 
-        { 
-            get => _totalArticulos; 
-            set => SetProperty(ref _totalArticulos, value); 
+        private int _totalArticulos;
+        public int TotalArticulos
+        {
+            get => _totalArticulos;
+            set => SetProperty(ref _totalArticulos, value);
         }
 
         public string Descrip
@@ -126,7 +125,7 @@ namespace recTivo.MVVM
 
                 CodigosFiltrados = ListaArticulos.Select(a => a.Codigo).Distinct().ToList();
                 Descrip1Filtradas = ListaArticulos.Select(a => a.Descrip).Distinct().ToList();
-                Descrip2Filtradas = ListaArticulos.Select(a => a.Descrip2).Distinct().ToList();
+                Descrip2Filtradas = ListaArticulos.Select(a => a.Descrip2).Where(d => !string.IsNullOrEmpty(d)).Distinct().ToList();
 
                 ArticulosFiltrados.Clear();
                 foreach (var a in ListaArticulos)
@@ -273,9 +272,10 @@ namespace recTivo.MVVM
             get => _descrip1Seleccionada;
             set
             {
-                SetProperty(ref _descrip1Seleccionada, value);
-                Filtrar();
-                FiltrarOC();
+                if (SetProperty(ref _descrip1Seleccionada, value))
+                {
+                    FiltrarPorDescrip1();
+                }
             }
         }
 
@@ -285,31 +285,160 @@ namespace recTivo.MVVM
             get => _descrip2Seleccionada;
             set
             {
-                SetProperty(ref _descrip2Seleccionada, value);
-                Filtrar();
-                FiltrarOC();
+                if (SetProperty(ref _descrip2Seleccionada, value))
+                {
+                    FiltrarPorDescrip2();
+                }
             }
         }
 
-        private void Filtrar()
+        private void FiltrarPorCodigo()
         {
-            if (ListaArticulos == null)
+            if (ListaArticulos == null) return;
+
+            if (string.IsNullOrWhiteSpace(CodigoSeleccionado))
+            {
+                RestablecerFiltros();
                 return;
+            }
+
+            var articulosFiltrados = ListaArticulos
+                .Where(a => a.Codigo == CodigoSeleccionado)
+                .OrderBy(a => a.Codigo)
+                .ToList();
+
+            if (articulosFiltrados.Any())
+            {
+                // Autocompletar si solo hay un artículo con ese código
+                if (articulosFiltrados.Count == 1)
+                {
+                    var articulo = articulosFiltrados.First();
+                    _descrip1Seleccionada = articulo.Descrip;
+                    _descrip2Seleccionada = articulo.Descrip2;
+                    OnPropertyChanged(nameof(Descrip1Seleccionada));
+                    OnPropertyChanged(nameof(Descrip2Seleccionada));
+
+                    // También establecer el artículo seleccionado
+                    ArticuloSeleccionado = articulo;
+                }
+
+                // Actualizar filtros
+                ActualizarFiltros(articulosFiltrados);
+            }
+        }
+
+        private void FiltrarPorDescrip1()
+        {
+            if (ListaArticulos == null) return;
 
             var query = ListaArticulos.AsQueryable();
 
-            if (!string.IsNullOrWhiteSpace(CodigoSeleccionado))
-                query = query.Where(a => a.Codigo == CodigoSeleccionado);
-
+            // Aplicar filtros acumulativos
             if (!string.IsNullOrWhiteSpace(Descrip1Seleccionada))
                 query = query.Where(a => a.Descrip == Descrip1Seleccionada);
 
             if (!string.IsNullOrWhiteSpace(Descrip2Seleccionada))
                 query = query.Where(a => a.Descrip2 == Descrip2Seleccionada);
 
-            CodigosFiltrados = query.Select(a => a.Codigo).Distinct().ToList();
-            Descrip1Filtradas = query.Select(a => a.Descrip).Distinct().ToList();
-            Descrip2Filtradas = query.Select(a => a.Descrip2).Distinct().ToList();
+            if (!string.IsNullOrWhiteSpace(CodigoSeleccionado))
+                query = query.Where(a => a.Codigo == CodigoSeleccionado);
+
+            var articulosFiltrados = query.ToList();
+
+            // Si solo queda un artículo, autocompletar
+            if (articulosFiltrados.Count == 1)
+            {
+                var articulo = articulosFiltrados.First();
+                _codigoSeleccionado = articulo.Codigo;
+                _descrip2Seleccionada = articulo.Descrip2;
+                OnPropertyChanged(nameof(CodigoSeleccionado));
+                OnPropertyChanged(nameof(Descrip2Seleccionada));
+
+                ArticuloSeleccionado = articulo;
+            }
+
+            ActualizarFiltros(articulosFiltrados);
+        }
+
+        private void FiltrarPorDescrip2()
+        {
+            if (ListaArticulos == null) return;
+
+            var query = ListaArticulos.AsQueryable();
+
+            // Aplicar filtros acumulativos
+            if (!string.IsNullOrWhiteSpace(Descrip2Seleccionada))
+                query = query.Where(a => a.Descrip2 == Descrip2Seleccionada);
+
+            if (!string.IsNullOrWhiteSpace(Descrip1Seleccionada))
+                query = query.Where(a => a.Descrip == Descrip1Seleccionada);
+
+            if (!string.IsNullOrWhiteSpace(CodigoSeleccionado))
+                query = query.Where(a => a.Codigo == CodigoSeleccionado);
+
+            var articulosFiltrados = query.ToList();
+
+            // Si solo queda un artículo, autocompletar
+            if (articulosFiltrados.Count == 1)
+            {
+                var articulo = articulosFiltrados.First();
+                _codigoSeleccionado = articulo.Codigo;
+                _descrip1Seleccionada = articulo.Descrip;
+                OnPropertyChanged(nameof(CodigoSeleccionado));
+                OnPropertyChanged(nameof(Descrip1Seleccionada));
+
+                ArticuloSeleccionado = articulo;
+            }
+
+            ActualizarFiltros(articulosFiltrados);
+        }
+
+        private void ActualizarFiltros(List<Articulo> articulosFiltrados)
+        {
+            // Actualizar listas filtradas
+            CodigosFiltrados = articulosFiltrados.Select(a => a.Codigo).Distinct().ToList();
+            Descrip1Filtradas = articulosFiltrados.Select(a => a.Descrip).Distinct().ToList();
+            Descrip2Filtradas = articulosFiltrados.Select(a => a.Descrip2)
+                .Where(d => !string.IsNullOrEmpty(d))
+                .Distinct()
+                .ToList();
+
+            // Actualizar ObservableCollections para la UI
+            ArticulosFiltrados.Clear();
+            foreach (var a in articulosFiltrados)
+                ArticulosFiltrados.Add(a);
+
+            Descrip1FiltradasOC.Clear();
+            foreach (var d in Descrip1Filtradas)
+                Descrip1FiltradasOC.Add(d);
+
+            Descrip2FiltradasOC.Clear();
+            foreach (var d2 in Descrip2Filtradas)
+                Descrip2FiltradasOC.Add(d2);
+        }
+
+        private void RestablecerFiltros()
+        {
+            if (ListaArticulos == null) return;
+
+            CodigosFiltrados = ListaArticulos.Select(a => a.Codigo).Distinct().ToList();
+            Descrip1Filtradas = ListaArticulos.Select(a => a.Descrip).Distinct().ToList();
+            Descrip2Filtradas = ListaArticulos.Select(a => a.Descrip2)
+                .Where(d => !string.IsNullOrEmpty(d))
+                .Distinct()
+                .ToList();
+
+            ArticulosFiltrados.Clear();
+            foreach (var a in ListaArticulos)
+                ArticulosFiltrados.Add(a);
+
+            Descrip1FiltradasOC.Clear();
+            foreach (var d in Descrip1Filtradas)
+                Descrip1FiltradasOC.Add(d);
+
+            Descrip2FiltradasOC.Clear();
+            foreach (var d2 in Descrip2Filtradas)
+                Descrip2FiltradasOC.Add(d2);
         }
 
         public ObservableCollection<Articulo> ArticulosFiltrados { get; set; } = new();
@@ -328,7 +457,6 @@ namespace recTivo.MVVM
                     Descrip1Seleccionada = value.Descrip;
                     Descrip2Seleccionada = value.Descrip2;
                 }
-                FiltrarOC();
             }
         }
 
@@ -337,34 +465,96 @@ namespace recTivo.MVVM
         public string Estanteria { get; set; }
         public string Hueco { get; set; }
 
-        private void FiltrarOC()
+        public async Task SalidaAlmacen()
         {
-            if (ListaArticulos == null)
-                return;
+            try
+            {
+                if (ArticuloSeleccionado == null)
+                {
+                    MensajeError.Mostrar("ERROR", "Debes seleccionar un artículo válido.");
+                    return;
+                }
 
-            var query = ListaArticulos.AsQueryable();
+                if (!int.TryParse(Cantidad, out int cantidad) || cantidad <= 0)
+                {
+                    MensajeAdvertencia.Mostrar("AVISO", "Introduce una cantidad válida.");
+                    return;
+                }
 
-            if (!string.IsNullOrWhiteSpace(Descrip1Seleccionada))
-                query = query.Where(a => a.Descrip == Descrip1Seleccionada);
+                // Verificar que hay stock suficiente
+                if ((ArticuloSeleccionado.Stock ?? 0) < cantidad)
+                {
+                    MensajeError.Mostrar("ERROR",
+                        $"Stock insuficiente. Disponible: {ArticuloSeleccionado.Stock ?? 0}, Solicitado: {cantidad}");
+                    return;
+                }
 
-            if (!string.IsNullOrWhiteSpace(Descrip2Seleccionada))
-                query = query.Where(a => a.Descrip2 == Descrip2Seleccionada);
+                string pasillo = Pasillo?.Trim();
+                string estanteria = Estanteria?.Trim();
+                string hueco = Hueco?.Trim();
 
-            ArticulosFiltrados.Clear();
-            foreach (var a in query)
-                ArticulosFiltrados.Add(a);
+                if (string.IsNullOrEmpty(pasillo) ||
+                    string.IsNullOrEmpty(estanteria) ||
+                    string.IsNullOrEmpty(hueco))
+                {
+                    MensajeAdvertencia.Mostrar("AVISO", "Debes indicar pasillo, estantería y hueco de donde se retira.");
+                    return;
+                }
 
-            Descrip1FiltradasOC.Clear();
-            foreach (var d in query.Select(a => a.Descrip).Distinct())
-                Descrip1FiltradasOC.Add(d);
+                int? estanteriaNum = int.TryParse(estanteria, out var est) ? est : null;
+                int? huecoNum = int.TryParse(hueco, out var hue) ? hue : null;
 
-            Descrip2FiltradasOC.Clear();
-            foreach (var d2 in query.Select(a => a.Descrip2).Where(d => !string.IsNullOrEmpty(d)).Distinct())
-                Descrip2FiltradasOC.Add(d2);
+                var ctx = _context;
+
+                // Verificar que la ubicación existe y coincide con la del artículo
+                var ubicacion = await ctx.Ubicacion
+                    .FirstOrDefaultAsync(u =>
+                        u.LetraPasillo == pasillo &&
+                        u.NumeroEstanteria == estanteriaNum &&
+                        u.Numero == huecoNum);
+
+                if (ubicacion == null || ArticuloSeleccionado.IdUbicacion != ubicacion.IdUbicacion)
+                {
+                    MensajeError.Mostrar("ERROR", "La ubicación especificada no coincide con la del artículo.");
+                    return;
+                }
+
+                // Restar del stock
+                ArticuloSeleccionado.Stock = (ArticuloSeleccionado.Stock ?? 0) - cantidad;
+
+                // Si el stock llega a 0, quitar la ubicación
+                if (ArticuloSeleccionado.Stock == 0)
+                {
+                    ArticuloSeleccionado.IdUbicacion = null;
+                }
+
+                ctx.Articulos.Update(ArticuloSeleccionado);
+                await ctx.SaveChangesAsync();
+
+                MensajeInformacion.Mostrar("ÉXITO",
+                    $"Se retiraron {cantidad} unidades del artículo {ArticuloSeleccionado.Codigo} " +
+                    $"del pasillo {pasillo}, estantería {estanteria}, hueco {hueco}. " +
+                    $"Stock restante: {ArticuloSeleccionado.Stock}");
+
+                // Limpiar campos
+                Cantidad = "";
+                Pasillo = "";
+                Estanteria = "";
+                Hueco = "";
+                ArticuloSeleccionado = null;
+                Descrip1Seleccionada = null;
+                Descrip2Seleccionada = null;
+
+                OnPropertyChanged(nameof(Cantidad));
+                OnPropertyChanged(nameof(Pasillo));
+                OnPropertyChanged(nameof(Estanteria));
+                OnPropertyChanged(nameof(Hueco));
+            }
+            catch (Exception ex)
+            {
+                MensajeError.Mostrar("ERROR", $"Error al retirar del almacén: {ex.Message}");
+            }
         }
-
-       
-
 
         public async Task AñadirAlmacen()
         {
@@ -398,8 +588,6 @@ namespace recTivo.MVVM
                 int? huecoNum = int.TryParse(hueco, out var hue) ? hue : null;
 
                 var ctx = _context;
-
-
 
                 var ubicacion = await ctx.Ubicacion
                     .FirstOrDefaultAsync(u =>

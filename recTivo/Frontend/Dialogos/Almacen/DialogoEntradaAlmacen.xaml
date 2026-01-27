@@ -63,7 +63,9 @@
                         <StackPanel Grid.Column="0" Margin="10,0,10,0">
                             <TextBlock Text="Código del artículo:" Foreground="#FF9800"/>
                             <ComboBox ItemsSource="{Binding CodigosFiltrados}"
-                                      SelectedItem="{Binding CodigoSeleccionado, Mode=TwoWay}"
+                                      SelectedItem="{Binding CodigoSeleccionado, Mode=TwoWay, 
+                                      UpdateSourceTrigger=PropertyChanged}"
+                                      IsEditable="True"
                                       Height="30"
                                       Margin="0,5"
                                       Width="180"
@@ -71,7 +73,9 @@
 
                             <TextBlock Text="Descripción 1:" Foreground="#FF9800"/>
                             <ComboBox ItemsSource="{Binding Descrip1Filtradas}"
-                                      SelectedItem="{Binding Descrip1Seleccionada, Mode=TwoWay}"
+                                      SelectedItem="{Binding Descrip1Seleccionada, Mode=TwoWay, 
+                                      UpdateSourceTrigger=PropertyChanged}"
+                                      IsEditable="True"
                                       Height="30"
                                       Margin="0,5"
                                       Width="180"
@@ -79,7 +83,9 @@
 
                             <TextBlock Text="Descripción 2:" Foreground="#FF9800"/>
                             <ComboBox ItemsSource="{Binding Descrip2Filtradas}"
-                                      SelectedItem="{Binding Descrip2Seleccionada, Mode=TwoWay}"
+                                      SelectedItem="{Binding Descrip2Seleccionada, Mode=TwoWay,
+                                      UpdateSourceTrigger=PropertyChanged}"
+                                      IsEditable="True"
                                       Height="30"
                                       Margin="0,5"
                                       Width="180"

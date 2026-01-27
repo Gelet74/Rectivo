@@ -6,17 +6,13 @@ using System.Windows.Input;
 
 namespace recTivo.Frontend.Dialogos.Articulos
 {
-    /// <summary>
-    /// Interaction logic for DialogoAltaArticulo.xaml
-    /// </summary>
     public partial class DialogoAltaArticulo : Window
     {
         private MVArticulo _mvArticulo;
-
+        private bool _escapeEnCurso = false;
         public DialogoAltaArticulo(MVArticulo mvArticulo)
         {
             InitializeComponent();
-
             _mvArticulo = mvArticulo;
             DataContext = _mvArticulo; 
         }
@@ -32,7 +28,7 @@ namespace recTivo.Frontend.Dialogos.Articulos
         }
 
 
-        private bool _escapeEnCurso = false;
+        
         protected override void OnPreviewKeyDown(KeyEventArgs e)
         {
             if (e.Key == Key.Escape)
