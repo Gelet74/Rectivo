@@ -1,4 +1,5 @@
-﻿using recTivo.Frontend.Dialogos.Articulos;
+﻿using Microsoft.Extensions.DependencyInjection;
+using recTivo.Frontend.Dialogos.Articulos;
 using recTivo.Frontend.Dialogos.VentanasInicio;
 using recTivo.MVVM;
 using System.Windows;
@@ -13,6 +14,7 @@ namespace recTivo.Frontend.UC
         private readonly MVArticulo _mvArticulo;
         private readonly IServiceProvider _serviceProvider;
         private DialogoListarArticulo _dialogoListarArticulo;
+        private DialogoModificarArticulo _dialogoModificarArticulo;
 
         // Evento para notificar al contenedor que debe cerrar esta vista
         public event Action SolicitarCierre;
@@ -72,5 +74,12 @@ namespace recTivo.Frontend.UC
                 base.OnPreviewKeyDown(e);
             }
         }
+
+        private void modificarArticulo_Click(object sender, RoutedEventArgs e)
+        {
+            _dialogoModificarArticulo = _serviceProvider.GetRequiredService<DialogoModificarArticulo>();
+            _dialogoModificarArticulo.ShowDialog();
+        }
+
     }
 }

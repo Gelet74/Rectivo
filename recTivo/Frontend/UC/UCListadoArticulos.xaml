@@ -28,7 +28,7 @@
                       IsReadOnly="True"
                       ScrollViewer.VerticalScrollBarVisibility="Auto"
                       ScrollViewer.CanContentScroll="True"
-                      MaxHeight="350"
+                      MaxHeight="860"
                       SelectedItem="{Binding codigoArticulo}">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="CÓDIGO"
@@ -42,7 +42,15 @@
                     <DataGridTextColumn Header="UBICACION"
                                         Binding="{Binding Ubicacion}"/>
                 </DataGrid.Columns>
-                
+                <DataGrid.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Modificar artículo"
+                                  x:Name="modificarArticulo"
+                                  Click="modificarArticulo_Click"/>
+                        <MenuItem Header="Eliminar artículo"
+                                  Command="{Binding EliminarArticuloCommand}"/>
+                    </ContextMenu>
+                </DataGrid.ContextMenu>
             </DataGrid>
         </Grid>
     </DockPanel>
