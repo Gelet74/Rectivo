@@ -320,7 +320,7 @@
         <!-- ============================
              DASHBOARD DERECHA
              ============================ -->
-        <Grid Grid.Column="1" Margin="20">
+        <Grid x:Name="panelPrincipal" Grid.Column="1" Margin="20">
 
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>

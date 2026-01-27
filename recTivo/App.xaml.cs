@@ -10,6 +10,7 @@ using recTivo.Frontend.Dialogos.Clientes;
 using recTivo.Frontend.Dialogos.Empleado;
 using recTivo.Frontend.Dialogos.Escandallo;
 using recTivo.Frontend.Dialogos.VentanasInicio;
+using recTivo.Frontend.UC;
 using recTivo.MVVM;
 using System;
 using System.Windows;
@@ -45,10 +46,6 @@ namespace recTivo
                     provider.GetRequiredService<OrdenRepository>()
                 );
             });
-
-
-
-
 
             services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));
             services.AddScoped<IRepository<Articulo>, ArticuloRepository>();
@@ -98,7 +95,7 @@ namespace recTivo
             services.AddTransient<ConfirmacionDialogo>();
             services.AddScoped<RolRepository>();
 
-
+            services.AddSingleton<UCListadoArticulos>();
         }
 
         protected override void OnStartup(StartupEventArgs e)

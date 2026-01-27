@@ -4,9 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:recTivo.Frontend.UC"
-             mc:Ignorable="d" 
-             x:Name="UCListadoArticulos"
-             Loaded="UCListadoArticulos_Loaded"
+             mc:Ignorable="d"
              Background="#2D2D30"
              d:DesignHeight="450" d:DesignWidth="800">
     <DockPanel>
@@ -24,18 +22,21 @@
                        Margin="0,0,20,0"/>
         </Grid>
         <Grid>
-            <DataGrid ItemsSource="{Binding listaArticulos}"
+            <DataGrid ItemsSource="{Binding ListaArticulos}"
                       AutoGenerateColumns="False"
                       ColumnWidth="*"
                       IsReadOnly="True"
+                      ScrollViewer.VerticalScrollBarVisibility="Auto"
+                      ScrollViewer.CanContentScroll="True"
+                      MaxHeight="350"
                       SelectedItem="{Binding codigoArticulo}">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="CÓDIGO"
                                        Binding="{Binding Codigo}"/>
                     <DataGridTextColumn Header="DESCRIPCIÓN"
-                                        Binding="{Binding Descripcion}"/>
+                                        Binding="{Binding Descrip}"/>
                     <DataGridTextColumn Header="DESCRIPCIÓN 2"
-                                        Binding="{Binding Descripcion2}"/>
+                                        Binding="{Binding Descrip2}"/>
                     <DataGridTextColumn Header="STOCK"
                                         Binding="{Binding Stock}"/>
                     <DataGridTextColumn Header="UBICACION"

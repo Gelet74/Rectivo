@@ -9,7 +9,7 @@ using recTivo.Frontend.Dialogos.Escandallo;
 using recTivo.Frontend.Dialogos.Ordenes;
 using recTivo.Frontend.Dialogos.VentanasInicio;
 using recTivo.Frontend.Dialogos.Ventas;
-using System;
+using recTivo.Frontend.UC;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
@@ -20,18 +20,18 @@ namespace recTivo
     public partial class MainWindow : MetroWindow, INotifyPropertyChanged
     {
         private readonly IServiceProvider _serviceProvider;
+        private UCListadoArticulos _ucListadoArticulos;
 
-        public MainWindow(IServiceProvider serviceProvider)
+        public MainWindow(IServiceProvider serviceProvider,
+                          UCListadoArticulos uCListadoArticulos)
         {
             InitializeComponent();
             _serviceProvider = serviceProvider;
+            _ucListadoArticulos = uCListadoArticulos;
+            _ucListadoArticulos.SolicitarCierre += CerrarListadoArticulos;
             DataContext = this;
             _ = CargarTotalesAsync();
         }
-
-        // ============================
-        // PROPIEDADES DE DASHBOARD
-        // ============================
 
         private int _totalArticulos;
         public int TotalArticulos
@@ -43,6 +43,14 @@ namespace recTivo
                 OnPropertyChanged(nameof(TotalArticulos));
             }
         }
+
+        private void CerrarListadoArticulos()
+        {
+            if (panelPrincipal.Children.Contains(_ucListadoArticulos))
+                panelPrincipal.Children.Remove(_ucListadoArticulos);
+        }
+
+
 
         private int _totalClientes;
         public int TotalClientes
@@ -77,10 +85,6 @@ namespace recTivo
             TotalEmpleados = (await empleadoRepo.GetAllAsync()).Count();
         }
 
-        // ============================
-        // EVENTOS DE MENÚ
-        // ============================
-
         private void almacen_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (almacen.SelectedItem is not ListViewItem item) return;
@@ -113,8 +117,9 @@ namespace recTivo
                 case "Modificar":
                     _serviceProvider.GetService<DialogoModificarArticulo>()?.ShowDialog();
                     break;
-                case "Listar artículos":
-                    _serviceProvider.GetService<DialogoListarArticulo>()?.ShowDialog();
+                case "Listar artículos": 
+                    if (!panelPrincipal.Children.Contains(_ucListadoArticulos)) 
+                        panelPrincipal.Children.Add(_ucListadoArticulos);
                     break;
             }
 
