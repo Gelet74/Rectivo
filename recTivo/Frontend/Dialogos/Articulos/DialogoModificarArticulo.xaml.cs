@@ -7,9 +7,6 @@ using System.Windows.Input;
 
 namespace recTivo.Frontend.Dialogos.Articulos
 {
-    /// <summary>
-    /// Lógica de interacción para DialogoModificarArticulo.xaml
-    /// </summary>
     public partial class DialogoModificarArticulo : Window
     {
         private readonly MVArticulo _vm;
@@ -25,7 +22,6 @@ namespace recTivo.Frontend.Dialogos.Articulos
             this.PreviewKeyDown += DialogoModificarArticulo_PreviewKeyDown;
         }
 
-        // ESC con confirmación
         protected override void OnPreviewKeyDown(KeyEventArgs e)
         {
             base.OnPreviewKeyDown(e);
@@ -61,12 +57,12 @@ namespace recTivo.Frontend.Dialogos.Articulos
                 this.Close();
         }
 
-        // BOTÓN: Cargar artículo (llamado desde XAML: Click="btnCargarArticulo_Click")
+        // BOTÓN: Cargar artículo
         private async void btnCargarArticulo_Click(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrEmpty(_vm.CodigoSeleccionado))
+            if (_vm.ArticuloSeleccionado == null)
             {
-                MensajeError.Mostrar("MODIFICAR ARTÍCULO", "Debes seleccionar un código primero.");
+                MensajeError.Mostrar("MODIFICAR ARTÍCULO", "Debes seleccionar un artículo primero.");
                 return;
             }
 
@@ -79,12 +75,11 @@ namespace recTivo.Frontend.Dialogos.Articulos
                 return;
             }
 
-            // Si se ha encontrado, mostramos el panel de datos
             panelDatos.Visibility = Visibility.Visible;
             panelDatos.UpdateLayout();
         }
 
-        // BOTÓN: Guardar cambios (Click="btnModificarArticulo_Click")
+        // BOTÓN: Guardar cambios
         private async void btnModificarArticulo_Click(object sender, RoutedEventArgs e)
         {
             var ok = await _vm.ModificarAsync();

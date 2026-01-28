@@ -34,6 +34,12 @@ namespace recTivo.Frontend.UC
                 Focus();
             };
         }
+        private void btnLimpiarFiltros_Click(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is MVArticulo vm)
+                vm.LimpiarFiltros();
+        }
+
 
         protected override void OnPreviewKeyDown(KeyEventArgs e)
         {
@@ -85,9 +91,8 @@ namespace recTivo.Frontend.UC
 
             _dialogoModificarArticulo.DataContext = _mvArticulo;
 
-            _mvArticulo.CodigoSeleccionado = _mvArticulo.ArticuloSeleccionado.Codigo;
-
             await _mvArticulo.CargarArticuloSeleccionadoAsync();
+
 
             _dialogoModificarArticulo.panelDatos.Visibility = Visibility.Visible;
 

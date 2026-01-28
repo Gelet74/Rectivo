@@ -7,22 +7,105 @@
              mc:Ignorable="d"
              Background="#2D2D30"
              d:DesignHeight="450" d:DesignWidth="800">
+
+    <UserControl.Resources>
+
+        <Style TargetType="TextBox">
+            <Setter Property="Background" Value="#E0E0E0"/>
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="BorderBrush" Value="#E0E0E0"/>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="Padding" Value="5"/>
+        </Style>
+
+        <Style TargetType="ComboBox">
+            <Setter Property="Background" Value="#E0E0E0"/>
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="BorderBrush" Value="#E0E0E0"/>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="Padding" Value="5"/>
+        </Style>
+
+    </UserControl.Resources>
+
     <DockPanel>
-    <Grid DockPanel.Dock="Top">
+
+        <!-- CABECERA -->
+        <Grid DockPanel.Dock="Top">
             <TextBlock Text="LISTADO DE ARTÍCULOS"
-                   FontSize="30"
-                   HorizontalAlignment="Left"
-                   VerticalAlignment="Center"
-                   Margin="20,0,0,0"    
-                   Foreground="#FF9800"/>
+                       FontSize="30"
+                       HorizontalAlignment="Left"
+                       VerticalAlignment="Center"
+                       Margin="20,0,0,0"
+                       Foreground="#FF9800"/>
+
             <TextBlock Text="Pulsa ESC para volver atrás"
                        Foreground="#FF9800"
                        HorizontalAlignment="Right"
                        VerticalAlignment="Center"
                        Margin="0,0,20,0"/>
         </Grid>
+
+        <!-- FILTROS -->
+        <StackPanel DockPanel.Dock="Top"
+                    Orientation="Horizontal"
+                    Margin="20,0"
+                    HorizontalAlignment="Left">
+
+            <StackPanel>
+                <TextBlock Text="FILTROS: " Foreground="#FF9800"
+                           Margin="0,0,20,0"/>
+            </StackPanel>
+
+            <!-- FILTRO CÓDIGO -->
+            <StackPanel Margin="10,0">
+                <TextBlock Text="Código" Foreground="#FF9800"/>
+                <ComboBox ItemsSource="{Binding CodigosLista}"
+              Text="{Binding FiltroCodigo, UpdateSourceTrigger=PropertyChanged}"
+              IsEditable="True"
+              Height="30"
+              Margin="0,5"
+              Width="150"/>
+            </StackPanel>
+
+            <!-- FILTRO DESCRIPCIÓN -->
+            <StackPanel Margin="10,0">
+                <TextBlock Text="Descripción" Foreground="#FF9800"/>
+                <ComboBox ItemsSource="{Binding DescripcionesLista}"
+              Text="{Binding FiltroDescripcion, UpdateSourceTrigger=PropertyChanged}"
+              IsEditable="True"
+              Height="30"
+              Margin="0,5"
+              Width="150"/>
+            </StackPanel>
+
+            <!-- FILTRO DESCRIPCIÓN 2 -->
+            <StackPanel Margin="10,0">
+                <TextBlock Text="Descripción 2" Foreground="#FF9800"/>
+                <ComboBox ItemsSource="{Binding Descripciones2Lista}"
+              Text="{Binding FiltroDescripcion2, UpdateSourceTrigger=PropertyChanged}"
+              IsEditable="True"
+              Height="30"
+              Margin="0,5"
+              Width="150"/>
+            </StackPanel>
+
+            <!-- BOTÓN LIMPIAR -->
+            <Button Content="Limpiar filtros"
+                    Width="150"
+                    Height="30"
+                    Margin="10,15,0,0"
+                    BorderBrush="#FF5722"
+                    Background="#E0E0E0"
+                    Foreground="#FF5722"
+                    FontWeight="Bold"
+                    Click="btnLimpiarFiltros_Click"
+/>
+        </StackPanel>
+
+        <!-- DATAGRID -->
         <Grid>
-            <DataGrid ItemsSource="{Binding ListaArticulos}"
+            <DataGrid ItemsSource="{Binding ArticulosView}"
                       AutoGenerateColumns="False"
                       ColumnWidth="*"
                       IsReadOnly="True"
@@ -30,9 +113,10 @@
                       ScrollViewer.CanContentScroll="True"
                       MaxHeight="860"
                       SelectedItem="{Binding ArticuloSeleccionado}">
+
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="CÓDIGO"
-                                       Binding="{Binding Codigo}"/>
+                                        Binding="{Binding Codigo}"/>
                     <DataGridTextColumn Header="DESCRIPCIÓN"
                                         Binding="{Binding Descrip}"/>
                     <DataGridTextColumn Header="DESCRIPCIÓN 2"
@@ -42,6 +126,7 @@
                     <DataGridTextColumn Header="UBICACION"
                                         Binding="{Binding Ubicacion}"/>
                 </DataGrid.Columns>
+
                 <DataGrid.ContextMenu>
                     <ContextMenu>
                         <MenuItem Header="Modificar artículo"
@@ -51,7 +136,9 @@
                                   Command="{Binding EliminarArticuloCommand}"/>
                     </ContextMenu>
                 </DataGrid.ContextMenu>
+
             </DataGrid>
         </Grid>
+
     </DockPanel>
 </UserControl>
