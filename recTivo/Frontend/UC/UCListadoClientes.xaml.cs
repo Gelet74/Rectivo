@@ -1,6 +1,6 @@
 ﻿using di.proyecto.clase._2025.Frontend.Mensajes;
 using Microsoft.Extensions.DependencyInjection;
-using recTivo.Frontend.Dialogos.Articulos;
+using recTivo.Frontend.Dialogos.Clientes;
 using recTivo.Frontend.Dialogos.VentanasInicio;
 using recTivo.MVVM;
 using System.Windows;
@@ -9,37 +9,32 @@ using System.Windows.Input;
 
 namespace recTivo.Frontend.UC
 {
-    public partial class UCListadoArticulos : UserControl
+    /// <summary>
+    /// Lógica de interacción para UCListadoClientes.xaml
+    /// </summary>
+    public partial class UCListadoClientes : UserControl
     {
         private bool _escapeEnCurso = false;
-        private readonly MVArticulo _mvArticulo;
+        private readonly MVCliente _mvCliente;
         private readonly IServiceProvider _serviceProvider;
-        private DialogoModificarArticulo _dialogoModificarArticulo;
+        private DialogoModificarCliente _dialogoModificarCliente;
 
         public event Action SolicitarCierre;
-
-        public UCListadoArticulos(MVArticulo mvArticulo,
-                                  IServiceProvider serviceProvider)
+        public UCListadoClientes(MVCliente mvCliente,
+                                 IServiceProvider serviceProvider)
         {
             InitializeComponent();
-            _mvArticulo = mvArticulo;
+            _mvCliente = mvCliente;
             _serviceProvider = serviceProvider;
 
             Loaded += async (_, __) =>
             {
-                await _mvArticulo.Inicializa();
-                DataContext = _mvArticulo;
-
+                await _mvCliente.Inicializa();
+                DataContext = _mvCliente;
                 Focusable = true;
                 Focus();
             };
         }
-        private void btnLimpiarFiltros_Click(object sender, RoutedEventArgs e)
-        {
-            if (DataContext is MVArticulo vm)
-                vm.LimpiarFiltros();
-        }
-
 
         protected override void OnPreviewKeyDown(KeyEventArgs e)
         {
@@ -50,10 +45,8 @@ namespace recTivo.Frontend.UC
                     e.Handled = true;
                     return;
                 }
-
                 _escapeEnCurso = true;
                 e.Handled = true;
-
                 try
                 {
                     var ownerWindow = Window.GetWindow(this);
@@ -79,26 +72,24 @@ namespace recTivo.Frontend.UC
             }
         }
 
-        private async void modificarArticulo_Click(object sender, RoutedEventArgs e)
+        private async void modificarCliente_Click(object sender, RoutedEventArgs e)
         {
-            if (_mvArticulo.ArticuloSeleccionado == null)
+            if (_mvCliente.ClienteSeleccionado == null)
             {
-                MensajeError.Mostrar("ERROR", "Debes seleccionar un artículo primero.");
+                MensajeError.Mostrar("ERROR", "Debes seleccionar un cliente primero.");
                 return;
             }
+            _dialogoModificarCliente = _serviceProvider.GetRequiredService<DialogoModificarCliente>();
 
-            _dialogoModificarArticulo = _serviceProvider.GetRequiredService<DialogoModificarArticulo>();
+            _dialogoModificarCliente.DataContext = _mvCliente;
 
-            _dialogoModificarArticulo.DataContext = _mvArticulo;
+            await _mvCliente.CargarClienteSeleccionadoAsync();
 
-            await _mvArticulo.CargarArticuloSeleccionadoAsync();
+            _dialogoModificarCliente.panelDatos.Visibility = Visibility.Visible;
 
-
-            _dialogoModificarArticulo.panelDatos.Visibility = Visibility.Visible;
-
-            _dialogoModificarArticulo.ShowDialog();
+            _dialogoModificarCliente.ShowDialog();
         }
-
-
+        }
     }
-}
+
+

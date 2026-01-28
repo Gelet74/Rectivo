@@ -95,6 +95,7 @@ namespace recTivo
             services.AddScoped<RolRepository>();
 
             services.AddSingleton<UCListadoArticulos>();
+            services.AddSingleton<UCListadoClientes>();
         }
 
         protected override void OnStartup(StartupEventArgs e)
