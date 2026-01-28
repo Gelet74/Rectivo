@@ -8,9 +8,6 @@
     <Compile Update="Frontend\Dialogos\Articulos\DialogoBajaArticulo.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Frontend\Dialogos\Articulos\DialogoListarArticulo.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Update="Frontend\Dialogos\Articulos\DialogoModificarArticulo.xaml.cs">
       <SubType>Code</SubType>
     </Compile>

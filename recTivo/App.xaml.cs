@@ -71,7 +71,6 @@ namespace recTivo
             services.AddTransient<DialogoAltaArticulo>();
             services.AddTransient<DialogoBajaArticulo>();
             services.AddTransient<DialogoModificarArticulo>();
-            services.AddTransient<DialogoListarArticulo>();
 
             services.AddTransient<DialogoAltaCliente>();
             services.AddTransient<DialogoConsultaCliente>();

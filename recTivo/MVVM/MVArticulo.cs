@@ -112,7 +112,10 @@ namespace recTivo.MVVM
             {
                 await LoadCodigosAsync();
 
-                ListaArticulos = (List<Articulo>)await _articuloRepository.GetAllAsync();
+                ListaArticulos = (await _articuloRepository.GetAllAsync())
+                .OrderBy(a => a.Codigo)
+                .ToList();
+
 
                 if (_clienteRepository != null)
                     _listaClientes = (List<Cliente>)await _clienteRepository.GetAllAsync();

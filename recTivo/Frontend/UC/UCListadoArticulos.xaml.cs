@@ -14,10 +14,8 @@ namespace recTivo.Frontend.UC
         private bool _escapeEnCurso = false;
         private readonly MVArticulo _mvArticulo;
         private readonly IServiceProvider _serviceProvider;
-        private DialogoListarArticulo _dialogoListarArticulo;
         private DialogoModificarArticulo _dialogoModificarArticulo;
 
-        // Evento para notificar al contenedor que debe cerrar esta vista
         public event Action SolicitarCierre;
 
         public UCListadoArticulos(MVArticulo mvArticulo,
@@ -32,7 +30,6 @@ namespace recTivo.Frontend.UC
                 await _mvArticulo.Inicializa();
                 DataContext = _mvArticulo;
 
-                // Necesario para que ESC funcione
                 Focusable = true;
                 Focus();
             };
@@ -86,16 +83,12 @@ namespace recTivo.Frontend.UC
 
             _dialogoModificarArticulo = _serviceProvider.GetRequiredService<DialogoModificarArticulo>();
 
-            // Pasar el mismo ViewModel
             _dialogoModificarArticulo.DataContext = _mvArticulo;
 
-            // Establecer el código seleccionado
             _mvArticulo.CodigoSeleccionado = _mvArticulo.ArticuloSeleccionado.Codigo;
 
-            // Cargar datos del artículo
             await _mvArticulo.CargarArticuloSeleccionadoAsync();
 
-            // Mostrar panel de datos directamente
             _dialogoModificarArticulo.panelDatos.Visibility = Visibility.Visible;
 
             _dialogoModificarArticulo.ShowDialog();
