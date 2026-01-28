@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using di.proyecto.clase._2025.Frontend.Mensajes;
+using Microsoft.Extensions.DependencyInjection;
 using recTivo.Frontend.Dialogos.Articulos;
 using recTivo.Frontend.Dialogos.VentanasInicio;
 using recTivo.MVVM;
@@ -75,11 +76,31 @@ namespace recTivo.Frontend.UC
             }
         }
 
-        private void modificarArticulo_Click(object sender, RoutedEventArgs e)
+        private async void modificarArticulo_Click(object sender, RoutedEventArgs e)
         {
+            if (_mvArticulo.ArticuloSeleccionado == null)
+            {
+                MensajeError.Mostrar("ERROR", "Debes seleccionar un artículo primero.");
+                return;
+            }
+
             _dialogoModificarArticulo = _serviceProvider.GetRequiredService<DialogoModificarArticulo>();
+
+            // Pasar el mismo ViewModel
+            _dialogoModificarArticulo.DataContext = _mvArticulo;
+
+            // Establecer el código seleccionado
+            _mvArticulo.CodigoSeleccionado = _mvArticulo.ArticuloSeleccionado.Codigo;
+
+            // Cargar datos del artículo
+            await _mvArticulo.CargarArticuloSeleccionadoAsync();
+
+            // Mostrar panel de datos directamente
+            _dialogoModificarArticulo.panelDatos.Visibility = Visibility.Visible;
+
             _dialogoModificarArticulo.ShowDialog();
         }
+
 
     }
 }

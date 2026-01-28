@@ -29,7 +29,7 @@
                       ScrollViewer.VerticalScrollBarVisibility="Auto"
                       ScrollViewer.CanContentScroll="True"
                       MaxHeight="860"
-                      SelectedItem="{Binding codigoArticulo}">
+                      SelectedItem="{Binding ArticuloSeleccionado}">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="CÓDIGO"
                                        Binding="{Binding Codigo}"/>
