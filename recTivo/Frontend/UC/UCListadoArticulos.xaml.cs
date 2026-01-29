@@ -10,6 +10,7 @@ using System.Windows.Input;
 namespace recTivo.Frontend.UC
 {
     public partial class UCListadoArticulos : UserControl
+
     {
         private bool _escapeEnCurso = false;
         private readonly MVArticulo _mvArticulo;

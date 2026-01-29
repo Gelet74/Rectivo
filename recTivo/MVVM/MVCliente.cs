@@ -1,15 +1,29 @@
-﻿using recTivo.Backend.Repos;
+﻿using di.proyecto.clase._2025.Frontend.Mensajes;
+using recTivo.Backend.Modelos;
+using recTivo.Backend.Repos;
 using recTivo.MVVM.Base;
+using System.Windows.Data;
 
 namespace recTivo.MVVM
 {
     public class MVCliente : MVBase
     {
-        private readonly ClienteRepository _clienteRepository;
+        private Cliente _cliente;
 
-        public MVCliente(ClienteRepository clienteRepository)
+        private readonly ClienteRepository _clienteRepository;
+        private readonly RectivoContext _context;
+        private readonly ArticuloRepository _articuloRepository;
+
+        public ListCollectionView ClientesView { get; private set; }
+
+        public MVCliente(
+            ClienteRepository clienteRepository, 
+            RectivoContext context, 
+            ArticuloRepository articuloRepository)
         {
             _clienteRepository = clienteRepository;
+            _context = context;
+            _articuloRepository = articuloRepository;
         }
 
         // ============================================================
@@ -73,6 +87,39 @@ namespace recTivo.MVVM
             set => SetProperty(ref _telefono, value);
         }
 
+        private string _filtroNombre;
+        public string FiltroNombre
+        {
+            get => _filtroNombre;
+            set
+            {
+                SetProperty(ref _filtroNombre, value);
+                ClientesView.Refresh();
+            }
+        }
+
+        private string _filtroApellido1;
+        public string FiltroApellido1
+        {
+            get => _filtroApellido1;
+            set
+            {
+                SetProperty(ref _filtroApellido1, value);
+                ClientesView.Refresh();
+            }
+        }
+
+        private string _filtroApellido2;
+        public string FiltroApellido2
+        {
+            get => _filtroApellido2;
+            set
+            {
+                SetProperty(ref _filtroApellido2, value);
+                ClientesView.Refresh();
+            }
+        }
+
         private string _usuario;
         public string Usuario
         {
@@ -87,13 +134,79 @@ namespace recTivo.MVVM
             set => SetProperty(ref _password, value);
         }
 
+        public List<string> NombreLista => ListaClientes?
+            .Select(a => a.Nombre)
+            .Where(c => !string.IsNullOrWhiteSpace(c))
+            .Distinct()
+            .OrderBy(c => c)
+            .ToList();
+
+        public List<string> Apellido1Lista => ListaClientes?
+           .Select(a => a.Apellido1)
+           .Where(d => !string.IsNullOrWhiteSpace(d))
+           .Distinct()
+           .OrderBy(d => d)
+           .ToList();
+
+        public List<string> Apellido2Lista => ListaClientes?
+          .Select(a => a.Apellido2)
+          .Where(d => !string.IsNullOrWhiteSpace(d))
+          .Distinct()
+          .OrderBy(d => d)
+          .ToList();
+
+
         // ============================================================
         // INICIALIZAR
         // ============================================================
 
         public async Task Inicializa()
         {
-            ListaClientes = (List<Cliente>)await _clienteRepository.GetAllAsync();
+            try
+            {
+                ListaClientes = (await _clienteRepository.GetAllAsync())
+                    .OrderBy(c => c.Apellido1)
+                    .ToList();
+                ClientesView = new ListCollectionView(ListaClientes);
+                ClientesView.Filter = FiltarClientes;
+
+                OnPropertyChanged(nameof(ClientesView));
+                OnPropertyChanged(nameof(NombreLista));
+                OnPropertyChanged(nameof(Apellido1Lista));
+                OnPropertyChanged(nameof(Apellido2Lista));
+            }
+            catch (Exception ex)
+            {
+                MensajeError.Mostrar("Error", $"Error al cargar datos\n{ex.Message}", 0);
+            }
+        }
+
+        public void LimpiarFiltros()
+        {
+            FiltroNombre = "";
+            FiltroApellido1 = "";
+            FiltroApellido2 = "";
+        }
+
+        private bool FiltarClientes(object obj)
+        {
+            if (obj is not Cliente cliente)
+                return false;
+
+            bool coincideNombre = 
+                string.IsNullOrWhiteSpace (FiltroNombre) ||
+                (cliente.Nombre?.Contains(FiltroNombre, StringComparison.OrdinalIgnoreCase) ?? false);
+
+            bool coincideApellido1 =
+                string.IsNullOrWhiteSpace(FiltroApellido1) ||
+                (cliente.Apellido1?.Contains(FiltroApellido1, StringComparison.OrdinalIgnoreCase) ?? false);
+
+            bool coincideApellido2 =
+                string.IsNullOrWhiteSpace(FiltroApellido2) ||
+                (cliente.Apellido2?.Contains(FiltroApellido2, StringComparison.OrdinalIgnoreCase) ?? false);
+
+            return coincideNombre && coincideApellido1 && coincideApellido2;
+        
         }
 
         // ============================================================

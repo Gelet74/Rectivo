@@ -31,9 +31,16 @@ namespace recTivo.Frontend.UC
             {
                 await _mvCliente.Inicializa();
                 DataContext = _mvCliente;
+
                 Focusable = true;
                 Focus();
             };
+        }
+
+        private void btnLimpiarFiltros_Click(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is MVCliente vm)
+                vm.LimpiarFiltros();
         }
 
         protected override void OnPreviewKeyDown(KeyEventArgs e)
@@ -85,7 +92,7 @@ namespace recTivo.Frontend.UC
 
             await _mvCliente.CargarClienteSeleccionadoAsync();
 
-            _dialogoModificarCliente.panelDatos.Visibility = Visibility.Visible;
+            _dialogoModificarCliente.panelEdicion.Visibility = Visibility.Visible;
 
             _dialogoModificarCliente.ShowDialog();
         }

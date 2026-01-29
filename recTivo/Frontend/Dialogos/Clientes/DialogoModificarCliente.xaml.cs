@@ -1,7 +1,6 @@
 ﻿using di.proyecto.clase._2025.Frontend.Mensajes;
 using recTivo.Frontend.Dialogos.VentanasInicio;
 using recTivo.MVVM;
-using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 
@@ -34,8 +33,15 @@ namespace recTivo.Frontend.Dialogos.Clientes
                 return;
             }
 
-            await _vm.CargarClienteSeleccionadoAsync();
+            var encontrado = await _vm.CargarClienteSeleccionadoAsync();
+
+           if (!encontrado)
+            {
+                MensajeError.Mostrar("ERROR", "No se pudo cargar el cliente seleccionado.");
+                return;
+            }
             panelEdicion.Visibility = Visibility.Visible;
+            panelEdicion.UpdateLayout();
         }
 
         private async void btnGuardarCambios_Click(object sender, RoutedEventArgs e)

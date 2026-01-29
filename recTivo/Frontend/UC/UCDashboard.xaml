@@ -1,0 +1,248 @@
+﻿<UserControl x:Class="recTivo.Frontend.UC.UCDashboard"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+             xmlns:local="clr-namespace:recTivo.Frontend.UC"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800"
+             Background="#2D2D30">
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- CABECERA -->
+        <StackPanel Orientation="Vertical">
+            <TextBlock Text="Panel principal"
+                       FontSize="26"
+                       FontWeight="Bold"
+                       Foreground="White"/>
+
+            <TextBlock FontSize="16" Margin="0,5,0,20" Foreground="White">
+                <Run Text="Bienvenido, "/>
+                <Run Text="{Binding UsuarioLogueado}"/>
+            </TextBlock>
+        </StackPanel>
+
+        <!-- TARJETAS -->
+        <UniformGrid Grid.Row="1" Columns="4" Margin="0,10,0,0" HorizontalAlignment="Stretch">
+
+            <!-- Artículos -->
+            <Border Background="#3A3A3C"
+                    CornerRadius="10"
+                    Padding="15"
+                    Margin="10">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Image Source="/Recursos/Iconos/Articulos.png"
+                           Width="55"
+                           Height="55"
+                           VerticalAlignment="Center"
+                           Margin="10,0,15,0"/>
+
+                    <StackPanel Grid.Column="1"
+                                VerticalAlignment="Center">
+                        <TextBlock Text="Total Artículos"
+                                   Foreground="#FF9800"
+                                   FontSize="16"
+                                   FontWeight="Bold"
+                                   Margin="20,0,0,5"/>
+
+                        <TextBlock Text="{Binding TotalArticulos}"
+                                   Foreground="White"
+                                   FontSize="32"
+                                   FontWeight="Bold"
+                                   Margin="20,0,0,5"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- Clientes -->
+            <Border Background="#3A3A3C" 
+                    CornerRadius="8" 
+                    Padding="15" 
+                    Margin="10">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Image Source="/Recursos/Iconos/Clientes.png"
+                           Width="55"
+                           Height="55"
+                           VerticalAlignment="Center"
+                           Margin="10,0,15,0"/>
+
+                    <StackPanel Grid.Column="1"
+                                VerticalAlignment="Center">
+                        <TextBlock Text="Total Clientes"
+                                   Foreground="#FF9800"
+                                   FontSize="16"
+                                   FontWeight="Bold"
+                                   Margin="20,0,0,5"/>
+
+                        <TextBlock Text="{Binding TotalClientes}"
+                                   Foreground="White"
+                                   FontSize="32"
+                                   FontWeight="Bold"
+                                   Margin="20,0,0,5"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- Órdenes -->
+            <Border Background="#3A3A3C" 
+                    CornerRadius="8" 
+                    Padding="15" 
+                    Margin="10">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Image Source="/Recursos/Iconos/Ordenes.png"
+                           Width="55"
+                           Height="55"
+                           VerticalAlignment="Center"
+                           Margin="10,0,15,0"/>
+
+                    <StackPanel Grid.Column="1"
+                                VerticalAlignment="Center">
+                        <TextBlock Text="Órdenes Abiertas"
+                                   Foreground="#FF9800"
+                                   FontSize="16"
+                                   FontWeight="Bold"
+                                   Margin="20,0,0,5"/>
+
+                        <TextBlock Text="-"
+                                   Foreground="White"
+                                   FontSize="32"
+                                   FontWeight="Bold"
+                                   Margin="20,0,0,5"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- Empleados -->
+            <Border Background="#3A3A3C" 
+                    CornerRadius="8" 
+                    Padding="15" 
+                    Margin="10">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Image Source="/Recursos/Iconos/Empleado.png"
+                           Width="55"
+                           Height="55"
+                           VerticalAlignment="Center"
+                           Margin="10,0,15,0"/>
+
+                    <StackPanel Grid.Column="1"
+                                VerticalAlignment="Center">
+                        <TextBlock Text="Total Empleados" 
+                                   Foreground="#FF9800" 
+                                   FontSize="16" 
+                                   FontWeight="Bold"
+                                   Margin="20,0,0,5"/>
+
+                        <TextBlock Text="{Binding TotalEmpleados}" 
+                                   Foreground="White" 
+                                   FontSize="28" 
+                                   FontWeight="Bold" 
+                                   Margin="20,0,0,5"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </UniformGrid>
+
+        <!-- ACCESOS RÁPIDOS -->
+        <StackPanel Grid.Row="2" Margin="0,30,0,0">
+            <TextBlock Text="Accesos rápidos"
+                       FontSize="18"
+                       FontWeight="Bold"
+                       Foreground="White"
+                       Margin="0,0,0,10"/>
+
+            <WrapPanel ItemHeight="60" ItemWidth="180">
+                <!-- Crear artículo -->
+                <Button Content="Crear artículo"
+                        Width="180"
+                        Height="60"
+                        HorizontalAlignment="Center"
+                        Margin="10,0,10,0"
+                        Background="#FF9800"
+                        Foreground="White"
+                        FontWeight="Bold"
+                        Click="BtnCrearArticulo_Click"/>
+
+                <!-- Crear cliente -->
+                <Button Content="Crear cliente"
+                        Width="180"
+                        Height="60"
+                        HorizontalAlignment="Center"
+                        Margin="10,0,0,0"
+                        Background="#FF9800"
+                        Foreground="White"
+                        FontWeight="Bold"
+                        Click="BtnCrearCliente_Click"/>
+
+                <!-- Crear empleado -->
+                <Button Content="Crear empleado"
+                        Width="180"
+                        Height="60"
+                        HorizontalAlignment="Center"
+                        Margin="10,0,10,0"
+                        Background="#FF9800"
+                        Foreground="White"
+                        FontWeight="Bold"
+                        Click="BtnCrearEmpleado_Click"/>
+
+                <!-- Crear escandallo -->
+                <Button Content="Crear escandallo"
+                        Width="180"
+                        Height="60"
+                        HorizontalAlignment="Center"
+                        Margin="10,0,10,0"
+                        Background="#FF9800"
+                        Foreground="White"
+                        FontWeight="Bold"
+                        Click="BtnCrearEscandallo_Click"/>
+
+                <!-- Procesar orden (deshabilitado) -->
+                <Button Content="Procesar orden"
+                        Width="180"
+                        Height="60"
+                        HorizontalAlignment="Center"
+                        Margin="10,0,10,0"
+                        Background="#555"
+                        Foreground="#AAA"
+                        FontWeight="Bold"
+                        IsEnabled="False"/>
+
+                <!-- Crear pedido (deshabilitado) -->
+                <Button Content="Crear pedido"
+                        Width="180"
+                        Height="60"
+                        HorizontalAlignment="Center"
+                        Margin="10,0,10,0"
+                        Background="#555"
+                        Foreground="#AAA"
+                        FontWeight="Bold"
+                        IsEnabled="False"/>
+            </WrapPanel>
+        </StackPanel>
+    </Grid>
+</UserControl>

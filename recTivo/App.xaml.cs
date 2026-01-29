@@ -96,6 +96,8 @@ namespace recTivo
 
             services.AddSingleton<UCListadoArticulos>();
             services.AddSingleton<UCListadoClientes>();
+            services.AddSingleton<UCDashboard>();
+
         }
 
         protected override void OnStartup(StartupEventArgs e)

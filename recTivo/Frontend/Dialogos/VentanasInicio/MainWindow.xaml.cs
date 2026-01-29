@@ -20,18 +20,29 @@ namespace recTivo
     public partial class MainWindow : MetroWindow, INotifyPropertyChanged
     {
         private readonly IServiceProvider _serviceProvider;
-        private UCListadoArticulos _ucListadoArticulos;
+        private UIElement _dashboardInicial;
 
-        public MainWindow(IServiceProvider serviceProvider,
-                          UCListadoArticulos uCListadoArticulos)
+
+        public MainWindow(IServiceProvider serviceProvider)
         {
             InitializeComponent();
             _serviceProvider = serviceProvider;
-            _ucListadoArticulos = uCListadoArticulos;
-            _ucListadoArticulos.SolicitarCierre += CerrarListadoArticulos;
+
+            panelPrincipal.Children.Add(_serviceProvider.GetService<UCDashboard>());
+
+
             DataContext = this;
             _ = CargarTotalesAsync();
         }
+
+        private void MostrarDashboard()
+        {
+            panelPrincipal.Children.Clear();
+
+            _dashboardInicial = _serviceProvider.GetRequiredService<UCDashboard>();
+            panelPrincipal.Children.Add(_dashboardInicial);
+        }
+
 
         private int _totalArticulos;
         public int TotalArticulos
@@ -43,14 +54,6 @@ namespace recTivo
                 OnPropertyChanged(nameof(TotalArticulos));
             }
         }
-
-        private void CerrarListadoArticulos()
-        {
-            if (panelPrincipal.Children.Contains(_ucListadoArticulos))
-                panelPrincipal.Children.Remove(_ucListadoArticulos);
-        }
-
-
 
         private int _totalClientes;
         public int TotalClientes
@@ -117,10 +120,23 @@ namespace recTivo
                 case "Modificar":
                     _serviceProvider.GetService<DialogoModificarArticulo>()?.ShowDialog();
                     break;
-                case "Listar artículos": 
-                    if (!panelPrincipal.Children.Contains(_ucListadoArticulos)) 
-                        panelPrincipal.Children.Add(_ucListadoArticulos);
-                    break;
+                case "Listar artículos":
+                    {
+                        panelPrincipal.Children.Clear();
+
+                        var uc = _serviceProvider.GetService<UCListadoArticulos>();
+
+                        uc.SolicitarCierre += () =>
+                        {
+                            panelPrincipal.Children.Remove(uc);
+                            MostrarDashboard();
+                        };
+
+                        panelPrincipal.Children.Add(uc);
+                        break;
+                    }
+
+
             }
 
             articulos.SelectedItem = null;
@@ -139,8 +155,22 @@ namespace recTivo
                     _serviceProvider.GetService<DialogoModificarCliente>()?.ShowDialog();
                     break;
                 case "Listar clientes":
-                    _serviceProvider.GetService<DialogoConsultaCliente>()?.ShowDialog();
-                    break;
+                    {
+                        panelPrincipal.Children.Clear();
+
+                        var uc = _serviceProvider.GetService<UCListadoClientes>();
+
+                        uc.SolicitarCierre += () =>
+                        {
+                            panelPrincipal.Children.Remove(uc);
+                            MostrarDashboard();
+                        };
+
+                        panelPrincipal.Children.Add(uc);
+                        break;
+                    }
+
+
             }
 
             clientes.SelectedItem = null;
@@ -195,12 +225,6 @@ namespace recTivo
                 case "Procesar orden":
                     _serviceProvider.GetService<DialogoProcesarOrden>()?.ShowDialog();
                     break;
-                //case "Cerrar orden":
-                    //_serviceProvider.GetService<DialogoCerrarOrden>()?.ShowDialog();
-                    //break;
-                //case "Listar órdenes":
-                    //_serviceProvider.GetService<DialogoListarOrden>()?.ShowDialog();
-                    //break;
             }
 
             ordenes.SelectedItem = null;
@@ -215,50 +239,14 @@ namespace recTivo
                 case "Crear pedido":
                     _serviceProvider.GetService<DialogoCrearPedido>()?.ShowDialog();
                     break;
-                //case "Cerrar pedido":
-                    //_serviceProvider.GetService<DialogoCerrarPedido>()?.ShowDialog();
-                    //break;
-                //case "Listar pedidos":
-                    //_serviceProvider.GetService<DialogoListarPedido>()?.ShowDialog();
-                    //break;
             }
 
             ventas.SelectedItem = null;
         }
 
-        // ============================
-        // BOTONES DE ACCESO RÁPIDO
-        // ============================
+    
 
-        private void BtnCrearArticulo_Click(object sender, RoutedEventArgs e)
-        {
-            _serviceProvider.GetService<DialogoAltaArticulo>()?.ShowDialog();
-        }
-
-        private void BtnCrearCliente_Click(object sender, RoutedEventArgs e)
-        {
-            _serviceProvider.GetService<DialogoAltaCliente>()?.ShowDialog();
-        }
-
-        private void BtnCrearEmpleado_Click(object sender, RoutedEventArgs e)
-        {
-            _serviceProvider.GetService<DialogoAltaEmpleado>()?.ShowDialog();
-        }
-
-        private void BtnCrearEscandallo_Click(object sender, RoutedEventArgs e)
-        {
-            _serviceProvider.GetService<DialogoAltaEscandallo>()?.ShowDialog();
-        }
-
-        private void BtnProcesarOrden_Click(object sender, RoutedEventArgs e)
-        {
-            _serviceProvider.GetService<DialogoProcesarOrden>()?.ShowDialog();
-        }
-
-        private void BtnCrearPedido_Click(object sender, RoutedEventArgs e)
-        {
-            _serviceProvider.GetService<DialogoCrearPedido>()?.ShowDialog();
-        }
+      
 
         private void salir_Click(object sender, RoutedEventArgs e)
         {
@@ -274,10 +262,6 @@ namespace recTivo
             if (e.Key == Key.Escape)
                 e.Handled = true;
         }
-
-        // ============================
-        // INotifyPropertyChanged
-        // ============================
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged(string propertyName)

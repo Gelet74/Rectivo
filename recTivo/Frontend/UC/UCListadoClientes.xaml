@@ -29,7 +29,6 @@
     </UserControl.Resources>
 
     <DockPanel>
-
         <!-- CABECERA -->
         <Grid DockPanel.Dock="Top">
             <TextBlock Text="LISTADO DE CLIENTES"
@@ -45,6 +44,32 @@
                        VerticalAlignment="Center"
                        Margin="0,0,20,0"/>
         </Grid>
+
+        <!-- FILTROS -->
+        <StackPanel DockPanel.Dock="Top"
+                 Orientation="Horizontal"
+                 Margin="20,0"
+                 HorizontalAlignment="Left">
+
+            <StackPanel>
+                <TextBlock Text="FILTROS: " Foreground="#FF9800"
+                        Margin="0,0,20,0"/>
+            </StackPanel>
+
+            <!-- FILTRO NOMBRE -->
+            <StackPanel Margin="10,0">
+                <TextBlock Text="Nombre" Foreground="#FF9800"/>
+                <ComboBox ItemsSource="{Binding NombresLista}"
+                          Text="{Binding FiltroNombre, UpdateSourceTrigger=PropertyChanged}"
+                          IsEditable="True"
+                          Height="30"
+                          Margin="0,5"
+                          Width="150"/>
+            </StackPanel>
+
+
+
+        </StackPanel>
         <Grid>
 
         </Grid>
