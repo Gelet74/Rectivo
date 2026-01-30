@@ -61,33 +61,33 @@
             <StackPanel Margin="10,0">
                 <TextBlock Text="Código" Foreground="#FF9800"/>
                 <ComboBox ItemsSource="{Binding CodigosLista}"
-              Text="{Binding FiltroCodigo, UpdateSourceTrigger=PropertyChanged}"
-              IsEditable="True"
-              Height="30"
-              Margin="0,5"
-              Width="150"/>
+                          SelectedItem="{Binding FiltroCodigo, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                          IsEditable="True"
+                          Height="30"
+                          Margin="0,5"
+                          Width="150"/>
             </StackPanel>
 
             <!-- FILTRO DESCRIPCIÓN -->
             <StackPanel Margin="10,0">
                 <TextBlock Text="Descripción" Foreground="#FF9800"/>
                 <ComboBox ItemsSource="{Binding DescripcionesLista}"
-              Text="{Binding FiltroDescripcion, UpdateSourceTrigger=PropertyChanged}"
-              IsEditable="True"
-              Height="30"
-              Margin="0,5"
-              Width="150"/>
+                          SelectedItem="{Binding FiltroDescripcion, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                          IsEditable="True"
+                          Height="30"
+                          Margin="0,5"
+                          Width="150"/>
             </StackPanel>
 
             <!-- FILTRO DESCRIPCIÓN 2 -->
             <StackPanel Margin="10,0">
                 <TextBlock Text="Descripción 2" Foreground="#FF9800"/>
                 <ComboBox ItemsSource="{Binding Descripciones2Lista}"
-              Text="{Binding FiltroDescripcion2, UpdateSourceTrigger=PropertyChanged}"
-              IsEditable="True"
-              Height="30"
-              Margin="0,5"
-              Width="150"/>
+                          SelectedItem="{Binding FiltroDescripcion2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                          IsEditable="True"
+                          Height="30"
+                          Margin="0,5"
+                          Width="150"/>
             </StackPanel>
 
             <!-- BOTÓN LIMPIAR -->

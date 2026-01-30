@@ -8,13 +8,15 @@ namespace recTivo.Frontend.Dialogos
     public partial class DialogoSalidaAlmacen : Window
     {
         private bool _escapeEnCurso = false;
+        private readonly MVArticulo _vm;
 
         public DialogoSalidaAlmacen(MVArticulo vm)
         {
             InitializeComponent();
-            DataContext = vm;
-            Loaded += async (_, _) => await vm.Inicializa();
-        }        
+            _vm = vm;
+            DataContext = _vm;
+            Loaded += async (_, __) => await _vm.Inicializa();
+        }
 
         protected override void OnPreviewKeyDown(KeyEventArgs e)
         {
@@ -25,8 +27,10 @@ namespace recTivo.Frontend.Dialogos
                     e.Handled = true;
                     return;
                 }
+
                 _escapeEnCurso = true;
                 e.Handled = true;
+
                 try
                 {
                     var dialog = new ConfirmacionDialogo { Owner = this };
@@ -50,8 +54,7 @@ namespace recTivo.Frontend.Dialogos
 
         private async void btnRestarAlmacen_Click(object sender, RoutedEventArgs e)
         {
-            if (DataContext is MVArticulo vm)
-                await vm.SalidaAlmacen();
+            await _vm.SalidaAlmacen();
         }
     }
 }

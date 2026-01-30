@@ -10,17 +10,14 @@ using System.Windows.Input;
 namespace recTivo.Frontend.UC
 {
     public partial class UCListadoArticulos : UserControl
-
     {
         private bool _escapeEnCurso = false;
         private readonly MVArticulo _mvArticulo;
         private readonly IServiceProvider _serviceProvider;
-        private DialogoModificarArticulo _dialogoModificarArticulo;
 
         public event Action SolicitarCierre;
 
-        public UCListadoArticulos(MVArticulo mvArticulo,
-                                  IServiceProvider serviceProvider)
+        public UCListadoArticulos(MVArticulo mvArticulo, IServiceProvider serviceProvider)
         {
             InitializeComponent();
             _mvArticulo = mvArticulo;
@@ -30,17 +27,15 @@ namespace recTivo.Frontend.UC
             {
                 await _mvArticulo.Inicializa();
                 DataContext = _mvArticulo;
-
                 Focusable = true;
                 Focus();
             };
         }
+
         private void btnLimpiarFiltros_Click(object sender, RoutedEventArgs e)
         {
-            if (DataContext is MVArticulo vm)
-                vm.LimpiarFiltros();
+            _mvArticulo.LimpiarFiltros();
         }
-
 
         protected override void OnPreviewKeyDown(KeyEventArgs e)
         {
@@ -58,16 +53,13 @@ namespace recTivo.Frontend.UC
                 try
                 {
                     var ownerWindow = Window.GetWindow(this);
-
-                    var dialog = new ConfirmacionDialogo
-                    {
-                        Owner = ownerWindow
-                    };
-
+                    var dialog = new ConfirmacionDialogo { Owner = ownerWindow };
                     bool? result = dialog.ShowDialog();
 
                     if (result == true && dialog.Confirmado)
+                    {
                         SolicitarCierre?.Invoke();
+                    }
                 }
                 finally
                 {
@@ -80,7 +72,7 @@ namespace recTivo.Frontend.UC
             }
         }
 
-        private async void modificarArticulo_Click(object sender, RoutedEventArgs e)
+        private void modificarArticulo_Click(object sender, RoutedEventArgs e)
         {
             if (_mvArticulo.ArticuloSeleccionado == null)
             {
@@ -88,18 +80,16 @@ namespace recTivo.Frontend.UC
                 return;
             }
 
-            _dialogoModificarArticulo = _serviceProvider.GetRequiredService<DialogoModificarArticulo>();
+            // Crear nuevo ViewModel para el diálogo
+            var vmModificar = _serviceProvider.GetRequiredService<MVArticulo>();
+            vmModificar.ArticuloSeleccionado = _mvArticulo.ArticuloSeleccionado;
 
-            _dialogoModificarArticulo.DataContext = _mvArticulo;
+            var dialogo = new DialogoModificarArticulo(vmModificar)
+            {
+                Owner = Window.GetWindow(this)
+            };
 
-            await _mvArticulo.CargarArticuloSeleccionadoAsync();
-
-
-            _dialogoModificarArticulo.panelDatos.Visibility = Visibility.Visible;
-
-            _dialogoModificarArticulo.ShowDialog();
+            dialogo.ShowDialog();
         }
-
-
     }
 }

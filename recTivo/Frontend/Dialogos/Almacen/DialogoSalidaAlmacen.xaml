@@ -63,9 +63,8 @@
 
                         <StackPanel Grid.Column="0" Margin="10,0,10,0">
                             <TextBlock Text="Código del artículo:" Foreground="#FF9800"/>
-                            <ComboBox ItemsSource="{Binding CodigosFiltrados}"
-                                      SelectedItem="{Binding CodigoSeleccionado, Mode=TwoWay, 
-                                      UpdateSourceTrigger=PropertyChanged}"
+                            <ComboBox ItemsSource="{Binding CodigosLista}"
+                                      SelectedItem="{Binding FiltroCodigo, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                       IsEditable="True"
                                       Height="30"
                                       Margin="0,5"
@@ -73,9 +72,8 @@
                                       HorizontalAlignment="Left"/>
 
                             <TextBlock Text="Descripción 1:" Foreground="#FF9800"/>
-                            <ComboBox ItemsSource="{Binding Descrip1Filtradas}"
-                                      SelectedItem="{Binding Descrip1Seleccionada, Mode=TwoWay, 
-                                      UpdateSourceTrigger=PropertyChanged}"
+                            <ComboBox ItemsSource="{Binding DescripcionesLista}"
+                                      SelectedItem="{Binding FiltroDescripcion, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                       IsEditable="True"
                                       Height="30"
                                       Margin="0,5"
@@ -83,20 +81,20 @@
                                       HorizontalAlignment="Left"/>
 
                             <TextBlock Text="Descripción 2:" Foreground="#FF9800"/>
-                            <ComboBox ItemsSource="{Binding Descrip2Filtradas}"
-                                      SelectedItem="{Binding Descrip2Seleccionada, Mode=TwoWay, 
-                                      UpdateSourceTrigger=PropertyChanged}"
-                                      IsEditable="True"
-                                      Height="30"
+                            <ComboBox ItemsSource="{Binding Descripciones2Lista}"
+                                      SelectedItem="{Binding FiltroDescripcion2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                      IsEditable="True" 
+                                      Height="30"   
                                       Margin="0,5"
                                       Width="180"
                                       HorizontalAlignment="Left"/>
+
                             <TextBlock Text="Cantidad:" Foreground="#FF9800"/>
-                            <TextBox x:Name="txtCantidad"
-                                     Height="30"
-                                     Margin="0,5"
-                                     Width="180"
-                                     HorizontalAlignment="Left"/>
+                            <TextBox Text="{Binding Cantidad, Mode=TwoWay}"
+             Height="30"
+             Margin="0,5"
+             Width="180"
+             HorizontalAlignment="Left"/>
                         </StackPanel>
 
                         <StackPanel Grid.Column="1" Margin="20,0,0,0">                           
