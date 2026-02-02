@@ -99,8 +99,7 @@
                     Background="#E0E0E0"
                     Foreground="#FF5722"
                     FontWeight="Bold"
-                    Click="btnLimpiarFiltros_Click"
-/>
+                    Click="btnLimpiarFiltros_Click"/>
         </StackPanel>
 
         <!-- DATAGRID -->

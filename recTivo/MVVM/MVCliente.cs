@@ -17,8 +17,8 @@ namespace recTivo.MVVM
         public ListCollectionView ClientesView { get; private set; }
 
         public MVCliente(
-            ClienteRepository clienteRepository, 
-            RectivoContext context, 
+            ClienteRepository clienteRepository,
+            RectivoContext context,
             ArticuloRepository articuloRepository)
         {
             _clienteRepository = clienteRepository;
@@ -119,6 +119,17 @@ namespace recTivo.MVVM
                 ClientesView.Refresh();
             }
         }
+        private string _DNI;
+        public string DNI
+        {
+            get => _DNI;
+            set
+            {
+                SetProperty(ref _DNI, value);
+                ClientesView.Refresh();
+            }
+        }
+
 
         private string _usuario;
         public string Usuario
@@ -193,8 +204,8 @@ namespace recTivo.MVVM
             if (obj is not Cliente cliente)
                 return false;
 
-            bool coincideNombre = 
-                string.IsNullOrWhiteSpace (FiltroNombre) ||
+            bool coincideNombre =
+                string.IsNullOrWhiteSpace(FiltroNombre) ||
                 (cliente.Nombre?.Contains(FiltroNombre, StringComparison.OrdinalIgnoreCase) ?? false);
 
             bool coincideApellido1 =
@@ -206,7 +217,7 @@ namespace recTivo.MVVM
                 (cliente.Apellido2?.Contains(FiltroApellido2, StringComparison.OrdinalIgnoreCase) ?? false);
 
             return coincideNombre && coincideApellido1 && coincideApellido2;
-        
+
         }
 
         // ============================================================
@@ -301,11 +312,11 @@ namespace recTivo.MVVM
             return true;
         }
 
-        private int _totalClientes; 
-        public int TotalClientes 
-        { 
-            get => _totalClientes; 
-            set => SetProperty(ref _totalClientes, value); 
+        private int _totalClientes;
+        public int TotalClientes
+        {
+            get => _totalClientes;
+            set => SetProperty(ref _totalClientes, value);
         }
 
         // ============================================================
@@ -332,5 +343,18 @@ namespace recTivo.MVVM
             OnPropertyChanged(nameof(Password));
             OnPropertyChanged(nameof(ClienteSeleccionado));
         }
+        // -----------------------------
+        // LISTAS FILTRADAS PARA COMBOBOX
+        // -----------------------------
+
+        private List<string> _listaNombresFiltrados;
+        public List<string> ListaNombresFiltrados
+        {
+            get => _listaNombresFiltrados;
+            set => SetProperty(ref _listaNombresFiltrados, value);
+
+        }
+
+
     }
 }

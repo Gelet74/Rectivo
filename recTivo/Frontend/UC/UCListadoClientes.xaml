@@ -59,7 +59,7 @@
             <!-- FILTRO NOMBRE -->
             <StackPanel Margin="10,0">
                 <TextBlock Text="Nombre" Foreground="#FF9800"/>
-                <ComboBox ItemsSource="{Binding NombresLista}"
+                <ComboBox ItemsSource="{Binding NombreLista}"
                           Text="{Binding FiltroNombre, UpdateSourceTrigger=PropertyChanged}"
                           IsEditable="True"
                           Height="30"
@@ -67,10 +67,58 @@
                           Width="150"/>
             </StackPanel>
 
+            <!-- FILTRO APELLIDO -->
+            <StackPanel Margin="10,0">
+                <TextBlock Text="Apellido 1" Foreground="#FF9800"/>
+                <ComboBox ItemsSource="{Binding Apellido1Lista}"
+                          Text="{Binding FiltroApellido1, UpdateSourceTrigger=PropertyChanged}"
+                          IsEditable="True"
+                          Height="30"
+                          Margin="0,5"
+                          Width="150"/>    
+            </StackPanel>
+
+            <!-- FILTRO APELLIDO 2-->
+            <StackPanel Margin="10,0">
+                <TextBlock Text="Apellido 2" Foreground="#FF9800"/>
+                <ComboBox ItemsSource="{Binding Apellido2Lista}"
+               Text="{Binding FiltroApellido2, UpdateSourceTrigger=PropertyChanged}"
+               IsEditable="True"
+               Height="30"
+               Margin="0,5"
+               Width="150"/>
+            </StackPanel>
+
+            <!-- BOTÓN LIMPIAR -->
+            <Button Content="Limpiar filtros"
+                    Width="150"
+                    Height="30"
+                    Margin="10,15,0,0"
+                    BorderBrush="#FF5722"
+                    Background="#E0E0E0"
+                    Foreground="#FF5722"
+                    FontWeight="Bold"
+                    Click="btnLimpiarFiltros_Click"/>
 
 
         </StackPanel>
         <Grid>
+            <DataGrid ItemsSource="{Binding ClientesView}"
+                      AutoGenerateColumns="False"
+                      CanUserAddRows="False"
+                      Margin="20"
+                      IsReadOnly="True">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="NOMBRE" 
+                                        Binding="{Binding Nombre}" Width="*"/>
+                    <DataGridTextColumn Header="APELLIDO" 
+                                        Binding="{Binding Apellido1}" Width="*"/>
+                    <DataGridTextColumn Header="APELLIDO 2" 
+                                        Binding="{Binding Apellido2}" Width="*"/>
+                    <DataGridTextColumn Header="DNI" 
+                                        Binding="{Binding Dni}" Width="*"/>
+                </DataGrid.Columns>
+            </DataGrid>
 
         </Grid>
     </DockPanel>
