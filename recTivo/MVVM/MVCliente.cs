@@ -234,7 +234,8 @@ namespace recTivo.MVVM
                 Dni = Dni,
                 Telefono = Telefono,
                 Usuario = Usuario,
-                Password = Password
+                Password = BCrypt.Net.BCrypt.HashPassword(Password)
+
             };
 
             await _clienteRepository.AddAsync(cliente);
@@ -304,13 +305,18 @@ namespace recTivo.MVVM
             ClienteSeleccionado.Dni = Dni;
             ClienteSeleccionado.Telefono = Telefono;
             ClienteSeleccionado.Usuario = Usuario;
-            ClienteSeleccionado.Password = Password;
+
+            if (Password != ClienteSeleccionado.Password)
+            {
+                ClienteSeleccionado.Password = BCrypt.Net.BCrypt.HashPassword(Password);
+            }
 
             await _clienteRepository.UpdateAsync(ClienteSeleccionado);
             await Inicializa();
 
             return true;
         }
+
 
         private int _totalClientes;
         public int TotalClientes
