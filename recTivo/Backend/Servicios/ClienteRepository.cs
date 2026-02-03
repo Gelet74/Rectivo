@@ -1,4 +1,4 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using recTivo.Backend.Modelos;
 
 namespace recTivo.Backend.Repos;
@@ -24,4 +24,6 @@ public class ClienteRepository : GenericRepository<Cliente>, IClienteRepository
     public async Task<Cliente?> LoginAsync(string usuario, string password)
         => await _dbSet.FirstOrDefaultAsync(c =>
             c.Usuario == usuario && c.Password == password);
+
+
 }

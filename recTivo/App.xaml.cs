@@ -100,15 +100,15 @@ namespace recTivo
 
         }
 
-        protected override void OnStartup(StartupEventArgs e)
+        protected override async void OnStartup(StartupEventArgs e)
         {
-            ShutdownMode = ShutdownMode.OnExplicitShutdown;
-
-            var inicioWindow = _serviceProvider.GetService<Inicio>();
-            inicioWindow.Show();
-
             base.OnStartup(e);
+
+            var login = _serviceProvider.GetRequiredService<Login>();
+            login.Show();
+
         }
+
 
     }
 }
