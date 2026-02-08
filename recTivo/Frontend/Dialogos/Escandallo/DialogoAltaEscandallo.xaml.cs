@@ -81,15 +81,6 @@ namespace recTivo.Frontend.Dialogos.Escandallo
         }
 
 
-   
-        // ================================
-        //   AÑADIR SUBCOMPONENTE
-        // ================================
-        private void BtnAñadirHijo_Click(object sender, RoutedEventArgs e)
-        {
-            _vm.AñadirSubcomponente();
-        }
-
         // ================================
         //   SELECCIÓN EN TREEVIEW
         // ================================
@@ -108,6 +99,15 @@ namespace recTivo.Frontend.Dialogos.Escandallo
         private async void BtnGuardar_Click(object sender, RoutedEventArgs e)
         {
             await _vm.GuardarEscandallo();
+        }
+
+
+        // ================================
+        //   AÑADIR SUBCOMPONENTE
+        // ================================
+        private async void BtnAñadirHijo_Click(object sender, RoutedEventArgs e)
+        {
+            await _vm.AñadirSubcomponente();
         }
     }
 }
