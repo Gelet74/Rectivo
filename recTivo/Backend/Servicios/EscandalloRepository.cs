@@ -86,6 +86,18 @@ namespace recTivo.Backend.Repos
             }
         }
 
+        public async Task DeleteComponenteAsync(int idComponente)
+        {
+            var componente = await _context.ComponenteEscandallos
+                .FirstOrDefaultAsync(c => c.IdComponente == idComponente);
+
+            if (componente != null)
+            {
+                _context.ComponenteEscandallos.Remove(componente);
+                await _context.SaveChangesAsync();
+            }
+        }
+
         /// <summary>
         /// Elimina un escandallo por su ID
         /// </summary>

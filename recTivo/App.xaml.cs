@@ -106,9 +106,6 @@ namespace recTivo
 
             var login = _serviceProvider.GetRequiredService<Login>();
             login.Show();
-
         }
-
-
     }
 }

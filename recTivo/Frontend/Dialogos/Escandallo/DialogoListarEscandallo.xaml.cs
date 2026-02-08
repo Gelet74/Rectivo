@@ -35,7 +35,7 @@ namespace recTivo.Frontend.Dialogos.Escandallo
                 return;
             }
 
-            await _vm.CargarEscandalloAsync(codigo);
+            await _vm.CargarEscandallo(codigo);
         }
 
 

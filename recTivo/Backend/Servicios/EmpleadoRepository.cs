@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using recTivo.Backend.Modelos;
-using System.Threading.Tasks;
+using recTivo.Backend.Servicios;
 
 namespace recTivo.Backend.Repos;
 
@@ -26,19 +26,18 @@ public class EmpleadoRepository : GenericRepository<Empleado>
         if (empleado == null)
             return null;
 
-        // Comparación directa (texto plano)
-        if (empleado.Password == password)
+        if (PasswordService.Verify(password, empleado.Password))
             return empleado;
 
         return null;
     }
+
     public async Task<IEnumerable<Empleado>> GetAllAsync()
     {
         return await _context.Empleados
                              .Include(e => e.Rol)
                              .ToListAsync();
     }
-
     public async Task DeleteAsync(int id)
     {
         var empleado = await _dbSet.FindAsync(id);
