@@ -131,15 +131,15 @@
                     </StackPanel>
 
                     <!-- TREEVIEW DE JERARQUÍA -->
-                    <TextBlock Text="Estructura del escandallo"
-           Foreground="White"
-           Margin="0,10,0,5"/>
+                    <TextBlock Text="Estructura del escandallo:"
+                               Foreground="White"
+                               Margin="0,10,0,5"/>
 
                     <TreeView ItemsSource="{Binding EscandalloActual}"
-          SelectedItemChanged="TreeView_SelectedItemChanged"
-          Background="#E0E0E0"
-          Foreground="Black"
-          Height="350">
+                              SelectedItemChanged="TreeView_SelectedItemChanged"
+                              Background="#E0E0E0"
+                              Foreground="Black"
+                              Height="350">
 
                         <TreeView.ItemTemplate>
                             <HierarchicalDataTemplate DataType="{x:Type modelos:ComponenteEscandallo}"
@@ -147,34 +147,32 @@
                                 <StackPanel Orientation="Vertical" Margin="2">
                                     <StackPanel Orientation="Horizontal">
                                         <TextBlock Text="{Binding CodigoArticulo}" 
-                               FontWeight="Bold" 
-                               Margin="5,0"/>
+                                                   FontWeight="Bold" 
+                                                   Margin="5,0"/>
                                         <TextBlock Text=" | Cant: " />
                                         <TextBlock Text="{Binding Cantidad}" />
                                     </StackPanel>
                                     <TextBlock Text="{Binding Descripcion}" 
-                           Margin="5,2,0,0"
-                           FontSize="11"
-                           Foreground="#555555"/>
+                                               Margin="5,2,0,0"
+                                               FontSize="11"
+                                               Foreground="#555555"/>
                                     <TextBlock Text="{Binding Descripcion2}" 
-                           Margin="5,0,0,2"
-                           FontSize="11"
-                           Foreground="#777777"/>
+                                               Margin="5,0,0,2"
+                                               FontSize="11"
+                                               Foreground="#555555"/>
                                 </StackPanel>
                             </HierarchicalDataTemplate>
                         </TreeView.ItemTemplate>
-
                     </TreeView>
 
                     <!-- GUARDAR -->
                     <Button Content="Guardar Escandallo"
                             Click="BtnGuardar_Click"
                             HorizontalAlignment="Right"
-                            Width="200"
-                            Margin="0,20,0,0"/>
+                            Width="160"
+                            Margin="0,25,20,0"/>
 
                 </StackPanel>
-
             </DockPanel>
         </Border>
     </Grid>

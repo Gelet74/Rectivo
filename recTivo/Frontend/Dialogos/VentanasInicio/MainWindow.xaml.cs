@@ -10,6 +10,7 @@ using recTivo.Frontend.Dialogos.Ordenes;
 using recTivo.Frontend.Dialogos.VentanasInicio;
 using recTivo.Frontend.Dialogos.Ventas;
 using recTivo.Frontend.UC;
+using recTivo.MVVM;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
@@ -149,8 +150,13 @@ namespace recTivo
             switch (item.Content.ToString())
             {
                 case "Dar de alta":
-                    _serviceProvider.GetService<DialogoAltaCliente>()?.ShowDialog();
-                    break;
+                    {
+                        var vm = _serviceProvider.GetRequiredService<MVCliente>();
+                        var dialogo = new DialogoAltaCliente(vm);
+                        dialogo.ShowDialog();
+                        break;
+                    }
+
                 case "Modificar":
                     _serviceProvider.GetService<DialogoModificarCliente>()?.ShowDialog();
                     break;

@@ -2,6 +2,7 @@
 using recTivo.Backend.Modelos;
 using recTivo.Backend.Repos;
 using recTivo.MVVM.Base;
+using System.Collections.ObjectModel;
 using System.Windows.Data;
 
 namespace recTivo.MVVM
@@ -30,12 +31,13 @@ namespace recTivo.MVVM
         // LISTADO
         // ============================================================
 
-        private List<Cliente> _listaClientes;
-        public List<Cliente> ListaClientes
+        private ObservableCollection<Cliente> _listaClientes;
+        public ObservableCollection<Cliente> ListaClientes
         {
             get => _listaClientes;
             set => SetProperty(ref _listaClientes, value);
         }
+
 
         // ============================================================
         // SELECCIÓN
@@ -175,10 +177,13 @@ namespace recTivo.MVVM
         {
             try
             {
-                ListaClientes = (await _clienteRepository.GetAllAsync())
-                    .OrderBy(c => c.Apellido1)
-                    .ToList();
+                ListaClientes = new ObservableCollection<Cliente>(
+                (await _clienteRepository.GetAllAsync())
+                .OrderBy(c => c.Apellido1)
+            );
+
                 ClientesView = new ListCollectionView(ListaClientes);
+
                 ClientesView.Filter = FiltarClientes;
 
                 OnPropertyChanged(nameof(ClientesView));
@@ -235,32 +240,19 @@ namespace recTivo.MVVM
                 Telefono = Telefono,
                 Usuario = Usuario,
                 Password = BCrypt.Net.BCrypt.HashPassword(Password)
-
             };
 
             await _clienteRepository.AddAsync(cliente);
-            await Inicializa();
+
+            ListaClientes.Add(cliente);
+
+            ClientesView.Refresh();
+
             LimpiarCampos();
             return true;
         }
 
-        // ============================================================
-        // BAJA
-        // ============================================================
 
-        public async Task<bool> EliminarAsync(int idCliente)
-        {
-            try
-            {
-                await _clienteRepository.DeleteAsync(idCliente);
-                await Inicializa();
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
-        }
 
         // ============================================================
         // CARGAR CLIENTE SELECCIONADO

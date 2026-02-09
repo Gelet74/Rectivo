@@ -37,7 +37,7 @@ namespace recTivo
             services.AddLogging(configure => configure.AddConsole());
             services.AddTransient<MVArticulo>();
             services.AddTransient<MVEmpleado>();
-            services.AddTransient<MVCliente>();
+            services.AddSingleton<MVCliente>();
             services.AddTransient<MVEscandallo>(provider =>
             {
                 return new MVEscandallo(

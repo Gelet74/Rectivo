@@ -29,8 +29,8 @@ namespace recTivo.Frontend.UC
 
             Loaded += async (_, __) =>
             {
-                await _mvCliente.Inicializa();
                 DataContext = _mvCliente;
+                await _mvCliente.Inicializa();                
 
                 Focusable = true;
                 Focus();

@@ -510,45 +510,130 @@ namespace recTivo.MVVM
         }
 
         // ============================================================
-        //   CARGAR ESCANDALLO CON RECARGA AUTOMÁTICA
+        //   MÉTODO TEMPORAL DE DEBUG
+        // ============================================================
+
+        public async Task TestBuscarEscandallo()
+        {
+            try
+            {
+                System.Diagnostics.Debug.WriteLine("========== TEST BÚSQUEDA ESCANDALLO ==========");
+
+                // 1. Ver TODOS los escandallos que existen
+                var todos = await _escandalloRepository.GetAllAsync();
+                System.Diagnostics.Debug.WriteLine($"\n→ Total de escandallos en BD: {todos.Count()}");
+
+                foreach (var e in todos)
+                {
+                    System.Diagnostics.Debug.WriteLine($"   ID: {e.IdEscandallo} | Código: '{e.CodigoProducto}' | Nombre: {e.NombreProducto}");
+                }
+
+                // 2. Buscar específicamente PS3510BB
+                System.Diagnostics.Debug.WriteLine("\n→ Buscando 'PS3510BB'...");
+                var escPS3510BB = await _escandalloRepository.GetByCodigoProductoAsync("PS3510BB");
+
+                if (escPS3510BB != null)
+                {
+                    System.Diagnostics.Debug.WriteLine($"   ✓ ENCONTRADO: ID={escPS3510BB.IdEscandallo}");
+
+                    var componentes = await _escandalloRepository.GetComponentesByEscandalloAsync(escPS3510BB.IdEscandallo);
+                    System.Diagnostics.Debug.WriteLine($"   ✓ Componentes: {componentes.Count}");
+
+                    foreach (var comp in componentes)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"      - {comp.CodigoArticulo} | Cant: {comp.Cantidad} | Padre: {comp.CodigoComponentePadre ?? "NULL"}");
+                    }
+                }
+                else
+                {
+                    System.Diagnostics.Debug.WriteLine("   ✗ NO ENCONTRADO");
+                }
+
+                // 3. Buscar con variaciones
+                System.Diagnostics.Debug.WriteLine("\n→ Probando variaciones...");
+
+                var variaciones = new[] { "PS3510BB", "ps3510bb", "PS3510BB ", " PS3510BB" };
+
+                foreach (var variacion in variaciones)
+                {
+                    var resultado = await _escandalloRepository.GetByCodigoProductoAsync(variacion);
+                    System.Diagnostics.Debug.WriteLine($"   '{variacion}' (len={variacion.Length}): {(resultado != null ? "✓ ENCONTRADO" : "✗ NO")}");
+                }
+
+                System.Diagnostics.Debug.WriteLine("==============================================\n");
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"ERROR en test: {ex.Message}");
+            }
+        }
+
+        // ============================================================
+        //   CARGAR ESCANDALLO PARA LISTAR
         // ============================================================
 
         public async Task CargarEscandallo(string codigo)
         {
             try
             {
+                codigo = codigo?.Trim();
                 if (string.IsNullOrWhiteSpace(codigo))
                 {
-                    MensajeError.Mostrar("ESCANDALLO", "Debes introducir un código.");
+                    MensajeError.Mostrar("ESCANDALLO", "Debes seleccionar un código válido.");
                     return;
                 }
 
-                var esc = await _escandalloRepository.Query()
-                    .FirstOrDefaultAsync(e => e.CodigoProducto == codigo);
+                EscandalloActual.Clear();
 
-                if (esc == null)
+                System.Diagnostics.Debug.WriteLine($"→ Buscando escandallo para código: '{codigo}'");
+
+                EscandalloActual.Clear();
+
+                // Buscar el escandallo por código de producto
+                var escandallo = await _escandalloRepository.GetByCodigoProductoAsync(codigo);
+
+                if (escandallo == null)
                 {
-                    MensajeError.Mostrar("ESCANDALLO", $"No existe escandallo para '{codigo}'.");
+                    System.Diagnostics.Debug.WriteLine($"→ NO SE ENCONTRÓ escandallo para '{codigo}'");
+
+                    // ✅ DEBUG: Ver todos los escandallos que existen
+                    var todos = await _escandalloRepository.GetAllAsync();
+                    System.Diagnostics.Debug.WriteLine($"→ Escandallos en BD:");
+                    foreach (var e in todos)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"   - '{e.CodigoProducto}' (ID: {e.IdEscandallo})");
+                    }
+
+                    MensajeInformacion.Mostrar("ESCANDALLO",
+                        $"No existe escandallo para el artículo '{codigo}'.");
                     return;
                 }
 
-                ArticuloFinal = await _articuloRepository.GetByCodigoAsync(esc.CodigoProducto);
-                OnPropertyChanged(nameof(ArticuloFinal));
-                OnPropertyChanged(nameof(DescripcionFinal));
-                OnPropertyChanged(nameof(Descripcion2Final));
+                System.Diagnostics.Debug.WriteLine($"→ Escandallo encontrado: ID={escandallo.IdEscandallo}, Codigo={escandallo.CodigoProducto}");
 
-                DescripcionArticulo = $"{ArticuloFinal.Descrip} - {ArticuloFinal.Descrip2}";
+                // Obtener todos los componentes del escandallo
+                var componentes = await _escandalloRepository
+                    .GetComponentesByEscandalloAsync(escandallo.IdEscandallo);
 
-                var componentes = await _escandalloRepository.GetComponentesByEscandalloAsync(esc.IdEscandallo);
+                System.Diagnostics.Debug.WriteLine($"→ Componentes encontrados: {componentes?.Count ?? 0}");
 
+                if (componentes == null || !componentes.Any())
+                {
+                    MensajeInformacion.Mostrar("ESCANDALLO",
+                        $"El escandallo de '{codigo}' no tiene componentes.");
+                    return;
+                }
+
+                // Construir la jerarquía para el TreeView
                 ConstruirJerarquiaParaListar(componentes);
-
-                // NUEVO: Recargar automáticamente los escandallos de los componentes
-                await RecargarEscandallosDeComponentesSilencioso();
             }
             catch (Exception ex)
             {
-                MensajeError.Mostrar("ESCANDALLO", $"Error al cargar escandallo:\n{ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"→ ERROR: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"→ StackTrace: {ex.StackTrace}");
+
+                MensajeError.Mostrar("ERROR",
+                    $"Error al cargar escandallo:\n{ex.Message}");
             }
         }
 
