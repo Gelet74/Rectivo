@@ -2,7 +2,10 @@
 using recTivo.Backend.Modelos;
 using recTivo.Frontend.Dialogos.VentanasInicio;
 using recTivo.MVVM;
+using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 
 namespace recTivo.Frontend.Dialogos.Escandallo
@@ -17,8 +20,15 @@ namespace recTivo.Frontend.Dialogos.Escandallo
             _vm = vm;
             DataContext = _vm;
 
-            Loaded += async (_, __) => await _vm.Inicializa();
+            this.IsEnabled = false;
+
+            Loaded += async (_, __) =>
+            {
+                await _vm.Inicializa();
+                this.IsEnabled = true;
+            };
         }
+
 
         // ================================
         //   MANEJO DE ESCAPE
@@ -70,6 +80,12 @@ namespace recTivo.Frontend.Dialogos.Escandallo
         // ================================
         private async void BtnCargarEscandallo_Click(object sender, RoutedEventArgs e)
         {
+            var comboBox = this.FindName("cmbArticuloFinal") as ComboBox;
+            if (comboBox != null)
+            {
+                var binding = BindingOperations.GetBindingExpression(comboBox, ComboBox.SelectedItemProperty);
+                binding?.UpdateSource();
+            }
             var articulo = _vm.ArticuloFinal;
             if (articulo == null)
             {
@@ -101,13 +117,9 @@ namespace recTivo.Frontend.Dialogos.Escandallo
             await _vm.GuardarEscandallo();
         }
 
-
-        // ================================
-        //   AÑADIR SUBCOMPONENTE
-        // ================================
-        private async void BtnAñadirHijo_Click(object sender, RoutedEventArgs e)
+        private async void BtnLimpiar_Click(object sender, RoutedEventArgs e)
         {
-            await _vm.AñadirSubcomponente();
+            await _vm.LimpiarCampos();
         }
     }
 }

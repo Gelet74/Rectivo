@@ -70,17 +70,25 @@
                                    Foreground="White"
                                    Margin="0,0,0,5"/>
 
-                        <ComboBox ItemsSource="{Binding ArticulosPT}"
-                                  SelectedItem="{Binding ArticuloFinal}"
+                        <ComboBox x:Name="cmbArticuloFinal"
+                                  ItemsSource="{Binding ArticulosFiltrados}"
+                                  SelectedItem="{Binding ArticuloFinal, Mode=TwoWay, 
+                                                UpdateSourceTrigger=PropertyChanged}"
                                   DisplayMemberPath="Codigo"
                                   HorizontalAlignment="Left"
-                                  Width="200"/>
+                                  Width="200"/> 
 
                         <Button Content="Cargar Escandallo"
-                                Width="200"
-                                Margin="0,-25,0,0"
+                                Width="150"
+                                Margin="0,-25,80,0"
                                 VerticalAlignment="Top"
                                 Click="BtnCargarEscandallo_Click"/>
+                        
+                        <Button Content="Limpiar"
+                                Width="80"
+                                Margin="300,-28,0,0"
+                                VerticalAlignment="Top"
+                                Click="BtnLimpiar_Click"/>
 
                         <TextBlock Text="{Binding DescripcionFinal}"
                                    Foreground="White"
@@ -108,13 +116,8 @@
                                      Margin="0,3,0,0"/>
                         </StackPanel>
 
-                        <Button Content="Añadir raíz"
+                        <Button Content="Añadir Artículo"
                                 Click="BtnAñadir_Click"
-                                Margin="10,0,0,0"
-                                VerticalAlignment="Bottom"/>
-
-                        <Button Content="Añadir como hijo"
-                                Click="BtnAñadirHijo_Click"
                                 Margin="10,0,0,0"
                                 VerticalAlignment="Bottom"/>
                     </StackPanel>
