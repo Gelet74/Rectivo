@@ -59,8 +59,8 @@ namespace recTivo.MVVM
 
         public List<string> CodigosArticulos { get; set; }
 
-        public string DescripcionFinal => ArticuloFinal?.Descrip ?? "";
-        public string Descripcion2Final => ArticuloFinal?.Descrip2 ?? "";
+        public string DescripcionFinal => ArticuloFinal?.descrip ?? "";
+        public string Descripcion2Final => ArticuloFinal?.descrip2 ?? "";
         public string DescripcionArticulo { get; set; }
 
         private Articulo _articuloFinal;
@@ -98,8 +98,8 @@ namespace recTivo.MVVM
             }
         }
 
-        public string DescripcionComponente => ArticuloComponenteSeleccionado?.Descrip ?? "";
-        public string Descripcion2Componente => ArticuloComponenteSeleccionado?.Descrip2 ?? "";
+        public string DescripcionComponente => ArticuloComponenteSeleccionado?.descrip ?? "";
+        public string Descripcion2Componente => ArticuloComponenteSeleccionado?.descrip2 ?? "";
 
         // ============================================================
         //   PROPIEDADES EXISTENTES
@@ -246,8 +246,8 @@ namespace recTivo.MVVM
             {
                 CodigoArticulo = ComponenteNuevo.CodigoArticulo,
                 Cantidad = ComponenteNuevo.Cantidad,
-                Descripcion = articulo?.Descrip ?? "",
-                Descripcion2 = articulo?.Descrip2 ?? "",
+                Descripcion = articulo?.descrip ?? "",
+                Descripcion2 = articulo?.descrip2 ?? "",
                 PrecioUnitario = articulo?.PrecioCompra ?? 0,
                 CodigoComponentePadre = null,
                 Hijos = new ObservableCollection<ComponenteEscandallo>()
@@ -400,8 +400,8 @@ namespace recTivo.MVVM
                 var nuevoEsc = new Escandallo
                 {
                     CodigoProducto = ArticuloFinal.Codigo,
-                    NombreProducto = ArticuloFinal.Descrip,
-                    Descripcion2 = ArticuloFinal.Descrip2
+                    Descrip = ArticuloFinal.descrip,
+                    Descrip2 = ArticuloFinal.descrip2
                 };
 
                 await _escandalloRepository.AddAsync(nuevoEsc);
@@ -447,8 +447,8 @@ namespace recTivo.MVVM
                 articulo = new Articulo
                 {
                     Codigo = comp.CodigoArticulo,
-                    Descrip = comp.Descripcion ?? "SIN DESCRIPCIÓN",
-                    Descrip2 = comp.Descripcion2,
+                    descrip = comp.Descripcion ?? "SIN DESCRIPCIÓN",
+                    descrip2 = comp.Descripcion2,
                     PrecioCompra = comp.PrecioUnitario ?? 0
                 };
             }
@@ -465,8 +465,8 @@ namespace recTivo.MVVM
             {
                 IdEscandallo = idEscandallo,
                 CodigoArticulo = articulo.Codigo,
-                Descripcion = articulo.Descrip ?? "SIN DESCRIPCIÓN",
-                Descripcion2 = articulo.Descrip2,
+                Descripcion = articulo.descrip ?? "SIN DESCRIPCIÓN",
+                Descripcion2 = articulo.descrip2,
                 Cantidad = cantidad,
                 PrecioUnitario = articulo.PrecioCompra ?? 0,
                 CodigoComponentePadre = codigoPadre,
@@ -500,7 +500,7 @@ namespace recTivo.MVVM
 
                 foreach (var e in todos)
                 {
-                    Debug.WriteLine($"   ID: {e.IdEscandallo} | Código: '{e.CodigoProducto}' | Nombre: {e.NombreProducto}");
+                    Debug.WriteLine($"   ID: {e.IdEscandallo} | Código: '{e.CodigoProducto}' | Nombre: {e.Descrip}");
                 }
 
                 Debug.WriteLine("\n→ Buscando 'PS3510BB'...");
@@ -577,7 +577,7 @@ namespace recTivo.MVVM
                 OnPropertyChanged(nameof(DescripcionFinal));
                 OnPropertyChanged(nameof(Descripcion2Final));
 
-                DescripcionArticulo = $"{ArticuloFinal.Descrip} - {ArticuloFinal.Descrip2}";
+                DescripcionArticulo = $"{ArticuloFinal.descrip} - {ArticuloFinal.descrip2}";
 
                 var componentes = await _escandalloRepository
                     .GetComponentesByEscandalloAsync(escandallo.IdEscandallo);
@@ -615,7 +615,6 @@ namespace recTivo.MVVM
 
             Debug.WriteLine($"→ Recargando escandallos de componentes...");
 
-            // ✅ Recargar ANTES de agregar a la colección
             foreach (var raiz in raices)
             {
                 Debug.WriteLine($"   → Intentando recargar: {raiz.CodigoArticulo}");
@@ -625,7 +624,6 @@ namespace recTivo.MVVM
 
             Debug.WriteLine("   → Recarga completada");
 
-            // ✅ AHORA SÍ limpiar y agregar todo de una vez
             EscandalloActual.Clear();
 
             foreach (var raiz in raices)
@@ -638,38 +636,7 @@ namespace recTivo.MVVM
             Debug.WriteLine($"→ EscandalloActual.Count = {EscandalloActual.Count}");
         }
 
-        // ============================================================
-        //   RECARGAR ESCANDALLOS SILENCIOSO
-        // ============================================================
-
-        private async Task RecargarEscandallosDeComponentesSilencioso()
-        {
-            try
-            {
-                if (EscandalloActual.Count == 0)
-                {
-                    Debug.WriteLine("   → No hay componentes en EscandalloActual");
-                    return;
-                }
-
-                Debug.WriteLine($"   → Procesando {EscandalloActual.Count} componentes raíz");
-
-                foreach (var componente in EscandalloActual)
-                {
-                    Debug.WriteLine($"   → Intentando recargar: {componente.CodigoArticulo}");
-                    var recargado = await RecargarEscandalloRecursivo(componente);
-                    Debug.WriteLine($"   → {componente.CodigoArticulo} recargado: {recargado}");
-                }
-
-                OnPropertyChanged(nameof(EscandalloActual));
-                Debug.WriteLine("   → Recarga silenciosa completada");
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"   → Error al recargar escandallos: {ex.Message}");
-            }
-        }
-
+        
         // ============================================================
         //   RECARGAR ESCANDALLO RECURSIVO
         // ============================================================

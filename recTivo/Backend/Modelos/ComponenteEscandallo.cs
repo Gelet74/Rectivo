@@ -11,9 +11,9 @@ namespace recTivo.Backend.Modelos
 
         // Código del artículo componente (clave real)
         public string CodigoArticulo { get; set; }
-
+        [NotMapped]
         public string Descripcion { get; set; }
-
+        [NotMapped]
         [Column("Descrip2")]
         public string? Descripcion2 { get; set; }
 

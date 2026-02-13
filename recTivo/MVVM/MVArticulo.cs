@@ -149,8 +149,8 @@ namespace recTivo.MVVM
                     var articulo = articulosFiltrados.First();
 
                     // Evitar bucle infinito
-                    _filtroDescripcion = articulo.Descrip;
-                    _filtroDescripcion2 = articulo.Descrip2;
+                    _filtroDescripcion = articulo.descrip;
+                    _filtroDescripcion2 = articulo.descrip2;
 
                     OnPropertyChanged(nameof(FiltroDescripcion));
                     OnPropertyChanged(nameof(FiltroDescripcion2));
@@ -169,10 +169,10 @@ namespace recTivo.MVVM
             var query = ListaArticulos.AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(FiltroDescripcion))
-                query = query.Where(a => a.Descrip == FiltroDescripcion);
+                query = query.Where(a => a.descrip == FiltroDescripcion);
 
             if (!string.IsNullOrWhiteSpace(FiltroDescripcion2))
-                query = query.Where(a => a.Descrip2 == FiltroDescripcion2);
+                query = query.Where(a => a.descrip2 == FiltroDescripcion2);
 
             if (!string.IsNullOrWhiteSpace(FiltroCodigo))
                 query = query.Where(a => a.Codigo == FiltroCodigo);
@@ -184,7 +184,7 @@ namespace recTivo.MVVM
                 var articulo = articulosFiltrados.First();
 
                 _filtroCodigo = articulo.Codigo;
-                _filtroDescripcion2 = articulo.Descrip2;
+                _filtroDescripcion2 = articulo.descrip2;
 
                 OnPropertyChanged(nameof(FiltroCodigo));
                 OnPropertyChanged(nameof(FiltroDescripcion2));
@@ -202,10 +202,10 @@ namespace recTivo.MVVM
             var query = ListaArticulos.AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(FiltroDescripcion2))
-                query = query.Where(a => a.Descrip2 == FiltroDescripcion2);
+                query = query.Where(a => a.descrip2 == FiltroDescripcion2);
 
             if (!string.IsNullOrWhiteSpace(FiltroDescripcion))
-                query = query.Where(a => a.Descrip == FiltroDescripcion);
+                query = query.Where(a => a.descrip == FiltroDescripcion);
 
             if (!string.IsNullOrWhiteSpace(FiltroCodigo))
                 query = query.Where(a => a.Codigo == FiltroCodigo);
@@ -217,7 +217,7 @@ namespace recTivo.MVVM
                 var articulo = articulosFiltrados.First();
 
                 _filtroCodigo = articulo.Codigo;
-                _filtroDescripcion = articulo.Descrip;
+                _filtroDescripcion = articulo.descrip;
 
                 OnPropertyChanged(nameof(FiltroCodigo));
                 OnPropertyChanged(nameof(FiltroDescripcion));
@@ -238,14 +238,14 @@ namespace recTivo.MVVM
                 .ToList();
 
             DescripcionesLista = articulosFiltrados
-                .Select(a => a.Descrip)
+                .Select(a => a.descrip)
                 .Where(d => !string.IsNullOrWhiteSpace(d))
                 .Distinct()
                 .OrderBy(d => d)
                 .ToList();
 
             Descripciones2Lista = articulosFiltrados
-                .Select(a => a.Descrip2)
+                .Select(a => a.descrip2)
                 .Where(d => !string.IsNullOrWhiteSpace(d))
                 .Distinct()
                 .OrderBy(d => d)
@@ -264,14 +264,14 @@ namespace recTivo.MVVM
                 .ToList();
 
             DescripcionesLista = ListaArticulos
-                .Select(a => a.Descrip)
+                .Select(a => a.descrip)
                 .Where(d => !string.IsNullOrWhiteSpace(d))
                 .Distinct()
                 .OrderBy(d => d)
                 .ToList();
 
             Descripciones2Lista = ListaArticulos
-                .Select(a => a.Descrip2)
+                .Select(a => a.descrip2)
                 .Where(d => !string.IsNullOrWhiteSpace(d))
                 .Distinct()
                 .OrderBy(d => d)
@@ -293,11 +293,11 @@ namespace recTivo.MVVM
 
             bool coincideDescrip =
                 string.IsNullOrWhiteSpace(FiltroDescripcion) ||
-                (art.Descrip?.Contains(FiltroDescripcion, StringComparison.OrdinalIgnoreCase) ?? false);
+                (art.descrip?.Contains(FiltroDescripcion, StringComparison.OrdinalIgnoreCase) ?? false);
 
             bool coincideDescrip2 =
                 string.IsNullOrWhiteSpace(FiltroDescripcion2) ||
-                (art.Descrip2?.Contains(FiltroDescripcion2, StringComparison.OrdinalIgnoreCase) ?? false);
+                (art.descrip2?.Contains(FiltroDescripcion2, StringComparison.OrdinalIgnoreCase) ?? false);
 
             return coincideCodigo && coincideDescrip && coincideDescrip2;
         }
@@ -352,14 +352,14 @@ namespace recTivo.MVVM
 
         public string Descrip
         {
-            get => _articulo.Descrip;
-            set { _articulo.Descrip = value; OnPropertyChanged(); }
+            get => _articulo.descrip;
+            set { _articulo.descrip = value; OnPropertyChanged(); }
         }
 
         public string Descrip2
         {
-            get => _articulo.Descrip2;
-            set { _articulo.Descrip2 = value; OnPropertyChanged(); }
+            get => _articulo.descrip2;
+            set { _articulo.descrip2 = value; OnPropertyChanged(); }
         }
 
         public double? Pvp

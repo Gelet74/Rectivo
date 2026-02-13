@@ -97,13 +97,13 @@ namespace recTivo.Backend.Modelos
                       .HasMaxLength(10)
                       .IsRequired();
 
-                entity.Property(a => a.Descrip)
-                      .HasColumnName("descrip")
+                entity.Property(a => a.descrip)
+                      .HasColumnName("descripcion")
                       .HasMaxLength(50)
                       .IsRequired();
 
-                entity.Property(a => a.Descrip2)
-                      .HasColumnName("descrip2")
+                entity.Property(a => a.descrip2)
+                      .HasColumnName("descripcion2")
                       .HasMaxLength(50);
 
                 entity.Property(a => a.Stock)
@@ -218,8 +218,8 @@ namespace recTivo.Backend.Modelos
 
                 entity.Property(e => e.IdEscandallo).HasColumnName("IdEscandallo");
                 entity.Property(e => e.CodigoProducto).HasMaxLength(10).HasColumnName("CodigoProducto");
-                entity.Property(e => e.NombreProducto).HasMaxLength(50).HasColumnName("Descrip");
-                entity.Property(e => e.Descripcion2).HasMaxLength(50).HasColumnName("Descrip2");
+                entity.Property(e => e.Descrip).HasMaxLength(50).HasColumnName("Descrip");
+                entity.Property(e => e.Descrip2).HasMaxLength(50).HasColumnName("Descrip2");
             });
 
             // ===========================
@@ -234,8 +234,6 @@ namespace recTivo.Backend.Modelos
                 entity.Property(e => e.IdComponente).HasColumnName("IdComponente");
                 entity.Property(e => e.IdEscandallo).HasColumnName("IdEscandallo");
                 entity.Property(e => e.CodigoArticulo).HasMaxLength(10).HasColumnName("CodigoArticulo");
-                entity.Property(e => e.Descripcion).HasMaxLength(50).HasColumnName("Descrip");
-                entity.Property(e => e.Descripcion2).HasMaxLength(50).HasColumnName("Descrip2");
                 entity.Property(e => e.Cantidad).HasColumnName("Cantidad");
                 entity.Property(e => e.PrecioUnitario).HasColumnType("decimal(10,2)").HasColumnName("PrecioUnitario");
 
