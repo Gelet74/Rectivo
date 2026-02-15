@@ -55,8 +55,8 @@
                         <TextBlock Text="Selecciona código:" 
                                    HorizontalAlignment="Center"
                                    Foreground="#FF9800"/>
-                        <ComboBox ItemsSource="{Binding CodigosArticulos}"
-                                  SelectedItem="{Binding CodigoSeleccionado}"
+                        <ComboBox ItemsSource="{Binding CodigosLista}"
+                                  SelectedItem="{Binding FiltroCodigo, Mode=TwoWay}"
                                   HorizontalAlignment="Center"
                                   Width="180"
                                   Height="30"

@@ -9,11 +9,13 @@ namespace recTivo.Frontend.Dialogos
     {
         private bool _escapeEnCurso = false;
 
-        public DialogoEntradaAlmacen(MVArticulo vm)
+        public DialogoEntradaAlmacen(MVAlmacen vm)
         {
             InitializeComponent();
             DataContext = vm;
-            Loaded += async (_, _) => await vm.Inicializa();
+
+            // Inicializa los artículos desde MVArticulo
+            Loaded += async (_, _) => await vm.MVArticulo.Inicializa();
         }
 
         protected override void OnPreviewKeyDown(KeyEventArgs e)
@@ -50,7 +52,7 @@ namespace recTivo.Frontend.Dialogos
 
         private async void btnAnadirAlmacen_Click(object sender, RoutedEventArgs e)
         {
-            if (DataContext is MVArticulo vm)
+            if (DataContext is MVAlmacen vm)
                 await vm.AñadirAlmacen();
         }
     }

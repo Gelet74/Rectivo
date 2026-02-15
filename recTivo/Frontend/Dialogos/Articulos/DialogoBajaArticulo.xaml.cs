@@ -1,15 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
-using recTivo.Backend.Modelos;
-using recTivo.Backend.Repos;
-using recTivo.MVVM;
+﻿using di.proyecto.clase._2025.Frontend.Mensajes;
 using recTivo.Frontend.Dialogos.VentanasInicio;
-using System;
+using recTivo.MVVM;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
-using di.proyecto.clase._2025.Frontend.Mensajes;
 
 namespace recTivo.Frontend.Dialogos.Articulos
 {

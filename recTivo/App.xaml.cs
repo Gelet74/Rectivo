@@ -21,6 +21,9 @@ namespace recTivo
     {
         private IServiceProvider _serviceProvider;
 
+        // ⭐ AÑADIR ESTA PROPIEDAD
+        public Empleado? EmpleadoActual { get; set; }
+
         public App()
         {
             var serviceCollection = new ServiceCollection();
@@ -31,13 +34,26 @@ namespace recTivo
         private void ConfigureServices(ServiceCollection services)
         {
             services.AddDbContext<RectivoContext>(options =>
-            options.UseMySQL("server=localhost;database=RECTIVO;user=root;password=mysql;Allow User Variables=True;Treat Tiny As Boolean=False;Default Command Timeout=60;"),
+            {
+                options.UseMySQL("server=localhost;database=RECTIVO;user=root;password=mysql;Allow User Variables=True;Treat Tiny As Boolean=False;Default Command Timeout=60;")
+                       .EnableSensitiveDataLogging()
+                       .LogTo(message => System.Diagnostics.Debug.WriteLine(message),
+                              LogLevel.Information);
+            },
             ServiceLifetime.Transient);
 
             services.AddLogging(configure => configure.AddConsole());
             services.AddTransient<MVArticulo>();
             services.AddTransient<MVEmpleado>();
             services.AddSingleton<MVCliente>();
+            services.AddTransient<MVAlmacen>(provider =>
+            {
+                return new MVAlmacen(
+                    provider.GetRequiredService<RectivoContext>(),
+                    provider.GetRequiredService<MVArticulo>()
+                );
+            });
+
             services.AddTransient<MVEscandallo>(provider =>
             {
                 return new MVEscandallo(
@@ -65,8 +81,19 @@ namespace recTivo
             services.AddTransient<Login>();
             services.AddTransient<MainWindow>();
 
-            services.AddTransient<DialogoEntradaAlmacen>();
-            services.AddTransient<DialogoSalidaAlmacen>();
+            services.AddTransient<DialogoEntradaAlmacen>(provider =>
+            {
+                return new DialogoEntradaAlmacen(
+                    provider.GetRequiredService<MVAlmacen>()
+                );
+            });
+
+            services.AddTransient<DialogoSalidaAlmacen>(provider =>
+            {
+                return new DialogoSalidaAlmacen(
+                    provider.GetRequiredService<MVAlmacen>()
+                );
+            });
 
             services.AddTransient<DialogoAltaArticulo>();
             services.AddTransient<DialogoBajaArticulo>();
@@ -90,14 +117,12 @@ namespace recTivo
             services.AddTransient<DialogoModificarEscandallo>();
             services.AddTransient<DialogoListarEscandallo>();
 
-
             services.AddTransient<ConfirmacionDialogo>();
             services.AddScoped<RolRepository>();
 
             services.AddSingleton<UCListadoArticulos>();
             services.AddSingleton<UCListadoClientes>();
             services.AddSingleton<UCDashboard>();
-
         }
 
         protected override async void OnStartup(StartupEventArgs e)

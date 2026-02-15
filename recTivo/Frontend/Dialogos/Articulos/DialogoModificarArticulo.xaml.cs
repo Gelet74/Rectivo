@@ -56,9 +56,9 @@ namespace recTivo.Frontend.Dialogos.Articulos
                 this.Close();
         }
 
-        // BOTÓN: Cargar artículo
         private async void btnCargarArticulo_Click(object sender, RoutedEventArgs e)
         {
+
             if (_vm.ArticuloSeleccionado == null)
             {
                 MensajeError.Mostrar("MODIFICAR ARTÍCULO", "Debes seleccionar un artículo primero.");
@@ -78,7 +78,6 @@ namespace recTivo.Frontend.Dialogos.Articulos
             panelDatos.UpdateLayout();
         }
 
-        // BOTÓN: Guardar cambios
         private async void btnModificarArticulo_Click(object sender, RoutedEventArgs e)
         {
             var ok = await _vm.ModificarAsync();

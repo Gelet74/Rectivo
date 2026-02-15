@@ -37,6 +37,12 @@ namespace recTivo.Frontend.Dialogos
 
                 if (empleado != null)
                 {
+                    // ⭐ GUARDAR EL EMPLEADO EN App.EmpleadoActual
+                    if (Application.Current is App app)
+                    {
+                        app.EmpleadoActual = empleado;
+                    }
+
                     // Resolvemos MainWindow desde el contenedor
                     var main = _serviceProvider.GetService(typeof(MainWindow)) as MainWindow;
                     main.WindowState = WindowState.Maximized;

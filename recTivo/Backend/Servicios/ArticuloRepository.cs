@@ -7,27 +7,32 @@ namespace recTivo.Backend.Repos
     {
         public ArticuloRepository(RectivoContext context) : base(context) { }
 
-
-        // Buscar por código
         public async Task<Articulo?> GetByCodigoAsync(string codigo)
         {
+            if (string.IsNullOrWhiteSpace(codigo)) return null;
+
             codigo = codigo.Trim().ToUpper();
 
             return await _dbSet
+                 .Include(a => a.ArticuloUbicaciones) // Carga las ubicaciones para que UbicacionesResumen no de "-"
                  .FirstOrDefaultAsync(a => a.Codigo.Trim().ToUpper() == codigo);
         }
 
-
-
-        // Obtener todos los artículos por ID de ubicación
         public async Task<IEnumerable<Articulo>> GetByUbicacionAsync(int idUbicacion)
-            => await _dbSet.Where(a => a.IdUbicacion == idUbicacion).ToListAsync();
+        {
+            // Importante: Usamos _context.Ubicacion porque así está en tu RectivoContext
+            return await _context.Ubicacion
+                .Where(u => u.IdUbicacion == idUbicacion && u.Articulo != null)
+                .Select(u => u.Articulo!)
+                .ToListAsync();
+        }
 
-        // Obtener artículos con sus relaciones cargadas (Ubicacion y ClienteHasArticulo)
         public async Task<Articulo?> GetWithRelationsAsync(int id)
-            => await _dbSet
-                .Include(a => a.Ubicacion)
+        {
+            return await _dbSet
                 .Include(a => a.ClienteHasArticulos)
+                .Include(a => a.ArticuloUbicaciones) // Relación 1:N directa, ya no hay tabla intermedia
                 .FirstOrDefaultAsync(a => a.IdArticulo == id);
+        }
     }
 }

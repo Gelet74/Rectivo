@@ -60,10 +60,12 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
 
+                        <!-- COLUMNA IZQUIERDA -->
                         <StackPanel Grid.Column="0" Margin="10,0,10,0">
+
                             <TextBlock Text="Código del artículo:" Foreground="#FF9800"/>
-                            <ComboBox ItemsSource="{Binding CodigosLista}"
-                                      SelectedItem="{Binding FiltroCodigo, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            <ComboBox ItemsSource="{Binding MVArticulo.CodigosLista}"
+                                      SelectedItem="{Binding MVArticulo.FiltroCodigo, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                       IsEditable="True"
                                       Height="30"
                                       Margin="0,5"
@@ -71,8 +73,8 @@
                                       HorizontalAlignment="Left"/>
 
                             <TextBlock Text="Descripción 1:" Foreground="#FF9800"/>
-                            <ComboBox ItemsSource="{Binding DescripcionesLista}"
-                                      SelectedItem="{Binding FiltroDescripcion, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            <ComboBox ItemsSource="{Binding MVArticulo.DescripcionesLista}"
+                                      SelectedItem="{Binding MVArticulo.FiltroDescripcion, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                       IsEditable="True"
                                       Height="30"
                                       Margin="0,5"
@@ -80,8 +82,8 @@
                                       HorizontalAlignment="Left"/>
 
                             <TextBlock Text="Descripción 2:" Foreground="#FF9800"/>
-                            <ComboBox ItemsSource="{Binding Descripciones2Lista}"
-                                      SelectedItem="{Binding FiltroDescripcion2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            <ComboBox ItemsSource="{Binding MVArticulo.Descripciones2Lista}"
+                                      SelectedItem="{Binding MVArticulo.FiltroDescripcion2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                       IsEditable="True" 
                                       Height="30"
                                       Margin="0,5"
@@ -132,7 +134,7 @@
                                     Foreground="#FF5722"
                                     FontWeight="Bold"/>
                         </StackPanel>
-                    </Grid>         
+                    </Grid>
                 </Grid>
             </DockPanel>
         </Border>

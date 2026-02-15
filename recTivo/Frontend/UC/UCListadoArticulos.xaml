@@ -117,13 +117,13 @@
                     <DataGridTextColumn Header="CÓDIGO"
                                         Binding="{Binding Codigo}"/>
                     <DataGridTextColumn Header="DESCRIPCIÓN"
-                                        Binding="{Binding Descrip}"/>
+                                        Binding="{Binding descrip}"/>
                     <DataGridTextColumn Header="DESCRIPCIÓN 2"
-                                        Binding="{Binding Descrip2}"/>
+                                        Binding="{Binding descrip2}"/>
                     <DataGridTextColumn Header="STOCK"
                                         Binding="{Binding Stock}"/>
-                    <DataGridTextColumn Header="UBICACION"
-                                        Binding="{Binding Ubicacion}"/>
+                    <DataGridTextColumn Header="UBICACIONES"
+                                        Binding="{Binding UbicacionesResumen}"/>
                 </DataGrid.Columns>
 
                 <DataGrid.ContextMenu>

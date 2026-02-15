@@ -311,11 +311,20 @@ namespace recTivo.MVVM
 
         private List<ComponenteEscandallo> ReconstruirJerarquia(List<ComponenteEscandallo> planos)
         {
+            // ⭐ 1) Rellenar descripciones de TODOS los componentes
             foreach (var comp in planos)
             {
+                var articulo = ListaArticulos.FirstOrDefault(a => a.Codigo == comp.CodigoArticulo);
+                if (articulo != null)
+                {
+                    comp.Descripcion = articulo.descrip;
+                    comp.Descripcion2 = articulo.descrip2;
+                }
+
                 comp.Hijos ??= new ObservableCollection<ComponenteEscandallo>();
             }
 
+            // ⭐ 2) Construir jerarquía
             foreach (var comp in planos)
             {
                 if (!string.IsNullOrWhiteSpace(comp.CodigoComponentePadre))
@@ -335,6 +344,7 @@ namespace recTivo.MVVM
                 }
             }
 
+            // ⭐ 3) Devolver raíces
             var raices = planos
                 .Where(c =>
                     string.IsNullOrWhiteSpace(c.CodigoComponentePadre) ||
@@ -343,6 +353,7 @@ namespace recTivo.MVVM
 
             return raices;
         }
+
 
         // ============================================================
         //   ACTUALIZAR PADRES RECURSIVO
@@ -636,7 +647,7 @@ namespace recTivo.MVVM
             Debug.WriteLine($"→ EscandalloActual.Count = {EscandalloActual.Count}");
         }
 
-        
+
         // ============================================================
         //   RECARGAR ESCANDALLO RECURSIVO
         // ============================================================
@@ -645,6 +656,15 @@ namespace recTivo.MVVM
         {
             bool seRecargo = false;
 
+            // ⭐ 1) Cargar el artículo para rellenar las descripciones
+            var articulo = await _articuloRepository.GetByCodigoAsync(componente.CodigoArticulo);
+            if (articulo != null)
+            {
+                componente.Descripcion = articulo.descrip;
+                componente.Descripcion2 = articulo.descrip2;
+            }
+
+            // 2) Buscar si este componente tiene escandallo propio
             var escandallo = await _escandalloRepository
                 .GetByCodigoProductoAsync(componente.CodigoArticulo);
 
@@ -662,6 +682,15 @@ namespace recTivo.MVVM
                     foreach (var hijo in componente.Hijos)
                     {
                         hijo.CodigoComponentePadre = componente.CodigoArticulo;
+
+                        // ⭐ 3) Rellenar descripciones también en los hijos
+                        var artHijo = await _articuloRepository.GetByCodigoAsync(hijo.CodigoArticulo);
+                        if (artHijo != null)
+                        {
+                            hijo.Descripcion = artHijo.descrip;
+                            hijo.Descripcion2 = artHijo.descrip2;
+                        }
+
                         await RecargarEscandalloRecursivo(hijo);
                     }
 
@@ -671,5 +700,6 @@ namespace recTivo.MVVM
 
             return seRecargo;
         }
+
     }
 }

@@ -4,7 +4,6 @@
         Title="Pulsa ESC para volver atrás"
         Height="350" Width="500"
         ResizeMode="NoResize"
-        x:Name="DialSalidaAlmacen"
         WindowStartupLocation="CenterScreen"
         Background="#2D2D30"
         WindowStyle="None">
@@ -61,10 +60,12 @@
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
 
+                        <!-- COLUMNA IZQUIERDA -->
                         <StackPanel Grid.Column="0" Margin="10,0,10,0">
+
                             <TextBlock Text="Código del artículo:" Foreground="#FF9800"/>
-                            <ComboBox ItemsSource="{Binding CodigosLista}"
-                                      SelectedItem="{Binding FiltroCodigo, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            <ComboBox ItemsSource="{Binding MVArticulo.CodigosLista}"
+                                      SelectedItem="{Binding MVArticulo.FiltroCodigo, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                       IsEditable="True"
                                       Height="30"
                                       Margin="0,5"
@@ -72,8 +73,8 @@
                                       HorizontalAlignment="Left"/>
 
                             <TextBlock Text="Descripción 1:" Foreground="#FF9800"/>
-                            <ComboBox ItemsSource="{Binding DescripcionesLista}"
-                                      SelectedItem="{Binding FiltroDescripcion, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            <ComboBox ItemsSource="{Binding MVArticulo.DescripcionesLista}"
+                                      SelectedItem="{Binding MVArticulo.FiltroDescripcion, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                       IsEditable="True"
                                       Height="30"
                                       Margin="0,5"
@@ -81,8 +82,8 @@
                                       HorizontalAlignment="Left"/>
 
                             <TextBlock Text="Descripción 2:" Foreground="#FF9800"/>
-                            <ComboBox ItemsSource="{Binding Descripciones2Lista}"
-                                      SelectedItem="{Binding FiltroDescripcion2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            <ComboBox ItemsSource="{Binding MVArticulo.Descripciones2Lista}"
+                                      SelectedItem="{Binding MVArticulo.FiltroDescripcion2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                       IsEditable="True" 
                                       Height="30"   
                                       Margin="0,5"
@@ -91,37 +92,37 @@
 
                             <TextBlock Text="Cantidad:" Foreground="#FF9800"/>
                             <TextBox Text="{Binding Cantidad, Mode=TwoWay}"
-             Height="30"
-             Margin="0,5"
-             Width="180"
-             HorizontalAlignment="Left"/>
+                                     Height="30"
+                                     Margin="0,5"
+                                     Width="180"
+                                     HorizontalAlignment="Left"/>
                         </StackPanel>
 
-                        <StackPanel Grid.Column="1" Margin="20,0,0,0">                           
+                        <!-- COLUMNA DERECHA -->
+                        <StackPanel Grid.Column="1" Margin="20,0,0,0">
 
                             <TextBlock Text="Letra pasillo:" Foreground="#FF9800"/>
-                            <TextBox x:Name="txtPasillo"
+                            <TextBox Text="{Binding Pasillo, Mode=TwoWay}"
                                      Height="30"
                                      Margin="0,5"
                                      Width="180"
                                      HorizontalAlignment="Left"/>
 
                             <TextBlock Text="Número estantería:" Foreground="#FF9800"/>
-                            <TextBox x:Name="txtEstanteria"
+                            <TextBox Text="{Binding Estanteria, Mode=TwoWay}"
                                      Height="30"
                                      Margin="0,5"
                                      Width="180"
                                      HorizontalAlignment="Left"/>
 
                             <TextBlock Text="Hueco:" Foreground="#FF9800"/>
-                            <TextBox x:Name="txtHueco"
+                            <TextBox Text="{Binding Hueco, Mode=TwoWay}"
                                      Height="30"
                                      Margin="0,5"
                                      Width="180"
                                      HorizontalAlignment="Left"/>
 
                             <Button Content="Restar del almacén"
-                                    x:Name="btnRestarAlmacen"
                                     Click="btnRestarAlmacen_Click"
                                     Height="30" Width="180"
                                     HorizontalAlignment="Left"
@@ -132,7 +133,7 @@
                                     Foreground="#FF5722"
                                     FontWeight="Bold"/>
                         </StackPanel>
-                    </Grid>       
+                    </Grid>
                 </Grid>
             </DockPanel>
         </Border>

@@ -1,14 +1,36 @@
-﻿using System.Collections.Generic;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace recTivo.Backend.Modelos;
 
+[Table("ubicacion")]
 public class Ubicacion
 {
+    [Key]
+    [Column("ID_UBICACION")]
     public int IdUbicacion { get; set; }
 
+    [Column("NUMERO")]
     public int? Numero { get; set; }
+
+    [Column("LETRA_PASILLO")]
     public string? LetraPasillo { get; set; }
+
+    [Column("NUMERO_ESTANTERIA")]
     public int? NumeroEstanteria { get; set; }
 
-    public virtual ICollection<Articulo> Articulos { get; set; } = new List<Articulo>();
+    [Column("CANTIDAD")]
+    public int Cantidad { get; set; }
+
+    // NUEVO: Relación con el Artículo
+    [Column("ID_ARTICULO")]
+    public int? IdArticulo { get; set; }
+
+    [ForeignKey("IdArticulo")]
+    public virtual Articulo? Articulo { get; set; }
+
+    // Relación 1 a 1 con ArticuloUbicacion
+    public ArticuloUbicacion ArticuloUbicacion { get; set; }
+
+
 }

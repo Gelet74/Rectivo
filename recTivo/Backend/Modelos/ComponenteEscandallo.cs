@@ -1,39 +1,48 @@
-﻿using recTivo.MVVM.Base;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace recTivo.Backend.Modelos
 {
+    [Table("componenteescandallo")]
     public class ComponenteEscandallo
     {
+        [Key]
+        [Column("IdComponente")]
         public int IdComponente { get; set; }
+
+        [Column("IdEscandallo")]
         public int IdEscandallo { get; set; }
 
-        // Código del artículo componente (clave real)
+        [Column("CodigoArticulo")]
+        [MaxLength(10)]
         public string CodigoArticulo { get; set; }
-        [NotMapped]
-        public string Descripcion { get; set; }
-        [NotMapped]
-        [Column("Descrip2")]
-        public string? Descripcion2 { get; set; }
 
+        [Column("Cantidad")]
         public decimal? Cantidad { get; set; }
+
+        [Column("PrecioUnitario")]
         public decimal? PrecioUnitario { get; set; }
 
-        public Escandallo Escandallo { get; set; }
+        [Column("CodigoComponentePadre")]
+        [MaxLength(10)]
+        public string? CodigoComponentePadre { get; set; }
 
-        // Código del padre (si es null → es raíz)
-        public String? CodigoComponentePadre { get; set; }
+        // ⭐ NO están en la BD, se cargan en memoria
+        [NotMapped]
+        public string? Descripcion { get; set; }
 
-        // Hijos en memoria (no en BD)
-        [NotMapped]       
-        public ObservableCollection<ComponenteEscandallo> Hijos { get; set; } = new();
+        [NotMapped]
+        public string? Descripcion2 { get; set; }
 
+        // Navegación
+        [NotMapped]
+        public Escandallo? Escandallo { get; set; }
 
-        // Nombre opcional para mostrar
+        [NotMapped]
+        public ObservableCollection<ComponenteEscandallo>? Hijos { get; set; }
+
         [NotMapped]
         public string? NombreComponente { get; set; }
-
-    
     }
 }

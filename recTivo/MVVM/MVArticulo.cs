@@ -1,5 +1,4 @@
 ﻿using di.proyecto.clase._2025.Frontend.Mensajes;
-using Microsoft.EntityFrameworkCore;
 using recTivo.Backend.Modelos;
 using recTivo.Backend.Repos;
 using recTivo.MVVM.Base;
@@ -15,7 +14,6 @@ namespace recTivo.MVVM
         private readonly ClienteRepository _clienteRepository;
         private readonly EmpleadoRepository _empleadoRepository;
         private readonly OrdenRepository _ordenRepository;
-        private readonly RectivoContext _context;
 
         public ListCollectionView ArticulosView { get; private set; }
 
@@ -23,14 +21,13 @@ namespace recTivo.MVVM
             ArticuloRepository articuloRepository,
             ClienteRepository clienteRepository,
             EmpleadoRepository empleadoRepository,
-            OrdenRepository ordenRepository,
-            RectivoContext context)
+            OrdenRepository ordenRepository)
         {
             _articuloRepository = articuloRepository;
             _clienteRepository = clienteRepository;
             _empleadoRepository = empleadoRepository;
             _ordenRepository = ordenRepository;
-            _context = context;
+
             _articulo = new Articulo();
         }
 
@@ -143,12 +140,10 @@ namespace recTivo.MVVM
 
             if (articulosFiltrados.Any())
             {
-                // Si solo hay un artículo con ese código, autocompletar
                 if (articulosFiltrados.Count == 1)
                 {
                     var articulo = articulosFiltrados.First();
 
-                    // Evitar bucle infinito
                     _filtroDescripcion = articulo.descrip;
                     _filtroDescripcion2 = articulo.descrip2;
 
@@ -381,15 +376,6 @@ namespace recTivo.MVVM
         }
 
         // -----------------------------
-        // PROPIEDADES ALMACÉN
-        // -----------------------------
-
-        public string Cantidad { get; set; }
-        public string Pasillo { get; set; }
-        public string Estanteria { get; set; }
-        public string Hueco { get; set; }
-
-        // -----------------------------
         // CRUD
         // -----------------------------
 
@@ -458,150 +444,6 @@ namespace recTivo.MVVM
             {
                 MensajeError.Mostrar("Error", $"Error al dar de baja artículo: {ex.Message}");
                 return false;
-            }
-        }
-
-        public async Task AñadirAlmacen()
-        {
-            try
-            {
-                if (ArticuloSeleccionado == null)
-                {
-                    MensajeError.Mostrar("ERROR", "Debes seleccionar un artículo válido.");
-                    return;
-                }
-
-                if (!int.TryParse(Cantidad, out int cantidad) || cantidad <= 0)
-                {
-                    MensajeAdvertencia.Mostrar("AVISO", "Introduce una cantidad válida.");
-                    return;
-                }
-
-                string pasillo = Pasillo?.Trim();
-                string estanteria = Estanteria?.Trim();
-                string hueco = Hueco?.Trim();
-
-                if (string.IsNullOrEmpty(pasillo) ||
-                    string.IsNullOrEmpty(estanteria) ||
-                    string.IsNullOrEmpty(hueco))
-                {
-                    MensajeAdvertencia.Mostrar("AVISO", "Debes indicar pasillo, estantería y hueco.");
-                    return;
-                }
-
-                int? estanteriaNum = int.TryParse(estanteria, out var est) ? est : null;
-                int? huecoNum = int.TryParse(hueco, out var hue) ? hue : null;
-
-                var ctx = _context;
-
-                var ubicacion = await ctx.Ubicacion
-                    .FirstOrDefaultAsync(u =>
-                        u.LetraPasillo == pasillo &&
-                        u.NumeroEstanteria == estanteriaNum &&
-                        u.Numero == huecoNum);
-
-                if (ubicacion == null)
-                {
-                    ubicacion = new Ubicacion
-                    {
-                        LetraPasillo = pasillo,
-                        NumeroEstanteria = estanteriaNum,
-                        Numero = huecoNum
-                    };
-                    ctx.Ubicacion.Add(ubicacion);
-                    await ctx.SaveChangesAsync();
-                }
-
-                ArticuloSeleccionado.Stock = (ArticuloSeleccionado.Stock ?? 0) + cantidad;
-                ArticuloSeleccionado.IdUbicacion = ubicacion.IdUbicacion;
-
-                ctx.Articulos.Update(ArticuloSeleccionado);
-                await ctx.SaveChangesAsync();
-
-                MensajeInformacion.Mostrar("ÉXITO",
-                    $"Se añadieron {cantidad} unidades del artículo {ArticuloSeleccionado.Codigo} " +
-                    $"al pasillo {pasillo}, estantería {estanteria}, hueco {hueco}.");
-
-                Cantidad = "";
-                Pasillo = "";
-                Estanteria = "";
-                Hueco = "";
-                ArticuloSeleccionado = null;
-                FiltroCodigo = null;
-                FiltroDescripcion = null;
-                FiltroDescripcion2 = null;
-
-                OnPropertyChanged(nameof(Cantidad));
-                OnPropertyChanged(nameof(Pasillo));
-                OnPropertyChanged(nameof(Estanteria));
-                OnPropertyChanged(nameof(Hueco));
-            }
-            catch (Exception ex)
-            {
-                MensajeError.Mostrar("ERROR", $"Error al añadir al almacén: {ex.Message}");
-            }
-        }
-
-        public async Task SalidaAlmacen()
-        {
-            try
-            {
-                if (ArticuloSeleccionado == null)
-                {
-                    MensajeError.Mostrar("ERROR", "Debes seleccionar un artículo válido.");
-                    return;
-                }
-
-                if (!int.TryParse(Cantidad, out int cantidad) || cantidad <= 0)
-                {
-                    MensajeAdvertencia.Mostrar("AVISO", "Introduce una cantidad válida.");
-                    return;
-                }
-
-                // Verificar que hay stock suficiente
-                if ((ArticuloSeleccionado.Stock ?? 0) < cantidad)
-                {
-                    MensajeError.Mostrar("ERROR",
-                        $"Stock insuficiente. Disponible: {ArticuloSeleccionado.Stock ?? 0}, Solicitado: {cantidad}");
-                    return;
-                }
-
-                var ctx = _context;
-
-                // Restar del stock
-                ArticuloSeleccionado.Stock = (ArticuloSeleccionado.Stock ?? 0) - cantidad;
-
-                // Si el stock llega a 0, opcionalmente quitar la ubicación
-                if (ArticuloSeleccionado.Stock == 0)
-                {
-                    ArticuloSeleccionado.IdUbicacion = null;
-                }
-
-                ctx.Articulos.Update(ArticuloSeleccionado);
-                await ctx.SaveChangesAsync();
-
-                MensajeInformacion.Mostrar("ÉXITO",
-                    $"Se retiraron {cantidad} unidades del artículo {ArticuloSeleccionado.Codigo}. " +
-                    $"Stock restante: {ArticuloSeleccionado.Stock}");
-
-                // Limpiar campos
-                Cantidad = "";
-                Pasillo = "";
-                Estanteria = "";
-                Hueco = "";
-                ArticuloSeleccionado = null;
-                FiltroCodigo = null;
-                FiltroDescripcion = null;
-                FiltroDescripcion2 = null;
-
-                OnPropertyChanged(nameof(Cantidad));
-                OnPropertyChanged(nameof(Pasillo));
-                OnPropertyChanged(nameof(Estanteria));
-                OnPropertyChanged(nameof(Hueco));
-            }
-            catch (Exception ex)
-            {
-                MensajeError.Mostrar("ERROR", $"Error al retirar del almacén: {ex.Message}");
             }
         }
     }
