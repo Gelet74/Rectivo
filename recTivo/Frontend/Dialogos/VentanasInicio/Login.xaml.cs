@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using di.proyecto.clase._2025.Frontend.Mensajes;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace recTivo.Frontend.Dialogos
 {
@@ -29,30 +30,54 @@ namespace recTivo.Frontend.Dialogos
 
             if (string.IsNullOrEmpty(usuario) || string.IsNullOrEmpty(password))
             {
-                MensajeAdvertencia.Mostrar("Advertencia de autenticación", "Por favor, introduce usuario y clave.");
+                MensajeAdvertencia.Mostrar("Advertencia de autenticación",
+                    "Por favor, introduce usuario y clave.");
+                return;
             }
-            else
+
+            // ✅ Deshabilitar botón mientras valida
+            btnLogin.IsEnabled = false;
+            btnLogin.Content = "Validando...";
+
+            try
             {
                 var empleado = await _empleadoRepository.ValidarCredencialesAsync(usuario, password);
 
                 if (empleado != null)
                 {
-                    // ⭐ GUARDAR EL EMPLEADO EN App.EmpleadoActual
+                    // ✅ Guardar el empleado actual
                     if (Application.Current is App app)
                     {
                         app.EmpleadoActual = empleado;
                     }
 
-                    // Resolvemos MainWindow desde el contenedor
-                    var main = _serviceProvider.GetService(typeof(MainWindow)) as MainWindow;
+                    // ✅ CREAR NUEVA INSTANCIA de MainWindow (esto ya recarga automáticamente)
+                    var main = _serviceProvider.GetRequiredService<MainWindow>();
+
                     main.WindowState = WindowState.Maximized;
                     main.Show();
+
                     this.Close();
                 }
                 else
                 {
-                    MensajeError.Mostrar("Error de autenticación", "Usuario o clave incorrectos.");
+                    MensajeError.Mostrar("Error de autenticación",
+                        "Usuario o clave incorrectos.");
+
+                    txtPassword.Clear();
+                    txtUsuario.Focus();
                 }
+            }
+            catch (Exception ex)
+            {
+                MensajeError.Mostrar("Error",
+                    $"Error al iniciar sesión: {ex.Message}");
+            }
+            finally
+            {
+                // ✅ Rehabilitar botón
+                btnLogin.IsEnabled = true;
+                btnLogin.Content = "Entrar";
             }
         }
 

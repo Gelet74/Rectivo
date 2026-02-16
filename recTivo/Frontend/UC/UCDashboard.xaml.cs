@@ -1,10 +1,14 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using recTivo.Backend.Modelos;
+using recTivo.Backend.Repos;
 using recTivo.Frontend.Dialogos;
 using recTivo.Frontend.Dialogos.Articulos;
 using recTivo.Frontend.Dialogos.Clientes;
 using recTivo.Frontend.Dialogos.Empleado;
 using recTivo.Frontend.Dialogos.Escandallo;
 using System;
+using System.ComponentModel;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -24,21 +28,20 @@ namespace recTivo.Frontend.UC
 
         private void UCDashboard_Loaded(object sender, RoutedEventArgs e)
         {
-            // Obtener el empleado desde App.xaml.cs
-            string nombreEmpleado = "Empleado"; // Valor por defecto
+            string nombreEmpleado = "Empleado";
 
             if (Application.Current is App app && app.EmpleadoActual != null)
-            {
                 nombreEmpleado = app.EmpleadoActual.NombreCompleto;
-            }
 
-            // Asignar DataContext usando la clase DashboardData
+            // ⭐ Obtener el DbContext directamente
+            var context = _serviceProvider.GetRequiredService<RectivoContext>();
+
             DataContext = new DashboardData
             {
                 UsuarioLogueado = nombreEmpleado,
-                TotalArticulos = 0,
-                TotalClientes = 0,
-                TotalEmpleados = 0
+                TotalArticulos = context.Articulos.Count(),
+                TotalClientes = context.Clientes.Count(),
+                TotalEmpleados = context.Empleados.Count()
             };
         }
 
@@ -64,13 +67,9 @@ namespace recTivo.Frontend.UC
 
         private void BtnCambiarUsuario_Click(object sender, RoutedEventArgs e)
         {
-            // Limpiar el empleado actual
             if (Application.Current is App app)
-            {
                 app.EmpleadoActual = null;
-            }
 
-            // Cerrar el MainWindow y volver al Login
             var mainWindow = Window.GetWindow(this);
 
             var login = _serviceProvider.GetRequiredService<Login>();
@@ -79,13 +78,39 @@ namespace recTivo.Frontend.UC
             mainWindow?.Close();
         }
 
-        // ⭐ CLASE SIMPLE PARA EL DATACONTEXT
-        private class DashboardData
+        private class DashboardData : INotifyPropertyChanged
         {
-            public string UsuarioLogueado { get; set; }
-            public int TotalArticulos { get; set; }
-            public int TotalClientes { get; set; }
-            public int TotalEmpleados { get; set; }
+            private string _usuarioLogueado;
+            public string UsuarioLogueado
+            {
+                get => _usuarioLogueado;
+                set { _usuarioLogueado = value; OnPropertyChanged(nameof(UsuarioLogueado)); }
+            }
+
+            private int _totalArticulos;
+            public int TotalArticulos
+            {
+                get => _totalArticulos;
+                set { _totalArticulos = value; OnPropertyChanged(nameof(TotalArticulos)); }
+            }
+
+            private int _totalClientes;
+            public int TotalClientes
+            {
+                get => _totalClientes;
+                set { _totalClientes = value; OnPropertyChanged(nameof(TotalClientes)); }
+            }
+
+            private int _totalEmpleados;
+            public int TotalEmpleados
+            {
+                get => _totalEmpleados;
+                set { _totalEmpleados = value; OnPropertyChanged(nameof(TotalEmpleados)); }
+            }
+
+            public event PropertyChangedEventHandler PropertyChanged;
+            protected void OnPropertyChanged(string name)
+                => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
     }
 }

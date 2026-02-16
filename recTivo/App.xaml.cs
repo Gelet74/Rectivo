@@ -122,7 +122,7 @@ namespace recTivo
 
             services.AddSingleton<UCListadoArticulos>();
             services.AddSingleton<UCListadoClientes>();
-            services.AddSingleton<UCDashboard>();
+            services.AddTransient<UCDashboard>();
         }
 
         protected override async void OnStartup(StartupEventArgs e)

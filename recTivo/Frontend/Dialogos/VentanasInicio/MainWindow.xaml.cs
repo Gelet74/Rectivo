@@ -250,9 +250,9 @@ namespace recTivo
             ventas.SelectedItem = null;
         }
 
-    
 
-      
+
+
 
         private void salir_Click(object sender, RoutedEventArgs e)
         {
