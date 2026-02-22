@@ -576,7 +576,7 @@ namespace recTivo.MVVM
                 if (escandallo == null)
                 {
                     Debug.WriteLine($"→ NO SE ENCONTRÓ escandallo para '{codigo}'");
-                    MensajeInformacion.Mostrar("ESCANDALLO",
+                    MensajeError.Mostrar("ESCANDALLO",
                         $"No existe escandallo para el artículo '{codigo}'.");
                     return;
                 }
