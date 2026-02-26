@@ -69,8 +69,12 @@ namespace recTivo.Backend.Repos
         public override async Task AddAsync(Escandallo esc)
         {
             await _context.Escandallos.AddAsync(esc);
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(); // Aquí EF ya asigna el IdEscandallo
+
+            // Aseguramos que el ID está disponible
+            await _context.Entry(esc).ReloadAsync();
         }
+
 
 
 

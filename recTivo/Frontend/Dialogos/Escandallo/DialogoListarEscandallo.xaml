@@ -72,7 +72,7 @@
 
                         <ComboBox x:Name="cmbCodigoArticulo"
                                   Width="150"
-                                  ItemsSource="{Binding ListaArticulos}"
+                                  ItemsSource="{Binding ArticulosTodos}"
                                   DisplayMemberPath="Codigo"
                                   SelectedValuePath="Codigo"
                                   SelectedValue="{Binding CodigoSeleccionado, Mode=TwoWay}"/>
@@ -89,7 +89,7 @@
                                Foreground="White"
                                Margin="0,10,0,10"/>
 
-                    <!-- TREEVIEW -->                
+                    <!-- TREEVIEW -->
                     <TreeView ItemsSource="{Binding EscandalloActual}"
                               Background="#E0E0E0"
                               Foreground="Black"

@@ -1,11 +1,8 @@
 ﻿using di.proyecto.clase._2025.Frontend.Mensajes;
-using recTivo.Backend.Modelos;
 using recTivo.Frontend.Dialogos.VentanasInicio;
 using recTivo.MVVM;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Input;
 
 namespace recTivo.Frontend.Dialogos.Escandallo
@@ -19,47 +16,27 @@ namespace recTivo.Frontend.Dialogos.Escandallo
             InitializeComponent();
             _vm = vm;
             DataContext = _vm;
+            Loaded += async (_, __) => await _vm.Inicializa();
 
-            this.IsEnabled = false;
-
-            Loaded += async (_, __) =>
-            {
-                await _vm.Inicializa();
-                this.IsEnabled = true;
-            };
+            // Validar al cambiar el artículo final seleccionado
+            cmbArticuloFinal.SelectionChanged += CmbArticuloFinal_SelectionChanged;
         }
 
-
-        // ================================
-        //   MANEJO DE ESCAPE
-        // ================================
-        private bool _escapeEnCurso = false;
+        private async void CmbArticuloFinal_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var articuloElegido = cmbArticuloFinal.SelectedItem as recTivo.Backend.Modelos.Articulo;
+            await _vm.ValidarArticuloFinal(articuloElegido);
+        }
 
         protected override void OnPreviewKeyDown(KeyEventArgs e)
         {
             if (e.Key == Key.Escape)
             {
-                if (_escapeEnCurso)
-                {
-                    e.Handled = true;
-                    return;
-                }
-
-                _escapeEnCurso = true;
                 e.Handled = true;
-
-                try
-                {
-                    var dialog = new ConfirmacionDialogo { Owner = this };
-                    bool? result = dialog.ShowDialog();
-
-                    if (result == true && dialog.Confirmado)
-                        this.Close();
-                }
-                finally
-                {
-                    _escapeEnCurso = false;
-                }
+                var dialog = new ConfirmacionDialogo { Owner = this };
+                bool? result = dialog.ShowDialog();
+                if (result == true && dialog.Confirmado)
+                    this.Close();
             }
             else
             {
@@ -67,59 +44,59 @@ namespace recTivo.Frontend.Dialogos.Escandallo
             }
         }
 
-        // ================================
-        //   AÑADIR COMPONENTE RAÍZ
-        // ================================
-        private void BtnAñadir_Click(object sender, RoutedEventArgs e)
+        private void TextBoxCantidad_LostFocus(object sender, RoutedEventArgs e)
         {
-            _vm.AñadirComponente();
+            if (sender is TextBox tb)
+            {
+                if (!decimal.TryParse(tb.Text,
+                        System.Globalization.NumberStyles.Any,
+                        System.Globalization.CultureInfo.CurrentCulture,
+                        out _))
+                {
+                    MensajeError.Mostrar("CANTIDAD", "La cantidad introducida no es válida. Usa solo números y un separador decimal (coma o punto).");
+                    tb.Dispatcher.BeginInvoke(() => tb.Focus());
+                }
+            }
         }
 
-        // ================================
-        //   CARGAR ESCANDALLO
-        // ================================
         private async void BtnCargarEscandallo_Click(object sender, RoutedEventArgs e)
         {
-            var comboBox = this.FindName("cmbArticuloFinal") as ComboBox;
-            if (comboBox != null)
+            if (_vm.ArticuloFinal == null)
             {
-                var binding = BindingOperations.GetBindingExpression(comboBox, ComboBox.SelectedItemProperty);
-                binding?.UpdateSource();
-            }
-            var articulo = _vm.ArticuloFinal;
-            if (articulo == null)
-            {
-                MensajeError.Mostrar("ESCANDALLO", "Selecciona un artículo válido.");
+                MensajeError.Mostrar("ALTA ESCANDALLO", "Debes seleccionar un artículo primero.");
                 return;
             }
-
-            await _vm.CargarEscandallo(articulo.Codigo);
+            await _vm.CargarEscandallo(_vm.ArticuloFinal.Codigo);
         }
 
+        private void BtnLimpiar_Click(object sender, RoutedEventArgs e)
+        {
+            _ = _vm.LimpiarCampos();
+        }
 
-        // ================================
-        //   SELECCIÓN EN TREEVIEW
-        // ================================
+        private async void BtnAñadir_Click(object sender, RoutedEventArgs e)
+        {
+            if (!_vm.ArticuloFinalValido || _vm.ArticuloFinal == null)
+            {
+                MensajeError.Mostrar("ALTA ESCANDALLO", "Debes seleccionar un artículo final válido antes de añadir componentes.");
+                return;
+            }
+            await _vm.AñadirComponente();
+        }
+
         private void TreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-            var seleccionado = e.NewValue as ComponenteEscandallo;
-            _vm.ComponentePadreSeleccionado = seleccionado;
-            _vm.ComponenteSeleccionado = seleccionado;
+            // reservado para selección futura
         }
 
-
-
-        // ================================
-        //   GUARDAR ESCANDALLO
-        // ================================
         private async void BtnGuardar_Click(object sender, RoutedEventArgs e)
         {
+            if (!_vm.ArticuloFinalValido || _vm.ArticuloFinal == null)
+            {
+                MensajeError.Mostrar("ALTA ESCANDALLO", "No puedes guardar: el artículo seleccionado ya tiene escandallo.");
+                return;
+            }
             await _vm.GuardarEscandallo();
-        }
-
-        private async void BtnLimpiar_Click(object sender, RoutedEventArgs e)
-        {
-            await _vm.LimpiarCampos();
         }
     }
 }

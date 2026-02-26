@@ -6,6 +6,7 @@ using recTivo.Frontend.Dialogos.Articulos;
 using recTivo.Frontend.Dialogos.Clientes;
 using recTivo.Frontend.Dialogos.Empleado;
 using recTivo.Frontend.Dialogos.Escandallo;
+using recTivo.Frontend.Dialogos.Ordenes;
 using System;
 using System.ComponentModel;
 using System.Linq;
@@ -64,6 +65,11 @@ namespace recTivo.Frontend.UC
         {
             _serviceProvider.GetService<DialogoAltaEscandallo>()?.ShowDialog();
         }
+        private void BtnCrearOrden_Click(object sender, RoutedEventArgs e)
+        {
+            _serviceProvider.GetService<DialogoProcesarOrden>()?.ShowDialog();
+        }
+
 
         private void BtnCambiarUsuario_Click(object sender, RoutedEventArgs e)
         {
@@ -112,5 +118,7 @@ namespace recTivo.Frontend.UC
             protected void OnPropertyChanged(string name)
                 => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
+
+       
     }
 }

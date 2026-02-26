@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 
 namespace recTivo.Backend.Modelos
 {
@@ -10,12 +9,11 @@ namespace recTivo.Backend.Modelos
         {
         }
 
-        public virtual DbSet<VistaArticuloUbicacion> VistaArticulosUbicacions { get; set; } = null!;
+        // ELIMINADOS: VistaArticulosUbicacions y ArticuloUbicaciones (obsoletos)
         public virtual DbSet<Articulo> Articulos { get; set; } = null!;
         public virtual DbSet<Cliente> Clientes { get; set; } = null!;
         public virtual DbSet<Empleado> Empleados { get; set; } = null!;
         public virtual DbSet<Orden> Ordens { get; set; } = null!;
-        public virtual DbSet<ArticuloUbicacion> ArticuloUbicaciones { get; set; } = null!;
         public virtual DbSet<Permiso> Permisos { get; set; } = null!;
         public virtual DbSet<Rol> Rols { get; set; } = null!;
         public virtual DbSet<Ubicacion> Ubicacion { get; set; } = null!;
@@ -54,30 +52,6 @@ namespace recTivo.Backend.Modelos
             });
 
             // ===========================
-            // CONFIGURACIÓN DE ARTÍCULO-UBICACIÓN
-            // ===========================
-            modelBuilder.Entity<ArticuloUbicacion>(entity =>
-            {
-                entity.ToTable("articuloubicacion");
-
-                entity.HasKey(au => au.IdArticuloUbicacion);
-
-                entity.Property(au => au.IdArticuloUbicacion).HasColumnName("id_articulo_ubicacion");
-                entity.Property(au => au.IdArticulo).HasColumnName("id_articulo");
-                entity.Property(au => au.IdUbicacion).HasColumnName("id_ubicacion");
-                entity.Property(au => au.Cantidad).HasColumnName("cantidad");
-
-                entity.HasOne(au => au.Articulo)
-                      .WithMany(a => a.ArticuloUbicaciones)
-                      .HasForeignKey(au => au.IdArticulo);
-
-                entity.HasOne(au => au.Ubicacion)
-                      .WithOne(u => u.ArticuloUbicacion)
-                      .HasForeignKey<ArticuloUbicacion>(au => au.IdUbicacion);
-            });
-
-
-            // ===========================
             // CONFIGURACIÓN DE ARTÍCULO
             // ===========================
             modelBuilder.Entity<Articulo>(entity =>
@@ -104,6 +78,14 @@ namespace recTivo.Backend.Modelos
                 entity.Property(u => u.Numero).HasColumnName("NUMERO");
                 entity.Property(u => u.LetraPasillo).HasColumnName("LETRA_PASILLO").HasMaxLength(10);
                 entity.Property(u => u.NumeroEstanteria).HasColumnName("NUMERO_ESTANTERIA");
+                // AÑADIDOS: faltaban en la configuración original
+                entity.Property(u => u.Cantidad).HasColumnName("CANTIDAD");
+                entity.Property(u => u.IdArticulo).HasColumnName("ID_ARTICULO");
+
+                entity.HasOne(u => u.Articulo)
+                      .WithMany(a => a.Ubicaciones)
+                      .HasForeignKey(u => u.IdArticulo)
+                      .OnDelete(DeleteBehavior.SetNull);
             });
 
             // ===========================
@@ -121,6 +103,12 @@ namespace recTivo.Backend.Modelos
                 entity.Property(e => e.FechaFin).HasColumnType("date").HasColumnName("FECHA_FIN");
                 entity.Property(e => e.IdArticulo).HasColumnName("ID_ARTICULO");
                 entity.Property(e => e.IdEmpleado).HasColumnName("ID_EMPLEADO");
+                entity.Property(e => e.Estado)
+                      .HasColumnName("Estado")
+                      .HasMaxLength(20)
+                      .HasDefaultValue("Pendiente");
+                entity.Ignore(e => e.EstadoEnum);
+                entity.Ignore(e => e.EstadoTexto);
 
                 entity.HasOne(d => d.IdArticuloNavigation)
                     .WithMany()
@@ -151,17 +139,21 @@ namespace recTivo.Backend.Modelos
             // ===========================
             modelBuilder.Entity<ClienteHasArticulo>(entity =>
             {
-                entity.HasKey(e => new { e.ClienteIdcliente, e.ArticuloIdArticulo });
+                // CORREGIDO: clave compuesta ahora usa ArticuloCodigo (string) en lugar de ArticuloIdArticulo (int)
+                entity.HasKey(e => new { e.ClienteIdcliente, e.ArticuloCodigo });
                 entity.Property(e => e.ClienteIdcliente).HasColumnName("cliente_IDCLIENTE");
-                entity.Property(e => e.ArticuloIdArticulo).HasColumnName("articulo_IDARTICULO");
+                // CORREGIDO: nombre de columna real en BD y tipo string
+                entity.Property(e => e.ArticuloCodigo).HasColumnName("articulo_CODIGO").HasMaxLength(10);
 
                 entity.HasOne(e => e.Cliente)
                     .WithMany(c => c.ClienteHasArticulos)
                     .HasForeignKey(e => e.ClienteIdcliente);
 
+                // CORREGIDO: FK por CODIGO, no por ID
                 entity.HasOne(e => e.Articulo)
                     .WithMany(a => a.ClienteHasArticulos)
-                    .HasForeignKey(e => e.ArticuloIdArticulo);
+                    .HasForeignKey(e => e.ArticuloCodigo)
+                    .HasPrincipalKey(a => a.Codigo);
             });
 
             // ===========================
@@ -191,13 +183,11 @@ namespace recTivo.Backend.Modelos
                 entity.Property(e => e.PrecioUnitario).HasColumnType("decimal(10,2)").HasColumnName("PrecioUnitario");
                 entity.Property(e => e.CodigoComponentePadre).HasColumnName("CodigoComponentePadre");
 
-                // ⭐ IGNORAR propiedades NotMapped
                 entity.Ignore(e => e.Descripcion);
                 entity.Ignore(e => e.Descripcion2);
                 entity.Ignore(e => e.Hijos);
                 entity.Ignore(e => e.NombreComponente);
 
-                // ⭐ Relación SIN propiedad de navegación
                 entity.HasOne<Escandallo>()
                     .WithMany(p => p.Componentes)
                     .HasForeignKey(e => e.IdEscandallo)

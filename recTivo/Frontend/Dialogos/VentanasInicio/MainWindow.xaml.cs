@@ -23,14 +23,12 @@ namespace recTivo
         private readonly IServiceProvider _serviceProvider;
         private UIElement _dashboardInicial;
 
-
         public MainWindow(IServiceProvider serviceProvider)
         {
             InitializeComponent();
             _serviceProvider = serviceProvider;
 
             panelPrincipal.Children.Add(_serviceProvider.GetService<UCDashboard>());
-
 
             DataContext = this;
             _ = CargarTotalesAsync();
@@ -39,43 +37,29 @@ namespace recTivo
         private void MostrarDashboard()
         {
             panelPrincipal.Children.Clear();
-
             _dashboardInicial = _serviceProvider.GetRequiredService<UCDashboard>();
             panelPrincipal.Children.Add(_dashboardInicial);
         }
-
 
         private int _totalArticulos;
         public int TotalArticulos
         {
             get => _totalArticulos;
-            set
-            {
-                _totalArticulos = value;
-                OnPropertyChanged(nameof(TotalArticulos));
-            }
+            set { _totalArticulos = value; OnPropertyChanged(nameof(TotalArticulos)); }
         }
 
         private int _totalClientes;
         public int TotalClientes
         {
             get => _totalClientes;
-            set
-            {
-                _totalClientes = value;
-                OnPropertyChanged(nameof(TotalClientes));
-            }
+            set { _totalClientes = value; OnPropertyChanged(nameof(TotalClientes)); }
         }
 
         private int _totalEmpleados;
         public int TotalEmpleados
         {
             get => _totalEmpleados;
-            set
-            {
-                _totalEmpleados = value;
-                OnPropertyChanged(nameof(TotalEmpleados));
-            }
+            set { _totalEmpleados = value; OnPropertyChanged(nameof(TotalEmpleados)); }
         }
 
         private async Task CargarTotalesAsync()
@@ -124,20 +108,15 @@ namespace recTivo
                 case "Listar artículos":
                     {
                         panelPrincipal.Children.Clear();
-
                         var uc = _serviceProvider.GetService<UCListadoArticulos>();
-
                         uc.SolicitarCierre += () =>
                         {
                             panelPrincipal.Children.Remove(uc);
                             MostrarDashboard();
                         };
-
                         panelPrincipal.Children.Add(uc);
                         break;
                     }
-
-
             }
 
             articulos.SelectedItem = null;
@@ -150,33 +129,24 @@ namespace recTivo
             switch (item.Content.ToString())
             {
                 case "Dar de alta":
-                    {
-                        var vm = _serviceProvider.GetRequiredService<MVCliente>();
-                        var dialogo = new DialogoAltaCliente(vm);
-                        dialogo.ShowDialog();
-                        break;
-                    }
-
+                    // CORREGIDO: usar el contenedor DI en lugar de new
+                    _serviceProvider.GetService<DialogoAltaCliente>()?.ShowDialog();
+                    break;
                 case "Modificar":
                     _serviceProvider.GetService<DialogoModificarCliente>()?.ShowDialog();
                     break;
                 case "Listar clientes":
                     {
                         panelPrincipal.Children.Clear();
-
                         var uc = _serviceProvider.GetService<UCListadoClientes>();
-
                         uc.SolicitarCierre += () =>
                         {
                             panelPrincipal.Children.Remove(uc);
                             MostrarDashboard();
                         };
-
                         panelPrincipal.Children.Add(uc);
                         break;
                     }
-
-
             }
 
             clientes.SelectedItem = null;
@@ -250,13 +220,9 @@ namespace recTivo
             ventas.SelectedItem = null;
         }
 
-
-
-
-
         private void salir_Click(object sender, RoutedEventArgs e)
         {
-            var dialogo = _serviceProvider.GetService<ConfirmacionDialogo>();
+            var dialogo = _serviceProvider.GetRequiredService<ConfirmacionDialogo>();
             dialogo.Owner = this;
 
             if (dialogo.ShowDialog() == true)

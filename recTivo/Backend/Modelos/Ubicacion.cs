@@ -22,15 +22,9 @@ public class Ubicacion
     [Column("CANTIDAD")]
     public int Cantidad { get; set; }
 
-    // NUEVO: Relación con el Artículo
     [Column("ID_ARTICULO")]
     public int? IdArticulo { get; set; }
 
     [ForeignKey("IdArticulo")]
     public virtual Articulo? Articulo { get; set; }
-
-    // Relación 1 a 1 con ArticuloUbicacion
-    public ArticuloUbicacion ArticuloUbicacion { get; set; }
-
-
 }

@@ -13,13 +13,39 @@ namespace recTivo.MVVM
         public Empleado Empleado
         {
             get => _empleado ?? (_empleado = new Empleado());
-            set => SetProperty(ref _empleado, value);
+            set
+            {
+                if (_empleado != null)
+                    _empleado.PropertyChanged -= OnEmpleadoPropertyChanged;
+
+                SetProperty(ref _empleado, value);
+
+                if (_empleado != null)
+                    _empleado.PropertyChanged += OnEmpleadoPropertyChanged;
+            }
+        }
+
+        public override bool HasNoErrors =>
+            !HasErrors &&
+            !string.IsNullOrWhiteSpace(Empleado.Nombre) &&
+            !string.IsNullOrWhiteSpace(Empleado.Apellidos) &&
+            !string.IsNullOrWhiteSpace(Empleado.Username) &&
+            !string.IsNullOrWhiteSpace(Empleado.Password) &&
+            Empleado.Rol != null;
+
+        private void OnEmpleadoPropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            OnPropertyChanged(nameof(HasNoErrors));
         }
 
         public MVEmpleado(EmpleadoRepository empleadoRepository, RolRepository rolRepository)
         {
             _empleadoRepository = empleadoRepository;
             _rolRepository = rolRepository;
+
+            // Inicializamos Empleado aquí para suscribirnos desde el principio
+            _empleado = new Empleado();
+            _empleado.PropertyChanged += OnEmpleadoPropertyChanged;
         }
 
         private List<Empleado> _listaEmpleados;
@@ -55,7 +81,6 @@ namespace recTivo.MVVM
                 IdRol = value?.Id;
             }
         }
-
 
         private string _nombre;
         public string Nombre
@@ -106,27 +131,22 @@ namespace recTivo.MVVM
             set => SetProperty(ref _idRol, value);
         }
 
-
         public async Task Inicializa()
         {
-            ListaEmpleados = (List<Empleado>)await _empleadoRepository.GetAllAsync();
-            ListaRoles = (List<Rol>)await _rolRepository.GetAllAsync();
+            ListaEmpleados = (await _empleadoRepository.GetAllAsync()).ToList();
+            ListaRoles = (await _rolRepository.GetAllAsync()).ToList();
         }
 
-     
         public async Task<bool> GuardarAsync()
         {
-            bool correcto = true;      
-
-            
             var empleado = new Empleado
             {
-                Apellidos = Apellidos,
-                Nombre = Nombre,
-                Dni = Dni,
-                Username = Username,
-                Password = Password,
-                IdRol = IdRol,
+                Apellidos = Empleado.Apellidos,
+                Nombre = Empleado.Nombre,
+                Dni = Empleado.Dni,
+                Username = Empleado.Username,
+                Password = Empleado.Password,
+                IdRol = Empleado.Rol?.Id,
                 Estado = Estado
             };
 
@@ -138,29 +158,17 @@ namespace recTivo.MVVM
 
         public void LimpiarCampos()
         {
-            Nombre = "";
-            Apellidos = "";
-            Dni = "";
-            Username = "";
-            Password = "";
-            Estado = "";
-            IdRol = null;
+            Empleado = new Empleado();
             Estado = "activo";
-
+            IdRol = null;
             RolSeleccionado = null;
             EmpleadoSeleccionado = null;
 
-            OnPropertyChanged(nameof(Nombre));
-            OnPropertyChanged(nameof(Apellidos));
-            OnPropertyChanged(nameof(Dni));
-            OnPropertyChanged(nameof(Username));
-            OnPropertyChanged(nameof(Password));
             OnPropertyChanged(nameof(Estado));
             OnPropertyChanged(nameof(RolSeleccionado));
             OnPropertyChanged(nameof(EmpleadoSeleccionado));
+            OnPropertyChanged(nameof(HasNoErrors));
         }
-
-
 
         public async Task<bool> EliminarAsync(int idEmpleado)
         {
@@ -176,7 +184,6 @@ namespace recTivo.MVVM
             }
         }
 
-       
         public async Task<bool> CargarEmpleadoSeleccionadoAsync()
         {
             if (EmpleadoSeleccionado == null)

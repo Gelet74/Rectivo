@@ -9,6 +9,7 @@ using recTivo.Frontend.Dialogos.Articulos;
 using recTivo.Frontend.Dialogos.Clientes;
 using recTivo.Frontend.Dialogos.Empleado;
 using recTivo.Frontend.Dialogos.Escandallo;
+using recTivo.Frontend.Dialogos.Ordenes;
 using recTivo.Frontend.Dialogos.VentanasInicio;
 using recTivo.Frontend.UC;
 using recTivo.MVVM;
@@ -21,7 +22,6 @@ namespace recTivo
     {
         private IServiceProvider _serviceProvider;
 
-        // ⭐ AÑADIR ESTA PROPIEDAD
         public Empleado? EmpleadoActual { get; set; }
 
         public App()
@@ -33,6 +33,7 @@ namespace recTivo
 
         private void ConfigureServices(ServiceCollection services)
         {
+            // CONTEXTO: Transient para evitar contextos compartidos en WPF
             services.AddDbContext<RectivoContext>(options =>
             {
                 options.UseMySQL("server=localhost;database=RECTIVO;user=root;password=mysql;Allow User Variables=True;Treat Tiny As Boolean=False;Default Command Timeout=60;")
@@ -43,85 +44,83 @@ namespace recTivo
             ServiceLifetime.Transient);
 
             services.AddLogging(configure => configure.AddConsole());
+
+            // REPOSITORIOS: todos Transient, consistente con el contexto
+            services.AddTransient(typeof(IRepository<>), typeof(GenericRepository<>));
+            services.AddTransient<ArticuloRepository>();
+            services.AddTransient<EmpleadoRepository>();
+            services.AddTransient<ClienteRepository>();
+            services.AddTransient<OrdenRepository>();
+            services.AddTransient<EscandalloRepository>();
+            services.AddTransient<RolRepository>();
+
+            // VIEWMODELS
             services.AddTransient<MVArticulo>();
             services.AddTransient<MVEmpleado>();
-            services.AddSingleton<MVCliente>();
-            services.AddTransient<MVAlmacen>(provider =>
-            {
-                return new MVAlmacen(
-                    provider.GetRequiredService<RectivoContext>(),
-                    provider.GetRequiredService<MVArticulo>()
-                );
-            });
+            services.AddTransient<MVCliente>();
+            services.AddTransient<MVAlmacen>(provider => new MVAlmacen(
+                provider.GetRequiredService<RectivoContext>(),
+                provider.GetRequiredService<MVArticulo>()
+            ));
+            services.AddTransient<MVEscandallo>(provider => new MVEscandallo(
+                provider.GetRequiredService<EscandalloRepository>(),
+                provider.GetRequiredService<ArticuloRepository>(),
+                provider.GetRequiredService<OrdenRepository>()
+            ));
+            services.AddTransient<MVOrden>(provider => new MVOrden(
+                provider.GetRequiredService<EscandalloRepository>(),
+                provider.GetRequiredService<ArticuloRepository>(),
+                provider.GetRequiredService<OrdenRepository>(),
+                provider.GetRequiredService<EmpleadoRepository>()
+            ));
 
-            services.AddTransient<MVEscandallo>(provider =>
-            {
-                return new MVEscandallo(
-                    provider.GetRequiredService<EscandalloRepository>(),
-                    provider.GetRequiredService<ArticuloRepository>(),
-                    provider.GetRequiredService<OrdenRepository>()
-                );
-            });
-
-            services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));
-            services.AddScoped<IRepository<Articulo>, ArticuloRepository>();
-            services.AddScoped<IRepository<Empleado>, EmpleadoRepository>();
-            services.AddScoped<IRepository<Cliente>, ClienteRepository>();
-            services.AddScoped<IRepository<Orden>, OrdenRepository>();
-            services.AddScoped<IRepository<Escandallo>, EscandalloRepository>();
-
-            services.AddScoped<EscandalloRepository>();
-            services.AddScoped<ArticuloRepository>();
-            services.AddScoped<EmpleadoRepository>();
-            services.AddScoped<ClienteRepository>();
-            services.AddScoped<OrdenRepository>();
-            services.AddScoped<ClienteHasArticuloRepository>();
-
+            // VENTANAS
             services.AddTransient<Inicio>();
             services.AddTransient<Login>();
             services.AddTransient<MainWindow>();
 
-            services.AddTransient<DialogoEntradaAlmacen>(provider =>
-            {
-                return new DialogoEntradaAlmacen(
-                    provider.GetRequiredService<MVAlmacen>()
-                );
-            });
+            // DIÁLOGOS DE ALMACÉN
+            services.AddTransient<DialogoEntradaAlmacen>(provider => new DialogoEntradaAlmacen(
+                provider.GetRequiredService<MVAlmacen>()
+            ));
+            services.AddTransient<DialogoSalidaAlmacen>(provider => new DialogoSalidaAlmacen(
+                provider.GetRequiredService<MVAlmacen>()
+            ));
 
-            services.AddTransient<DialogoSalidaAlmacen>(provider =>
-            {
-                return new DialogoSalidaAlmacen(
-                    provider.GetRequiredService<MVAlmacen>()
-                );
-            });
-
+            // DIÁLOGOS DE ARTÍCULOS
             services.AddTransient<DialogoAltaArticulo>();
             services.AddTransient<DialogoBajaArticulo>();
             services.AddTransient<DialogoModificarArticulo>();
 
+            // DIÁLOGOS DE CLIENTES
             services.AddTransient<DialogoAltaCliente>();
             services.AddTransient<DialogoConsultaCliente>();
             services.AddTransient<DialogoModificarCliente>();
 
+            // DIÁLOGOS DE EMPLEADOS
             services.AddTransient<DialogoAltaEmpleado>();
             services.AddTransient<DialogoConsultaEmpleado>();
             services.AddTransient<DialogoModificarEmpleado>();
 
-            services.AddTransient<DialogoAltaEscandallo>(provider =>
-            {
-                return new DialogoAltaEscandallo(
-                    provider.GetRequiredService<MVEscandallo>()
-                );
-            });
-
-            services.AddTransient<DialogoModificarEscandallo>();
+            // DIÁLOGOS DE ESCANDALLO
+            services.AddTransient<DialogoAltaEscandallo>(provider => new DialogoAltaEscandallo(
+                provider.GetRequiredService<MVEscandallo>()
+            ));
+            services.AddTransient<DialogoModificarEscandallo>(provider => new DialogoModificarEscandallo(
+                provider.GetRequiredService<MVEscandallo>()
+            ));
             services.AddTransient<DialogoListarEscandallo>();
 
-            services.AddTransient<ConfirmacionDialogo>();
-            services.AddScoped<RolRepository>();
+            // DIÁLOGOS DE ÓRDENES
+            services.AddTransient<DialogoProcesarOrden>(provider => new DialogoProcesarOrden(
+                provider.GetRequiredService<MVOrden>()
+            ));
 
-            services.AddSingleton<UCListadoArticulos>();
-            services.AddSingleton<UCListadoClientes>();
+            services.AddTransient<ConfirmacionDialogo>();
+
+            // USER CONTROLS
+            services.AddTransient<UCListadoArticulos>();
+            services.AddTransient<UCListadoClientes>();
             services.AddTransient<UCDashboard>();
         }
 

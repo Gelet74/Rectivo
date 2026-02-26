@@ -3,10 +3,232 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:recTivo.Frontend.Dialogos.Ordenes"
         mc:Ignorable="d"
-        Title="DialogoProcesarOrden" Height="450" Width="800">
+        ResizeMode="NoResize"
+        WindowStyle="None"
+        WindowStartupLocation="CenterScreen"
+        Background="#2D2D30"
+        Height="680" Width="860">
+
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
+
+        <Style TargetType="TextBox">
+            <Setter Property="Background"        Value="#E0E0E0"/>
+            <Setter Property="Foreground"        Value="Black"/>
+            <Setter Property="BorderBrush"       Value="#E0E0E0"/>
+            <Setter Property="BorderThickness"   Value="2"/>
+            <Setter Property="Padding"           Value="5"/>
+        </Style>
+        <Style TargetType="ComboBox">
+            <Setter Property="Background"        Value="#E0E0E0"/>
+            <Setter Property="Foreground"        Value="Black"/>
+            <Setter Property="BorderBrush"       Value="#E0E0E0"/>
+            <Setter Property="BorderThickness"   Value="2"/>
+            <Setter Property="Padding"           Value="5"/>
+        </Style>
+        <Style TargetType="CheckBox">
+            <Setter Property="Foreground"        Value="White"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+        <Style TargetType="DataGrid">
+            <Setter Property="Background"                Value="#E0E0E0"/>
+            <Setter Property="RowBackground"             Value="#F5F5F5"/>
+            <Setter Property="AlternatingRowBackground"  Value="#E8E8E8"/>
+            <Setter Property="GridLinesVisibility"       Value="Horizontal"/>
+            <Setter Property="HorizontalGridLinesBrush"  Value="#CCCCCC"/>
+            <Setter Property="BorderThickness"           Value="0"/>
+            <Setter Property="CanUserAddRows"            Value="False"/>
+            <Setter Property="IsReadOnly"                Value="True"/>
+            <Setter Property="AutoGenerateColumns"       Value="False"/>
+            <Setter Property="RowHeaderWidth"            Value="0"/>
+        </Style>
+    </Window.Resources>
+
     <Grid>
-        
+        <Border BorderBrush="#FF9800" BorderThickness="4">
+            <DockPanel LastChildFill="True">
+
+                <!-- CABECERA -->
+                <Grid DockPanel.Dock="Top" Height="40" Background="#808080">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="GENERAR ÓRDENES DE FABRICACIÓN"
+                               Foreground="White" VerticalAlignment="Center"
+                               HorizontalAlignment="Left" Margin="10,0" FontWeight="Bold"/>
+                    <TextBlock Text="Pulsa ESC para volver atrás"
+                               Foreground="White" HorizontalAlignment="Right"
+                               VerticalAlignment="Center" Grid.Column="1" Margin="0,0,10,0"/>
+                </Grid>
+
+                <StackPanel Margin="24" Orientation="Vertical">
+
+                    <!-- FILA 1: artículo + cantidad + fecha -->
+                    <Border Background="#3A3A3D" CornerRadius="4" Padding="16,12" Margin="0,0,0,12">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="150"/>
+                                <ColumnDefinition Width="170"/>
+                                <ColumnDefinition Width="150"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Artículo PT -->
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="Artículo PT a fabricar:"
+                                           Foreground="#FF9800" Margin="0,0,0,4"/>
+                                <ComboBox x:Name="cmbArticulo"
+                                          ItemsSource="{Binding ArticulosPT}"
+                                          SelectedItem="{Binding ArticuloSeleccionado, Mode=TwoWay}"
+                                          DisplayMemberPath="Codigo"
+                                          Height="30"/>
+                            </StackPanel>
+
+                            <!-- Descripción -->
+                            <StackPanel Grid.Column="1" Margin="0,0,16,0">
+                                <TextBlock Text="Descripción:" Foreground="#FF9800" Margin="0,0,0,4"/>
+                                <TextBlock Text="{Binding ArticuloSeleccionado.descrip}"
+                                           Foreground="White" Height="30" Padding="0,6,0,0"
+                                           TextTrimming="CharacterEllipsis" VerticalAlignment="Center"/>
+                            </StackPanel>
+
+                            <!-- Cantidad -->
+                            <StackPanel Grid.Column="2" Margin="0,0,16,0">
+                                <TextBlock Text="Cantidad a fabricar:" Foreground="#FF9800" Margin="0,0,0,4"/>
+                                <TextBox x:Name="txtCantidad"
+                                         Text="{Binding CantidadFabricar, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"
+                                         Height="30" LostFocus="TxtCantidad_LostFocus"/>
+                            </StackPanel>
+
+                            <!-- Fecha fin -->
+                            <StackPanel Grid.Column="3">
+                                <TextBlock Text="Fecha fin*:" Foreground="#FF9800" Margin="0,0,0,4"/>
+                                <DatePicker x:Name="dpFechaFin"
+                                            SelectedDate="{Binding FechaFin, Mode=TwoWay}"
+                                            Height="30" Background="#E0E0E0"/>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                    <!-- FILA 2: opción PT + botón calcular -->
+                    <Border Background="#3A3A3D" CornerRadius="4" Padding="16,10" Margin="0,0,0,12">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Orientation="Vertical" VerticalAlignment="Center">
+                                <TextBlock Text="¿Generar también la orden del PT?"
+                                           Foreground="#FF9800" FontWeight="Bold"
+                                           Margin="0,0,0,6"/>
+                                <StackPanel Orientation="Horizontal">
+                                    <RadioButton x:Name="rbSoloPT"
+                                                 Content="Solo componentes PS"
+                                                 GroupName="opcionPT"
+                                                 Checked="RbSoloPT_Checked"
+                                                 Foreground="White" Margin="0,0,20,0"/>
+                                    <RadioButton x:Name="rbConPT"
+                                                 Content="PS + orden del PT"
+                                                 GroupName="opcionPT"
+                                                 Checked="RbConPT_Checked"
+                                                 Foreground="White"/>
+                                </StackPanel>
+                            </StackPanel>
+
+                            <Button Grid.Column="1"
+                                    x:Name="btnCalcular"
+                                    Content="▶  Calcular órdenes"
+                                    Click="BtnCalcular_Click"
+                                    Width="180" Height="36"
+                                    Background="#FF9800" Foreground="White"
+                                    BorderBrush="#FF9800" FontWeight="Bold"
+                                    VerticalAlignment="Center"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- PREVIEW DE ÓRDENES -->
+                    <Border Visibility="{Binding PreviewVisible, Converter={StaticResource BoolToVis}}"
+                            Background="#1E1E1E" BorderBrush="#FF9800" BorderThickness="1"
+                            CornerRadius="4" Padding="0">
+                        <StackPanel>
+                            <TextBlock Text="Órdenes que se generarán:"
+                                       Foreground="#FF9800" FontWeight="Bold"
+                                       Margin="12,10,0,8"/>
+
+                            <DataGrid x:Name="dgPreview"
+                                      ItemsSource="{Binding OrdenesPreview}"
+                                      MaxHeight="260" Margin="8,0,8,8">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Tipo"
+                                                        Binding="{Binding Tipo}"
+                                                        Width="55">
+                                        <DataGridTextColumn.ElementStyle>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="FontWeight" Value="Bold"/>
+                                                <Style.Triggers>
+                                                    <Trigger Property="Text" Value="PT">
+                                                        <Setter Property="Foreground" Value="#FF9800"/>
+                                                    </Trigger>
+                                                    <Trigger Property="Text" Value="PS">
+                                                        <Setter Property="Foreground" Value="#2196F3"/>
+                                                    </Trigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </DataGridTextColumn.ElementStyle>
+                                    </DataGridTextColumn>
+                                    <DataGridTextColumn Header="Código"
+                                                        Binding="{Binding CodigoArticulo}"
+                                                        Width="120"
+                                                        FontWeight="SemiBold"/>
+                                    <DataGridTextColumn Header="Descripción"
+                                                        Binding="{Binding Descripcion}"
+                                                        Width="*"/>
+                                    <DataGridTextColumn Header="Cantidad"
+                                                        Binding="{Binding Cantidad, StringFormat={}{0:0.##}}"
+                                                        Width="90"/>
+                                    <DataGridTextColumn Header="Acción"
+                                                        Binding="{Binding AccionTexto}"
+                                                        Width="80">
+                                        <DataGridTextColumn.ElementStyle>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="FontWeight" Value="Bold"/>
+                                                <Style.Triggers>
+                                                    <Trigger Property="Text" Value="Nueva">
+                                                        <Setter Property="Foreground" Value="#4CAF50"/>
+                                                    </Trigger>
+                                                    <Trigger Property="Text" Value="Agrupar">
+                                                        <Setter Property="Foreground" Value="#FF9800"/>
+                                                    </Trigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </DataGridTextColumn.ElementStyle>
+                                    </DataGridTextColumn>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- NOTA agrupación -->
+                    <TextBlock Visibility="{Binding PreviewVisible, Converter={StaticResource BoolToVis}}"
+                               Text="ℹ Si ya existe una orden con el mismo código y fecha, las cantidades se sumarán."
+                               Foreground="#AAAAAA" FontSize="11" Margin="0,6,0,0"/>
+
+                    <!-- BOTÓN CONFIRMAR -->
+                    <Button x:Name="btnConfirmar"
+                            Content="✔  Confirmar y generar órdenes"
+                            Click="BtnConfirmar_Click"
+                            Visibility="{Binding PreviewVisible, Converter={StaticResource BoolToVis}}"
+                            HorizontalAlignment="Right"
+                            Width="240" Height="36"
+                            Background="#4CAF50" Foreground="White"
+                            BorderBrush="#4CAF50" FontWeight="Bold"
+                            Margin="0,12,0,0"/>
+
+                </StackPanel>
+            </DockPanel>
+        </Border>
     </Grid>
 </Window>

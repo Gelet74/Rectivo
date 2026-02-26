@@ -3,6 +3,7 @@ using recTivo.Backend.Modelos;
 using recTivo.Backend.Repos;
 using recTivo.MVVM.Base;
 using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
 using System.Windows.Data;
 
 namespace recTivo.MVVM
@@ -38,7 +39,6 @@ namespace recTivo.MVVM
             set => SetProperty(ref _listaClientes, value);
         }
 
-
         // ============================================================
         // SELECCIÓN
         // ============================================================
@@ -51,21 +51,31 @@ namespace recTivo.MVVM
         }
 
         // ============================================================
-        // CAMPOS DEL FORMULARIO
+        // CAMPOS DEL FORMULARIO (con [Required] para validación visual)
         // ============================================================
 
         private string _nombre;
+        [Required(ErrorMessage = "El Nombre es obligatorio")]
         public string Nombre
         {
             get => _nombre;
-            set => SetProperty(ref _nombre, value);
+            set
+            {
+                SetProperty(ref _nombre, value);
+                OnPropertyChanged(nameof(HasNoErrors));
+            }
         }
 
         private string _apellido1;
+        [Required(ErrorMessage = "El primer apellido es obligatorio")]
         public string Apellido1
         {
             get => _apellido1;
-            set => SetProperty(ref _apellido1, value);
+            set
+            {
+                SetProperty(ref _apellido1, value);
+                OnPropertyChanged(nameof(HasNoErrors));
+            }
         }
 
         private string _apellido2;
@@ -76,10 +86,15 @@ namespace recTivo.MVVM
         }
 
         private string _dni;
+        [Required(ErrorMessage = "El DNI es obligatorio")]
         public string Dni
         {
             get => _dni;
-            set => SetProperty(ref _dni, value);
+            set
+            {
+                SetProperty(ref _dni, value);
+                OnPropertyChanged(nameof(HasNoErrors));
+            }
         }
 
         private string _telefono;
@@ -96,7 +111,7 @@ namespace recTivo.MVVM
             set
             {
                 SetProperty(ref _filtroNombre, value);
-                ClientesView.Refresh();
+                ClientesView?.Refresh();
             }
         }
 
@@ -107,7 +122,7 @@ namespace recTivo.MVVM
             set
             {
                 SetProperty(ref _filtroApellido1, value);
-                ClientesView.Refresh();
+                ClientesView?.Refresh();
             }
         }
 
@@ -118,9 +133,10 @@ namespace recTivo.MVVM
             set
             {
                 SetProperty(ref _filtroApellido2, value);
-                ClientesView.Refresh();
+                ClientesView?.Refresh();
             }
         }
+
         private string _DNI;
         public string DNI
         {
@@ -128,23 +144,32 @@ namespace recTivo.MVVM
             set
             {
                 SetProperty(ref _DNI, value);
-                ClientesView.Refresh();
+                ClientesView?.Refresh();
             }
         }
 
-
         private string _usuario;
+        [Required(ErrorMessage = "El Usuario es obligatorio")]
         public string Usuario
         {
             get => _usuario;
-            set => SetProperty(ref _usuario, value);
+            set
+            {
+                SetProperty(ref _usuario, value);
+                OnPropertyChanged(nameof(HasNoErrors));
+            }
         }
 
         private string _password;
+        [Required(ErrorMessage = "La Contraseña es obligatoria")]
         public string Password
         {
             get => _password;
-            set => SetProperty(ref _password, value);
+            set
+            {
+                SetProperty(ref _password, value);
+                OnPropertyChanged(nameof(HasNoErrors));
+            }
         }
 
         public List<string> NombreLista => ListaClientes?
@@ -168,6 +193,17 @@ namespace recTivo.MVVM
           .OrderBy(d => d)
           .ToList();
 
+        // ============================================================
+        // VALIDACIÓN BOTÓN ALTA
+        // ============================================================
+
+        public override bool HasNoErrors =>
+            !HasErrors &&
+            !string.IsNullOrWhiteSpace(Nombre) &&
+            !string.IsNullOrWhiteSpace(Apellido1) &&
+            !string.IsNullOrWhiteSpace(Dni) &&
+            !string.IsNullOrWhiteSpace(Usuario) &&
+            !string.IsNullOrWhiteSpace(Password);
 
         // ============================================================
         // INICIALIZAR
@@ -178,12 +214,11 @@ namespace recTivo.MVVM
             try
             {
                 ListaClientes = new ObservableCollection<Cliente>(
-                (await _clienteRepository.GetAllAsync())
-                .OrderBy(c => c.Apellido1)
-            );
+                    (await _clienteRepository.GetAllAsync())
+                    .OrderBy(c => c.Apellido1)
+                );
 
                 ClientesView = new ListCollectionView(ListaClientes);
-
                 ClientesView.Filter = FiltarClientes;
 
                 OnPropertyChanged(nameof(ClientesView));
@@ -222,7 +257,6 @@ namespace recTivo.MVVM
                 (cliente.Apellido2?.Contains(FiltroApellido2, StringComparison.OrdinalIgnoreCase) ?? false);
 
             return coincideNombre && coincideApellido1 && coincideApellido2;
-
         }
 
         // ============================================================
@@ -243,16 +277,11 @@ namespace recTivo.MVVM
             };
 
             await _clienteRepository.AddAsync(cliente);
-
             ListaClientes.Add(cliente);
-
             ClientesView.Refresh();
-
             LimpiarCampos();
             return true;
         }
-
-
 
         // ============================================================
         // CARGAR CLIENTE SELECCIONADO
@@ -309,6 +338,27 @@ namespace recTivo.MVVM
             return true;
         }
 
+        // ============================================================
+        // LIMPIAR CAMPOS
+        // ============================================================
+
+        public void LimpiarCampos()
+        {
+            Nombre = null;
+            Apellido1 = null;
+            Apellido2 = null;
+            Dni = null;
+            Telefono = null;
+            Usuario = null;
+            Password = null;
+            ClienteSeleccionado = null;
+
+            OnPropertyChanged(nameof(HasNoErrors));
+        }
+
+        // ============================================================
+        // TOTAL CLIENTES
+        // ============================================================
 
         private int _totalClientes;
         public int TotalClientes
@@ -318,41 +368,14 @@ namespace recTivo.MVVM
         }
 
         // ============================================================
-        // LIMPIAR CAMPOS
-        // ============================================================
-
-        public void LimpiarCampos()
-        {
-            Nombre = "";
-            Apellido1 = "";
-            Apellido2 = "";
-            Dni = "";
-            Telefono = "";
-            Usuario = "";
-            Password = "";
-            ClienteSeleccionado = null;
-
-            OnPropertyChanged(nameof(Nombre));
-            OnPropertyChanged(nameof(Apellido1));
-            OnPropertyChanged(nameof(Apellido2));
-            OnPropertyChanged(nameof(Dni));
-            OnPropertyChanged(nameof(Telefono));
-            OnPropertyChanged(nameof(Usuario));
-            OnPropertyChanged(nameof(Password));
-            OnPropertyChanged(nameof(ClienteSeleccionado));
-        }
-        // -----------------------------
         // LISTAS FILTRADAS PARA COMBOBOX
-        // -----------------------------
+        // ============================================================
 
         private List<string> _listaNombresFiltrados;
         public List<string> ListaNombresFiltrados
         {
             get => _listaNombresFiltrados;
             set => SetProperty(ref _listaNombresFiltrados, value);
-
         }
-
-
     }
 }

@@ -8,7 +8,6 @@ namespace recTivo.Backend.Modelos
     public class Articulo : ValidatableViewModel
     {
         public int IdArticulo { get; set; }
-
         public string Codigo { get; set; } = null!;
 
         [Column("descripcion")]
@@ -18,7 +17,6 @@ namespace recTivo.Backend.Modelos
         public string? descrip2 { get; set; }
 
         public int? Stock { get; set; } = 0;
-
         public double? Pvp { get; set; }
 
         [Column("precio_compra")]
@@ -27,9 +25,10 @@ namespace recTivo.Backend.Modelos
         // ===========================
         // RELACIONES
         // ===========================
-        public virtual ICollection<ArticuloUbicacion> ArticuloUbicaciones { get; set; } = new List<ArticuloUbicacion>();
 
-        // Relación con ClienteHasArticulo
+        // Un artículo puede estar en múltiples ubicaciones físicas
+        public virtual ICollection<Ubicacion> Ubicaciones { get; set; } = new List<Ubicacion>();
+
         public virtual ICollection<ClienteHasArticulo> ClienteHasArticulos { get; set; } = new List<ClienteHasArticulo>();
 
         // ===========================
@@ -37,24 +36,17 @@ namespace recTivo.Backend.Modelos
         // ===========================
 
         [NotMapped]
+        public int StockTotal => Ubicaciones?.Sum(u => u.Cantidad) ?? Stock ?? 0;
+
+        [NotMapped]
         public string UbicacionesResumen
         {
             get
             {
-                if (ArticuloUbicaciones == null || !ArticuloUbicaciones.Any())
+                if (Ubicaciones == null || !Ubicaciones.Any())
                     return "-";
-
-                return string.Join(" | ", ArticuloUbicaciones.Select(u =>
-                    $"{u.Ubicacion?.LetraPasillo ?? "?"}-{u.Ubicacion?.NumeroEstanteria?.ToString() ?? "?"}-{u.Ubicacion?.Numero?.ToString() ?? "?"} ({u.Cantidad})"));
-            }
-        }
-
-        [NotMapped]
-        public int StockTotal
-        {
-            get
-            {
-                return ArticuloUbicaciones?.Sum(u => u.Cantidad) ?? Stock ?? 0;
+                return string.Join(" | ", Ubicaciones.Select(u =>
+                    $"{u.LetraPasillo ?? "?"}-{u.NumeroEstanteria?.ToString() ?? "?"}-{u.Numero?.ToString() ?? "?"} ({u.Cantidad})"));
             }
         }
     }

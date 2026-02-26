@@ -8,8 +8,8 @@ namespace recTivo.Backend.Modelos
         [Column("cliente_IDCLIENTE")]
         public int ClienteIdcliente { get; set; }
 
-        [Column("articulo_IDARTICULO")]
-        public int ArticuloIdArticulo { get; set; }
+        [Column("articulo_CODIGO")]
+        public string ArticuloCodigo { get; set; } = null!;
 
         public virtual Cliente? Cliente { get; set; }
         public virtual Articulo? Articulo { get; set; }

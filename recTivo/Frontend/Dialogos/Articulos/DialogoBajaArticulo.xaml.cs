@@ -1,8 +1,6 @@
 ﻿using di.proyecto.clase._2025.Frontend.Mensajes;
 using recTivo.Frontend.Dialogos.VentanasInicio;
 using recTivo.MVVM;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
 
@@ -19,7 +17,6 @@ namespace recTivo.Frontend.Dialogos.Articulos
             DataContext = _vm;
 
             Loaded += async (_, __) => await _vm.Inicializa();
-
         }
 
         private async void btnBajaArticulo_Click(object sender, RoutedEventArgs e)
@@ -27,7 +24,8 @@ namespace recTivo.Frontend.Dialogos.Articulos
             bool ok = await _vm.BajaPorCodigoAsync();
             if (ok)
             {
-                MensajeError.Mostrar("Error","Artículo dado de baja correctamente");
+                // CORREGIDO: era MensajeError, debe ser MensajeInformacion
+                MensajeInformacion.Mostrar("ÉXITO", "Artículo dado de baja correctamente");
                 this.Close();
             }
             else
@@ -36,31 +34,24 @@ namespace recTivo.Frontend.Dialogos.Articulos
             }
         }
 
-
         protected override void OnPreviewKeyDown(KeyEventArgs e)
         {
-            base.OnPreviewKeyDown(e);
-
             if (e.Key == Key.Escape)
             {
+                e.Handled = true;
+
                 var dialog = new ConfirmacionDialogo { Owner = this };
                 bool? result = dialog.ShowDialog();
 
                 if (result == true && dialog.Confirmado)
-                {
-                    var main = Application.Current.Windows.OfType<MainWindow>().FirstOrDefault();
-                    if (main != null)
-                        main.Activate();
-
                     this.Close();
-                }
-
-                e.Handled = true;
+            }
+            else
+            {
+                base.OnPreviewKeyDown(e);
             }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged([CallerMemberName] string prop = null)
-            => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
+        // ELIMINADO: INotifyPropertyChanged — no tiene uso en una ventana
     }
 }

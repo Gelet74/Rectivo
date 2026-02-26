@@ -245,10 +245,10 @@
                         Height="60"
                         HorizontalAlignment="Center"
                         Margin="10,0,10,0"
-                        Background="#555"
-                        Foreground="#AAA"
+                        Background="#FF9800"
+                        Foreground="White"
                         FontWeight="Bold"
-                        IsEnabled="False"/>
+                        Click="BtnCrearOrden_Click"/>
 
                 <!-- Crear pedido (deshabilitado) -->
                 <Button Content="Crear pedido"

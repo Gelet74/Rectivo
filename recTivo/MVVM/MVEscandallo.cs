@@ -1,5 +1,4 @@
 ﻿using di.proyecto.clase._2025.Frontend.Mensajes;
-using Microsoft.EntityFrameworkCore;
 using recTivo.Backend.Modelos;
 using recTivo.Backend.Repos;
 using recTivo.MVVM.Base;
@@ -26,13 +25,7 @@ namespace recTivo.MVVM
             ComponenteNuevo = new ComponenteEscandallo() { Cantidad = 1 };
         }
 
-        private bool _estaCargando;
-        public bool EstaCargando
-        {
-            get => _estaCargando;
-            set => SetProperty(ref _estaCargando, value);
-        }
-
+        public bool EsNuevoEscandallo { get; set; } = true;
 
         // ============================================================
         //   PROPIEDADES
@@ -57,11 +50,29 @@ namespace recTivo.MVVM
             set => SetProperty(ref _articulosFiltrados, value);
         }
 
-        public List<string> CodigosArticulos { get; set; }
+        private List<Articulo> _articulosTodos;
+        public List<Articulo> ArticulosTodos
+        {
+            get => _articulosTodos;
+            set => SetProperty(ref _articulosTodos, value);
+        }
+
+        private List<Articulo> _articulosSinEscandallo;
+        public List<Articulo> ArticulosSinEscandallo
+        {
+            get => _articulosSinEscandallo;
+            set => SetProperty(ref _articulosSinEscandallo, value);
+        }
+
+        private List<string> _codigosArticulos;
+        public List<string> CodigosArticulos
+        {
+            get => _codigosArticulos;
+            set => SetProperty(ref _codigosArticulos, value);
+        }
 
         public string DescripcionFinal => ArticuloFinal?.descrip ?? "";
         public string Descripcion2Final => ArticuloFinal?.descrip2 ?? "";
-        public string DescripcionArticulo { get; set; }
 
         private Articulo _articuloFinal;
         public Articulo ArticuloFinal
@@ -75,8 +86,49 @@ namespace recTivo.MVVM
             }
         }
 
+        // true = artículo elegido válido (sin escandallo previo); false = bloqueado
+        private bool _articuloFinalValido = true;
+        public bool ArticuloFinalValido
+        {
+            get => _articuloFinalValido;
+            set => SetProperty(ref _articuloFinalValido, value);
+        }
+
+        /// <summary>
+        /// Llama a esto desde el SelectionChanged del combo artículo final.
+        /// Devuelve false si el artículo YA tiene escandallo (muestra el error internamente).
+        /// </summary>
+        public async Task<bool> ValidarArticuloFinal(Articulo articulo)
+        {
+            if (articulo == null)
+            {
+                ArticuloFinalValido = true;
+                EscandalloActual.Clear();
+                return true;
+            }
+
+            var existente = await _escandalloRepository.GetByCodigoProductoAsync(articulo.Codigo);
+            if (existente != null)
+            {
+                ArticuloFinalValido = false;
+                MensajeError.Mostrar("ALTA ESCANDALLO",
+                    $"El artículo '{articulo.Codigo}' ya tiene un escandallo creado.\n" +
+                    $"Usa la opción MODIFICAR ESCANDALLO para editarlo.");
+                // Resetear la selección
+                ArticuloFinal = null;
+                EscandalloActual.Clear();
+                OnPropertyChanged(nameof(ArticuloFinal));
+                OnPropertyChanged(nameof(DescripcionFinal));
+                OnPropertyChanged(nameof(Descripcion2Final));
+                return false;
+            }
+
+            ArticuloFinalValido = true;
+            return true;
+        }
+
         // ============================================================
-        //   PROPIEDADES NUEVAS PARA COMPONENTE SELECCIONADO
+        //   PROPIEDADES PARA COMPONENTE SELECCIONADO
         // ============================================================
 
         private Articulo _articuloComponenteSeleccionado;
@@ -100,10 +152,6 @@ namespace recTivo.MVVM
 
         public string DescripcionComponente => ArticuloComponenteSeleccionado?.descrip ?? "";
         public string Descripcion2Componente => ArticuloComponenteSeleccionado?.descrip2 ?? "";
-
-        // ============================================================
-        //   PROPIEDADES EXISTENTES
-        // ============================================================
 
         private ComponenteEscandallo _componenteNuevo;
         public ComponenteEscandallo ComponenteNuevo
@@ -140,6 +188,26 @@ namespace recTivo.MVVM
         public string CodigoSeleccionado { get; set; }
 
         // ============================================================
+        //   PROPIEDADES PARA MODIFICAR ESCANDALLO
+        // ============================================================
+
+        private bool _escandalloVisible;
+        public bool EscandalloVisible
+        {
+            get => _escandalloVisible;
+            set => SetProperty(ref _escandalloVisible, value);
+        }
+
+        private string _codigoSeleccionadoModificar;
+        public string CodigoSeleccionadoModificar
+        {
+            get => _codigoSeleccionadoModificar;
+            set => SetProperty(ref _codigoSeleccionadoModificar, value);
+        }
+
+
+
+        // ============================================================
         //   INICIALIZACIÓN
         // ============================================================
 
@@ -162,20 +230,30 @@ namespace recTivo.MVVM
 
                 ListaArticulos = lista.ToList();
 
+                ArticulosTodos = ListaArticulos
+                    .Where(a =>
+                        !a.Codigo.StartsWith("MP") &&
+                        !a.Codigo.StartsWith("HE") &&
+                        a.Codigo != "01" &&
+                        a.Codigo != "02" &&
+                        a.Codigo != "03"
+                    )
+                    .OrderBy(a => a.Codigo)
+                    .ToList();
+
                 ArticulosFiltrados = ListaArticulos
                     .Where(a =>
-                        a.Codigo.StartsWith("PT") ||
                         a.Codigo.StartsWith("PS") ||
-                        (a.Codigo.StartsWith("03") && a.Codigo.Length > 2) ||
-                        (a.Codigo.StartsWith("02") && a.Codigo.Length > 2) ||
-                        (a.Codigo.StartsWith("01") && a.Codigo.Length > 2)
+                        a.Codigo.StartsWith("MP") ||
+                        a.Codigo.StartsWith("03") ||
+                        a.Codigo.StartsWith("02") ||
+                        a.Codigo.StartsWith("01")
                     )
                     .OrderBy(a =>
-                        a.Codigo.StartsWith("PT") ? 1 :
-                        a.Codigo.StartsWith("PS") ? 2 :
-                        a.Codigo.StartsWith("03") ? 3 :
-                        a.Codigo.StartsWith("02") ? 4 :
-                        a.Codigo.StartsWith("01") ? 5 : 6
+                        a.Codigo.StartsWith("PS") ? 1 :
+                        a.Codigo.StartsWith("03") ? 2 :
+                        a.Codigo.StartsWith("02") ? 3 :
+                        a.Codigo.StartsWith("01") ? 4 : 5
                     )
                     .ThenBy(a => a.Codigo)
                     .ToList();
@@ -185,22 +263,32 @@ namespace recTivo.MVVM
                     .Select(e => e.CodigoProducto)
                     .OrderBy(c => c)
                     .ToList();
+
+                // Artículos que aún NO tienen escandallo (para el combo de Alta)
+                var codigosConEscandallo = new HashSet<string>(CodigosArticulos);
+                ArticulosSinEscandallo = ArticulosTodos
+                    .Where(a => !codigosConEscandallo.Contains(a.Codigo))
+                    .ToList();
             }
             catch (Exception ex)
             {
                 MensajeError.Mostrar("ERROR", $"Error al inicializar: {ex.Message}");
             }
         }
+
         // ============================================================
         //   LIMPIAR CAMPOS
         // ============================================================
 
         public async Task LimpiarCampos()
         {
+            EsNuevoEscandallo = true;
+
             EscandalloActual.Clear();
             ArticuloFinal = null;
             ComponenteNuevo = new ComponenteEscandallo() { Cantidad = 1 };
             ArticuloComponenteSeleccionado = null;
+
             OnPropertyChanged(nameof(ArticuloFinal));
             OnPropertyChanged(nameof(ComponenteNuevo));
             OnPropertyChanged(nameof(ArticuloComponenteSeleccionado));
@@ -210,108 +298,166 @@ namespace recTivo.MVVM
         }
 
 
-        // ============================================================
-        //   AÑADIR COMPONENTE RAÍZ
-        // ============================================================
-
         public async Task AñadirComponente()
         {
-            if (ArticuloFinal == null || string.IsNullOrWhiteSpace(ArticuloFinal.Codigo))
+            try
             {
-                MensajeError.Mostrar("ESCANDALLO", "Debes seleccionar un artículo válido.");
-                return;
+                if (ArticuloFinal == null || string.IsNullOrWhiteSpace(ArticuloFinal.Codigo))
+                {
+                    MensajeError.Mostrar("ESCANDALLO", "Debes seleccionar un artículo final.");
+                    return;
+                }
+
+                if (string.IsNullOrWhiteSpace(ComponenteNuevo.CodigoArticulo) || ComponenteNuevo.Cantidad <= 0)
+                {
+                    MensajeError.Mostrar("ESCANDALLO", "Código o cantidad inválidos.");
+                    return;
+                }
+
+                if (ComponenteNuevo.CodigoArticulo == ArticuloFinal.Codigo)
+                {
+                    MensajeError.Mostrar("ESCANDALLO", "Un artículo no puede ser componente de sí mismo.");
+                    return;
+                }
+
+                var articulo = ListaArticulos.FirstOrDefault(a => a.Codigo == ComponenteNuevo.CodigoArticulo);
+                if (articulo == null)
+                {
+                    MensajeError.Mostrar("ESCANDALLO", $"No se encontró el artículo '{ComponenteNuevo.CodigoArticulo}'.");
+                    return;
+                }
+
+                // ============================================================
+                //   1) CREAR COMPONENTE RAÍZ
+                // ============================================================
+
+                var nuevo = new ComponenteEscandallo
+                {
+                    CodigoArticulo = ComponenteNuevo.CodigoArticulo,
+                    Cantidad = ComponenteNuevo.Cantidad,
+                    Descripcion = articulo.descrip,
+                    Descripcion2 = articulo.descrip2,
+                    PrecioUnitario = articulo.PrecioCompra ?? 0,
+                    CodigoComponentePadre = null,
+                    Hijos = new ObservableCollection<ComponenteEscandallo>()
+                };
+
+                // ============================================================
+                //   2) EVITAR DUPLICADOS EN EL NIVEL RAÍZ
+                // ============================================================
+
+                var existente = EscandalloActual
+                    .FirstOrDefault(c => c.CodigoArticulo == nuevo.CodigoArticulo);
+
+                if (existente != null)
+                {
+                    // Ya existe → sumar cantidad
+                    existente.Cantidad += nuevo.Cantidad;
+                    MensajeInformacion.Mostrar("ESCANDALLO",
+                        $"El componente '{nuevo.CodigoArticulo}' ya existía. Se ha sumado la cantidad.");
+                }
+                else
+                {
+                    EscandalloActual.Add(nuevo);
+                }
+
+                // ============================================================
+                //   3) CARGA PROFUNDA AUTOMÁTICA CONDICIONAL
+                // ============================================================
+
+                await CargarEscandalloDeComponente(nuevo);
+
+                // ============================================================
+                //   4) LIMPIAR CAMPOS DE ENTRADA
+                // ============================================================
+
+                ComponenteNuevo = new ComponenteEscandallo() { Cantidad = 1 };
+                ArticuloComponenteSeleccionado = null;
+
+                OnPropertyChanged(nameof(EscandalloActual));
+                OnPropertyChanged(nameof(ComponenteNuevo));
+                OnPropertyChanged(nameof(ArticuloComponenteSeleccionado));
+                OnPropertyChanged(nameof(DescripcionComponente));
+                OnPropertyChanged(nameof(Descripcion2Componente));
             }
-
-            if (string.IsNullOrWhiteSpace(ComponenteNuevo.CodigoArticulo) || ComponenteNuevo.Cantidad <= 0)
+            catch (Exception ex)
             {
-                MensajeError.Mostrar("ESCANDALLO", "Código o cantidad inválidos.");
-                return;
+                MensajeError.Mostrar("ESCANDALLO", $"Error al añadir componente:\n{ex.Message}");
             }
-
-            if (ComponenteNuevo.CodigoArticulo == ArticuloFinal.Codigo)
-            {
-                MensajeError.Mostrar("ESCANDALLO", "Un artículo no puede ser componente de sí mismo.");
-                return;
-            }
-
-            var articulo = ListaArticulos.FirstOrDefault(a => a.Codigo == ComponenteNuevo.CodigoArticulo);
-
-            if (articulo == null)
-            {
-                MensajeError.Mostrar("ESCANDALLO", $"No se encontró el artículo '{ComponenteNuevo.CodigoArticulo}'.");
-                return;
-            }
-
-            var nuevoComponente = new ComponenteEscandallo
-            {
-                CodigoArticulo = ComponenteNuevo.CodigoArticulo,
-                Cantidad = ComponenteNuevo.Cantidad,
-                Descripcion = articulo?.descrip ?? "",
-                Descripcion2 = articulo?.descrip2 ?? "",
-                PrecioUnitario = articulo?.PrecioCompra ?? 0,
-                CodigoComponentePadre = null,
-                Hijos = new ObservableCollection<ComponenteEscandallo>()
-            };
-
-            await CargarEscandalloDeComponente(nuevoComponente);
-
-            EscandalloActual.Add(nuevoComponente);
-
-            ComponenteNuevo = new ComponenteEscandallo() { Cantidad = 1 };
-            ArticuloComponenteSeleccionado = null;
-
-            OnPropertyChanged(nameof(ComponenteNuevo));
-            OnPropertyChanged(nameof(ArticuloComponenteSeleccionado));
-            OnPropertyChanged(nameof(DescripcionComponente));
-            OnPropertyChanged(nameof(Descripcion2Componente));
-            OnPropertyChanged(nameof(EscandalloActual));
         }
 
-        
 
         // ============================================================
-        //   CARGAR ESCANDALLO DE UN COMPONENTE
+        //   CARGA PROFUNDA AUTOMÁTICA DE UN COMPONENTE
         // ============================================================
 
         private async Task CargarEscandalloDeComponente(ComponenteEscandallo componente)
         {
             try
             {
-                var escandallo = await _escandalloRepository
-                    .GetByCodigoProductoAsync(componente.CodigoArticulo);
+                var esc = await _escandalloRepository.GetByCodigoProductoAsync(componente.CodigoArticulo);
+                if (esc == null)
+                    return; // No tiene escandallo → no cargar nada
 
-                if (escandallo != null)
+                var hijos = await _escandalloRepository.GetComponentesByEscandalloAsync(esc.IdEscandallo);
+                if (hijos == null || hijos.Count == 0)
+                    return;
+
+                // Reconstruir jerarquía de los hijos
+                var hijosJerarquia = ReconstruirJerarquia(hijos);
+
+                foreach (var hijoPlano in hijosJerarquia)
                 {
-                    var subComponentes = await _escandalloRepository
-                        .GetComponentesByEscandalloAsync(escandallo.IdEscandallo);
-
-                    if (subComponentes.Any())
-                    {
-                        var hijosReconstruidos = ReconstruirJerarquia(subComponentes);
-
-                        componente.Hijos = new ObservableCollection<ComponenteEscandallo>(hijosReconstruidos);
-
-                        foreach (var hijo in componente.Hijos)
-                        {
-                            hijo.CodigoComponentePadre = componente.CodigoArticulo;
-                            ActualizarPadresRecursivo(hijo, componente.CodigoArticulo);
-                        }
-                    }
+                    await InsertarHijoSinDuplicar(componente, hijoPlano);
                 }
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"No se pudo cargar escandallo para {componente.CodigoArticulo}: {ex.Message}");
+                MensajeError.Mostrar("ESCANDALLO", $"Error al cargar subcomponentes:\n{ex.Message}");
             }
         }
 
+
         // ============================================================
-        //   RECONSTRUIR JERARQUÍA
+        //   INSERTAR HIJO EVITANDO DUPLICADOS (Código + Padre)
         // ============================================================
+
+        private async Task InsertarHijoSinDuplicar(ComponenteEscandallo padre, ComponenteEscandallo hijoPlano)
+        {
+            // Buscar si ya existe un hijo con el mismo código bajo este padre
+            var existente = padre.Hijos
+                .FirstOrDefault(h => h.CodigoArticulo == hijoPlano.CodigoArticulo);
+
+            if (existente != null)
+            {
+                // Ya existe → sumar cantidades
+                existente.Cantidad += hijoPlano.Cantidad;
+            }
+            else
+            {
+                // Crear hijo nuevo
+                var nuevoHijo = new ComponenteEscandallo
+                {
+                    CodigoArticulo = hijoPlano.CodigoArticulo,
+                    Cantidad = hijoPlano.Cantidad,
+                    Descripcion = hijoPlano.Descripcion,
+                    Descripcion2 = hijoPlano.Descripcion2,
+                    PrecioUnitario = hijoPlano.PrecioUnitario,
+                    CodigoComponentePadre = padre.CodigoArticulo,
+                    Hijos = new ObservableCollection<ComponenteEscandallo>()
+                };
+
+                padre.Hijos.Add(nuevoHijo);
+
+                // Cargar subcomponentes del hijo (recursivo)
+                await CargarEscandalloDeComponente(nuevoHijo);
+            }
+        }
+
 
         private List<ComponenteEscandallo> ReconstruirJerarquia(List<ComponenteEscandallo> planos)
         {
-            // ⭐ 1) Rellenar descripciones de TODOS los componentes
+            // 1) Asegurar descripciones y listas de hijos
             foreach (var comp in planos)
             {
                 var articulo = ListaArticulos.FirstOrDefault(a => a.Codigo == comp.CodigoArticulo);
@@ -324,7 +470,7 @@ namespace recTivo.MVVM
                 comp.Hijos ??= new ObservableCollection<ComponenteEscandallo>();
             }
 
-            // ⭐ 2) Construir jerarquía
+            // 2) Asignar hijos a sus padres
             foreach (var comp in planos)
             {
                 if (!string.IsNullOrWhiteSpace(comp.CodigoComponentePadre))
@@ -338,43 +484,103 @@ namespace recTivo.MVVM
                         .FirstOrDefault();
 
                     if (padre != null)
-                    {
                         padre.Hijos.Add(comp);
-                    }
                 }
             }
 
-            // ⭐ 3) Devolver raíces
-            var raices = planos
+            // 3) Devolver solo los nodos raíz
+            return planos
                 .Where(c =>
                     string.IsNullOrWhiteSpace(c.CodigoComponentePadre) ||
                     !planos.Any(p => p.CodigoArticulo == c.CodigoComponentePadre))
                 .ToList();
-
-            return raices;
         }
 
 
         // ============================================================
-        //   ACTUALIZAR PADRES RECURSIVO
+        //   RECARGAR ESCANDALLO RECURSIVO (desde BD)
         // ============================================================
 
-        private void ActualizarPadresRecursivo(ComponenteEscandallo componente, string nuevoPadre)
+        private async Task<bool> RecargarEscandalloRecursivo(ComponenteEscandallo componente)
         {
-            componente.CodigoComponentePadre = nuevoPadre;
+            bool seRecargo = false;
 
-            if (componente.Hijos != null)
+            // Actualizar descripciones
+            var articulo = await _articuloRepository.GetByCodigoAsync(componente.CodigoArticulo);
+            if (articulo != null)
             {
-                foreach (var hijo in componente.Hijos)
+                componente.Descripcion = articulo.descrip;
+                componente.Descripcion2 = articulo.descrip2;
+            }
+
+            // Buscar si este componente tiene escandallo propio
+            var escandallo = await _escandalloRepository
+                .GetByCodigoProductoAsync(componente.CodigoArticulo);
+
+            if (escandallo != null)
+            {
+                var subComponentes = await _escandalloRepository
+                    .GetComponentesByEscandalloAsync(escandallo.IdEscandallo);
+
+                if (subComponentes.Any())
                 {
-                    ActualizarPadresRecursivo(hijo, componente.CodigoArticulo);
+                    // Reconstruir jerarquía de los hijos
+                    var hijosReconstruidos = ReconstruirJerarquia(subComponentes);
+
+                    componente.Hijos = new ObservableCollection<ComponenteEscandallo>();
+
+                    foreach (var hijo in hijosReconstruidos)
+                    {
+                        hijo.CodigoComponentePadre = componente.CodigoArticulo;
+
+                        // Actualizar descripciones del hijo
+                        var artHijo = await _articuloRepository.GetByCodigoAsync(hijo.CodigoArticulo);
+                        if (artHijo != null)
+                        {
+                            hijo.Descripcion = artHijo.descrip;
+                            hijo.Descripcion2 = artHijo.descrip2;
+                        }
+
+                        componente.Hijos.Add(hijo);
+
+                        // Recursivo: cargar subcomponentes del hijo
+                        await RecargarEscandalloRecursivo(hijo);
+                    }
+
+                    seRecargo = true;
                 }
             }
+
+            return seRecargo;
         }
 
+
         // ============================================================
-        //   GUARDAR ESCANDALLO
+        //   CONSTRUIR JERARQUÍA PARA LISTAR (TreeView)
         // ============================================================
+
+        private async Task ConstruirJerarquiaParaListar(List<ComponenteEscandallo> componentes)
+        {
+            Debug.WriteLine($"→ Reconstruyendo jerarquía...");
+            var raices = ReconstruirJerarquia(componentes);
+
+            Debug.WriteLine($"→ Recargando escandallos de componentes...");
+            foreach (var raiz in raices)
+            {
+                Debug.WriteLine($"   → Intentando recargar: {raiz.CodigoArticulo}");
+                var recargado = await RecargarEscandalloRecursivo(raiz);
+                Debug.WriteLine($"   → {raiz.CodigoArticulo} recargado: {recargado}");
+            }
+
+            Debug.WriteLine("   → Recarga completada");
+
+            EscandalloActual.Clear();
+            foreach (var raiz in raices)
+                EscandalloActual.Add(raiz);
+
+            OnPropertyChanged(nameof(EscandalloActual));
+            Debug.WriteLine($"→ EscandalloActual.Count = {EscandalloActual.Count}");
+        }
 
         public async Task GuardarEscandallo()
         {
@@ -392,21 +598,32 @@ namespace recTivo.MVVM
                     return;
                 }
 
-                var existente = await _escandalloRepository
-                    .GetByCodigoProductoAsync(ArticuloFinal.Codigo);
+                Escandallo existente = null;
 
-                if (existente != null)
+                // ============================================================
+                //   MODO MODIFICAR → borrar escandallo anterior
+                // ============================================================
+
+                if (!EsNuevoEscandallo)
                 {
-                    var componentesExistentes = await _escandalloRepository
-                        .GetComponentesByEscandalloAsync(existente.IdEscandallo);
+                    existente = await _escandalloRepository
+                        .GetByCodigoProductoAsync(ArticuloFinal.Codigo);
 
-                    foreach (var comp in componentesExistentes)
+                    if (existente != null)
                     {
-                        await _escandalloRepository.DeleteComponenteAsync(comp.IdComponente);
-                    }
+                        var componentesExistentes = await _escandalloRepository
+                            .GetComponentesByEscandalloAsync(existente.IdEscandallo);
 
-                    await _escandalloRepository.DeleteByIdAsync(existente.IdEscandallo);
+                        foreach (var comp in componentesExistentes)
+                            await _escandalloRepository.DeleteComponenteAsync(comp.IdComponente);
+
+                        await _escandalloRepository.DeleteByIdAsync(existente.IdEscandallo);
+                    }
                 }
+
+                // ============================================================
+                //   CREAR ESCANDALLO NUEVO
+                // ============================================================
 
                 var nuevoEsc = new Escandallo
                 {
@@ -417,33 +634,42 @@ namespace recTivo.MVVM
 
                 await _escandalloRepository.AddAsync(nuevoEsc);
 
+                // ============================================================
+                //   GUARDAR TODOS LOS COMPONENTES (RECURSIVO)
+                // ============================================================
+
                 foreach (var raiz in EscandalloActual)
-                {
                     await GuardarComponenteRecursivo(raiz, nuevoEsc.IdEscandallo, null);
+
+                MensajeInformacion.Mostrar("ESCANDALLO", "Escandallo guardado correctamente.", 1);
+
+                // Actualizar CodigosArticulos y ArticulosSinEscandallo para reflejar el nuevo escandallo
+                if (!CodigosArticulos.Contains(ArticuloFinal.Codigo))
+                {
+                    CodigosArticulos = CodigosArticulos.Append(ArticuloFinal.Codigo).OrderBy(c => c).ToList();
+                    var codigosConEscandallo = new HashSet<string>(CodigosArticulos);
+                    ArticulosSinEscandallo = ArticulosTodos
+                        .Where(a => !codigosConEscandallo.Contains(a.Codigo))
+                        .ToList();
                 }
 
-                MensajeInformacion.Mostrar("ESCANDALLO",
-                    "Escandallo guardado correctamente.", 1);
-
+                // Reset
+                EsNuevoEscandallo = true;
                 EscandalloActual.Clear();
                 ComponenteNuevo = new ComponenteEscandallo() { Cantidad = 1 };
                 ArticuloComponenteSeleccionado = null;
 
-                OnPropertyChanged(nameof(ComponenteNuevo));
-                OnPropertyChanged(nameof(ArticuloComponenteSeleccionado));
-                OnPropertyChanged(nameof(DescripcionComponente));
-                OnPropertyChanged(nameof(Descripcion2Componente));
                 OnPropertyChanged(nameof(EscandalloActual));
             }
             catch (Exception ex)
             {
-                var detalle = ex.InnerException?.Message ?? ex.Message;
-                MensajeError.Mostrar("ESCANDALLO", $"Error al guardar: {detalle}");
+                MensajeError.Mostrar("ESCANDALLO", $"Error al guardar: {ex.Message}");
             }
         }
 
+
         // ============================================================
-        //   GUARDADO RECURSIVO
+        //   GUARDADO RECURSIVO DE UN COMPONENTE
         // ============================================================
 
         private async Task GuardarComponenteRecursivo(
@@ -451,6 +677,7 @@ namespace recTivo.MVVM
             int idEscandallo,
             string codigoPadre)
         {
+            // Obtener artículo
             var articulo = await _articuloRepository.GetByCodigoAsync(comp.CodigoArticulo);
 
             if (articulo == null)
@@ -467,11 +694,11 @@ namespace recTivo.MVVM
             var cantidad = comp.Cantidad ?? 0;
             if (cantidad <= 0)
             {
-                MensajeError.Mostrar("ESCANDALLO",
-                    $"Cantidad inválida para '{comp.CodigoArticulo}'.");
+                MensajeError.Mostrar("ESCANDALLO", $"Cantidad inválida para '{comp.CodigoArticulo}'.");
                 return;
             }
 
+            // Crear componente para BD
             var nuevo = new ComponenteEscandallo
             {
                 IdEscandallo = idEscandallo,
@@ -485,76 +712,16 @@ namespace recTivo.MVVM
                 Escandallo = null
             };
 
+            // Insertar en BD
             await _escandalloRepository.InsertComponenteAsync(nuevo);
 
+            // Guardar hijos recursivamente
             if (comp.Hijos != null && comp.Hijos.Count > 0)
             {
                 foreach (var hijo in comp.Hijos)
-                {
                     await GuardarComponenteRecursivo(hijo, idEscandallo, comp.CodigoArticulo);
-                }
             }
         }
-
-        // ============================================================
-        //   MÉTODO TEMPORAL DE DEBUG
-        // ============================================================
-
-        public async Task TestBuscarEscandallo()
-        {
-            try
-            {
-                Debug.WriteLine("========== TEST BÚSQUEDA ESCANDALLO ==========");
-
-                var todos = await _escandalloRepository.GetAllAsync();
-                Debug.WriteLine($"\n→ Total de escandallos en BD: {todos.Count()}");
-
-                foreach (var e in todos)
-                {
-                    Debug.WriteLine($"   ID: {e.IdEscandallo} | Código: '{e.CodigoProducto}' | Nombre: {e.Descrip}");
-                }
-
-                Debug.WriteLine("\n→ Buscando 'PS3510BB'...");
-                var escPS3510BB = await _escandalloRepository.GetByCodigoProductoAsync("PS3510BB");
-
-                if (escPS3510BB != null)
-                {
-                    Debug.WriteLine($"   ✓ ENCONTRADO: ID={escPS3510BB.IdEscandallo}");
-
-                    var componentes = await _escandalloRepository.GetComponentesByEscandalloAsync(escPS3510BB.IdEscandallo);
-                    Debug.WriteLine($"   ✓ Componentes: {componentes.Count}");
-
-                    foreach (var comp in componentes)
-                    {
-                        Debug.WriteLine($"      - {comp.CodigoArticulo} | Cant: {comp.Cantidad} | Padre: {comp.CodigoComponentePadre ?? "NULL"}");
-                    }
-                }
-                else
-                {
-                    Debug.WriteLine("   ✗ NO ENCONTRADO");
-                }
-
-                Debug.WriteLine("\n→ Probando variaciones...");
-
-                var variaciones = new[] { "PS3510BB", "ps3510bb", "PS3510BB ", " PS3510BB" };
-
-                foreach (var variacion in variaciones)
-                {
-                    var resultado = await _escandalloRepository.GetByCodigoProductoAsync(variacion);
-                    Debug.WriteLine($"   '{variacion}' (len={variacion.Length}): {(resultado != null ? "✓ ENCONTRADO" : "✗ NO")}");
-                }
-
-                Debug.WriteLine("==============================================\n");
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"ERROR en test: {ex.Message}");
-            }
-        }
-
-        // ============================================================
-        //   CARGAR ESCANDALLO CON RECARGA AUTOMÁTICA
-        // ============================================================
 
         public async Task CargarEscandallo(string codigo)
         {
@@ -567,38 +734,32 @@ namespace recTivo.MVVM
                     return;
                 }
 
-                Debug.WriteLine($"→ Buscando escandallo para código: '{codigo}'");
-
-                EscandalloActual.Clear();
-
                 var escandallo = await _escandalloRepository.GetByCodigoProductoAsync(codigo);
 
                 if (escandallo == null)
                 {
-                    Debug.WriteLine($"→ NO SE ENCONTRÓ escandallo para '{codigo}'");
-                    MensajeError.Mostrar("ESCANDALLO",
-                        $"No existe escandallo para el artículo '{codigo}'.");
+                    // MODO CREAR
+                    EsNuevoEscandallo = true;
+                    MensajeInformacion.Mostrar("ESCANDALLO", $"Creando escandallo nuevo para '{codigo}'.");
                     return;
                 }
 
-                Debug.WriteLine($"→ Escandallo encontrado: ID={escandallo.IdEscandallo}, Codigo={escandallo.CodigoProducto}");
+                // MODO MODIFICAR
+                EsNuevoEscandallo = false;
+
+                EscandalloActual.Clear();
 
                 ArticuloFinal = await _articuloRepository.GetByCodigoAsync(escandallo.CodigoProducto);
                 OnPropertyChanged(nameof(ArticuloFinal));
                 OnPropertyChanged(nameof(DescripcionFinal));
                 OnPropertyChanged(nameof(Descripcion2Final));
 
-                DescripcionArticulo = $"{ArticuloFinal.descrip} - {ArticuloFinal.descrip2}";
-
                 var componentes = await _escandalloRepository
                     .GetComponentesByEscandalloAsync(escandallo.IdEscandallo);
 
-                Debug.WriteLine($"→ Componentes encontrados: {componentes?.Count ?? 0}");
-
                 if (componentes == null || !componentes.Any())
                 {
-                    MensajeInformacion.Mostrar("ESCANDALLO",
-                        $"El escandallo de '{codigo}' no tiene componentes.");
+                    MensajeInformacion.Mostrar("ESCANDALLO", $"El escandallo de '{codigo}' no tiene componentes.");
                     return;
                 }
 
@@ -606,100 +767,107 @@ namespace recTivo.MVVM
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"→ ERROR: {ex.Message}");
-                Debug.WriteLine($"→ StackTrace: {ex.StackTrace}");
-
-                MensajeError.Mostrar("ERROR",
-                    $"Error al cargar escandallo:\n{ex.Message}");
+                MensajeError.Mostrar("ERROR", $"Error al cargar escandallo:\n{ex.Message}");
             }
         }
 
+
         // ============================================================
-        //   CONSTRUIR JERARQUÍA PARA LISTAR (TREEVIEW)
+        //   COMPROBAR SI EXISTE ESCANDALLO (usado por Listar)
         // ============================================================
 
-        private async Task ConstruirJerarquiaParaListar(List<ComponenteEscandallo> componentes)
+        public async Task<bool> TieneEscandallo(string codigo)
         {
-            Debug.WriteLine($"→ Reconstruyendo jerarquía...");
-
-            var raices = ReconstruirJerarquia(componentes);
-
-            Debug.WriteLine($"→ Recargando escandallos de componentes...");
-
-            foreach (var raiz in raices)
-            {
-                Debug.WriteLine($"   → Intentando recargar: {raiz.CodigoArticulo}");
-                var recargado = await RecargarEscandalloRecursivo(raiz);
-                Debug.WriteLine($"   → {raiz.CodigoArticulo} recargado: {recargado}");
-            }
-
-            Debug.WriteLine("   → Recarga completada");
-
-            EscandalloActual.Clear();
-
-            foreach (var raiz in raices)
-            {
-                EscandalloActual.Add(raiz);
-            }
-
-            OnPropertyChanged(nameof(EscandalloActual));
-
-            Debug.WriteLine($"→ EscandalloActual.Count = {EscandalloActual.Count}");
+            if (string.IsNullOrWhiteSpace(codigo))
+                return false;
+            var esc = await _escandalloRepository.GetByCodigoProductoAsync(codigo.Trim());
+            return esc != null;
         }
 
-
         // ============================================================
-        //   RECARGAR ESCANDALLO RECURSIVO
+        //   CARGAR ESCANDALLO PARA MODIFICAR
         // ============================================================
 
-        private async Task<bool> RecargarEscandalloRecursivo(ComponenteEscandallo componente)
+        public async Task<bool> CargarEscandalloParaModificar()
         {
-            bool seRecargo = false;
-
-            // ⭐ 1) Cargar el artículo para rellenar las descripciones
-            var articulo = await _articuloRepository.GetByCodigoAsync(componente.CodigoArticulo);
-            if (articulo != null)
+            if (string.IsNullOrWhiteSpace(CodigoSeleccionadoModificar))
             {
-                componente.Descripcion = articulo.descrip;
-                componente.Descripcion2 = articulo.descrip2;
+                MensajeError.Mostrar("MODIFICAR ESCANDALLO", "Debes seleccionar un código primero.");
+                return false;
             }
 
-            // 2) Buscar si este componente tiene escandallo propio
-            var escandallo = await _escandalloRepository
-                .GetByCodigoProductoAsync(componente.CodigoArticulo);
+            await CargarEscandallo(CodigoSeleccionadoModificar);
 
-            if (escandallo != null)
-            {
-                var subComponentes = await _escandalloRepository
-                    .GetComponentesByEscandalloAsync(escandallo.IdEscandallo);
+            if (EscandalloActual.Count == 0)
+                return false;
 
-                if (subComponentes.Any())
-                {
-                    var hijosReconstruidos = ReconstruirJerarquia(subComponentes);
-
-                    componente.Hijos = new ObservableCollection<ComponenteEscandallo>(hijosReconstruidos);
-
-                    foreach (var hijo in componente.Hijos)
-                    {
-                        hijo.CodigoComponentePadre = componente.CodigoArticulo;
-
-                        // ⭐ 3) Rellenar descripciones también en los hijos
-                        var artHijo = await _articuloRepository.GetByCodigoAsync(hijo.CodigoArticulo);
-                        if (artHijo != null)
-                        {
-                            hijo.Descripcion = artHijo.descrip;
-                            hijo.Descripcion2 = artHijo.descrip2;
-                        }
-
-                        await RecargarEscandalloRecursivo(hijo);
-                    }
-
-                    seRecargo = true;
-                }
-            }
-
-            return seRecargo;
+            EscandalloVisible = true;
+            return true;
         }
 
+
+        // ============================================================
+        //   ACTUALIZAR CANTIDAD
+        // ============================================================
+
+        public bool ActualizarCantidad(ComponenteEscandallo componente)
+        {
+            if (componente == null) return false;
+
+            if (componente.Cantidad <= 0)
+            {
+                MensajeError.Mostrar("MODIFICAR ESCANDALLO", "La cantidad debe ser mayor que 0.");
+                return false;
+            }
+
+            MensajeInformacion.Mostrar("MODIFICAR ESCANDALLO",
+                $"Cantidad de '{componente.CodigoArticulo}' actualizada a {componente.Cantidad}.");
+            return true;
+        }
+
+
+        // ============================================================
+        //   QUITAR COMPONENTE
+        // ============================================================
+
+        public void QuitarComponente(ComponenteEscandallo componente)
+        {
+            if (componente == null) return;
+
+            // Intentar quitar de raíz
+            if (EscandalloActual.Remove(componente))
+                return;
+
+            // Si no está en raíz, buscar recursivamente
+            QuitarComponenteRecursivo(EscandalloActual, componente);
+        }
+
+        private bool QuitarComponenteRecursivo(
+            ObservableCollection<ComponenteEscandallo> lista,
+            ComponenteEscandallo objetivo)
+        {
+            foreach (var item in lista)
+            {
+                if (item.Hijos != null && item.Hijos.Remove(objetivo))
+                    return true;
+
+                if (item.Hijos != null && QuitarComponenteRecursivo(item.Hijos, objetivo))
+                    return true;
+            }
+            return false;
+        }
+
+
+        // ============================================================
+        //   GUARDAR Y LIMPIAR
+        // ============================================================
+
+        public async Task GuardarYLimpiar()
+        {
+            await GuardarEscandallo();
+            EscandalloVisible = false;
+            CodigoSeleccionadoModificar = null;
+            OnPropertyChanged(nameof(CodigoSeleccionadoModificar));
+        }
     }
 }

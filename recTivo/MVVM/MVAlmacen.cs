@@ -41,20 +41,25 @@ namespace recTivo.MVVM
 
                 if (!int.TryParse(Cantidad, out int cantidadAIngresar) || cantidadAIngresar <= 0) return;
 
-                // 1. Buscar si la ubicación física existe en la tabla "Ubicaciones"
+                // CORREGIDO: validar Estanteria y Hueco antes de parsear
+                if (!int.TryParse(Estanteria, out int estanteria) || !int.TryParse(Hueco, out int hueco))
+                {
+                    MensajeAdvertencia.Mostrar("AVISO", "Estantería y hueco deben ser números válidos.");
+                    return;
+                }
+
                 var ubicacion = await _context.Ubicacion.FirstOrDefaultAsync(u =>
                     u.LetraPasillo == Pasillo &&
-                    u.NumeroEstanteria == int.Parse(Estanteria) &&
-                    u.Numero == int.Parse(Hueco));
+                    u.NumeroEstanteria == estanteria &&
+                    u.Numero == hueco);
 
                 if (ubicacion == null)
                 {
-                    // Creamos una nueva fila en la tabla ubicacion vinculada al artículo
                     ubicacion = new Ubicacion
                     {
                         LetraPasillo = Pasillo,
-                        NumeroEstanteria = int.Parse(Estanteria),
-                        Numero = int.Parse(Hueco),
+                        NumeroEstanteria = estanteria,
+                        Numero = hueco,
                         IdArticulo = articulo.IdArticulo,
                         Cantidad = cantidadAIngresar
                     };
@@ -62,16 +67,29 @@ namespace recTivo.MVVM
                 }
                 else
                 {
+                    // CORREGIDO: avisar si la ubicación ya tiene un artículo diferente
+                    if (ubicacion.IdArticulo != null && ubicacion.IdArticulo != articulo.IdArticulo)
+                    {
+                        MensajeError.Mostrar("ERROR", "Esa ubicación ya contiene un artículo diferente.");
+                        return;
+                    }
+
                     ubicacion.IdArticulo = articulo.IdArticulo;
                     ubicacion.Cantidad += cantidadAIngresar;
                     _context.Ubicacion.Update(ubicacion);
                 }
 
-                articulo.Stock += cantidadAIngresar;
-                _context.Articulos.Update(articulo);
-
                 await _context.SaveChangesAsync();
-                MensajeInformacion.Mostrar("ÉXITO", "Stock actualizado en ubicación.");
+
+                // CORREGIDO: recalcular Stock como suma real de ubicaciones
+                articulo.Stock = await _context.Ubicacion
+                    .Where(u => u.IdArticulo == articulo.IdArticulo)
+                    .SumAsync(u => u.Cantidad);
+
+                _context.Articulos.Update(articulo);
+                await _context.SaveChangesAsync();
+
+                MensajeInformacion.Mostrar("ÉXITO", $"Stock actualizado. Stock total: {articulo.Stock}");
                 LimpiarCampos();
             }
             catch (Exception ex)
@@ -100,28 +118,45 @@ namespace recTivo.MVVM
                     return;
                 }
 
-                var ubicacion = await _context.Ubicacion
-                    .FirstOrDefaultAsync(u => u.IdArticulo == articulo.IdArticulo && u.Cantidad >= cantidadASacar);
+                if (!int.TryParse(Estanteria, out int estanteria) || !int.TryParse(Hueco, out int hueco))
+                {
+                    MensajeAdvertencia.Mostrar("AVISO", "Estantería y hueco deben ser números válidos.");
+                    return;
+                }
+
+                // Buscar la ubicación concreta indicada por el usuario
+                var ubicacion = await _context.Ubicacion.FirstOrDefaultAsync(u =>
+                    u.LetraPasillo == Pasillo &&
+                    u.NumeroEstanteria == estanteria &&
+                    u.Numero == hueco &&
+                    u.IdArticulo == articulo.IdArticulo);
 
                 if (ubicacion == null)
                 {
-                    MensajeError.Mostrar("ERROR", "No hay ninguna ubicación con stock suficiente para retirar esa cantidad.");
+                    MensajeError.Mostrar("ERROR", "No existe esa ubicación para el artículo seleccionado.");
+                    return;
+                }
+
+                if (ubicacion.Cantidad < cantidadASacar)
+                {
+                    MensajeError.Mostrar("ERROR", $"Stock insuficiente en esa ubicación. Disponible: {ubicacion.Cantidad}");
                     return;
                 }
 
                 ubicacion.Cantidad -= cantidadASacar;
 
-                if (ubicacion.Cantidad <= 0)
-                {
+                if (ubicacion.Cantidad == 0)
                     ubicacion.IdArticulo = null;
-                    ubicacion.Cantidad = 0;
-                }
-
-                articulo.Stock -= cantidadASacar;
 
                 _context.Ubicacion.Update(ubicacion);
-                _context.Articulos.Update(articulo);
+                await _context.SaveChangesAsync();
 
+                // Recalcular Stock como suma real de todas las ubicaciones del artículo
+                articulo.Stock = await _context.Ubicacion
+                    .Where(u => u.IdArticulo == articulo.IdArticulo)
+                    .SumAsync(u => u.Cantidad);
+
+                _context.Articulos.Update(articulo);
                 await _context.SaveChangesAsync();
 
                 MensajeInformacion.Mostrar("ÉXITO",
@@ -138,7 +173,7 @@ namespace recTivo.MVVM
         private void LimpiarCampos()
         {
             Cantidad = ""; Pasillo = ""; Estanteria = ""; Hueco = "";
-            MVArticulo.ArticuloSeleccionado = null;
+            MVArticulo.LimpiarFiltros();
         }
     }
 }

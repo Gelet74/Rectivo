@@ -5,6 +5,7 @@ using recTivo.MVVM.Base;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace recTivo.Frontend.Dialogos.Empleado
 {
@@ -18,13 +19,38 @@ namespace recTivo.Frontend.Dialogos.Empleado
             _vm = vm;
             DataContext = _vm;
 
-            Loaded += async (_, __) => await _vm.Inicializa();
+            Loaded += async (_, __) =>
+            {
+                await _vm.Inicializa();
+                _vm.LimpiarCampos();
+                ForzarValidacion();
+            };
         }
 
         private void OnErrorEvent(object sender, ValidationErrorEventArgs e)
-        { 
-            if (DataContext is MVBase vm) 
-                vm.OnErrorEvent(sender, e); 
+        {
+            if (DataContext is MVBase vm)
+                vm.OnErrorEvent(sender, e);
+        }
+
+        // Fuerza que WPF evalúe todos los TextBox con ValidatesOnDataErrors
+        // para que aparezcan en rojo con su mensaje desde el inicio
+        private void ForzarValidacion()
+        {
+            foreach (var tb in FindVisualChildren<TextBox>(this))
+                tb.GetBindingExpression(TextBox.TextProperty)?.UpdateSource();
+        }
+
+        private static IEnumerable<T> FindVisualChildren<T>(DependencyObject root) where T : DependencyObject
+        {
+            if (root == null) yield break;
+            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(root); i++)
+            {
+                var child = VisualTreeHelper.GetChild(root, i);
+                if (child is T t) yield return t;
+                foreach (var descendant in FindVisualChildren<T>(child))
+                    yield return descendant;
+            }
         }
 
         private async void btnAltaEmpleado_Click(object sender, RoutedEventArgs e)

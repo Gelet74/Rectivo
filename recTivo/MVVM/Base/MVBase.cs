@@ -4,16 +4,17 @@ using System.Windows;
 using System.Windows.Controls;
 
 
-namespace recTivo.MVVM.Base{
-        public class MVBase : ValidatableViewModel
+namespace recTivo.MVVM.Base
+{
+    public class MVBase : ValidatableViewModel
     {
-       
+
         /// <summary>
         /// Botón del formulario que queremos que se active/desactive en función
         /// de si hay errores en la validación de los campos
         /// </summary>    
 
-        
+
         /// <summary>
         /// Variable que llev la cuenta de los errores que hay en el formulario
         /// </summary>
@@ -136,10 +137,12 @@ namespace recTivo.MVVM.Base{
         }
         private bool _hasErrors;
 
+        public virtual bool HasNoErrors => !HasErrors;
+
         private void UpdateHasErrors()
         {
             HasErrors = errorCount > 0;
-
+            OnPropertyChanged(nameof(HasNoErrors));
         }
 
 
@@ -161,7 +164,6 @@ namespace recTivo.MVVM.Base{
         {
             try
             {
-                // Obtener la propiedad "Id" (puedes cambiar el nombre si usas otro identificador)
                 var idProp = typeof(T).GetProperty("Id");
                 if (idProp == null)
                 {
@@ -172,7 +174,6 @@ namespace recTivo.MVVM.Base{
                 var idValue = idProp.GetValue(entity);
                 if (idValue == null || (int)idValue == 0)
                 {
-                    // Si el Id es nulo o 0, se considera nuevo
                     await repo.AddAsync(entity);
                     return true;
                 }
