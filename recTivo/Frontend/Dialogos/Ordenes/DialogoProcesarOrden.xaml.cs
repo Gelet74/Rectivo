@@ -1,4 +1,5 @@
 ﻿using di.proyecto.clase._2025.Frontend.Mensajes;
+using recTivo.Backend.Modelos;
 using recTivo.Frontend.Dialogos.VentanasInicio;
 using recTivo.MVVM;
 using System.Windows;
@@ -17,18 +18,28 @@ namespace recTivo.Frontend.Dialogos.Ordenes
             _vm = vm;
             DataContext = _vm;
 
-            // Seleccionar "Solo PS" por defecto al abrir
             rbSoloPT.IsChecked = true;
 
             Loaded += async (_, __) => await _vm.InicializarAsync();
         }
 
-        // ── RadioButtons: gestionados en code-behind para evitar converter inverso ──
+        // ── CheckBox del ListBox de PT ────────────────────────────────────
+        private void ChkPT_Checked(object sender, RoutedEventArgs e)
+        {
+            if (sender is CheckBox chk && chk.DataContext is Articulo art)
+                _vm.TogglePT(art, true);
+        }
 
+        private void ChkPT_Unchecked(object sender, RoutedEventArgs e)
+        {
+            if (sender is CheckBox chk && chk.DataContext is Articulo art)
+                _vm.TogglePT(art, false);
+        }
+
+        // ── RadioButtons ─────────────────────────────────────────────────
         private void RbSoloPT_Checked(object sender, RoutedEventArgs e)
         {
             _vm.IncluirPT = false;
-            // Recalcular preview si ya estaba visible para reflejar el cambio
             if (_vm.PreviewVisible)
                 _ = _vm.CalcularPreviewAsync();
         }
@@ -40,22 +51,7 @@ namespace recTivo.Frontend.Dialogos.Ordenes
                 _ = _vm.CalcularPreviewAsync();
         }
 
-        private void TxtCantidad_LostFocus(object sender, RoutedEventArgs e)
-        {
-            if (sender is TextBox tb)
-            {
-                if (!decimal.TryParse(tb.Text,
-                        System.Globalization.NumberStyles.Any,
-                        System.Globalization.CultureInfo.CurrentCulture,
-                        out decimal val) || val <= 0)
-                {
-                    MensajeError.Mostrar("CANTIDAD", "Introduce un número válido mayor que 0.");
-                    tb.Text = "1";
-                    _vm.CantidadFabricar = 1;
-                }
-            }
-        }
-
+        // ── Botones ───────────────────────────────────────────────────────
         private async void BtnCalcular_Click(object sender, RoutedEventArgs e)
         {
             await _vm.CalcularPreviewAsync();
@@ -74,6 +70,7 @@ namespace recTivo.Frontend.Dialogos.Ordenes
                 Close();
         }
 
+        // ── ESC ───────────────────────────────────────────────────────────
         protected override void OnPreviewKeyDown(KeyEventArgs e)
         {
             if (e.Key == Key.Escape)

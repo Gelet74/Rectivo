@@ -14,6 +14,7 @@ namespace recTivo.Backend.Modelos
         public virtual DbSet<Cliente> Clientes { get; set; } = null!;
         public virtual DbSet<Empleado> Empleados { get; set; } = null!;
         public virtual DbSet<Orden> Ordens { get; set; } = null!;
+        public virtual DbSet<OrdenFase> OrdenFases { get; set; } = null!;
         public virtual DbSet<Permiso> Permisos { get; set; } = null!;
         public virtual DbSet<Rol> Rols { get; set; } = null!;
         public virtual DbSet<Ubicacion> Ubicacion { get; set; } = null!;
@@ -193,6 +194,39 @@ namespace recTivo.Backend.Modelos
                     .HasForeignKey(e => e.IdEscandallo)
                     .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("fk_componenteescandallo_escandallo");
+            });
+
+            modelBuilder.Entity<OrdenFase>(entity =>
+            {
+                entity.ToTable("orden_fase");
+                entity.HasKey(e => e.IdOrdenFase);
+                entity.Property(e => e.IdOrdenFase).HasColumnName("IdOrdenFase");
+                entity.Property(e => e.IdOrden).HasColumnName("IdOrden");
+                entity.Property(e => e.CodigoFase).HasMaxLength(10).HasColumnName("CodigoFase");
+                entity.Property(e => e.NumeroFase).HasColumnName("NumeroFase");
+                entity.Property(e => e.CantidadEntrada).HasColumnName("CantidadEntrada");
+                entity.Property(e => e.CantidadOK).HasColumnName("CantidadOK");
+                entity.Property(e => e.CantidadDefecto).HasColumnName("CantidadDefecto");
+                entity.Property(e => e.FechaFin).HasColumnType("date").HasColumnName("FechaFin");
+                entity.Property(e => e.IdEmpleado).HasColumnName("IdEmpleado");
+                entity.Property(e => e.Estado)
+                      .HasMaxLength(20).HasColumnName("Estado")
+                      .HasDefaultValue("Pendiente");
+                entity.Ignore(e => e.EstadoEnum);
+                entity.Ignore(e => e.EstadoTexto);
+                entity.Ignore(e => e.NombreFase);
+
+                entity.HasOne(e => e.OrdenNavigation)
+                      .WithMany(o => o.Fases)
+                      .HasForeignKey(e => e.IdOrden)
+                      .HasConstraintName("fk_ordenfase_orden")
+                      .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasOne(e => e.EmpleadoNavigation)
+                      .WithMany()
+                      .HasForeignKey(e => e.IdEmpleado)
+                      .HasConstraintName("fk_ordenfase_emp")
+                      .OnDelete(DeleteBehavior.SetNull);
             });
 
             OnModelCreatingPartial(modelBuilder);

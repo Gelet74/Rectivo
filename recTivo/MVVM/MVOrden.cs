@@ -6,17 +6,25 @@ using System.Collections.ObjectModel;
 
 namespace recTivo.MVVM
 {
+    // ── Fila en la tabla de PT seleccionados (izquierda del diálogo) ──────
+    public class FilaPTSeleccionado
+    {
+        public Articulo Articulo { get; set; } = null!;
+        public string Codigo => Articulo.Codigo;
+        public string Descripcion => Articulo.descrip ?? "";
+        public decimal Cantidad { get; set; } = 1;
+    }
+
+    // ── Fila en el preview de órdenes a generar ───────────────────────────
     public class FilaOrdenPreview
     {
         public string CodigoArticulo { get; set; } = "";
         public string Descripcion { get; set; } = "";
         public decimal Cantidad { get; set; }
         public bool EsPT { get; set; }
+        public bool EsNueva { get; set; } = true;
 
         public string Tipo => EsPT ? "PT" : "PS";
-
-        // Indica si al confirmar se creará nueva o se sumará a una existente
-        public bool EsNueva { get; set; } = true;
         public string AccionTexto => EsNueva ? "Nueva" : "Agrupar";
     }
 
@@ -26,20 +34,23 @@ namespace recTivo.MVVM
         private readonly ArticuloRepository _articuloRepo;
         private readonly OrdenRepository _ordenRepo;
         private readonly EmpleadoRepository _empleadoRepo;
+        private readonly OrdenFaseRepository _ordenFaseRepo;
 
         public MVOrden(
             EscandalloRepository escandalloRepo,
             ArticuloRepository articuloRepo,
             OrdenRepository ordenRepo,
-            EmpleadoRepository empleadoRepo)
+            EmpleadoRepository empleadoRepo,
+            OrdenFaseRepository ordenFaseRepo)
         {
             _escandalloRepo = escandalloRepo;
             _articuloRepo = articuloRepo;
             _ordenRepo = ordenRepo;
             _empleadoRepo = empleadoRepo;
+            _ordenFaseRepo = ordenFaseRepo;
         }
 
-        // ── Artículos PT con escandallo ───────────────────────────────────
+        // ── Lista completa de PT con escandallo (para el ListBox) ─────────
         private List<Articulo> _articulosPT = new();
         public List<Articulo> ArticulosPT
         {
@@ -47,28 +58,10 @@ namespace recTivo.MVVM
             set => SetProperty(ref _articulosPT, value);
         }
 
-        // ── Artículo PT seleccionado ──────────────────────────────────────
-        private Articulo? _articuloSeleccionado;
-        public Articulo? ArticuloSeleccionado
-        {
-            get => _articuloSeleccionado;
-            set
-            {
-                SetProperty(ref _articuloSeleccionado, value);
-                OrdenesPreview.Clear();
-                PreviewVisible = false;
-            }
-        }
+        // ── PT marcados con su cantidad (tabla derecha) ───────────────────
+        public ObservableCollection<FilaPTSeleccionado> PTSeleccionados { get; } = new();
 
-        // ── Cantidad a fabricar ───────────────────────────────────────────
-        private decimal _cantidadFabricar = 1;
-        public decimal CantidadFabricar
-        {
-            get => _cantidadFabricar;
-            set => SetProperty(ref _cantidadFabricar, value);
-        }
-
-        // ── Fecha fin ─────────────────────────────────────────────────────
+        // ── Fecha fin (única para todos) ──────────────────────────────────
         private DateTime? _fechaFin;
         public DateTime? FechaFin
         {
@@ -87,7 +80,6 @@ namespace recTivo.MVVM
         // ── Preview de órdenes ────────────────────────────────────────────
         public ObservableCollection<FilaOrdenPreview> OrdenesPreview { get; } = new();
 
-        // ── Visibilidad del panel de preview ─────────────────────────────
         private bool _previewVisible;
         public bool PreviewVisible
         {
@@ -124,6 +116,27 @@ namespace recTivo.MVVM
         }
 
         // ================================================================
+        //   MARCAR / DESMARCAR PT desde el ListBox
+        // ================================================================
+        public void TogglePT(Articulo articulo, bool marcado)
+        {
+            if (marcado)
+            {
+                if (!PTSeleccionados.Any(p => p.Codigo == articulo.Codigo))
+                    PTSeleccionados.Add(new FilaPTSeleccionado { Articulo = articulo, Cantidad = 1 });
+            }
+            else
+            {
+                var fila = PTSeleccionados.FirstOrDefault(p => p.Codigo == articulo.Codigo);
+                if (fila != null)
+                    PTSeleccionados.Remove(fila);
+            }
+
+            OrdenesPreview.Clear();
+            PreviewVisible = false;
+        }
+
+        // ================================================================
         //   CALCULAR PREVIEW
         // ================================================================
         public async Task CalcularPreviewAsync()
@@ -131,14 +144,14 @@ namespace recTivo.MVVM
             OrdenesPreview.Clear();
             PreviewVisible = false;
 
-            if (ArticuloSeleccionado == null)
+            if (PTSeleccionados.Count == 0)
             {
-                MensajeError.Mostrar("ÓRDENES", "Selecciona un artículo PT.");
+                MensajeError.Mostrar("ÓRDENES", "Selecciona al menos un artículo PT.");
                 return;
             }
-            if (CantidadFabricar <= 0)
+            if (PTSeleccionados.Any(p => p.Cantidad <= 0))
             {
-                MensajeError.Mostrar("ÓRDENES", "La cantidad a fabricar debe ser mayor que 0.");
+                MensajeError.Mostrar("ÓRDENES", "Todas las cantidades deben ser mayores que 0.");
                 return;
             }
             if (FechaFin == null)
@@ -149,57 +162,52 @@ namespace recTivo.MVVM
 
             try
             {
-                var escandallo = await _escandalloRepo
-                    .GetByCodigoProductoAsync(ArticuloSeleccionado.Codigo);
-
-                if (escandallo == null)
-                {
-                    MensajeError.Mostrar("ÓRDENES",
-                        $"El artículo '{ArticuloSeleccionado.Codigo}' no tiene escandallo.");
-                    return;
-                }
-
-                var componentes = await _escandalloRepo
-                    .GetComponentesByEscandalloAsync(escandallo.IdEscandallo);
-
-                // Acumular PS recursivamente
+                // Acumular PS de todos los PT seleccionados
                 var acumulado = new Dictionary<string, decimal>();
-                await RecopilarPS(componentes, CantidadFabricar, acumulado);
+
+                foreach (var filaPT in PTSeleccionados)
+                {
+                    var escandallo = await _escandalloRepo
+                        .GetByCodigoProductoAsync(filaPT.Codigo);
+                    if (escandallo == null) continue;
+
+                    var componentes = await _escandalloRepo
+                        .GetComponentesByEscandalloAsync(escandallo.IdEscandallo);
+
+                    await RecopilarPS(componentes, filaPT.Cantidad, acumulado);
+
+                    // Si incluir PT, añadirlo directamente
+                    if (IncluirPT)
+                    {
+                        OrdenesPreview.Add(new FilaOrdenPreview
+                        {
+                            CodigoArticulo = filaPT.Codigo,
+                            Descripcion = filaPT.Descripcion,
+                            Cantidad = filaPT.Cantidad,
+                            EsPT = true,
+                            EsNueva = true
+                        });
+                    }
+                }
 
                 if (acumulado.Count == 0)
                 {
                     MensajeError.Mostrar("ÓRDENES",
-                        "Este escandallo no contiene ningún componente PS.");
+                        "Los escandallos seleccionados no contienen componentes PS.");
                     return;
                 }
 
-                // Añadir PS al preview — comprobar si ya existe orden para marcar Agrupar
+                // Añadir PS al preview — siempre orden nueva
                 foreach (var kvp in acumulado.OrderBy(k => k.Key))
                 {
                     var art = _todosArticulos.FirstOrDefault(a => a.Codigo == kvp.Key);
-                    var existente = await _ordenRepo.GetByCodigoYFechaAsync(kvp.Key, FechaFin);
                     OrdenesPreview.Add(new FilaOrdenPreview
                     {
                         CodigoArticulo = kvp.Key,
                         Descripcion = art?.descrip ?? "",
                         Cantidad = kvp.Value,
                         EsPT = false,
-                        EsNueva = existente == null
-                    });
-                }
-
-                // Si el usuario quiere incluir el PT, añadirlo al principio
-                if (IncluirPT)
-                {
-                    var existentePT = await _ordenRepo
-                        .GetByCodigoYFechaAsync(ArticuloSeleccionado.Codigo, FechaFin);
-                    OrdenesPreview.Insert(0, new FilaOrdenPreview
-                    {
-                        CodigoArticulo = ArticuloSeleccionado.Codigo,
-                        Descripcion = ArticuloSeleccionado.descrip ?? "",
-                        Cantidad = CantidadFabricar,
-                        EsPT = true,
-                        EsNueva = existentePT == null
+                        EsNueva = true
                     });
                 }
 
@@ -232,10 +240,8 @@ namespace recTivo.MVVM
                 }
                 else
                 {
-                    // Bajar un nivel si tiene escandallo propio
                     var subEsc = await _escandalloRepo
                         .GetByCodigoProductoAsync(comp.CodigoArticulo);
-
                     if (subEsc != null)
                     {
                         var subComps = await _escandalloRepo
@@ -247,18 +253,16 @@ namespace recTivo.MVVM
         }
 
         // ================================================================
-        //   CONFIRMAR Y GENERAR ÓRDENES — agrupa por código + fecha
+        //   CONFIRMAR Y GENERAR ÓRDENES
         // ================================================================
         public async Task<bool> GenerarOrdenesAsync(Empleado empleadoActual)
         {
             if (OrdenesPreview.Count == 0)
             {
-                MensajeError.Mostrar("ÓRDENES",
-                    "No hay órdenes que generar. Calcula el preview primero.");
+                MensajeError.Mostrar("ÓRDENES", "Calcula el preview primero.");
                 return false;
             }
 
-            // Verificar permiso (si el rol tiene permisos configurados)
             bool tienePermiso = empleadoActual?.Rol?.Permisos
                 .Any(p => p.NombrePermiso.ToLower().Contains("orden")) ?? false;
 
@@ -278,48 +282,32 @@ namespace recTivo.MVVM
                 {
                     int cantidadInt = (int)Math.Ceiling(fila.Cantidad);
 
-                    // Buscar si ya existe una orden con mismo código y misma fecha
-                    var ordenExistente = await _ordenRepo
-                        .GetByCodigoYFechaAsync(fila.CodigoArticulo, FechaFin);
+                    var articuloId = _todosArticulos
+                        .FirstOrDefault(a => a.Codigo == fila.CodigoArticulo)?.IdArticulo ?? 0;
 
-                    if (ordenExistente != null)
+                    var nuevaOrden = new Orden
                     {
-                        // Agrupar: sumar cantidad
-                        ordenExistente.Cantidad += cantidadInt;
-                        await _ordenRepo.UpdateAsync(ordenExistente);
-                        agrupadas++;
-                    }
-                    else
-                    {
-                        // Crear nueva
-                        var articuloId = _todosArticulos
-                            .FirstOrDefault(a => a.Codigo == fila.CodigoArticulo)?.IdArticulo ?? 0;
+                        Codigo = fila.CodigoArticulo,
+                        Cantidad = cantidadInt,
+                        FechaFin = FechaFin,
+                        IdEmpleado = empleadoActual!.Id,
+                        IdArticulo = articuloId,
+                        Estado = nameof(EstadoOrden.Pendiente)
+                    };
 
-                        var nuevaOrden = new Orden
-                        {
-                            Codigo = fila.CodigoArticulo,
-                            Cantidad = cantidadInt,
-                            FechaFin = FechaFin,
-                            IdEmpleado = empleadoActual!.Id,
-                            IdArticulo = articuloId,
-                            Estado = nameof(EstadoOrden.Pendiente)
-                        };
+                    await _ordenRepo.AddAsync(nuevaOrden);
+                    nuevas++;
 
-                        await _ordenRepo.AddAsync(nuevaOrden);
-                        nuevas++;
-                    }
+                    if (nuevaOrden.Codigo.StartsWith("PS"))
+                        await GenerarFasesAsync(nuevaOrden);
                 }
 
-                string resumen = $"Órdenes generadas: {nuevas} nuevas";
-                if (agrupadas > 0)
-                    resumen += $", {agrupadas} agrupadas con órdenes existentes";
-                resumen += ".";
+                string resumen = $"Se han generado {nuevas} órdenes de fabricación.";
 
                 MensajeInformacion.Mostrar("ÓRDENES", resumen, 2);
 
                 // Reset
-                ArticuloSeleccionado = null;
-                CantidadFabricar = 1;
+                PTSeleccionados.Clear();
                 FechaFin = null;
                 IncluirPT = false;
                 OrdenesPreview.Clear();
@@ -332,6 +320,188 @@ namespace recTivo.MVVM
             {
                 MensajeError.Mostrar("ÓRDENES", $"Error al guardar las órdenes: {ex.Message}");
                 return false;
+            }
+        }
+
+        // ================================================================
+        //   GENERAR FASES para una orden de PS recién creada
+        // ================================================================
+        private async Task GenerarFasesAsync(Orden ordenPS)
+        {
+            try
+            {
+                var escandallo = await _escandalloRepo
+                    .GetByCodigoProductoAsync(ordenPS.Codigo);
+                if (escandallo == null) return;
+
+                var componentes = await _escandalloRepo
+                    .GetComponentesByEscandalloAsync(escandallo.IdEscandallo);
+
+                var fases = new List<(int numero, string codigo)>();
+                await RecopilarFases(componentes, fases);
+
+                if (fases.Count == 0) return;
+
+                var fasesOrdenadas = fases.OrderBy(f => f.numero).ToList();
+
+                // Calcular fechas laborables para cada fase
+                var fechas = CalcularFechasFases(fasesOrdenadas, ordenPS.FechaFin);
+
+                for (int i = 0; i < fasesOrdenadas.Count; i++)
+                {
+                    var (numero, codigo) = fasesOrdenadas[i];
+
+                    var ordenFase = new OrdenFase
+                    {
+                        IdOrden = ordenPS.IdOrden,
+                        CodigoFase = codigo,
+                        NumeroFase = i + 1,
+                        CantidadEntrada = i == 0 ? ordenPS.Cantidad : 0,
+                        FechaFin = fechas[i],
+                        Estado = nameof(EstadoOrden.Pendiente)
+                    };
+
+                    await _ordenFaseRepo.AddAsync(ordenFase);
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(
+                    $"[MVOrden] Error generando fases para {ordenPS.Codigo}: {ex.Message}");
+            }
+        }
+
+        // ================================================================
+        //   CALCULAR FECHAS DE FASES según pesos y días laborables
+        //   Pesos: 01=20%, 02=30%, 03=50%
+        //   Si faltan fases, se redistribuye proporcionalmente
+        // ================================================================
+        private List<DateTime?> CalcularFechasFases(
+            List<(int numero, string codigo)> fases,
+            DateTime? fechaFin)
+        {
+            var resultado = new List<DateTime?>();
+
+            if (fechaFin == null)
+            {
+                foreach (var _ in fases) resultado.Add(null);
+                return resultado;
+            }
+
+            DateTime hoy = DateTime.Today;
+            DateTime fin = fechaFin.Value.Date;
+
+            // Contar días laborables totales entre hoy y fechaFin
+            int diasLaborables = ContarDiasLaborables(hoy, fin);
+
+            if (diasLaborables <= 0)
+            {
+                // Si no hay días, todas las fases van a fechaFin
+                foreach (var _ in fases) resultado.Add(fin);
+                return resultado;
+            }
+
+            // Determinar qué números de fase existen
+            bool tiene01 = fases.Any(f => f.numero == 1);
+            bool tiene02 = fases.Any(f => f.numero == 2);
+            bool tiene03 = fases.Any(f => f.numero == 3);
+
+            // Pesos base: 01=20%, 02=30%, 03=50%
+            // Si falta alguna fase, redistribuir su peso entre las restantes
+            var pesos = new Dictionary<int, double>();
+
+            if (tiene01 && tiene02 && tiene03)
+            {
+                pesos[1] = 0.20; pesos[2] = 0.50; pesos[3] = 1.0; // acumulado
+            }
+            else if (tiene01 && tiene02)
+            {
+                // 01=40%, 02=60% (proporcional sin 03: 20/50 → 40/60)
+                pesos[1] = 0.40; pesos[2] = 1.0;
+            }
+            else if (tiene01 && tiene03)
+            {
+                // 01=29%, 03=71% (proporcional sin 02: 20/70 → 29/71)
+                pesos[1] = 0.29; pesos[3] = 1.0;
+            }
+            else
+            {
+                // Solo una fase → va directo a fechaFin
+                foreach (var f in fases) pesos[f.numero] = 1.0;
+            }
+
+            // Calcular fecha de cada fase sumando días laborables desde hoy
+            foreach (var (numero, _) in fases)
+            {
+                if (numero == fases.Last().numero)
+                {
+                    // La última fase siempre va a fechaFin exacta
+                    resultado.Add(fin);
+                }
+                else
+                {
+                    double peso = pesos.ContainsKey(numero) ? pesos[numero] : 1.0;
+                    int diasFase = (int)Math.Round(diasLaborables * peso);
+                    DateTime fechaFase = SumarDiasLaborables(hoy, diasFase);
+                    resultado.Add(fechaFase);
+                }
+            }
+
+            return resultado;
+        }
+
+        /// <summary>Cuenta días laborables entre dos fechas (sin contar fines de semana).</summary>
+        private int ContarDiasLaborables(DateTime desde, DateTime hasta)
+        {
+            int count = 0;
+            DateTime d = desde.AddDays(1); // empezar desde mañana
+            while (d <= hasta)
+            {
+                if (d.DayOfWeek != DayOfWeek.Saturday && d.DayOfWeek != DayOfWeek.Sunday)
+                    count++;
+                d = d.AddDays(1);
+            }
+            return count;
+        }
+
+        /// <summary>Suma N días laborables a una fecha.</summary>
+        private DateTime SumarDiasLaborables(DateTime desde, int dias)
+        {
+            DateTime d = desde;
+            int sumados = 0;
+            while (sumados < dias)
+            {
+                d = d.AddDays(1);
+                if (d.DayOfWeek != DayOfWeek.Saturday && d.DayOfWeek != DayOfWeek.Sunday)
+                    sumados++;
+            }
+            return d;
+        }
+
+        private async Task RecopilarFases(
+            List<ComponenteEscandallo> componentes,
+            List<(int numero, string codigo)> fases)
+        {
+            foreach (var comp in componentes)
+            {
+                string cod = comp.CodigoArticulo;
+
+                if (cod.StartsWith("01") || cod.StartsWith("02") || cod.StartsWith("03"))
+                {
+                    int numero = int.Parse(cod.Substring(0, 2));
+                    if (!fases.Any(f => f.codigo == cod))
+                        fases.Add((numero, cod));
+                }
+                else
+                {
+                    var subEsc = await _escandalloRepo.GetByCodigoProductoAsync(cod);
+                    if (subEsc != null)
+                    {
+                        var subComps = await _escandalloRepo
+                            .GetComponentesByEscandalloAsync(subEsc.IdEscandallo);
+                        await RecopilarFases(subComps, fases);
+                    }
+                }
             }
         }
     }

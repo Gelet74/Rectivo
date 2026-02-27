@@ -1,0 +1,199 @@
+﻿<UserControl x:Class="recTivo.Frontend.UC.UCListadoOrdenes"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d"
+             Background="#2D2D30"
+             d:DesignHeight="600" d:DesignWidth="1000">
+
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
+        <Style TargetType="ComboBox">
+            <Setter Property="Background"      Value="#E0E0E0"/>
+            <Setter Property="Foreground"      Value="Black"/>
+            <Setter Property="BorderBrush"     Value="#E0E0E0"/>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="Padding"         Value="5"/>
+            <Setter Property="Height"          Value="30"/>
+        </Style>
+        <Style TargetType="TextBox">
+            <Setter Property="Background"      Value="#E0E0E0"/>
+            <Setter Property="Foreground"      Value="Black"/>
+            <Setter Property="BorderBrush"     Value="#E0E0E0"/>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="Padding"         Value="5"/>
+            <Setter Property="Height"          Value="30"/>
+        </Style>
+        <Style TargetType="DatePicker">
+            <Setter Property="Background"  Value="#E0E0E0"/>
+            <Setter Property="Height"      Value="30"/>
+        </Style>
+    </UserControl.Resources>
+
+    <DockPanel>
+
+        <!-- CABECERA -->
+        <Grid DockPanel.Dock="Top" Margin="0,0,0,10">
+            <TextBlock Text="LISTADO DE ÓRDENES"
+                       FontSize="28" FontWeight="Bold"
+                       HorizontalAlignment="Left" VerticalAlignment="Center"
+                       Margin="20,10,0,0" Foreground="#FF9800"/>
+            <TextBlock Text="Pulsa ESC para volver atrás"
+                       Foreground="#FF9800" HorizontalAlignment="Right"
+                       VerticalAlignment="Center" Margin="0,10,20,0"/>
+        </Grid>
+
+        <!-- FILTROS -->
+        <Border DockPanel.Dock="Top" Background="#3A3A3D"
+                Margin="20,0,20,10" Padding="12,8" CornerRadius="4">
+            <WrapPanel Orientation="Horizontal">
+
+                <StackPanel Margin="0,0,16,0">
+                    <TextBlock Text="Estado" Foreground="#FF9800" Margin="0,0,0,3"/>
+                    <ComboBox ItemsSource="{Binding OpcionesEstado}"
+                              SelectedItem="{Binding FiltroEstado, Mode=TwoWay}"
+                              Width="130"/>
+                </StackPanel>
+
+                <StackPanel Margin="0,0,16,0">
+                    <TextBlock Text="Código artículo" Foreground="#FF9800" Margin="0,0,0,3"/>
+                    <TextBox Text="{Binding FiltroCodigo, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             Width="130"/>
+                </StackPanel>
+
+                <StackPanel Margin="0,0,16,0">
+                    <TextBlock Text="Fecha fin desde" Foreground="#FF9800" Margin="0,0,0,3"/>
+                    <DatePicker SelectedDate="{Binding FiltroFechaDesde, Mode=TwoWay}" Width="140"/>
+                </StackPanel>
+
+                <StackPanel Margin="0,0,16,0">
+                    <TextBlock Text="Fecha fin hasta" Foreground="#FF9800" Margin="0,0,0,3"/>
+                    <DatePicker SelectedDate="{Binding FiltroFechaHasta, Mode=TwoWay}" Width="140"/>
+                </StackPanel>
+
+                <Button Content="↺  Limpiar"
+                        Click="BtnLimpiar_Click"
+                        Width="120" Height="30"
+                        Margin="0,18,0,0"
+                        Background="#E0E0E0" Foreground="#FF5722"
+                        BorderBrush="#FF5722" FontWeight="Bold" Cursor="Hand"/>
+
+                <Button Content="↻  Recargar"
+                        Click="BtnRecargar_Click"
+                        Width="120" Height="30"
+                        Margin="8,18,0,0"
+                        Background="#E0E0E0" Foreground="#FF5722"
+                        BorderBrush="#FF5722" FontWeight="Bold" Cursor="Hand"/>
+            </WrapPanel>
+        </Border>
+
+        <!-- PANEL FASES (abajo, dock) -->
+        <Border DockPanel.Dock="Bottom"
+                Visibility="{Binding FasesVisible, Converter={StaticResource BoolToVis}}"
+                Background="#1E1E1E" BorderBrush="#FF9800" BorderThickness="1"
+                Margin="20,8,20,8" Padding="0" CornerRadius="4">
+            <StackPanel>
+                <TextBlock Text="Fases de la orden seleccionada:"
+                           Foreground="#FF9800" FontWeight="Bold" Margin="12,8,0,6"/>
+                <DataGrid ItemsSource="{Binding FasesOrden}"
+                          AutoGenerateColumns="False"
+                          IsReadOnly="True"
+                          CanUserAddRows="False"
+                          RowHeaderWidth="0"
+                          MaxHeight="160"
+                          Background="#E0E0E0"
+                          RowBackground="#F5F5F5"
+                          AlternatingRowBackground="#E8E8E8"
+                          GridLinesVisibility="Horizontal"
+                          BorderThickness="0"
+                          Margin="8,0,8,8">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Nº Fase"
+                                            Binding="{Binding NumeroFase}" Width="60"/>
+                        <DataGridTextColumn Header="Código fase"
+                                            Binding="{Binding CodigoFase}" Width="110"/>
+                        <DataGridTextColumn Header="Entrada"
+                                            Binding="{Binding CantidadEntrada}" Width="80"/>
+                        <DataGridTextColumn Header="OK"
+                                            Binding="{Binding CantidadOK}" Width="70"/>
+                        <DataGridTextColumn Header="Defectos"
+                                            Binding="{Binding CantidadDefecto}" Width="80"/>
+                        <DataGridTextColumn Header="Fecha fin"
+                                            Binding="{Binding FechaFin, StringFormat=dd/MM/yyyy}" Width="100"/>
+                        <DataGridTextColumn Header="Estado"
+                                            Binding="{Binding EstadoTexto}" Width="100">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="FontWeight" Value="Bold"/>
+                                    <Style.Triggers>
+                                        <Trigger Property="Text" Value="Pendiente">
+                                            <Setter Property="Foreground" Value="#FF9800"/>
+                                        </Trigger>
+                                        <Trigger Property="Text" Value="En curso">
+                                            <Setter Property="Foreground" Value="#2196F3"/>
+                                        </Trigger>
+                                        <Trigger Property="Text" Value="Cerrada">
+                                            <Setter Property="Foreground" Value="#4CAF50"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </StackPanel>
+        </Border>
+
+        <!-- DATAGRID ÓRDENES -->
+        <DataGrid DockPanel.Dock="Top"
+                  ItemsSource="{Binding OrdenesFiltradas}"
+                  SelectedItem="{Binding OrdenSeleccionada, Mode=TwoWay}"
+                  AutoGenerateColumns="False"
+                  IsReadOnly="True"
+                  CanUserAddRows="False"
+                  RowHeaderWidth="0"
+                  Margin="20,0,20,0"
+                  Background="#3A3A3D"
+                  RowBackground="#F5F5F5"
+                  AlternatingRowBackground="#E8E8E8"
+                  GridLinesVisibility="Horizontal"
+                  HorizontalGridLinesBrush="#CCCCCC"
+                  BorderThickness="0"
+                  ScrollViewer.VerticalScrollBarVisibility="Auto">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="ID"
+                                    Binding="{Binding IdOrden}" Width="55"/>
+                <DataGridTextColumn Header="Código"
+                                    Binding="{Binding Codigo}" Width="120"
+                                    FontWeight="SemiBold"/>
+                <DataGridTextColumn Header="Descripción"
+                                    Binding="{Binding Descripcion}" Width="*"/>
+                <DataGridTextColumn Header="Cantidad"
+                                    Binding="{Binding Cantidad}" Width="80"/>
+                <DataGridTextColumn Header="Fecha fin"
+                                    Binding="{Binding FechaFin}" Width="100"/>
+                <DataGridTextColumn Header="Estado"
+                                    Binding="{Binding Estado}" Width="100">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="FontWeight" Value="Bold"/>
+                            <Style.Triggers>
+                                <Trigger Property="Text" Value="Pendiente">
+                                    <Setter Property="Foreground" Value="#FF9800"/>
+                                </Trigger>
+                                <Trigger Property="Text" Value="En curso">
+                                    <Setter Property="Foreground" Value="#2196F3"/>
+                                </Trigger>
+                                <Trigger Property="Text" Value="Cerrada">
+                                    <Setter Property="Foreground" Value="#4CAF50"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+
+    </DockPanel>
+</UserControl>

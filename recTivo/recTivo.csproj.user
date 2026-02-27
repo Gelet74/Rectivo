@@ -68,5 +68,8 @@
     <Compile Update="Frontend\UC\UCListadoClientes.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Frontend\UC\UCListadoOrdenes.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
 </Project>

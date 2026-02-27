@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema; // ← AÑADIDO
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace recTivo.Backend.Modelos;
 
-// ← AÑADIDO: enum fuera de la clase, mismo fichero
 public enum EstadoOrden
 {
     Pendiente,
@@ -15,16 +12,23 @@ public enum EstadoOrden
 public partial class Orden
 {
     public int IdOrden { get; set; }
+
     public string Codigo { get; set; } = null!;
+
     public int Cantidad { get; set; }
+
     public DateTime? FechaFin { get; set; }
+
     public int IdEmpleado { get; set; }
+
     public int IdArticulo { get; set; }
 
-    // ← AÑADIDO: persiste en BD como string ("Pendiente" por defecto)
+    /// <summary>
+    /// Estado de la orden: Pendiente | EnCurso | Cerrada
+    /// Se almacena como string en BD (columna Estado VARCHAR(20))
+    /// </summary>
     public string Estado { get; set; } = nameof(EstadoOrden.Pendiente);
 
-    // ← AÑADIDO: para trabajar con el enum en código
     [NotMapped]
     public EstadoOrden EstadoEnum
     {
@@ -32,7 +36,6 @@ public partial class Orden
         set => Estado = value.ToString();
     }
 
-    // ← AÑADIDO: para mostrar en UI ("En curso" en lugar de "EnCurso")
     [NotMapped]
     public string EstadoTexto => EstadoEnum switch
     {
@@ -44,4 +47,5 @@ public partial class Orden
 
     public virtual Articulo IdArticuloNavigation { get; set; } = null!;
     public virtual Empleado IdEmpleadoNavigation { get; set; } = null!;
+    public virtual ICollection<OrdenFase> Fases { get; set; } = new List<OrdenFase>();
 }

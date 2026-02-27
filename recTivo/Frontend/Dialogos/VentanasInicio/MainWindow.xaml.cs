@@ -201,6 +201,18 @@ namespace recTivo
                 case "Procesar orden":
                     _serviceProvider.GetService<DialogoProcesarOrden>()?.ShowDialog();
                     break;
+                case "Listar órdenes":
+                    {
+                        panelPrincipal.Children.Clear();
+                        var uc = _serviceProvider.GetRequiredService<UCListadoOrdenes>();
+                        uc.SolicitarCierre += () =>
+                        {
+                            panelPrincipal.Children.Remove(uc);
+                            MostrarDashboard();
+                        };
+                        panelPrincipal.Children.Add(uc);
+                        break;
+                    }
             }
 
             ordenes.SelectedItem = null;

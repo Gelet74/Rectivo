@@ -8,28 +8,16 @@
         WindowStyle="None"
         WindowStartupLocation="CenterScreen"
         Background="#2D2D30"
-        Height="680" Width="860">
+        Height="720" Width="980">
 
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVis"/>
-
         <Style TargetType="TextBox">
-            <Setter Property="Background"        Value="#E0E0E0"/>
-            <Setter Property="Foreground"        Value="Black"/>
-            <Setter Property="BorderBrush"       Value="#E0E0E0"/>
-            <Setter Property="BorderThickness"   Value="2"/>
-            <Setter Property="Padding"           Value="5"/>
-        </Style>
-        <Style TargetType="ComboBox">
-            <Setter Property="Background"        Value="#E0E0E0"/>
-            <Setter Property="Foreground"        Value="Black"/>
-            <Setter Property="BorderBrush"       Value="#E0E0E0"/>
-            <Setter Property="BorderThickness"   Value="2"/>
-            <Setter Property="Padding"           Value="5"/>
-        </Style>
-        <Style TargetType="CheckBox">
-            <Setter Property="Foreground"        Value="White"/>
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Background"      Value="#E0E0E0"/>
+            <Setter Property="Foreground"      Value="Black"/>
+            <Setter Property="BorderBrush"     Value="#E0E0E0"/>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="Padding"         Value="5"/>
         </Style>
         <Style TargetType="DataGrid">
             <Setter Property="Background"                Value="#E0E0E0"/>
@@ -39,7 +27,6 @@
             <Setter Property="HorizontalGridLinesBrush"  Value="#CCCCCC"/>
             <Setter Property="BorderThickness"           Value="0"/>
             <Setter Property="CanUserAddRows"            Value="False"/>
-            <Setter Property="IsReadOnly"                Value="True"/>
             <Setter Property="AutoGenerateColumns"       Value="False"/>
             <Setter Property="RowHeaderWidth"            Value="0"/>
         </Style>
@@ -63,67 +50,120 @@
                                VerticalAlignment="Center" Grid.Column="1" Margin="0,0,10,0"/>
                 </Grid>
 
-                <StackPanel Margin="24" Orientation="Vertical">
+                <Grid Margin="20">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
 
-                    <!-- FILA 1: artículo + cantidad + fecha -->
-                    <Border Background="#3A3A3D" CornerRadius="4" Padding="16,12" Margin="0,0,0,12">
+                    <!-- FILA 1: ListBox PT izquierda + Tabla cantidades derecha -->
+                    <Grid Grid.Row="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="260"/>
+                            <ColumnDefinition Width="16"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- LISTBOX PT -->
+                        <Border Grid.Column="0" Background="#3A3A3D" CornerRadius="4" Padding="12">
+                            <StackPanel>
+                                <TextBlock Text="Artículos PT disponibles:"
+                                           Foreground="#FF9800" FontWeight="Bold" Margin="0,0,0,8"/>
+                                <ListBox x:Name="lstPT"
+                                         ItemsSource="{Binding ArticulosPT}"
+                                         Background="Transparent"
+                                         BorderThickness="0"
+                                         MaxHeight="340"
+                                         ScrollViewer.VerticalScrollBarVisibility="Auto">
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <CheckBox x:Name="chkPT"
+                                                      Foreground="White"
+                                                      Margin="0,3"
+                                                      Checked="ChkPT_Checked"
+                                                      Unchecked="ChkPT_Unchecked">
+                                                <StackPanel Orientation="Vertical">
+                                                    <TextBlock Text="{Binding Codigo}"
+                                                               FontWeight="Bold" Foreground="White"/>
+                                                    <TextBlock Text="{Binding descrip}"
+                                                               Foreground="#AAAAAA" FontSize="11"/>
+                                                </StackPanel>
+                                            </CheckBox>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                    <ListBox.ItemContainerStyle>
+                                        <Style TargetType="ListBoxItem">
+                                            <Setter Property="Background"  Value="Transparent"/>
+                                            <Setter Property="Padding"     Value="2"/>
+                                            <Setter Property="Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate TargetType="ListBoxItem">
+                                                        <ContentPresenter/>
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Style>
+                                    </ListBox.ItemContainerStyle>
+                                </ListBox>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- TABLA CANTIDADES PT SELECCIONADOS -->
+                        <Border Grid.Column="2" Background="#3A3A3D" CornerRadius="4" Padding="12">
+                            <StackPanel>
+                                <TextBlock Text="PT seleccionados — introduce la cantidad a fabricar:"
+                                           Foreground="#FF9800" FontWeight="Bold" Margin="0,0,0,8"/>
+                                <DataGrid x:Name="dgPTSeleccionados"
+                                          ItemsSource="{Binding PTSeleccionados}"
+                                          IsReadOnly="False"
+                                          MaxHeight="340">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="Código"
+                                                            Binding="{Binding Codigo}"
+                                                            Width="120" IsReadOnly="True"
+                                                            FontWeight="SemiBold"/>
+                                        <DataGridTextColumn Header="Descripción"
+                                                            Binding="{Binding Descripcion}"
+                                                            Width="*" IsReadOnly="True"/>
+                                        <DataGridTextColumn Header="Cantidad"
+                                                            Binding="{Binding Cantidad, UpdateSourceTrigger=LostFocus}"
+                                                            Width="90"/>
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                                <TextBlock Text="Haz doble clic en la celda Cantidad para editarla."
+                                           Foreground="#888" FontSize="11" Margin="0,6,0,0"/>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+
+                    <!-- FILA 2: opciones (fecha + PT) + botón calcular -->
+                    <Border Grid.Row="1" Background="#3A3A3D" CornerRadius="4"
+                            Padding="16,10" Margin="0,12,0,0">
                         <Grid>
                             <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="150"/>
-                                <ColumnDefinition Width="170"/>
-                                <ColumnDefinition Width="150"/>
-                            </Grid.ColumnDefinitions>
-
-                            <!-- Artículo PT -->
-                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
-                                <TextBlock Text="Artículo PT a fabricar:"
-                                           Foreground="#FF9800" Margin="0,0,0,4"/>
-                                <ComboBox x:Name="cmbArticulo"
-                                          ItemsSource="{Binding ArticulosPT}"
-                                          SelectedItem="{Binding ArticuloSeleccionado, Mode=TwoWay}"
-                                          DisplayMemberPath="Codigo"
-                                          Height="30"/>
-                            </StackPanel>
-
-                            <!-- Descripción -->
-                            <StackPanel Grid.Column="1" Margin="0,0,16,0">
-                                <TextBlock Text="Descripción:" Foreground="#FF9800" Margin="0,0,0,4"/>
-                                <TextBlock Text="{Binding ArticuloSeleccionado.descrip}"
-                                           Foreground="White" Height="30" Padding="0,6,0,0"
-                                           TextTrimming="CharacterEllipsis" VerticalAlignment="Center"/>
-                            </StackPanel>
-
-                            <!-- Cantidad -->
-                            <StackPanel Grid.Column="2" Margin="0,0,16,0">
-                                <TextBlock Text="Cantidad a fabricar:" Foreground="#FF9800" Margin="0,0,0,4"/>
-                                <TextBox x:Name="txtCantidad"
-                                         Text="{Binding CantidadFabricar, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"
-                                         Height="30" LostFocus="TxtCantidad_LostFocus"/>
-                            </StackPanel>
-
-                            <!-- Fecha fin -->
-                            <StackPanel Grid.Column="3">
-                                <TextBlock Text="Fecha fin*:" Foreground="#FF9800" Margin="0,0,0,4"/>
-                                <DatePicker x:Name="dpFechaFin"
-                                            SelectedDate="{Binding FechaFin, Mode=TwoWay}"
-                                            Height="30" Background="#E0E0E0"/>
-                            </StackPanel>
-                        </Grid>
-                    </Border>
-
-                    <!-- FILA 2: opción PT + botón calcular -->
-                    <Border Background="#3A3A3D" CornerRadius="4" Padding="16,10" Margin="0,0,0,12">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
 
-                            <StackPanel Orientation="Vertical" VerticalAlignment="Center">
-                                <TextBlock Text="¿Generar también la orden del PT?"
-                                           Foreground="#FF9800" FontWeight="Bold"
-                                           Margin="0,0,0,6"/>
+                            <!-- Fecha fin -->
+                            <StackPanel Grid.Column="0" Orientation="Vertical"
+                                        Margin="0,0,30,0" VerticalAlignment="Center">
+                                <TextBlock Text="Fecha fin para todas las órdenes*:"
+                                           Foreground="#FF9800" Margin="0,0,0,4"/>
+                                <DatePicker x:Name="dpFechaFin"
+                                            SelectedDate="{Binding FechaFin, Mode=TwoWay}"
+                                            Width="160" Height="30" Background="#E0E0E0"/>
+                            </StackPanel>
+
+                            <!-- Opción PT -->
+                            <StackPanel Grid.Column="1" Orientation="Vertical"
+                                        VerticalAlignment="Center">
+                                <TextBlock Text="¿Generar también orden del PT?"
+                                           Foreground="#FF9800" Margin="0,0,0,6"/>
                                 <StackPanel Orientation="Horizontal">
                                     <RadioButton x:Name="rbSoloPT"
                                                  Content="Solo componentes PS"
@@ -138,33 +178,32 @@
                                 </StackPanel>
                             </StackPanel>
 
-                            <Button Grid.Column="1"
-                                    x:Name="btnCalcular"
+                            <!-- Botón calcular -->
+                            <Button Grid.Column="3"
                                     Content="▶  Calcular órdenes"
                                     Click="BtnCalcular_Click"
                                     Width="180" Height="36"
                                     Background="#FF9800" Foreground="White"
                                     BorderBrush="#FF9800" FontWeight="Bold"
-                                    VerticalAlignment="Center"/>
+                                    VerticalAlignment="Center" Cursor="Hand"/>
                         </Grid>
                     </Border>
 
-                    <!-- PREVIEW DE ÓRDENES -->
-                    <Border Visibility="{Binding PreviewVisible, Converter={StaticResource BoolToVis}}"
+                    <!-- FILA 3: Preview -->
+                    <Border Grid.Row="2"
+                            Visibility="{Binding PreviewVisible, Converter={StaticResource BoolToVis}}"
                             Background="#1E1E1E" BorderBrush="#FF9800" BorderThickness="1"
-                            CornerRadius="4" Padding="0">
+                            CornerRadius="4" Margin="0,12,0,0" Padding="0">
                         <StackPanel>
                             <TextBlock Text="Órdenes que se generarán:"
-                                       Foreground="#FF9800" FontWeight="Bold"
-                                       Margin="12,10,0,8"/>
-
+                                       Foreground="#FF9800" FontWeight="Bold" Margin="12,10,0,8"/>
                             <DataGrid x:Name="dgPreview"
                                       ItemsSource="{Binding OrdenesPreview}"
-                                      MaxHeight="260" Margin="8,0,8,8">
+                                      IsReadOnly="True" MaxHeight="200"
+                                      Margin="8,0,8,8">
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Header="Tipo"
-                                                        Binding="{Binding Tipo}"
-                                                        Width="55">
+                                                        Binding="{Binding Tipo}" Width="55">
                                         <DataGridTextColumn.ElementStyle>
                                             <Style TargetType="TextBlock">
                                                 <Setter Property="FontWeight" Value="Bold"/>
@@ -181,53 +220,31 @@
                                     </DataGridTextColumn>
                                     <DataGridTextColumn Header="Código"
                                                         Binding="{Binding CodigoArticulo}"
-                                                        Width="120"
-                                                        FontWeight="SemiBold"/>
+                                                        Width="120" FontWeight="SemiBold"/>
                                     <DataGridTextColumn Header="Descripción"
-                                                        Binding="{Binding Descripcion}"
-                                                        Width="*"/>
+                                                        Binding="{Binding Descripcion}" Width="*"/>
                                     <DataGridTextColumn Header="Cantidad"
                                                         Binding="{Binding Cantidad, StringFormat={}{0:0.##}}"
                                                         Width="90"/>
-                                    <DataGridTextColumn Header="Acción"
-                                                        Binding="{Binding AccionTexto}"
-                                                        Width="80">
-                                        <DataGridTextColumn.ElementStyle>
-                                            <Style TargetType="TextBlock">
-                                                <Setter Property="FontWeight" Value="Bold"/>
-                                                <Style.Triggers>
-                                                    <Trigger Property="Text" Value="Nueva">
-                                                        <Setter Property="Foreground" Value="#4CAF50"/>
-                                                    </Trigger>
-                                                    <Trigger Property="Text" Value="Agrupar">
-                                                        <Setter Property="Foreground" Value="#FF9800"/>
-                                                    </Trigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </DataGridTextColumn.ElementStyle>
-                                    </DataGridTextColumn>
+
                                 </DataGrid.Columns>
                             </DataGrid>
                         </StackPanel>
                     </Border>
 
-                    <!-- NOTA agrupación -->
-                    <TextBlock Visibility="{Binding PreviewVisible, Converter={StaticResource BoolToVis}}"
-                               Text="ℹ Si ya existe una orden con el mismo código y fecha, las cantidades se sumarán."
-                               Foreground="#AAAAAA" FontSize="11" Margin="0,6,0,0"/>
+                    <!-- FILA 4: nota + botón confirmar -->
+                    <Grid Grid.Row="3"
+                          Visibility="{Binding PreviewVisible, Converter={StaticResource BoolToVis}}"
+                          Margin="0,8,0,0">                       
+                        <Button Content="Confirmar y generar órdenes"
+                                Click="BtnConfirmar_Click"
+                                HorizontalAlignment="Right"
+                                Width="240" Height="36"
+                                Background="#FF9800" Foreground="White"
+                                BorderBrush="#FF9800" FontWeight="Bold" Cursor="Hand"/>
+                    </Grid>
 
-                    <!-- BOTÓN CONFIRMAR -->
-                    <Button x:Name="btnConfirmar"
-                            Content="✔  Confirmar y generar órdenes"
-                            Click="BtnConfirmar_Click"
-                            Visibility="{Binding PreviewVisible, Converter={StaticResource BoolToVis}}"
-                            HorizontalAlignment="Right"
-                            Width="240" Height="36"
-                            Background="#4CAF50" Foreground="White"
-                            BorderBrush="#4CAF50" FontWeight="Bold"
-                            Margin="0,12,0,0"/>
-
-                </StackPanel>
+                </Grid>
             </DockPanel>
         </Border>
     </Grid>
