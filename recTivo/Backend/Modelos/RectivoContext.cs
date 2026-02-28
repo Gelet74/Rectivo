@@ -13,7 +13,7 @@ namespace recTivo.Backend.Modelos
         public virtual DbSet<Articulo> Articulos { get; set; } = null!;
         public virtual DbSet<Cliente> Clientes { get; set; } = null!;
         public virtual DbSet<Empleado> Empleados { get; set; } = null!;
-        public virtual DbSet<Orden> Ordens { get; set; } = null!;
+        public virtual DbSet<Orden> Orden { get; set; } = null!;
         public virtual DbSet<OrdenFase> OrdenFases { get; set; } = null!;
         public virtual DbSet<Permiso> Permisos { get; set; } = null!;
         public virtual DbSet<Rol> Rols { get; set; } = null!;
@@ -195,6 +195,38 @@ namespace recTivo.Backend.Modelos
                     .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("fk_componenteescandallo_escandallo");
             });
+
+            modelBuilder.Entity<Rol>(entity =>
+            {
+                entity.ToTable("rol");
+                entity.HasKey(r => r.Id).HasName("PRIMARY");
+                entity.Property(r => r.Id).HasColumnName("ID");
+                entity.Property(r => r.NombreRol).HasMaxLength(50).HasColumnName("NOMBRE_ROL");
+
+                entity.HasMany(r => r.Permisos)
+                      .WithMany(p => p.IdRols)
+                      .UsingEntity(j => j.ToTable("rol_permiso")
+                          .HasData()
+                      );
+            });
+
+            modelBuilder.Entity<Permiso>(entity =>
+            {
+                entity.ToTable("permiso");
+                entity.HasKey(p => p.Id).HasName("PRIMARY");
+                entity.Property(p => p.Id).HasColumnName("ID");
+                entity.Property(p => p.NombrePermiso).HasMaxLength(50).HasColumnName("NOMBRE_PERMISO");
+            });
+
+            modelBuilder.Entity<Rol>()
+                .HasMany(r => r.Permisos)
+                .WithMany(p => p.IdRols)
+                .UsingEntity<Dictionary<string, object>>(
+                    "rol_permiso",
+                    j => j.HasOne<Permiso>().WithMany().HasForeignKey("ID_PERMISO"),
+                    j => j.HasOne<Rol>().WithMany().HasForeignKey("ID_ROL"),
+                    j => j.ToTable("rol_permiso")
+                );
 
             modelBuilder.Entity<OrdenFase>(entity =>
             {

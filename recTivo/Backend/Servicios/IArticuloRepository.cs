@@ -6,4 +6,5 @@ namespace recTivo.Backend.Repos;
 public interface IArticuloRepository : IRepository<Articulo>
 {
     Task<Articulo?> GetByCodigoAsync(string codigo);
+    Task<List<Articulo>> GetAllWithUbicacionesAsync();
 }

@@ -1,15 +1,12 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using recTivo.Backend.Modelos;
-using recTivo.Backend.Repos;
 using recTivo.Frontend.Dialogos;
 using recTivo.Frontend.Dialogos.Articulos;
 using recTivo.Frontend.Dialogos.Clientes;
 using recTivo.Frontend.Dialogos.Empleado;
 using recTivo.Frontend.Dialogos.Escandallo;
 using recTivo.Frontend.Dialogos.Ordenes;
-using System;
 using System.ComponentModel;
-using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -34,7 +31,6 @@ namespace recTivo.Frontend.UC
             if (Application.Current is App app && app.EmpleadoActual != null)
                 nombreEmpleado = app.EmpleadoActual.NombreCompleto;
 
-            // ⭐ Obtener el DbContext directamente
             var context = _serviceProvider.GetRequiredService<RectivoContext>();
 
             DataContext = new DashboardData
@@ -42,8 +38,48 @@ namespace recTivo.Frontend.UC
                 UsuarioLogueado = nombreEmpleado,
                 TotalArticulos = context.Articulos.Count(),
                 TotalClientes = context.Clientes.Count(),
+                TotalOrdenes = context.Orden.Count(),
                 TotalEmpleados = context.Empleados.Count()
             };
+
+            AplicarRestriccionesDashboard();
+        }
+
+        private void AplicarRestriccionesDashboard()
+        {
+            if (Application.Current is not App app || app.EmpleadoActual?.Rol == null)
+                return;
+
+            var permisos = app.EmpleadoActual.Rol.Permisos
+                .Select(p => p.NombrePermiso)
+                .ToHashSet();
+
+            // Administrador → todo visible
+            if (app.EmpleadoActual.Rol.NombreRol == "Administrador" || permisos.Count == 0)
+                return;
+
+            // Crear artículo
+            btnCrearArticulo.Visibility = permisos.Contains("Crear artículos")
+                ? Visibility.Visible : Visibility.Collapsed;
+
+            // Crear cliente → solo admin (no hay permiso específico todavía)
+            btnCrearCliente.Visibility = Visibility.Collapsed;
+
+            // Crear empleado
+            btnCrearEmpleado.Visibility = permisos.Contains("Ver usuarios")
+                ? Visibility.Visible : Visibility.Collapsed;
+
+            // Crear escandallo
+            btnCrearEscandallo.Visibility = permisos.Contains("Crear escandallos")
+                ? Visibility.Visible : Visibility.Collapsed;
+
+            // Procesar orden
+            btnProcesarOrden.Visibility = permisos.Contains("Registrar movimientos de stock")
+                ? Visibility.Visible : Visibility.Collapsed;
+
+            // Crear pedido → solo cuando haya ventas implementadas
+            btnCrearPedido.Visibility = permisos.Contains("Gestionar ventas")
+                ? Visibility.Visible : Visibility.Collapsed;
         }
 
         private void BtnCrearArticulo_Click(object sender, RoutedEventArgs e)
@@ -65,11 +101,11 @@ namespace recTivo.Frontend.UC
         {
             _serviceProvider.GetService<DialogoAltaEscandallo>()?.ShowDialog();
         }
-        private void BtnCrearOrden_Click(object sender, RoutedEventArgs e)
+
+        private void BtnProcesarOrden_Click(object sender, RoutedEventArgs e)
         {
             _serviceProvider.GetService<DialogoProcesarOrden>()?.ShowDialog();
         }
-
 
         private void BtnCambiarUsuario_Click(object sender, RoutedEventArgs e)
         {
@@ -91,7 +127,7 @@ namespace recTivo.Frontend.UC
             {
                 get => _usuarioLogueado;
                 set { _usuarioLogueado = value; OnPropertyChanged(nameof(UsuarioLogueado)); }
-            }
+            }           
 
             private int _totalArticulos;
             public int TotalArticulos
@@ -107,6 +143,14 @@ namespace recTivo.Frontend.UC
                 set { _totalClientes = value; OnPropertyChanged(nameof(TotalClientes)); }
             }
 
+
+            private int _totalOrdenes;
+            public int TotalOrdenes
+            {
+                get => _totalOrdenes;
+                set { _totalOrdenes = value; OnPropertyChanged(nameof(TotalOrdenes)); }
+            }
+
             private int _totalEmpleados;
             public int TotalEmpleados
             {
@@ -118,7 +162,5 @@ namespace recTivo.Frontend.UC
             protected void OnPropertyChanged(string name)
                 => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
-
-       
     }
 }

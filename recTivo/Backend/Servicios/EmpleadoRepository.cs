@@ -9,7 +9,7 @@ public class EmpleadoRepository : GenericRepository<Empleado>
 {
     private readonly ILogger<GenericRepository<Empleado>> _logger;
 
-    public EmpleadoRepository(RectivoContext context, ILogger<GenericRepository<Empleado>> logger) 
+    public EmpleadoRepository(RectivoContext context, ILogger<GenericRepository<Empleado>> logger)
         : base(context, logger)
     {
     }
@@ -21,7 +21,10 @@ public class EmpleadoRepository : GenericRepository<Empleado>
     {
         _logger?.LogInformation("Validando credenciales para {Username}", username);
 
-        var empleado = await _dbSet.FirstOrDefaultAsync(e => e.Username == username);
+        var empleado = await _dbSet
+            .Include(e => e.Rol)
+                .ThenInclude(r => r.Permisos)
+            .FirstOrDefaultAsync(e => e.Username == username);
 
         if (empleado == null)
             return null;

@@ -20,8 +20,18 @@ namespace recTivo.Backend.Repos
         {
             return await _dbSet
                 .Include(a => a.ClienteHasArticulos)
-                .Include(a => a.Ubicaciones) 
+                .Include(a => a.Ubicaciones)
                 .FirstOrDefaultAsync(a => a.IdArticulo == id);
+        }
+
+        /// <summary>Carga todos los artículos con sus ubicaciones incluidas.</summary>
+        public async Task<List<Articulo>> GetAllWithUbicacionesAsync()
+        {
+            return await _dbSet
+                .Include(a => a.Ubicaciones)
+                .Where(a => !a.Codigo.StartsWith("0"))
+                .OrderBy(a => a.Codigo)
+                .ToListAsync();
         }
     }
 }

@@ -142,7 +142,7 @@
                                    FontWeight="Bold"
                                    Margin="20,0,0,5"/>
 
-                        <TextBlock Text="-"
+                        <TextBlock Text="{Binding TotalOrdenes}"
                                    Foreground="White"
                                    FontSize="32"
                                    FontWeight="Bold"
@@ -204,7 +204,7 @@
                         Background="#FF9800"
                         Foreground="White"
                         FontWeight="Bold"
-                        Click="BtnCrearArticulo_Click"/>
+                        x:Name="btnCrearArticulo" Click="BtnCrearArticulo_Click"/>
 
                 <!-- Crear cliente -->
                 <Button Content="Crear cliente"
@@ -215,7 +215,7 @@
                         Background="#FF9800"
                         Foreground="White"
                         FontWeight="Bold"
-                        Click="BtnCrearCliente_Click"/>
+                        x:Name="btnCrearCliente" Click="BtnCrearCliente_Click"/>
 
                 <!-- Crear empleado -->
                 <Button Content="Crear empleado"
@@ -226,7 +226,7 @@
                         Background="#FF9800"
                         Foreground="White"
                         FontWeight="Bold"
-                        Click="BtnCrearEmpleado_Click"/>
+                        x:Name="btnCrearEmpleado" Click="BtnCrearEmpleado_Click"/>
 
                 <!-- Crear escandallo -->
                 <Button Content="Crear escandallo"
@@ -237,10 +237,10 @@
                         Background="#FF9800"
                         Foreground="White"
                         FontWeight="Bold"
-                        Click="BtnCrearEscandallo_Click"/>
+                        x:Name="btnCrearEscandallo" Click="BtnCrearEscandallo_Click"/>
 
-                <!-- Procesar orden (deshabilitado) -->
-                <Button Content="Procesar orden"
+                <!-- Procesar orden -->
+                <Button x:Name="btnProcesarOrden" Content="Procesar orden"
                         Width="180"
                         Height="60"
                         HorizontalAlignment="Center"
@@ -248,10 +248,10 @@
                         Background="#FF9800"
                         Foreground="White"
                         FontWeight="Bold"
-                        Click="BtnCrearOrden_Click"/>
+                        Click="BtnProcesarOrden_Click"/>
 
                 <!-- Crear pedido (deshabilitado) -->
-                <Button Content="Crear pedido"
+                <Button x:Name="btnCrearPedido" Content="Crear pedido"
                         Width="180"
                         Height="60"
                         HorizontalAlignment="Center"

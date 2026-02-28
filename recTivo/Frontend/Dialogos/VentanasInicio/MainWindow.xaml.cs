@@ -32,6 +32,84 @@ namespace recTivo
 
             DataContext = this;
             _ = CargarTotalesAsync();
+
+            AplicarRestriccionesRol();
+        }
+
+        private void AplicarRestriccionesRol()
+        {
+            if (Application.Current is not App app || app.EmpleadoActual?.Rol == null)
+                return;
+
+            var permisos = app.EmpleadoActual.Rol.Permisos
+                .Select(p => p.NombrePermiso)
+                .ToHashSet();
+
+            // Si no tiene ningún permiso configurado es Administrador o dev → todo visible
+            if (permisos.Count == 0) return;
+
+            bool esAdmin = app.EmpleadoActual.Rol.NombreRol == "Administrador";
+            if (esAdmin) return;
+
+            // ── Almacén ───────────────────────────────────────────────────
+            bool verAlmacen = permisos.Contains("Hacer movimientos de almacen") ||
+                              permisos.Contains("Registrar movimientos de stock");
+            expAlmacen.Visibility = verAlmacen ? Visibility.Visible : Visibility.Collapsed;
+
+            // ── Artículos ─────────────────────────────────────────────────
+            bool verArticulos = permisos.Contains("Ver artículos") ||
+                                permisos.Contains("Crear artículos") ||
+                                permisos.Contains("Editar artículos") ||
+                                permisos.Contains("Eliminar artículos");
+            expArticulos.Visibility = verArticulos ? Visibility.Visible : Visibility.Collapsed;
+
+            // Ocultar items específicos dentro de Artículos
+            if (verArticulos)
+            {
+                foreach (ListViewItem item in articulos.Items)
+                {
+                    string content = item.Content?.ToString() ?? "";
+                    if (content == "Dar de alta")
+                        item.Visibility = permisos.Contains("Crear artículos") ? Visibility.Visible : Visibility.Collapsed;
+                    else if (content == "Dar de baja")
+                        item.Visibility = permisos.Contains("Eliminar artículos") ? Visibility.Visible : Visibility.Collapsed;
+                    else if (content == "Modificar")
+                        item.Visibility = permisos.Contains("Editar artículos") ? Visibility.Visible : Visibility.Collapsed;
+                }
+            }
+
+            // ── Clientes ──────────────────────────────────────────────────
+            expClientes.Visibility = Visibility.Collapsed; // Solo admin/administrativo
+
+            // ── Empleados ─────────────────────────────────────────────────
+            bool verEmpleados = permisos.Contains("Ver usuarios") || permisos.Contains("Gestionar roles");
+            expEmpleados.Visibility = verEmpleados ? Visibility.Visible : Visibility.Collapsed;
+
+            // ── Escandallos ───────────────────────────────────────────────
+            bool verEscandallos = permisos.Contains("Crear escandallos") || permisos.Contains("Editar escandallos");
+            expEscandallos.Visibility = verEscandallos ? Visibility.Visible : Visibility.Collapsed;
+
+            // ── Órdenes ───────────────────────────────────────────────────
+            bool puedeProcesat = permisos.Contains("Registrar movimientos de stock");
+            bool puedeCerrar = permisos.Contains("Cerrar fases") || permisos.Contains("Cerrar ordenes");
+            bool verOrdenes = puedeProcesat || puedeCerrar;
+            expOrdenes.Visibility = verOrdenes ? Visibility.Visible : Visibility.Collapsed;
+
+            if (verOrdenes)
+            {
+                foreach (ListViewItem item in ordenes.Items)
+                {
+                    string itemContent = item.Content?.ToString() ?? "";
+                    if (itemContent == "Procesar orden")
+                        item.Visibility = puedeProcesat ? Visibility.Visible : Visibility.Collapsed;
+                    else if (itemContent is "Cerrar orden" or "Listar órdenes")
+                        item.Visibility = puedeCerrar ? Visibility.Visible : Visibility.Collapsed;
+                }
+            }
+
+            // ── Ventas ────────────────────────────────────────────────────
+            bool verVentas = permisos.Contains("Gestionar ventas");
+            expVentas.Visibility = verVentas ? Visibility.Visible : Visibility.Collapsed;
         }
 
         private void MostrarDashboard()

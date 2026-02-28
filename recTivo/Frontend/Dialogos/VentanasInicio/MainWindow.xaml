@@ -59,7 +59,7 @@
                      ============================ -->
 
                 <!-- Almacén -->
-                <Expander HorizontalAlignment="Left" 
+                <Expander x:Name="expAlmacen" HorizontalAlignment="Left" 
                           IsExpanded="False" 
                           Width="170" 
                           Style="{StaticResource MaterialDesignExpander}" 
@@ -90,7 +90,7 @@
                 </Expander>
 
                 <!-- Artículos -->
-                <Expander HorizontalAlignment="Left" 
+                <Expander x:Name="expArticulos" HorizontalAlignment="Left" 
                           IsExpanded="False" 
                           Width="170" 
                           Style="{StaticResource MaterialDesignExpander}" 
@@ -124,7 +124,7 @@
                 </Expander>
 
                 <!-- Clientes -->
-                <Expander HorizontalAlignment="Left" 
+                <Expander x:Name="expClientes" HorizontalAlignment="Left" 
                           IsExpanded="False" 
                           Width="170" 
                           Style="{StaticResource MaterialDesignExpander}" 
@@ -156,7 +156,7 @@
                 </Expander>
 
                 <!-- Empleados -->
-                <Expander HorizontalAlignment="Left" 
+                <Expander x:Name="expEmpleados" HorizontalAlignment="Left" 
                           IsExpanded="False" Width="170" 
                           Style="{StaticResource MaterialDesignExpander}" 
                           Foreground="White" 
@@ -187,7 +187,7 @@
                 </Expander>
 
                 <!-- Escandallos -->
-                <Expander HorizontalAlignment="Left" 
+                <Expander x:Name="expEscandallos" HorizontalAlignment="Left" 
                           IsExpanded="False" Width="170" 
                           Style="{StaticResource MaterialDesignExpander}" 
                           Foreground="White" 
@@ -218,7 +218,7 @@
                 </Expander>
 
                 <!-- Órdenes -->
-                <Expander HorizontalAlignment="Left" 
+                <Expander x:Name="expOrdenes" HorizontalAlignment="Left" 
                           IsExpanded="False" 
                           Width="170" 
                           Style="{StaticResource MaterialDesignExpander}" 
@@ -250,7 +250,7 @@
                 </Expander>
 
                 <!-- Ventas -->
-                <Expander HorizontalAlignment="Left" 
+                <Expander x:Name="expVentas" HorizontalAlignment="Left" 
                           IsExpanded="False" 
                           Width="170" 
                           Style="{StaticResource MaterialDesignExpander}" 

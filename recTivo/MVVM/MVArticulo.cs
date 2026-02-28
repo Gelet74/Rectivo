@@ -305,9 +305,7 @@ namespace recTivo.MVVM
         {
             try
             {
-                ListaArticulos = (await _articuloRepository.GetAllAsync())
-                    .OrderBy(a => a.Codigo)
-                    .ToList();
+                ListaArticulos = await _articuloRepository.GetAllWithUbicacionesAsync();
 
                 RestablecerFiltros();
 
