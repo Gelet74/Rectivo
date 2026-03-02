@@ -8,6 +8,9 @@ public class OrdenRepository : GenericRepository<Orden>, IOrdenRepository
 {
     public OrdenRepository(RectivoContext context) : base(context) { }
 
+    public async Task<Orden?> GetByIdAsync(int id)
+        => await _dbSet.FindAsync(id);
+
     public async Task<Orden?> GetByCodigoAsync(string codigo)
         => await _dbSet.FirstOrDefaultAsync(o => o.Codigo == codigo);
 

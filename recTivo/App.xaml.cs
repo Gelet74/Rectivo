@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using recTivo.Backend.Modelos;
 using recTivo.Backend.Repos;
+using recTivo.Backend.Servicios;
 using recTivo.Frontend.Dialogos;
 using recTivo.Frontend.Dialogos.Articulos;
 using recTivo.Frontend.Dialogos.Clientes;
@@ -12,6 +13,7 @@ using recTivo.Frontend.Dialogos.Ordenes;
 using recTivo.Frontend.Dialogos.VentanasInicio;
 using recTivo.Frontend.UC;
 using recTivo.MVVM;
+using System;
 using System.Windows;
 
 namespace recTivo
@@ -51,13 +53,17 @@ namespace recTivo
             services.AddTransient<OrdenRepository>();
             services.AddTransient<EscandalloRepository>();
             services.AddTransient<OrdenFaseRepository>();
+            services.AddTransient<MVOrden>();
+            services.AddTransient<UCCerrarFase>();
+            services.AddTransient<UCListadoOrdenes>();
+
+            services.AddTransient<UCListadoOrdenes>();
             services.AddTransient<RolRepository>();
 
             // VIEWMODELS
             services.AddTransient<MVArticulo>();
             services.AddTransient<MVEmpleado>();
             services.AddTransient<MVCliente>();
-            services.AddTransient<MVListadoOrdenes>();
             services.AddTransient<MVAlmacen>(provider => new MVAlmacen(
                 provider.GetRequiredService<RectivoContext>(),
                 provider.GetRequiredService<MVArticulo>()
@@ -72,7 +78,8 @@ namespace recTivo
                 provider.GetRequiredService<ArticuloRepository>(),
                 provider.GetRequiredService<OrdenRepository>(),
                 provider.GetRequiredService<EmpleadoRepository>(),
-                provider.GetRequiredService<OrdenFaseRepository>()
+                provider.GetRequiredService<OrdenFaseRepository>(),
+                provider.GetRequiredService<RectivoContext>()
             ));
 
             // VENTANAS
@@ -123,7 +130,6 @@ namespace recTivo
             services.AddTransient<UCListadoArticulos>();
             services.AddTransient<UCListadoClientes>();
             services.AddTransient<UCDashboard>();
-            services.AddTransient<UCListadoOrdenes>();
         }
 
         protected override async void OnStartup(StartupEventArgs e)

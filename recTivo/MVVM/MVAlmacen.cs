@@ -14,20 +14,61 @@ namespace recTivo.MVVM
         {
             _context = context;
             MVArticulo = mvArticulo;
+
+            // Cuando cambia el artículo seleccionado, recalcular EsValido
+            MVArticulo.PropertyChanged += (_, e) =>
+            {
+                if (e.PropertyName == nameof(MVArticulo.ArticuloSeleccionado))
+                    OnPropertyChanged(nameof(EsValido));
+            };
         }
 
         // Propiedades de la UI (Binding)
         private string _cantidad;
-        public string Cantidad { get => _cantidad; set => SetProperty(ref _cantidad, value); }
+        public string Cantidad
+        {
+            get => _cantidad;
+            set { SetProperty(ref _cantidad, value); OnPropertyChanged(nameof(EsValido)); }
+        }
 
         private string _pasillo;
-        public string Pasillo { get => _pasillo; set => SetProperty(ref _pasillo, value); }
+        public string Pasillo
+        {
+            get => _pasillo;
+            set { SetProperty(ref _pasillo, value?.ToUpper()); OnPropertyChanged(nameof(EsValido)); }
+        }
 
         private string _estanteria;
-        public string Estanteria { get => _estanteria; set => SetProperty(ref _estanteria, value); }
+        public string Estanteria
+        {
+            get => _estanteria;
+            set { SetProperty(ref _estanteria, value); OnPropertyChanged(nameof(EsValido)); }
+        }
 
         private string _hueco;
-        public string Hueco { get => _hueco; set => SetProperty(ref _hueco, value); }
+        public string Hueco
+        {
+            get => _hueco;
+            set { SetProperty(ref _hueco, value); OnPropertyChanged(nameof(EsValido)); }
+        }
+
+        // ── Validación: el botón solo se habilita cuando todo es correcto ──
+        public bool EsValido =>
+            MVArticulo.ArticuloSeleccionado != null &&
+            int.TryParse(Cantidad, out int c) && c > 0 &&
+            !string.IsNullOrWhiteSpace(Pasillo) &&
+            int.TryParse(Estanteria, out _) &&
+            int.TryParse(Hueco, out _);
+
+        // Mensajes de error por campo
+        public string ErrorCantidad => !int.TryParse(Cantidad, out int c2) || c2 <= 0
+            ? "Introduce un número mayor que 0" : "";
+        public string ErrorPasillo => string.IsNullOrWhiteSpace(Pasillo)
+            ? "Obligatorio" : "";
+        public string ErrorEstanteria => !int.TryParse(Estanteria, out _)
+            ? "Debe ser un número" : "";
+        public string ErrorHueco => !int.TryParse(Hueco, out _)
+            ? "Debe ser un número" : "";
 
         // -----------------------------
         // MÉTODO: ENTRADA ALMACÉN
@@ -173,7 +214,7 @@ namespace recTivo.MVVM
         private void LimpiarCampos()
         {
             Cantidad = ""; Pasillo = ""; Estanteria = ""; Hueco = "";
-            MVArticulo.LimpiarFiltros();
+            MVArticulo.ArticuloSeleccionado = null;
         }
     }
 }

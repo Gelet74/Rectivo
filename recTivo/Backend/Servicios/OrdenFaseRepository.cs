@@ -23,12 +23,14 @@ public class OrdenFaseRepository : GenericRepository<OrdenFase>
             .OrderBy(f => f.NumeroFase)
             .FirstOrDefaultAsync();
 
-    /// <summary>Cierra una fase: guarda OK/defectos, descuenta MP y activa la siguiente.</summary>
+    /// <summary>Cierra una fase: guarda OK/defectos, descuenta MP y activa la siguiente.
+    /// Si es la última fase cierra la orden y sube el PS a stock con ubicación.</summary>
     public async Task CerrarFaseAsync(
         int idOrdenFase,
         int cantidadOK,
         int cantidadDefecto,
         int idEmpleado,
+        DateTime fechaCierre,
         RectivoContext context)
     {
         var fase = await _dbSet
@@ -39,6 +41,16 @@ public class OrdenFaseRepository : GenericRepository<OrdenFase>
         if (fase.EstadoEnum == EstadoOrden.Cerrada)
             throw new Exception("Esta fase ya está cerrada.");
 
+        // Validar que la fase anterior esté cerrada
+        if (fase.NumeroFase > 1)
+        {
+            var faseAnterior = await _dbSet
+                .FirstOrDefaultAsync(f => f.IdOrden == fase.IdOrden &&
+                                          f.NumeroFase == fase.NumeroFase - 1);
+            if (faseAnterior != null && faseAnterior.EstadoEnum != EstadoOrden.Cerrada)
+                throw new Exception("No se puede cerrar esta fase: la fase anterior aún no está cerrada.");
+        }
+
         if (cantidadOK + cantidadDefecto > fase.CantidadEntrada)
             throw new Exception(
                 $"OK ({cantidadOK}) + Defectos ({cantidadDefecto}) " +
@@ -48,12 +60,11 @@ public class OrdenFaseRepository : GenericRepository<OrdenFase>
         fase.CantidadOK = cantidadOK;
         fase.CantidadDefecto = cantidadDefecto;
         fase.IdEmpleado = idEmpleado;
+        fase.FechaFin = fechaCierre;
         fase.EstadoEnum = EstadoOrden.Cerrada;
         await SaveChangesAsync();
 
         // ── 2) Descontar MP asociadas al componente de fase ───────────────
-        //    Buscamos el escandallo del artículo de fase (01x, 02x, 03x)
-        //    y de sus componentes MP descontamos stock proporcional a CantidadEntrada
         var escandallo = await context.Escandallos
             .FirstOrDefaultAsync(e => e.CodigoProducto == fase.CodigoFase);
 
@@ -76,15 +87,13 @@ public class OrdenFaseRepository : GenericRepository<OrdenFase>
                     if (articulo.Stock < 0) articulo.Stock = 0;
                 }
             }
-
             await context.SaveChangesAsync();
         }
 
         // ── 3) Propagar CantidadOK a la siguiente fase (si existe) ────────
         var siguienteFase = await _dbSet
             .Where(f => f.IdOrden == fase.IdOrden &&
-                        f.NumeroFase == fase.NumeroFase + 1 &&
-                        f.Estado == nameof(EstadoOrden.Pendiente))
+                        f.NumeroFase == fase.NumeroFase + 1)
             .FirstOrDefaultAsync();
 
         if (siguienteFase != null)
@@ -94,14 +103,52 @@ public class OrdenFaseRepository : GenericRepository<OrdenFase>
         }
         else
         {
-            // ── 4) Última fase cerrada → el PS va a stock ─────────────────
+            // ── 4) Última fase cerrada → cerrar la orden y subir PS a stock con ubicación ──
             var orden = fase.OrdenNavigation;
+
+            // Cerrar la orden
+            orden.Estado = nameof(EstadoOrden.Cerrada);
+            await context.SaveChangesAsync();
+
+            // Subir el PS a stock con ubicación automática (pasillo P, estantería 1)
             var articuloPS = await context.Articulos
                 .FirstOrDefaultAsync(a => a.Codigo == orden.Codigo);
 
-            if (articuloPS != null)
+            if (articuloPS != null && cantidadOK > 0)
             {
-                articuloPS.Stock += cantidadOK;
+                // Buscar ubicación existente del artículo o crear una nueva
+                var ubicacion = await context.Ubicacion
+                    .FirstOrDefaultAsync(u => u.IdArticulo == articuloPS.IdArticulo);
+
+                if (ubicacion == null)
+                {
+                    // Crear ubicación en pasillo P (Producto semiterminado)
+                    int maxHueco = await context.Ubicacion
+                        .Where(u => u.LetraPasillo == "P" && u.NumeroEstanteria == 1)
+                        .MaxAsync(u => (int?)u.Numero) ?? 0;
+
+                    ubicacion = new Ubicacion
+                    {
+                        LetraPasillo = "P",
+                        NumeroEstanteria = 1,
+                        Numero = maxHueco + 1,
+                        IdArticulo = articuloPS.IdArticulo,
+                        Cantidad = cantidadOK
+                    };
+                    context.Ubicacion.Add(ubicacion);
+                }
+                else
+                {
+                    ubicacion.Cantidad += cantidadOK;
+                    context.Ubicacion.Update(ubicacion);
+                }
+
+                // Recalcular stock total del PS
+                await context.SaveChangesAsync();
+                articuloPS.Stock = await context.Ubicacion
+                    .Where(u => u.IdArticulo == articuloPS.IdArticulo)
+                    .SumAsync(u => u.Cantidad);
+
                 await context.SaveChangesAsync();
             }
         }

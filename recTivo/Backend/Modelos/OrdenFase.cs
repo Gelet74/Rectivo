@@ -4,21 +4,21 @@ namespace recTivo.Backend.Modelos;
 
 public class OrdenFase
 {
-    public int    IdOrdenFase      { get; set; }
-    public int    IdOrden          { get; set; }
+    public int IdOrdenFase { get; set; }
+    public int IdOrden { get; set; }
 
     /// <summary>Código del artículo de fase: 01x, 02x o 03x</summary>
-    public string CodigoFase       { get; set; } = null!;
+    public string CodigoFase { get; set; } = null!;
 
     /// <summary>1 = fase 01x, 2 = fase 02x, 3 = fase 03x</summary>
-    public int    NumeroFase       { get; set; }
+    public int NumeroFase { get; set; }
 
-    public int    CantidadEntrada  { get; set; }
-    public int?   CantidadOK       { get; set; }
-    public int?   CantidadDefecto  { get; set; }
-    public DateTime? FechaFin      { get; set; }
-    public int?   IdEmpleado       { get; set; }
-    public string Estado           { get; set; } = nameof(EstadoOrden.Pendiente);
+    public int CantidadEntrada { get; set; }
+    public int? CantidadOK { get; set; }
+    public int? CantidadDefecto { get; set; }
+    public DateTime? FechaFin { get; set; }
+    public int? IdEmpleado { get; set; }
+    public string Estado { get; set; } = nameof(EstadoOrden.Pendiente);
 
     // ── Propiedades calculadas ────────────────────────────────────────────
     [NotMapped]
@@ -32,21 +32,24 @@ public class OrdenFase
     public string EstadoTexto => EstadoEnum switch
     {
         EstadoOrden.Pendiente => "Pendiente",
-        EstadoOrden.EnCurso   => "En curso",
-        EstadoOrden.Cerrada   => "Cerrada",
-        _                     => Estado
+        EstadoOrden.EnCurso => "En curso",
+        EstadoOrden.Cerrada => "Cerrada",
+        _                   => Estado
     };
 
     [NotMapped]
-    public string NombreFase => NumeroFase switch
+    public string NombreFaseTexto => CodigoFase?.Substring(0, 2) switch
     {
-        1 => "Fase 1 - Corte",
-        2 => "Fase 2 - Proceso",
-        3 => "Fase 3 - Acabado",
-        _ => $"Fase {NumeroFase}"
+        "01" => "FASE 1 · SECCIONADORA",
+        "02" => "FASE 2 · CANTEADORA",
+        "03" => "FASE 3 · MECANIZADO",
+        _ => $"FASE {NumeroFase}"
     };
 
+    [NotMapped]
+    public string NombreFase => NombreFaseTexto;
+
     // ── Navegación ────────────────────────────────────────────────────────
-    public virtual Orden    OrdenNavigation    { get; set; } = null!;
+    public virtual Orden OrdenNavigation { get; set; } = null!;
     public virtual Empleado? EmpleadoNavigation { get; set; }
 }

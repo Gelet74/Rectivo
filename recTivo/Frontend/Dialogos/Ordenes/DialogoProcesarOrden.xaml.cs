@@ -20,10 +20,9 @@ namespace recTivo.Frontend.Dialogos.Ordenes
 
             rbSoloPT.IsChecked = true;
 
-            Loaded += async (_, __) => await _vm.InicializarAsync();
+            Loaded += async (_, __) => await _vm.InicializarProcesoAsync();
         }
 
-        // ── CheckBox del ListBox de PT ────────────────────────────────────
         private void ChkPT_Checked(object sender, RoutedEventArgs e)
         {
             if (sender is CheckBox chk && chk.DataContext is Articulo art)
@@ -36,7 +35,6 @@ namespace recTivo.Frontend.Dialogos.Ordenes
                 _vm.TogglePT(art, false);
         }
 
-        // ── RadioButtons ─────────────────────────────────────────────────
         private void RbSoloPT_Checked(object sender, RoutedEventArgs e)
         {
             _vm.IncluirPT = false;
@@ -51,7 +49,6 @@ namespace recTivo.Frontend.Dialogos.Ordenes
                 _ = _vm.CalcularPreviewAsync();
         }
 
-        // ── Botones ───────────────────────────────────────────────────────
         private async void BtnCalcular_Click(object sender, RoutedEventArgs e)
         {
             await _vm.CalcularPreviewAsync();
@@ -70,7 +67,6 @@ namespace recTivo.Frontend.Dialogos.Ordenes
                 Close();
         }
 
-        // ── ESC ───────────────────────────────────────────────────────────
         protected override void OnPreviewKeyDown(KeyEventArgs e)
         {
             if (e.Key == Key.Escape)

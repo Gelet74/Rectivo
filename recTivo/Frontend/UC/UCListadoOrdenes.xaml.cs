@@ -8,12 +8,12 @@ namespace recTivo.Frontend.UC
 {
     public partial class UCListadoOrdenes : UserControl
     {
-        private readonly MVListadoOrdenes _vm;
+        private readonly MVOrden _vm;
         private bool _escapeEnCurso = false;
 
         public event Action? SolicitarCierre;
 
-        public UCListadoOrdenes(MVListadoOrdenes vm)
+        public UCListadoOrdenes(MVOrden vm)
         {
             InitializeComponent();
             _vm = vm;
@@ -21,7 +21,7 @@ namespace recTivo.Frontend.UC
 
             Loaded += async (_, __) =>
             {
-                await _vm.InicializarAsync();
+                await _vm.InicializarListadoAsync();
                 Focusable = true;
                 Focus();
             };

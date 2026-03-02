@@ -29,6 +29,14 @@
             <Setter Property="Background"  Value="#E0E0E0"/>
             <Setter Property="Height"      Value="30"/>
         </Style>
+        <Style x:Key="CenterCell" TargetType="TextBlock">
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="TextAlignment" Value="Center"/>
+        </Style>
+
+        <Style x:Key="CenterEdit" TargetType="TextBox">
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        </Style>        
     </UserControl.Resources>
 
     <DockPanel>
@@ -110,15 +118,15 @@
                           Margin="8,0,8,8">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Nº Fase"
-                                            Binding="{Binding NumeroFase}" Width="60"/>
+                                            Binding="{Binding NumeroFase}" Width="80"/>
                         <DataGridTextColumn Header="Código fase"
                                             Binding="{Binding CodigoFase}" Width="110"/>
                         <DataGridTextColumn Header="Entrada"
                                             Binding="{Binding CantidadEntrada}" Width="80"/>
                         <DataGridTextColumn Header="OK"
                                             Binding="{Binding CantidadOK}" Width="70"/>
-                        <DataGridTextColumn Header="Defectos"
-                                            Binding="{Binding CantidadDefecto}" Width="80"/>
+                        <DataGridTextColumn Header="Defectuosas"
+                                            Binding="{Binding CantidadDefecto}" Width="120"/>
                         <DataGridTextColumn Header="Fecha fin"
                                             Binding="{Binding FechaFin, StringFormat=dd/MM/yyyy}" Width="100"/>
                         <DataGridTextColumn Header="Estado"

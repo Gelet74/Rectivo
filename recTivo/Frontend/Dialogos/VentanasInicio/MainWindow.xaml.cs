@@ -291,6 +291,18 @@ namespace recTivo
                         panelPrincipal.Children.Add(uc);
                         break;
                     }
+                case "Cerrar orden":
+                    {
+                        panelPrincipal.Children.Clear();
+                        var uc = _serviceProvider.GetRequiredService<UCCerrarFase>();
+                        uc.SolicitarCierre += () =>
+                        {
+                            panelPrincipal.Children.Remove(uc);
+                            MostrarDashboard();
+                        };
+                        panelPrincipal.Children.Add(uc);
+                        break;
+                    }
             }
 
             ordenes.SelectedItem = null;
