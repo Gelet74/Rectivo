@@ -3,7 +3,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using recTivo.Backend.Modelos;
 using recTivo.Backend.Repos;
-using recTivo.Backend.Servicios;
 using recTivo.Frontend.Dialogos;
 using recTivo.Frontend.Dialogos.Articulos;
 using recTivo.Frontend.Dialogos.Clientes;
@@ -11,9 +10,9 @@ using recTivo.Frontend.Dialogos.Empleado;
 using recTivo.Frontend.Dialogos.Escandallo;
 using recTivo.Frontend.Dialogos.Ordenes;
 using recTivo.Frontend.Dialogos.VentanasInicio;
+using recTivo.Frontend.Dialogos.Ventas;
 using recTivo.Frontend.UC;
 using recTivo.MVVM;
-using System;
 using System.Windows;
 
 namespace recTivo
@@ -53,6 +52,7 @@ namespace recTivo
             services.AddTransient<OrdenRepository>();
             services.AddTransient<EscandalloRepository>();
             services.AddTransient<OrdenFaseRepository>();
+            services.AddTransient<PedidoRepository>();
             services.AddTransient<MVOrden>();
             services.AddTransient<UCCerrarFase>();
             services.AddTransient<UCListadoOrdenes>();
@@ -122,6 +122,20 @@ namespace recTivo
             // DIÁLOGOS DE ÓRDENES
             services.AddTransient<DialogoProcesarOrden>(provider => new DialogoProcesarOrden(
                 provider.GetRequiredService<MVOrden>()
+            ));
+
+            services.AddTransient<MVPedido>(provider => new MVPedido(
+                provider.GetRequiredService<PedidoRepository>(),
+                provider.GetRequiredService<ArticuloRepository>(),
+                provider.GetRequiredService<EscandalloRepository>(),
+                provider.GetRequiredService<ClienteRepository>()
+            ));
+
+            services.AddTransient<DialogoPedidos>(provider => new DialogoPedidos(
+                provider.GetRequiredService<PedidoRepository>(),
+                provider.GetRequiredService<ArticuloRepository>(),
+                provider.GetRequiredService<EscandalloRepository>(),
+                provider.GetRequiredService<ClienteRepository>()
             ));
 
             services.AddTransient<ConfirmacionDialogo>();

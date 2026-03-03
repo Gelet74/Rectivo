@@ -9,7 +9,6 @@ namespace recTivo.Backend.Modelos
         {
         }
 
-        // ELIMINADOS: VistaArticulosUbicacions y ArticuloUbicaciones (obsoletos)
         public virtual DbSet<Articulo> Articulos { get; set; } = null!;
         public virtual DbSet<Cliente> Clientes { get; set; } = null!;
         public virtual DbSet<Empleado> Empleados { get; set; } = null!;
@@ -21,6 +20,8 @@ namespace recTivo.Backend.Modelos
         public virtual DbSet<ClienteHasArticulo> ClienteHasArticulos { get; set; } = null!;
         public virtual DbSet<Escandallo> Escandallos { get; set; } = null!;
         public virtual DbSet<ComponenteEscandallo> ComponenteEscandallos { get; set; } = null!;
+        public virtual DbSet<Pedido> Pedidos { get; set; } = null!;
+        public virtual DbSet<PedidoLinea> PedidoLineas { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -133,6 +134,58 @@ namespace recTivo.Backend.Modelos
                 entity.HasOne(e => e.Rol)
                       .WithMany(r => r.Empleados)
                       .HasForeignKey(e => e.IdRol);
+            });
+
+            // ===========================
+            // CONFIGURACIÓN DE PEDIDO
+            // ===========================
+            modelBuilder.Entity<Pedido>(entity =>
+            {
+                entity.ToTable("pedido");
+                entity.HasKey(p => p.IdPedido);
+                entity.Property(p => p.IdPedido).HasColumnName("IdPedido");
+                entity.Property(p => p.IdCliente).HasColumnName("IdCliente");
+                entity.Property(p => p.FechaPedido).HasColumnType("date").HasColumnName("FechaPedido");
+                entity.Property(p => p.FechaEntrega).HasColumnType("date").HasColumnName("FechaEntrega");
+                entity.Property(p => p.Estado).HasMaxLength(20).HasColumnName("Estado").HasDefaultValue("Pendiente");
+                entity.Property(p => p.Total).HasColumnType("decimal(10,2)").HasColumnName("Total");
+
+                entity.Ignore(p => p.EstadoTexto);
+
+                entity.HasOne(p => p.Cliente)
+                      .WithMany()
+                      .HasForeignKey(p => p.IdCliente)
+                      .OnDelete(DeleteBehavior.Restrict)
+                      .HasConstraintName("fk_pedido_cliente");
+
+                entity.HasMany(p => p.Lineas)
+                      .WithOne(l => l.Pedido)
+                      .HasForeignKey(l => l.IdPedido)
+                      .OnDelete(DeleteBehavior.Cascade)
+                      .HasConstraintName("fk_pedidolinea_pedido");
+            });
+
+            // ===========================
+            // CONFIGURACIÓN DE PEDIDO_LINEA
+            // ===========================
+            modelBuilder.Entity<PedidoLinea>(entity =>
+            {
+                entity.ToTable("pedido_linea");
+                entity.HasKey(l => l.IdPedidoLinea);
+                entity.Property(l => l.IdPedidoLinea).HasColumnName("IdPedidoLinea");
+                entity.Property(l => l.IdPedido).HasColumnName("IdPedido");
+                entity.Property(l => l.CodigoArticulo).HasMaxLength(10).HasColumnName("CodigoArticulo");
+                entity.Property(l => l.Cantidad).HasColumnName("Cantidad");
+                entity.Property(l => l.PrecioUnitario).HasColumnType("decimal(10,2)").HasColumnName("PrecioUnitario");
+
+                entity.Ignore(l => l.Subtotal);
+
+                entity.HasOne(l => l.Articulo)
+                      .WithMany()
+                      .HasForeignKey(l => l.CodigoArticulo)
+                      .HasPrincipalKey(a => a.Codigo)
+                      .OnDelete(DeleteBehavior.Restrict)
+                      .HasConstraintName("fk_pedidolinea_articulo");
             });
 
             // ===========================

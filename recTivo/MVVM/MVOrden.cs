@@ -11,6 +11,7 @@ namespace recTivo.MVVM
         public Articulo Articulo { get; set; } = null!;
         public string Codigo => Articulo.Codigo;
         public string Descripcion => Articulo.descrip ?? "";
+        public string Descripcion2 => Articulo.descrip2 ?? "";
         public decimal Cantidad { get; set; } = 1;
     }
 
@@ -18,6 +19,7 @@ namespace recTivo.MVVM
     {
         public string CodigoArticulo { get; set; } = "";
         public string Descripcion { get; set; } = "";
+        public string Descripcion2 { get; set; } = "";
         public decimal Cantidad { get; set; }
         public bool EsPT { get; set; }
         public bool EsNueva { get; set; } = true;
@@ -333,6 +335,7 @@ namespace recTivo.MVVM
                         {
                             CodigoArticulo = filaPT.Codigo,
                             Descripcion = filaPT.Descripcion,
+                            Descripcion2 = filaPT.Descripcion2,
                             Cantidad = filaPT.Cantidad,
                             EsPT = true,
                             EsNueva = true
@@ -354,6 +357,7 @@ namespace recTivo.MVVM
                     {
                         CodigoArticulo = kvp.Key,
                         Descripcion = art?.descrip ?? "",
+                        Descripcion2 = art?.descrip2 ?? "",
                         Cantidad = kvp.Value,
                         EsPT = false,
                         EsNueva = true
@@ -389,6 +393,7 @@ namespace recTivo.MVVM
                 {
                     CodigoArticulo = fila.Codigo,
                     Descripcion = fila.Descripcion,
+                    Descripcion2 = fila.Descripcion2,
                     Cantidad = fila.Cantidad,
                     EsPT = false,
                     EsNueva = true

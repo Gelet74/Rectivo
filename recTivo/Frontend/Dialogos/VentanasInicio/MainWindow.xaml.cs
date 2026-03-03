@@ -315,11 +315,26 @@ namespace recTivo
             switch (item.Content.ToString())
             {
                 case "Crear pedido":
-                    _serviceProvider.GetService<DialogoCrearPedido>()?.ShowDialog();
+                    var dlgCrear = _serviceProvider.GetService<DialogoPedidos>();
+                    dlgCrear.tabControl.SelectedIndex = 0;
+                    dlgCrear.ShowDialog();
                     break;
-            }
 
-            ventas.SelectedItem = null;
+                case "Cerrar pedido":
+                    var dlgCerrar = _serviceProvider.GetService<DialogoPedidos>();
+                    dlgCerrar.tabControl.SelectedIndex = 1;
+                    dlgCerrar.ViewModel.FiltrarSoloPendientes();  // solo muestra pendientes
+                    dlgCerrar.ShowDialog();
+                    break;
+
+                case "Listar pedidos":
+                    var dlgListar = _serviceProvider.GetService<DialogoPedidos>();
+                    dlgListar.tabControl.SelectedIndex = 1;
+                    dlgListar.ShowDialog();
+                    break;
+
+                    ventas.SelectedItem = null;
+            }
         }
 
         private void salir_Click(object sender, RoutedEventArgs e)

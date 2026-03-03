@@ -112,6 +112,8 @@
                                                             <StackPanel>
                                                                 <TextBlock Text="{Binding Codigo}" FontWeight="Bold" Foreground="White"/>
                                                                 <TextBlock Text="{Binding descrip}" Foreground="#AAAAAA" FontSize="11"/>
+                                                                <TextBlock Text="{Binding descrip2}" Foreground="#AAAAAA" FontSize="11"/>
+                                                                
                                                             </StackPanel>
                                                         </CheckBox>
                                                     </DataTemplate>
@@ -148,6 +150,10 @@
                                                     <DataGridTextColumn Header="Descripción"
                                                                         Binding="{Binding Descripcion}"
                                                                         Width="*" IsReadOnly="True"/>
+                                                    <DataGridTextColumn Header="Descripción 2"
+                                                                        Binding="{Binding Descripcion2}"
+                                                                        Width="*" IsReadOnly="True"/>
+                                                    
                                                     <DataGridTextColumn Header="Cantidad"
                                                                         Binding="{Binding Cantidad, UpdateSourceTrigger=LostFocus}"
                                                                         Width="90"/>
@@ -219,6 +225,7 @@
                                                 <DataGridTextColumn Header="Tipo"     Binding="{Binding Tipo}"            Width="55"/>
                                                 <DataGridTextColumn Header="Código"   Binding="{Binding CodigoArticulo}"  Width="120" FontWeight="SemiBold"/>
                                                 <DataGridTextColumn Header="Descripción" Binding="{Binding Descripcion}"  Width="*"/>
+                                                <DataGridTextColumn Header="Descripción 2" Binding="{Binding Descripcion2}"  Width="*"/>
                                                 <DataGridTextColumn Header="Cantidad" Binding="{Binding Cantidad, StringFormat={}{0:0.##}}" Width="90"/>
                                             </DataGrid.Columns>
                                         </DataGrid>
@@ -265,10 +272,6 @@
                                             <TextBlock Text="Artículos PS disponibles:"
                                                        Foreground="#FF9800" FontWeight="Bold" Margin="0,0,0,6"/>
                                             <!-- Buscador -->
-                                            <TextBox x:Name="txtBuscarPS"
-                                                     Text="{Binding FiltroBusquedaPS, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                                     Height="28" Margin="0,0,0,8"
-                                                     ToolTip="Filtrar por código o descripción"/>
                                             <ListBox x:Name="lstPS"
                                                      ItemsSource="{Binding ArticulosPSFiltrados}"
                                                      Background="Transparent" BorderThickness="0"
@@ -281,6 +284,7 @@
                                                             <StackPanel>
                                                                 <TextBlock Text="{Binding Codigo}" FontWeight="Bold" Foreground="White"/>
                                                                 <TextBlock Text="{Binding descrip}" Foreground="#AAAAAA" FontSize="11"/>
+                                                                <TextBlock Text="{Binding descrip2}" Foreground="#AAAAAA" FontSize="11"/>
                                                             </StackPanel>
                                                         </CheckBox>
                                                     </DataTemplate>
@@ -316,6 +320,9 @@
                                                                         Width="120" IsReadOnly="True" FontWeight="SemiBold"/>
                                                     <DataGridTextColumn Header="Descripción"
                                                                         Binding="{Binding Descripcion}"
+                                                                        Width="*" IsReadOnly="True"/>
+                                                    <DataGridTextColumn Header="Descripción 2"
+                                                                        Binding="{Binding Descripcion2}"
                                                                         Width="*" IsReadOnly="True"/>
                                                     <DataGridTextColumn Header="Cantidad"
                                                                         Binding="{Binding Cantidad, UpdateSourceTrigger=LostFocus}"
@@ -369,6 +376,7 @@
                                             <DataGrid.Columns>
                                                 <DataGridTextColumn Header="Código"      Binding="{Binding CodigoArticulo}" Width="120" FontWeight="SemiBold"/>
                                                 <DataGridTextColumn Header="Descripción" Binding="{Binding Descripcion}"    Width="*"/>
+                                                <DataGridTextColumn Header="Descripción 2" Binding="{Binding Descripcion2}"    Width="*"/>
                                                 <DataGridTextColumn Header="Cantidad"    Binding="{Binding Cantidad, StringFormat={}{0:0.##}}" Width="90"/>
                                             </DataGrid.Columns>
                                         </DataGrid>
