@@ -17,12 +17,11 @@ namespace recTivo.Frontend.Dialogos.Ordenes
             InitializeComponent();
             _vm = vm;
             DataContext = _vm;
-
             rbSoloPT.IsChecked = true;
-
             Loaded += async (_, __) => await _vm.InicializarProcesoAsync();
         }
 
+        // ── Pestaña PT: checkboxes ────────────────────────────────────────
         private void ChkPT_Checked(object sender, RoutedEventArgs e)
         {
             if (sender is CheckBox chk && chk.DataContext is Articulo art)
@@ -35,20 +34,20 @@ namespace recTivo.Frontend.Dialogos.Ordenes
                 _vm.TogglePT(art, false);
         }
 
+        // ── Pestaña PT: radio buttons ─────────────────────────────────────
         private void RbSoloPT_Checked(object sender, RoutedEventArgs e)
         {
             _vm.IncluirPT = false;
-            if (_vm.PreviewVisible)
-                _ = _vm.CalcularPreviewAsync();
+            if (_vm.PreviewVisible) _ = _vm.CalcularPreviewAsync();
         }
 
         private void RbConPT_Checked(object sender, RoutedEventArgs e)
         {
             _vm.IncluirPT = true;
-            if (_vm.PreviewVisible)
-                _ = _vm.CalcularPreviewAsync();
+            if (_vm.PreviewVisible) _ = _vm.CalcularPreviewAsync();
         }
 
+        // ── Pestaña PT: botones ───────────────────────────────────────────
         private async void BtnCalcular_Click(object sender, RoutedEventArgs e)
         {
             await _vm.CalcularPreviewAsync();
@@ -61,12 +60,48 @@ namespace recTivo.Frontend.Dialogos.Ordenes
                 MensajeError.Mostrar("SESIÓN", "No hay ningún empleado con sesión iniciada.");
                 return;
             }
-
             bool ok = await _vm.GenerarOrdenesAsync(app.EmpleadoActual);
-            if (ok)
-                Close();
+            if (ok) Close();
         }
 
+        // ── Pestaña PS: checkboxes ────────────────────────────────────────
+        private void ChkPS_Checked(object sender, RoutedEventArgs e)
+        {
+            if (sender is CheckBox chk && chk.DataContext is Articulo art)
+                _vm.TogglePS(art, true);
+        }
+
+        private void ChkPS_Unchecked(object sender, RoutedEventArgs e)
+        {
+            if (sender is CheckBox chk && chk.DataContext is Articulo art)
+                _vm.TogglePS(art, false);
+        }
+
+        // ── Pestaña PS: botones ───────────────────────────────────────────
+        private async void BtnCalcularPS_Click(object sender, RoutedEventArgs e)
+        {
+            await _vm.CalcularPreviewPSAsync();
+        }
+
+        private async void BtnConfirmarPS_Click(object sender, RoutedEventArgs e)
+        {
+            if (Application.Current is not App app || app.EmpleadoActual == null)
+            {
+                MensajeError.Mostrar("SESIÓN", "No hay ningún empleado con sesión iniciada.");
+                return;
+            }
+            bool ok = await _vm.GenerarOrdenesPSAsync(app.EmpleadoActual);
+            if (ok) Close();
+        }
+
+        // ── Cambio de pestaña: limpiar preview ───────────────────────────
+        private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            _vm.PreviewVisible = false;
+            _vm.PreviewPSVisible = false;
+        }
+
+        // ── ESC ───────────────────────────────────────────────────────────
         protected override void OnPreviewKeyDown(KeyEventArgs e)
         {
             if (e.Key == Key.Escape)

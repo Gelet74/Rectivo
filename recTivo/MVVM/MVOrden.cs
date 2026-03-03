@@ -6,7 +6,6 @@ using System.Collections.ObjectModel;
 
 namespace recTivo.MVVM
 {
-    // ── Fila en la tabla de PT seleccionados ─────────────────────────────
     public class FilaPTSeleccionado
     {
         public Articulo Articulo { get; set; } = null!;
@@ -15,7 +14,6 @@ namespace recTivo.MVVM
         public decimal Cantidad { get; set; } = 1;
     }
 
-    // ── Fila en el preview de órdenes a generar ───────────────────────────
     public class FilaOrdenPreview
     {
         public string CodigoArticulo { get; set; } = "";
@@ -23,18 +21,15 @@ namespace recTivo.MVVM
         public decimal Cantidad { get; set; }
         public bool EsPT { get; set; }
         public bool EsNueva { get; set; } = true;
-
         public string Tipo => EsPT ? "PT" : "PS";
         public string AccionTexto => EsNueva ? "Nueva" : "Agrupar";
     }
 
-    // ── Wrapper para el listado ───────────────────────────────────────────
     public class OrdenViewModel
     {
         public Orden Orden { get; set; } = null!;
         public string Descripcion { get; set; } = "";
         public string Descrip2 { get; set; } = "";
-
         public int IdOrden => Orden.IdOrden;
         public string Codigo => Orden.Codigo;
         public int Cantidad => Orden.Cantidad;
@@ -74,7 +69,7 @@ namespace recTivo.MVVM
         private List<Articulo> _todosArticulos = new();
 
         // ================================================================
-        //   SECCIÓN: PROCESAR ORDEN
+        //   SECCIÓN: PROCESAR ORDEN (PT → PS)
         // ================================================================
 
         private List<Articulo> _articulosPT = new();
@@ -110,6 +105,44 @@ namespace recTivo.MVVM
         }
 
         // ================================================================
+        //   SECCIÓN: PS DIRECTO
+        // ================================================================
+
+        private List<Articulo> _articulosPS = new();
+
+        private string _filtroBusquedaPS = "";
+        public string FiltroBusquedaPS
+        {
+            get => _filtroBusquedaPS;
+            set { SetProperty(ref _filtroBusquedaPS, value); AplicarFiltroPS(); }
+        }
+
+        private List<Articulo> _articulosPSFiltrados = new();
+        public List<Articulo> ArticulosPSFiltrados
+        {
+            get => _articulosPSFiltrados;
+            set => SetProperty(ref _articulosPSFiltrados, value);
+        }
+
+        public ObservableCollection<FilaPTSeleccionado> PSSeleccionados { get; } = new();
+
+        private DateTime? _fechaFinPS;
+        public DateTime? FechaFinPS
+        {
+            get => _fechaFinPS;
+            set => SetProperty(ref _fechaFinPS, value);
+        }
+
+        public ObservableCollection<FilaOrdenPreview> OrdenesPSPreview { get; } = new();
+
+        private bool _previewPSVisible;
+        public bool PreviewPSVisible
+        {
+            get => _previewPSVisible;
+            set => SetProperty(ref _previewPSVisible, value);
+        }
+
+        // ================================================================
         //   SECCIÓN: LISTADO DE ÓRDENES
         // ================================================================
 
@@ -126,11 +159,7 @@ namespace recTivo.MVVM
         public OrdenViewModel? OrdenSeleccionada
         {
             get => _ordenSeleccionada;
-            set
-            {
-                SetProperty(ref _ordenSeleccionada, value);
-                _ = CargarFasesAsync();
-            }
+            set { SetProperty(ref _ordenSeleccionada, value); _ = CargarFasesAsync(); }
         }
 
         public ObservableCollection<OrdenFase> FasesOrden { get; } = new();
@@ -142,7 +171,6 @@ namespace recTivo.MVVM
             set => SetProperty(ref _fasesVisible, value);
         }
 
-        // ── Filtros listado ───────────────────────────────────────────────
         private string? _filtroEstado;
         public string? FiltroEstado
         {
@@ -175,7 +203,7 @@ namespace recTivo.MVVM
             { "Todas", "Pendiente", "En curso", "Cerrada" };
 
         // ================================================================
-        //   INICIALIZAR (carga datos para ambas secciones)
+        //   INICIALIZAR
         // ================================================================
         public async Task InicializarProcesoAsync()
         {
@@ -192,6 +220,8 @@ namespace recTivo.MVVM
                              && codigosConEscandallo.Contains(a.Codigo))
                     .OrderBy(a => a.Codigo)
                     .ToList();
+
+                InicializarPS();
             }
             catch (Exception ex)
             {
@@ -205,8 +235,33 @@ namespace recTivo.MVVM
             await CargarOrdenesAsync();
         }
 
+        private void InicializarPS()
+        {
+            _articulosPS = _todosArticulos
+                .Where(a => a.Codigo.StartsWith("PS"))
+                .OrderBy(a => a.Codigo)
+                .ToList();
+            ArticulosPSFiltrados = new List<Articulo>(_articulosPS);
+        }
+
+        private void AplicarFiltroPS()
+        {
+            if (string.IsNullOrWhiteSpace(FiltroBusquedaPS))
+            {
+                ArticulosPSFiltrados = new List<Articulo>(_articulosPS);
+            }
+            else
+            {
+                string filtro = FiltroBusquedaPS.Trim().ToLower();
+                ArticulosPSFiltrados = _articulosPS
+                    .Where(a => a.Codigo.ToLower().Contains(filtro) ||
+                                (a.descrip?.ToLower().Contains(filtro) ?? false))
+                    .ToList();
+            }
+        }
+
         // ================================================================
-        //   PROCESAR: TOGGLE PT
+        //   PROCESAR PT: TOGGLE
         // ================================================================
         public void TogglePT(Articulo articulo, bool marcado)
         {
@@ -220,13 +275,31 @@ namespace recTivo.MVVM
                 var fila = PTSeleccionados.FirstOrDefault(p => p.Codigo == articulo.Codigo);
                 if (fila != null) PTSeleccionados.Remove(fila);
             }
-
             OrdenesPreview.Clear();
             PreviewVisible = false;
         }
 
         // ================================================================
-        //   PROCESAR: CALCULAR PREVIEW
+        //   PS DIRECTO: TOGGLE
+        // ================================================================
+        public void TogglePS(Articulo articulo, bool marcado)
+        {
+            if (marcado)
+            {
+                if (!PSSeleccionados.Any(p => p.Codigo == articulo.Codigo))
+                    PSSeleccionados.Add(new FilaPTSeleccionado { Articulo = articulo, Cantidad = 1 });
+            }
+            else
+            {
+                var fila = PSSeleccionados.FirstOrDefault(p => p.Codigo == articulo.Codigo);
+                if (fila != null) PSSeleccionados.Remove(fila);
+            }
+            OrdenesPSPreview.Clear();
+            PreviewPSVisible = false;
+        }
+
+        // ================================================================
+        //   PROCESAR PT: CALCULAR PREVIEW
         // ================================================================
         public async Task CalcularPreviewAsync()
         {
@@ -234,20 +307,11 @@ namespace recTivo.MVVM
             PreviewVisible = false;
 
             if (PTSeleccionados.Count == 0)
-            {
-                MensajeError.Mostrar("ÓRDENES", "Selecciona al menos un artículo PT.");
-                return;
-            }
+            { MensajeError.Mostrar("ÓRDENES", "Selecciona al menos un artículo PT."); return; }
             if (PTSeleccionados.Any(p => p.Cantidad <= 0))
-            {
-                MensajeError.Mostrar("ÓRDENES", "Todas las cantidades deben ser mayores que 0.");
-                return;
-            }
+            { MensajeError.Mostrar("ÓRDENES", "Todas las cantidades deben ser mayores que 0."); return; }
             if (FechaFin == null)
-            {
-                MensajeError.Mostrar("ÓRDENES", "Debes seleccionar una fecha fin.");
-                return;
-            }
+            { MensajeError.Mostrar("ÓRDENES", "Debes seleccionar una fecha fin."); return; }
 
             try
             {
@@ -305,7 +369,38 @@ namespace recTivo.MVVM
         }
 
         // ================================================================
-        //   PROCESAR: RECOPILAR PS RECURSIVAMENTE
+        //   PS DIRECTO: CALCULAR PREVIEW
+        // ================================================================
+        public async Task CalcularPreviewPSAsync()
+        {
+            OrdenesPSPreview.Clear();
+            PreviewPSVisible = false;
+
+            if (PSSeleccionados.Count == 0)
+            { MensajeError.Mostrar("ÓRDENES PS", "Selecciona al menos un artículo PS."); return; }
+            if (PSSeleccionados.Any(p => p.Cantidad <= 0))
+            { MensajeError.Mostrar("ÓRDENES PS", "Todas las cantidades deben ser mayores que 0."); return; }
+            if (FechaFinPS == null)
+            { MensajeError.Mostrar("ÓRDENES PS", "Debes seleccionar una fecha fin."); return; }
+
+            foreach (var fila in PSSeleccionados)
+            {
+                OrdenesPSPreview.Add(new FilaOrdenPreview
+                {
+                    CodigoArticulo = fila.Codigo,
+                    Descripcion = fila.Descripcion,
+                    Cantidad = fila.Cantidad,
+                    EsPT = false,
+                    EsNueva = true
+                });
+            }
+
+            PreviewPSVisible = true;
+            await Task.CompletedTask;
+        }
+
+        // ================================================================
+        //   PROCESAR PT: RECOPILAR PS RECURSIVAMENTE
         // ================================================================
         private async Task RecopilarPS(
             List<ComponenteEscandallo> componentes,
@@ -337,15 +432,12 @@ namespace recTivo.MVVM
         }
 
         // ================================================================
-        //   PROCESAR: CONFIRMAR Y GENERAR ÓRDENES
+        //   PROCESAR PT: CONFIRMAR Y GENERAR ÓRDENES
         // ================================================================
         public async Task<bool> GenerarOrdenesAsync(Empleado empleadoActual)
         {
             if (OrdenesPreview.Count == 0)
-            {
-                MensajeError.Mostrar("ÓRDENES", "Calcula el preview primero.");
-                return false;
-            }
+            { MensajeError.Mostrar("ÓRDENES", "Calcula el preview primero."); return false; }
 
             bool tienePermiso = empleadoActual?.Rol?.Permisos
                 .Any(p => p.NombrePermiso.ToLower().Contains("orden")) ?? false;
@@ -364,7 +456,6 @@ namespace recTivo.MVVM
                 foreach (var fila in OrdenesPreview)
                 {
                     int cantidadInt = (int)Math.Ceiling(fila.Cantidad);
-
                     var articuloId = _todosArticulos
                         .FirstOrDefault(a => a.Codigo == fila.CodigoArticulo)?.IdArticulo ?? 0;
 
@@ -385,10 +476,8 @@ namespace recTivo.MVVM
                         await GenerarFasesAsync(nuevaOrden);
                 }
 
-                MensajeInformacion.Mostrar("ÓRDENES",
-                    $"Se han generado {nuevas} órdenes de fabricación.", 2);
+                MensajeInformacion.Mostrar("ÓRDENES", $"Se han generado {nuevas} órdenes de fabricación.", 2);
 
-                // Reset
                 PTSeleccionados.Clear();
                 FechaFin = null;
                 IncluirPT = false;
@@ -401,6 +490,67 @@ namespace recTivo.MVVM
             catch (Exception ex)
             {
                 MensajeError.Mostrar("ÓRDENES", $"Error al guardar las órdenes: {ex.Message}");
+                return false;
+            }
+        }
+
+        // ================================================================
+        //   PS DIRECTO: CONFIRMAR Y GENERAR ÓRDENES
+        // ================================================================
+        public async Task<bool> GenerarOrdenesPSAsync(Empleado empleadoActual)
+        {
+            if (OrdenesPSPreview.Count == 0)
+            { MensajeError.Mostrar("ÓRDENES PS", "Calcula el preview primero."); return false; }
+
+            bool tienePermiso = empleadoActual?.Rol?.Permisos
+                .Any(p => p.NombrePermiso.ToLower().Contains("orden")) ?? false;
+
+            if (!tienePermiso && (empleadoActual?.Rol?.Permisos.Count ?? 0) > 0)
+            {
+                MensajeError.Mostrar("ÓRDENES PS",
+                    $"'{empleadoActual!.NombreCompleto}' no tiene permiso para generar órdenes.");
+                return false;
+            }
+
+            try
+            {
+                int nuevas = 0;
+
+                foreach (var fila in OrdenesPSPreview)
+                {
+                    int cantidadInt = (int)Math.Ceiling(fila.Cantidad);
+                    var articuloId = _todosArticulos
+                        .FirstOrDefault(a => a.Codigo == fila.CodigoArticulo)?.IdArticulo ?? 0;
+
+                    var nuevaOrden = new Orden
+                    {
+                        Codigo = fila.CodigoArticulo,
+                        Cantidad = cantidadInt,
+                        FechaFin = FechaFinPS,
+                        IdEmpleado = empleadoActual!.Id,
+                        IdArticulo = articuloId,
+                        Estado = nameof(EstadoOrden.Pendiente)
+                    };
+
+                    await _ordenRepo.AddAsync(nuevaOrden);
+                    nuevas++;
+
+                    await GenerarFasesAsync(nuevaOrden);
+                }
+
+                MensajeInformacion.Mostrar("ÓRDENES PS",
+                    $"Se han generado {nuevas} órdenes PS de fabricación.", 2);
+
+                PSSeleccionados.Clear();
+                FechaFinPS = null;
+                OrdenesPSPreview.Clear();
+                PreviewPSVisible = false;
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                MensajeError.Mostrar("ÓRDENES PS", $"Error al guardar las órdenes: {ex.Message}");
                 return false;
             }
         }
@@ -429,7 +579,6 @@ namespace recTivo.MVVM
                 for (int i = 0; i < fasesOrdenadas.Count; i++)
                 {
                     var (numero, codigo) = fasesOrdenadas[i];
-
                     await _ordenFaseRepo.AddAsync(new OrdenFase
                     {
                         IdOrden = ordenPS.IdOrden,
@@ -443,14 +592,12 @@ namespace recTivo.MVVM
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine(
-                    $"[MVOrden] Error generando fases: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"[MVOrden] Error generando fases: {ex.Message}");
             }
         }
 
         private List<DateTime?> CalcularFechasFases(
-            List<(int numero, string codigo)> fases,
-            DateTime? fechaFin)
+            List<(int numero, string codigo)> fases, DateTime? fechaFin)
         {
             var resultado = new List<DateTime?>();
             if (fechaFin == null) { foreach (var _ in fases) resultado.Add(null); return resultado; }
@@ -481,7 +628,6 @@ namespace recTivo.MVVM
                     resultado.Add(SumarDiasLaborables(hoy, (int)Math.Round(diasLaborables * peso)));
                 }
             }
-
             return resultado;
         }
 
@@ -629,8 +775,10 @@ namespace recTivo.MVVM
                 foreach (var f in fases) FasesOrden.Add(f);
                 FasesVisible = fases.Count > 0;
 
-                // Detectar fase activa (primera Pendiente)
                 FaseActiva = FasesOrden.FirstOrDefault(f => f.Estado == nameof(EstadoOrden.Pendiente));
+
+                EsUltimaFase = FaseActiva != null &&
+                               FaseActiva.NumeroFase == FasesOrden.Max(f => f.NumeroFase);
             }
             catch (Exception ex)
             {
@@ -642,7 +790,6 @@ namespace recTivo.MVVM
         //   CERRAR FASE
         // ================================================================
 
-        // ── Fase activa (siguiente pendiente) ─────────────────────────────
         private OrdenFase? _faseActiva;
         public OrdenFase? FaseActiva
         {
@@ -664,6 +811,8 @@ namespace recTivo.MVVM
             "03" => "FASE 3 · MECANIZADO",
             _ => FaseActiva != null ? $"FASE {FaseActiva.NumeroFase}" : ""
         };
+
+        public string TextoBotonCerrar => EsUltimaFase ? "Cerrar fase y orden" : "Cerrar fase";
 
         // ── Campos de cierre ───────────────────────────────────────────────
         private string _cierreCantidadOK = "";
@@ -687,12 +836,53 @@ namespace recTivo.MVVM
             set { SetProperty(ref _cierreFecha, value); OnPropertyChanged(nameof(PuedeCerrarFase)); OnPropertyChanged(nameof(ErrorCierreFase)); }
         }
 
+        // ── Ubicación (solo en última fase) ───────────────────────────────
+        private bool _esUltimaFase;
+        public bool EsUltimaFase
+        {
+            get => _esUltimaFase;
+            set
+            {
+                SetProperty(ref _esUltimaFase, value);
+                OnPropertyChanged(nameof(PuedeCerrarFase));
+                OnPropertyChanged(nameof(ErrorCierreFase));
+                OnPropertyChanged(nameof(TextoBotonCerrar));
+            }
+        }
+
+        private string _ubicacionPasillo = "";
+        public string UbicacionPasillo
+        {
+            get => _ubicacionPasillo;
+            set { SetProperty(ref _ubicacionPasillo, value); OnPropertyChanged(nameof(PuedeCerrarFase)); OnPropertyChanged(nameof(ErrorCierreFase)); }
+        }
+
+        private string _ubicacionEstanteria = "";
+        public string UbicacionEstanteria
+        {
+            get => _ubicacionEstanteria;
+            set { SetProperty(ref _ubicacionEstanteria, value); OnPropertyChanged(nameof(PuedeCerrarFase)); OnPropertyChanged(nameof(ErrorCierreFase)); }
+        }
+
+        private string _ubicacionHueco = "";
+        public string UbicacionHueco
+        {
+            get => _ubicacionHueco;
+            set { SetProperty(ref _ubicacionHueco, value); OnPropertyChanged(nameof(PuedeCerrarFase)); OnPropertyChanged(nameof(ErrorCierreFase)); }
+        }
+
+        // ── Validación ────────────────────────────────────────────────────
         public bool PuedeCerrarFase =>
             FaseActiva != null &&
             int.TryParse(CierreCantidadOK, out int ok) && ok >= 0 &&
             int.TryParse(CierreCantidadDefecto, out int def) && def >= 0 &&
             (ok + def) <= FaseActiva.CantidadEntrada &&
-            CierreFecha.HasValue;
+            CierreFecha.HasValue &&
+            (!EsUltimaFase || (
+                !string.IsNullOrWhiteSpace(UbicacionPasillo) &&
+                int.TryParse(UbicacionEstanteria, out _) &&
+                int.TryParse(UbicacionHueco, out _)
+            ));
 
         public string ErrorCierreFase
         {
@@ -707,16 +897,30 @@ namespace recTivo.MVVM
                     return $"OK + Defectos ({ok + def}) no puede superar la entrada ({FaseActiva.CantidadEntrada})";
                 if (!CierreFecha.HasValue)
                     return "Introduce la fecha de cierre";
+                if (EsUltimaFase)
+                {
+                    if (string.IsNullOrWhiteSpace(UbicacionPasillo))
+                        return "Introduce el pasillo de ubicación";
+                    if (!int.TryParse(UbicacionEstanteria, out _))
+                        return "La estantería debe ser un número";
+                    if (!int.TryParse(UbicacionHueco, out _))
+                        return "El hueco debe ser un número";
+                }
                 return "";
             }
         }
 
+        // ── Cerrar fase ───────────────────────────────────────────────────
         public async Task<bool> CerrarFaseActivaAsync(Empleado empleadoActual)
         {
             if (!PuedeCerrarFase) return false;
 
             int ok = int.Parse(CierreCantidadOK);
             int def = int.Parse(CierreCantidadDefecto);
+
+            string? pasillo = EsUltimaFase ? UbicacionPasillo.Trim().ToUpper() : null;
+            int? estanteria = EsUltimaFase && int.TryParse(UbicacionEstanteria, out int est) ? est : null;
+            int? hueco = EsUltimaFase && int.TryParse(UbicacionHueco, out int hue) ? hue : null;
 
             try
             {
@@ -725,18 +929,18 @@ namespace recTivo.MVVM
                     ok, def,
                     empleadoActual.Id,
                     CierreFecha!.Value,
-                    _context);
+                    _context,
+                    pasillo, estanteria, hueco);
 
                 string msg = $"{NombreFaseActiva} cerrada. Pasan a siguiente fase: {ok} unidades.";
 
-                // Comprobar si era la última — la orden se habrá cerrado
                 var ordenActualizada = await _ordenRepo.GetByIdAsync(OrdenSeleccionada!.Orden.IdOrden);
                 if (ordenActualizada?.Estado == nameof(EstadoOrden.Cerrada))
-                    msg = $"Todas las fases completadas. Orden cerrada. {ok} uds de {OrdenSeleccionada.Codigo} subidas a stock.";
+                    msg = $"Todas las fases completadas. Orden cerrada. {ok} uds de " +
+                          $"{OrdenSeleccionada.Codigo} subidas a stock en {pasillo}-{estanteria}-{hueco}.";
 
                 MensajeInformacion.Mostrar("FASE CERRADA", msg, 3);
 
-                // Limpiar campos y recargar
                 LimpiarCamposCierre();
                 await CargarFasesAsync();
                 await CargarOrdenesAsync();
@@ -755,6 +959,10 @@ namespace recTivo.MVVM
             CierreCantidadOK = "";
             CierreCantidadDefecto = "";
             CierreFecha = null;
+            UbicacionPasillo = "";
+            UbicacionEstanteria = "";
+            UbicacionHueco = "";
+            EsUltimaFase = false;
         }
     }
 }

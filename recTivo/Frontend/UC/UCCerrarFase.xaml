@@ -128,19 +128,17 @@
                         </Grid>
                     </Border>
 
-                    <!-- FASES: cada una es su propia tarjeta -->
+                    <!-- FASES -->
                     <ItemsControl ItemsSource="{Binding FasesOrden}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
                                 <Border CornerRadius="4" Padding="14,10" Margin="0,0,0,8">
                                     <Border.Style>
                                         <Style TargetType="Border">
-                                            <!-- Por defecto: fase cerrada, gris apagado -->
                                             <Setter Property="Background"      Value="#2A2A2D"/>
                                             <Setter Property="BorderBrush"     Value="#444"/>
                                             <Setter Property="BorderThickness" Value="1"/>
                                             <Style.Triggers>
-                                                <!-- Fase pendiente (pero no activa): gris normal -->
                                                 <DataTrigger Binding="{Binding Estado}" Value="Pendiente">
                                                     <Setter Property="Background"      Value="#3A3A3D"/>
                                                     <Setter Property="BorderBrush"     Value="#555"/>
@@ -149,15 +147,12 @@
                                             </Style.Triggers>
                                         </Style>
                                     </Border.Style>
-
                                     <StackPanel>
-                                        <!-- Cabecera de la fase: nombre + estado -->
                                         <Grid>
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="*"/>
                                                 <ColumnDefinition Width="Auto"/>
                                             </Grid.ColumnDefinitions>
-
                                             <TextBlock Text="{Binding NombreFaseTexto}"
                                                        FontWeight="Bold" FontSize="13">
                                                 <TextBlock.Style>
@@ -174,8 +169,6 @@
                                                     </Style>
                                                 </TextBlock.Style>
                                             </TextBlock>
-
-                                            <!-- Icono + estado -->
                                             <StackPanel Grid.Column="1" Orientation="Horizontal">
                                                 <TextBlock VerticalAlignment="Center"
                                                            FontSize="16" Margin="0,0,6,0">
@@ -207,19 +200,14 @@
                                                 </TextBlock>
                                             </StackPanel>
                                         </Grid>
-
-                                        <!-- Info básica -->
                                         <WrapPanel Margin="0,6,0,0">
                                             <TextBlock Foreground="#AAA" Text="Entrada: "/>
                                             <TextBlock Foreground="White" FontWeight="Bold"
                                                        Text="{Binding CantidadEntrada}" Margin="0,0,16,0"/>
                                             <TextBlock Foreground="#AAA" Text="Fecha límite: "/>
                                             <TextBlock Foreground="White"
-                                                       Text="{Binding FechaFin, StringFormat=dd/MM/yyyy}"
-                                                       Margin="0,0,0,0"/>
+                                                       Text="{Binding FechaFin, StringFormat=dd/MM/yyyy}"/>
                                         </WrapPanel>
-
-                                        <!-- Resultados si está cerrada -->
                                         <WrapPanel Margin="0,4,0,0">
                                             <WrapPanel.Style>
                                                 <Style TargetType="WrapPanel">
@@ -241,21 +229,19 @@
                                             <TextBlock Foreground="White"
                                                        Text="{Binding FechaFin, StringFormat=dd/MM/yyyy}"/>
                                         </WrapPanel>
-
                                     </StackPanel>
                                 </Border>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
 
-                    <!-- PANEL DE CIERRE: solo visible cuando hay fase activa,
-                         con borde naranja destacado y título muy claro -->
+                    <!-- PANEL DE CIERRE -->
                     <Border Visibility="{Binding HayFaseActiva, Converter={StaticResource BoolToVis}}"
                             Background="#3A3A3D" BorderBrush="#FF9800" BorderThickness="2"
                             CornerRadius="4" Padding="14,12" Margin="0,4,0,8">
                         <StackPanel>
 
-                            <!-- Título destacado -->
+                            <!-- Título -->
                             <Border Background="#FF9800" CornerRadius="3"
                                     Padding="10,6" Margin="0,0,0,12">
                                 <StackPanel>
@@ -270,13 +256,10 @@
                                         <Run Text="{Binding FaseActiva.CantidadEntrada, Mode=OneWay}"/>
                                         <Run Text=" uds"/>
                                     </TextBlock>
-                                    <TextBlock Foreground="#1E1E1E" FontSize="11" FontWeight="SemiBold"
-                                               Margin="0,2,0,0"
-                                               Text="{Binding NombreFaseActiva, StringFormat='Cerrando: {0}'}"/>  
                                 </StackPanel>
                             </Border>
 
-                            <!-- Campos -->
+                            <!-- Campos de cierre -->
                             <WrapPanel>
                                 <StackPanel Margin="0,0,20,0">
                                     <TextBlock Text="Cantidad OK:" Foreground="#FF9800" Margin="0,0,0,3"/>
@@ -295,10 +278,44 @@
                                 </StackPanel>
                             </WrapPanel>
 
-                            <TextBlock Text="{Binding ErrorCierreFase}"
-                                       Style="{StaticResource ErrorText}"/>
+                            <!-- ── UBICACIÓN: solo visible en la última fase ── -->
+                            <Border Visibility="{Binding EsUltimaFase, Converter={StaticResource BoolToVis}}"
+                                    Background="#2A2A2D" BorderBrush="#FF9800" BorderThickness="1"
+                                    CornerRadius="4" Padding="10,8" Margin="0,12,0,0">
+                                <StackPanel>
+                                    <TextBlock Text="📦  Ubicación en almacén"
+                                               Foreground="#FF9800" FontWeight="Bold"
+                                               FontSize="12" Margin="0,0,0,8"/>
+                                    <WrapPanel>
+                                        <StackPanel Margin="0,0,16,0">
+                                            <TextBlock Text="Pasillo:" Foreground="#AAA"
+                                                       FontSize="11" Margin="0,0,0,3"/>
+                                            <TextBox Width="80" MaxLength="5" CharacterCasing="Upper"
+                                                     ToolTip="Letra del pasillo (ej: A, B, P)"
+                                                     Text="{Binding UbicacionPasillo, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                        </StackPanel>
+                                        <StackPanel Margin="0,0,16,0">
+                                            <TextBlock Text="Estantería:" Foreground="#AAA"
+                                                       FontSize="11" Margin="0,0,0,3"/>
+                                            <TextBox Text="{Binding UbicacionEstanteria, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                     Width="80"
+                                                     ToolTip="Número de estantería"/>
+                                        </StackPanel>
+                                        <StackPanel>
+                                            <TextBlock Text="Hueco:" Foreground="#AAA"
+                                                       FontSize="11" Margin="0,0,0,3"/>
+                                            <TextBox Text="{Binding UbicacionHueco, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                     Width="80"
+                                                     ToolTip="Número de hueco"/>
+                                        </StackPanel>
+                                    </WrapPanel>
+                                </StackPanel>
+                            </Border>
 
-                            <Button Content="Cerrar fase"
+                            <TextBlock Text="{Binding ErrorCierreFase}"
+                                       Style="{StaticResource ErrorText}" Margin="0,8,0,0"/>
+
+                            <Button Content="{Binding TextoBotonCerrar}"
                                     Click="BtnCerrarFase_Click"
                                     IsEnabled="{Binding PuedeCerrarFase}"
                                     Width="160" Height="32"
