@@ -1,5 +1,6 @@
 ﻿using recTivo.Backend.Modelos;
 using recTivo.Backend.Repos;
+using recTivo.Frontend.Dialogos.VentanasInicio;
 using recTivo.MVVM;
 using System.Windows;
 using System.Windows.Controls;
@@ -12,6 +13,8 @@ namespace recTivo.Frontend.Dialogos.Ventas
         private readonly MVPedido _vm;
         public MVPedido ViewModel => _vm;
 
+        private bool _escapeEnCurso = false;
+
         public DialogoPedidos(
             PedidoRepository pedidoRepo,
             ArticuloRepository articuloRepo,
@@ -23,19 +26,40 @@ namespace recTivo.Frontend.Dialogos.Ventas
             _vm = new MVPedido(pedidoRepo, articuloRepo, escandalloRepo, clienteRepo);
             DataContext = _vm;
 
-            KeyDown += (_, e) => { if (e.Key == Key.Escape) Close(); };
-
             Loaded += async (_, _) => await _vm.InicializarAsync();
         }
 
-        // ── Tab changed ─────────────────────────────────────────────────
-        private async void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        // ── ESC con confirmación (igual que el resto de diálogos) ────
+        protected override void OnPreviewKeyDown(KeyEventArgs e)
         {
-            if (tabControl.SelectedIndex == 1)
-                await _vm.CargarPedidosAsync();
+            if (e.Key == Key.Escape)
+            {
+                if (_escapeEnCurso)
+                {
+                    e.Handled = true;
+                    return;
+                }
+                _escapeEnCurso = true;
+                e.Handled = true;
+                try
+                {
+                    var dialog = new ConfirmacionDialogo { Owner = this };
+                    bool? result = dialog.ShowDialog();
+                    if (result == true && dialog.Confirmado)
+                        this.Close();
+                }
+                finally
+                {
+                    _escapeEnCurso = false;
+                }
+            }
+            else
+            {
+                base.OnPreviewKeyDown(e);
+            }
         }
 
-        // ── Checkbox artículo PT ────────────────────────────────────────
+        // ── Checkbox artículo PT ─────────────────────────────────────
         private async void ChkPT_Checked(object sender, RoutedEventArgs e)
         {
             if ((sender as System.Windows.Controls.CheckBox)?.DataContext is Articulo art)
@@ -48,27 +72,33 @@ namespace recTivo.Frontend.Dialogos.Ventas
                 await _vm.TogglePT(art, false);
         }
 
-        // ── Edición cantidad en DataGrid ────────────────────────────────
+        // ── Edición cantidad en DataGrid ─────────────────────────────
         private void DgLineas_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
         {
-            // Notificar el total después de editar
             Dispatcher.BeginInvoke(() => _vm.NotificarTotalCambiado());
         }
 
-        // ── Crear pedido ────────────────────────────────────────────────
+        // ── Crear pedido ─────────────────────────────────────────────
         private async void BtnCrearPedido_Click(object sender, RoutedEventArgs e)
         {
             await _vm.CrearPedidoAsync();
         }
 
-        // ── Cerrar pedido ───────────────────────────────────────────────
+        // ── Cerrar pedido ────────────────────────────────────────────
         private async void BtnCerrarPedido_Click(object sender, RoutedEventArgs e)
         {
             if (dgPedidos.SelectedItem is FilaPedido fila)
+            {
                 await _vm.CerrarPedidoAsync(fila);
+            }
             else
-                MessageBox.Show("Selecciona un pedido de la lista.", "VENTAS",
-                    MessageBoxButton.OK, MessageBoxImage.Information);
+            {
+                MessageBox.Show(
+                    "Selecciona un pedido de la lista haciendo clic sobre él.",
+                    "VENTAS",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information);
+            }
         }
     }
 }

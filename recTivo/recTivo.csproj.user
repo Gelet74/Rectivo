@@ -53,6 +53,9 @@
     <Compile Update="Frontend\Dialogos\VentanasInicio\ConfirmacionDialogo.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Frontend\Dialogos\VentanasInicio\DialogoSeleccionUbicacion.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Frontend\Dialogos\VentanasInicio\Inicio.xaml.cs">
       <SubType>Code</SubType>
     </Compile>

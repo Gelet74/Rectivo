@@ -41,45 +41,56 @@ namespace recTivo.Backend.Repos
         }
 
         // ── Cerrar pedido: marcar Entregado + descontar stock ───────────
-        public async Task CerrarPedidoAsync(int idPedido)
+        // Todo ocurre dentro de una transacción: si algo falla a mitad,
+        // se hace rollback completo y la BD queda como estaba.
+        public async Task CerrarPedidoAsync(
+            int idPedido,
+            Dictionary<string, int> ubicacionesPorArticulo)
         {
-            var pedido = await GetByIdAsync(idPedido)
-                ?? throw new Exception($"Pedido {idPedido} no encontrado.");
+            // Abrir transacción explícita
+            await using var tx = await _context.Database.BeginTransactionAsync();
 
-            if (pedido.Estado == "Entregado")
-                throw new Exception("El pedido ya está entregado.");
-
-            foreach (var linea in pedido.Lineas)
+            try
             {
-                // 1) Descontar de articulo.stock
-                var articulo = await _context.Articulos
-                    .FirstOrDefaultAsync(a => a.Codigo == linea.CodigoArticulo);
+                var pedido = await GetByIdAsync(idPedido)
+                    ?? throw new Exception($"Pedido {idPedido} no encontrado.");
 
-                if (articulo != null)
+                if (pedido.Estado == "Entregado")
+                    throw new Exception("El pedido ya está entregado.");
+
+                foreach (var linea in pedido.Lineas)
                 {
-                    articulo.Stock = (byte)Math.Max(0, (int)articulo.Stock - linea.Cantidad);
+                    // 1) Descontar de articulo.stock
+                    var articulo = await _context.Articulos
+                        .FirstOrDefaultAsync(a => a.Codigo == linea.CodigoArticulo);
+
+                    if (articulo != null)
+                        articulo.Stock = (byte)Math.Max(0, (int)articulo.Stock - linea.Cantidad);
+
+                    // 2) Descontar de la ubicación elegida por el usuario
+                    if (ubicacionesPorArticulo.TryGetValue(linea.CodigoArticulo, out int idUbicacion))
+                    {
+                        var ub = await _context.Ubicacion
+                            .FirstOrDefaultAsync(u => u.IdUbicacion == idUbicacion);
+
+                        if (ub != null)
+                            ub.Cantidad = Math.Max(0, ub.Cantidad - linea.Cantidad);
+                    }
                 }
 
-                // 2) Descontar de ubicacion (FIFO: primero el hueco con más stock)
-                var ubicaciones = await _context.Ubicacion
-                    .Where(u => u.IdArticulo == articulo!.IdArticulo && u.Cantidad > 0)
-                    .OrderByDescending(u => u.Cantidad)
-                    .ToListAsync();
+                pedido.Estado = "Entregado";
+                pedido.FechaEntrega = DateTime.Today;
 
-                int pendiente = linea.Cantidad;
-                foreach (var ub in ubicaciones)
-                {
-                    if (pendiente <= 0) break;
-                    int descontar = Math.Min(ub.Cantidad, pendiente);
-                    ub.Cantidad -= descontar;
-                    pendiente -= descontar;
-                }
+                // Guardar todos los cambios en un único commit
+                await _context.SaveChangesAsync();
+                await tx.CommitAsync();
             }
-
-            pedido.Estado = "Entregado";
-            pedido.FechaEntrega = DateTime.Today;
-
-            await _context.SaveChangesAsync();
+            catch
+            {
+                // Cualquier error → rollback completo, la BD queda intacta
+                await tx.RollbackAsync();
+                throw;
+            }
         }
 
         // ── Eliminar pedido (solo si está Pendiente) ────────────────────

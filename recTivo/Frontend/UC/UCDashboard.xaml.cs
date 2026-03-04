@@ -6,6 +6,7 @@ using recTivo.Frontend.Dialogos.Clientes;
 using recTivo.Frontend.Dialogos.Empleado;
 using recTivo.Frontend.Dialogos.Escandallo;
 using recTivo.Frontend.Dialogos.Ordenes;
+using recTivo.Frontend.Dialogos.Ventas;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
@@ -107,6 +108,11 @@ namespace recTivo.Frontend.UC
             _serviceProvider.GetService<DialogoProcesarOrden>()?.ShowDialog();
         }
 
+        private void btnCrearPedido_Click(object sender, RoutedEventArgs e)
+        {
+            _serviceProvider.GetService<DialogoPedidos>()?.ShowDialog();
+        }
+
         private void BtnCambiarUsuario_Click(object sender, RoutedEventArgs e)
         {
             if (Application.Current is App app)
@@ -162,5 +168,7 @@ namespace recTivo.Frontend.UC
             protected void OnPropertyChanged(string name)
                 => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
+
+       
     }
 }

@@ -20,14 +20,10 @@ namespace recTivo.MVVM
         public int Cantidad
         {
             get => _cantidad;
-            set
-            {
-                SetProperty(ref _cantidad, value);
-                OnPropertyChanged(nameof(Subtotal));
-            }
+            set { SetProperty(ref _cantidad, value); OnPropertyChanged(nameof(Subtotal)); }
         }
 
-        public decimal PrecioUnitario { get; set; }   // PVP calculado
+        public decimal PrecioUnitario { get; set; }
         public decimal Subtotal => Cantidad * PrecioUnitario;
     }
 
@@ -71,14 +67,12 @@ namespace recTivo.MVVM
             _clienteRepo = clienteRepo;
         }
 
-        // ── Estado compartido ────────────────────────────────────────
         private List<Articulo> _todosArticulosPT = new();
         private List<Cliente> _todosClientes = new();
 
         // ================================================================
         //  SECCIÓN: CREAR PEDIDO
         // ================================================================
-
         private List<Articulo> _articulosPTFiltrados = new();
         public List<Articulo> ArticulosPTFiltrados
         {
@@ -128,28 +122,26 @@ namespace recTivo.MVVM
         // ================================================================
         //  SECCIÓN: LISTADO DE PEDIDOS
         // ================================================================
-
         private List<FilaPedido> _todosPedidos = new();
 
-        private ObservableCollection<FilaPedido> _pedidosFiltrados = new();
-        public ObservableCollection<FilaPedido> PedidosFiltrados
-        {
-            get => _pedidosFiltrados;
-            set => SetProperty(ref _pedidosFiltrados, value);
-        }
+        public ObservableCollection<FilaPedido> PedidosFiltrados { get; } = new();
+
+        // Cuando es true los setters de filtro no disparan AplicarFiltrosPedidos,
+        // evitando que el ComboBox de Estado borre la selección del DataGrid al inicializar.
+        private bool _suprimirFiltros = true;
 
         private string? _filtroEstadoPedido;
         public string? FiltroEstadoPedido
         {
             get => _filtroEstadoPedido;
-            set { SetProperty(ref _filtroEstadoPedido, value); AplicarFiltrosPedidos(); }
+            set { SetProperty(ref _filtroEstadoPedido, value); if (!_suprimirFiltros) AplicarFiltrosPedidos(); }
         }
 
         private string? _filtroCodigoPedido;
         public string? FiltroCodigoPedido
         {
             get => _filtroCodigoPedido;
-            set { SetProperty(ref _filtroCodigoPedido, value); AplicarFiltrosPedidos(); }
+            set { SetProperty(ref _filtroCodigoPedido, value); if (!_suprimirFiltros) AplicarFiltrosPedidos(); }
         }
 
         public List<string> OpcionesEstado { get; } = new() { "Todos", "Pendiente", "Entregado" };
@@ -172,6 +164,7 @@ namespace recTivo.MVVM
             ClientesFiltrados = new List<Cliente>(_todosClientes);
 
             await CargarPedidosAsync();
+            _suprimirFiltros = false; // a partir de aquí los filtros funcionan normalmente
         }
 
         // ================================================================
@@ -215,7 +208,10 @@ namespace recTivo.MVVM
                     p.IdPedido.ToString().Contains(FiltroCodigoPedido!) ||
                     p.Cliente.Contains(FiltroCodigoPedido!, StringComparison.OrdinalIgnoreCase));
 
-            PedidosFiltrados = new ObservableCollection<FilaPedido>(result);
+            var lista = result.ToList();
+            PedidosFiltrados.Clear();
+            foreach (var p in lista)
+                PedidosFiltrados.Add(p);
         }
 
         public void FiltrarSoloPendientes()
@@ -254,28 +250,51 @@ namespace recTivo.MVVM
 
         // ================================================================
         //  CÁLCULO PVP DESDE ESCANDALLO
+        //  Estrategia: pre-cargar TODO en memoria antes de cualquier recursión
+        //  para no tener nunca dos queries abiertas al mismo tiempo en EF Core
         // ================================================================
         private async Task<decimal> CalcularPvpAsync(string codigoPT)
         {
-            // FIX 1: Caché por sesión de cálculo — evita recalcular el mismo
-            //        subcomponente exponencialmente en escandallos multinivel
+            var todosEscandallos = await _escandalloRepo.GetAllEscandallосAsync();
+
+            var todosComponentes = await _escandalloRepo.GetAllComponentesAsync();
+
+            var todosArticulos = await _articuloRepo.GetAllAsync();
+
+            var escandallosPorCodigo = todosEscandallos
+                .ToDictionary(e => e.CodigoProducto, e => e, StringComparer.OrdinalIgnoreCase);
+
+            var componentesPorEscandallo = todosComponentes
+                .GroupBy(c => c.IdEscandallo)
+                .ToDictionary(g => g.Key, g => g.ToList());
+
+            var articulosPorCodigo = todosArticulos
+                .ToDictionary(a => a.Codigo, a => a, StringComparer.OrdinalIgnoreCase);
+
             var cache = new Dictionary<string, decimal>(StringComparer.OrdinalIgnoreCase);
 
-            var escandallo = await _escandalloRepo.GetByCodigoProductoAsync(codigoPT);
-            if (escandallo == null) return 0;
+            if (!escandallosPorCodigo.TryGetValue(codigoPT, out var escandallo))
+                return 0;
 
-            // FIX 2: Materializar con ToListAsync antes de recursionar para
-            //        cerrar el DataReader antes de abrir queries anidadas
-            var componentes = await _escandalloRepo
-                .GetComponentesByEscandalloAsync(escandallo.IdEscandallo);
+            if (!componentesPorEscandallo.TryGetValue(escandallo.IdEscandallo, out var componentes))
+                return 0;
 
-            decimal coste = await SumarCosteAsync(componentes, cache);
+            decimal coste = SumarCosteEnMemoria(
+                componentes,
+                escandallosPorCodigo,
+                componentesPorEscandallo,
+                articulosPorCodigo,
+                cache);
+
             return Math.Round(coste * MARGEN, 2);
         }
 
-        // FIX 1+2+3: Caché + lista materializada + algoritmo sin doble conteo
-        private async Task<decimal> SumarCosteAsync(
+        // Recursión 100% en memoria — cero queries a BD
+        private decimal SumarCosteEnMemoria(
             List<ComponenteEscandallo> componentes,
+            Dictionary<string, Escandallo> escandallosPorCodigo,
+            Dictionary<int, List<ComponenteEscandallo>> componentesPorEscandallo,
+            Dictionary<string, Articulo> articulosPorCodigo,
             Dictionary<string, decimal> cache)
         {
             decimal total = 0;
@@ -284,34 +303,34 @@ namespace recTivo.MVVM
             {
                 decimal cantidad = comp.Cantidad ?? 1;
 
-                // Consultar caché primero — evita recalcular el mismo código
+                // Consultar caché primero
                 if (cache.TryGetValue(comp.CodigoArticulo, out decimal costeCache))
                 {
                     total += cantidad * costeCache;
                     continue;
                 }
 
-                // Buscar precio_compra directo en la tabla artículo
-                var artGeneral = await _articuloRepo.GetByCodigoAsync(comp.CodigoArticulo);
-
-                if (artGeneral?.PrecioCompra > 0)
+                // Tiene precio_compra directo → usarlo, no recursionar
+                if (articulosPorCodigo.TryGetValue(comp.CodigoArticulo, out var art)
+                    && art.PrecioCompra > 0)
                 {
-                    // Tiene precio directo → sumar y parar, NO recursionar
-                    decimal costeUnitario = artGeneral.PrecioCompra ?? 0;
+                    decimal costeUnitario = art.PrecioCompra ?? 0;
                     cache[comp.CodigoArticulo] = costeUnitario;
                     total += cantidad * costeUnitario;
                     continue;
                 }
 
-                // No tiene precio → buscar su sub-escandallo y recursionar
-                var subEsc = await _escandalloRepo.GetByCodigoProductoAsync(comp.CodigoArticulo);
-                if (subEsc != null)
+                // Sin precio directo → buscar sub-escandallo y recursionar
+                if (escandallosPorCodigo.TryGetValue(comp.CodigoArticulo, out var subEsc)
+                    && componentesPorEscandallo.TryGetValue(subEsc.IdEscandallo, out var subComps))
                 {
-                    // FIX 2: Materializar ANTES de recursionar para cerrar el DataReader
-                    var subComps = await _escandalloRepo
-                        .GetComponentesByEscandalloAsync(subEsc.IdEscandallo);
+                    decimal costeSubEsc = SumarCosteEnMemoria(
+                        subComps,
+                        escandallosPorCodigo,
+                        componentesPorEscandallo,
+                        articulosPorCodigo,
+                        cache);
 
-                    decimal costeSubEsc = await SumarCosteAsync(subComps, cache);
                     cache[comp.CodigoArticulo] = costeSubEsc;
                     total += cantidad * costeSubEsc;
                 }
@@ -368,19 +387,58 @@ namespace recTivo.MVVM
         }
 
         // ================================================================
-        //  CERRAR PEDIDO (descontar stock)
+        //  CERRAR PEDIDO — muestra diálogo de ubicación por cada artículo
         // ================================================================
         public async Task<bool> CerrarPedidoAsync(FilaPedido fila)
         {
             if (fila.Estado == "Entregado")
             { MensajeError.Mostrar("VENTAS", "Este pedido ya está entregado."); return false; }
 
+            // Cargar el pedido completo con sus líneas
+            var pedido = await _pedidoRepo.GetByIdAsync(fila.IdPedido);
+            if (pedido == null)
+            { MensajeError.Mostrar("VENTAS", "Pedido no encontrado."); return false; }
+
+            var ubicacionesPorArticulo = new Dictionary<string, int>();
+
+            foreach (var linea in pedido.Lineas)
+            {
+                // Obtener ubicaciones disponibles del artículo
+                var ubicaciones = await _escandalloRepo.GetUbicacionesByArticuloAsync(
+                    linea.Articulo?.IdArticulo ?? 0);
+
+                if (ubicaciones.Count == 0)
+                {
+                    MensajeError.Mostrar("VENTAS",
+                        $"El artículo {linea.CodigoArticulo} no tiene stock en ninguna ubicación. No se puede entregar el pedido.");
+                    return false;
+                }
+
+                // Mostrar diálogo de selección de ubicación
+                var dlg = new recTivo.Frontend.Dialogos.VentanasInicio.DialogoSeleccionUbicacion(
+                    linea.CodigoArticulo,
+                    linea.Articulo?.descrip ?? "",
+                    linea.Cantidad,
+                    ubicaciones)
+                { Owner = System.Windows.Application.Current.MainWindow };
+
+                bool? result = dlg.ShowDialog();
+
+                if (dlg.Cancelado || result != true)
+                {
+                    MensajeError.Mostrar("VENTAS", "Operación cancelada.");
+                    return false;
+                }
+
+                ubicacionesPorArticulo[linea.CodigoArticulo] = dlg.UbicacionElegida!.IdUbicacion;
+            }
+
             try
             {
-                await _pedidoRepo.CerrarPedidoAsync(fila.IdPedido);
+                await _pedidoRepo.CerrarPedidoAsync(fila.IdPedido, ubicacionesPorArticulo);
 
                 MensajeInformacion.Mostrar("VENTAS",
-                    $"Pedido #{fila.IdPedido} cerrado. Stock actualizado.", 2);
+                    $"Pedido #{fila.IdPedido} entregado. Stock descontado.", 2);
 
                 await CargarPedidosAsync();
                 return true;

@@ -1,5 +1,5 @@
 ﻿using recTivo.Backend.Modelos;
-using recTivo.Backend.Servicios;        // Necesario para IEscandalloRepository
+using recTivo.Backend.Servicios;
 using Microsoft.EntityFrameworkCore;
 
 namespace recTivo.Backend.Repos
@@ -13,9 +13,6 @@ namespace recTivo.Backend.Repos
             _context = context;
         }
 
-        /// <summary>
-        /// Obtiene todos los escandallos con sus componentes
-        /// </summary>
         public override async Task<IEnumerable<Escandallo>> GetAllAsync()
         {
             return await _context.Escandallos
@@ -23,9 +20,6 @@ namespace recTivo.Backend.Repos
                                  .ToListAsync();
         }
 
-        /// <summary>
-        /// Obtiene un escandallo por ID
-        /// </summary>
         public override async Task<Escandallo?> GetByIdAsync(params object[] keyValues)
         {
             if (keyValues == null || keyValues.Length == 0)
@@ -38,16 +32,34 @@ namespace recTivo.Backend.Repos
                                  .FirstOrDefaultAsync(e => e.IdEscandallo == id);
         }
 
+        public async Task<List<Escandallo>> GetAllEscandallосAsync()
+        {
+            return await _context.Escandallos
+                .AsNoTracking()
+                .ToListAsync();
+        }
+
+        public async Task<List<ComponenteEscandallo>> GetAllComponentesAsync()
+        {
+            return await _context.ComponenteEscandallos
+                .AsNoTracking()
+                .ToListAsync();
+        }
+
+        public async Task<List<Ubicacion>> GetUbicacionesByArticuloAsync(int idArticulo)
+        {
+            return await _context.Ubicacion
+                .Where(u => u.IdArticulo == idArticulo && u.Cantidad > 0)
+                .OrderByDescending(u => u.Cantidad)
+                .ToListAsync();
+        }
+
         public async Task InsertComponenteAsync(ComponenteEscandallo comp)
         {
             await _context.ComponenteEscandallos.AddAsync(comp);
             await _context.SaveChangesAsync();
         }
 
-
-        /// <summary>
-        /// Método personalizado: obtener escandallo por CódigoProducto
-        /// </summary>
         public async Task<Escandallo?> GetByCodigoProductoAsync(string codigoProducto)
         {
             return await _context.Escandallos
@@ -55,9 +67,6 @@ namespace recTivo.Backend.Repos
                                  .FirstOrDefaultAsync(e => e.CodigoProducto == codigoProducto);
         }
 
-        /// <summary>
-        /// Obtiene todos los componentes de un escandallo por su IdEscandallo
-        /// </summary>
         public async Task<List<ComponenteEscandallo>> GetComponentesByEscandalloAsync(int idEscandallo)
         {
             return await _context.ComponenteEscandallos
@@ -69,18 +78,10 @@ namespace recTivo.Backend.Repos
         public override async Task AddAsync(Escandallo esc)
         {
             await _context.Escandallos.AddAsync(esc);
-            await _context.SaveChangesAsync(); // Aquí EF ya asigna el IdEscandallo
-
-            // Aseguramos que el ID está disponible
+            await _context.SaveChangesAsync();
             await _context.Entry(esc).ReloadAsync();
         }
 
-
-
-
-        /// <summary>
-        /// Elimina un escandallo por entidad
-        /// </summary>
         public override void Remove(Escandallo entidad)
         {
             if (entidad != null)
@@ -102,9 +103,6 @@ namespace recTivo.Backend.Repos
             }
         }
 
-        /// <summary>
-        /// Elimina un escandallo por su ID
-        /// </summary>
         public async Task DeleteByIdAsync(int id)
         {
             var entidad = await _context.Escandallos.FindAsync(id);
