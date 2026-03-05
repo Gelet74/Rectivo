@@ -119,10 +119,24 @@ public class OrdenFaseRepository : GenericRepository<OrdenFase>
 
             if (articuloPS != null && cantidadOK > 0)
             {
-                // Usar ubicación introducida por el usuario
                 string pasillo = ubicacionPasillo ?? "P";
                 int estanteria = ubicacionEstanteria ?? 1;
                 int hueco = ubicacionHueco ?? 1;
+
+                // ── NUEVO: comprobar si esa ubicación ya existe con otro artículo ──
+                var ubicacionOcupada = await context.Ubicacion
+                    .FirstOrDefaultAsync(u =>
+                        u.LetraPasillo == pasillo &&
+                        u.NumeroEstanteria == estanteria &&
+                        u.Numero == hueco &&
+                        u.IdArticulo != null &&
+                        u.IdArticulo != articuloPS.IdArticulo);
+
+                if (ubicacionOcupada != null)
+                    throw new Exception(
+                        $"La ubicación {pasillo}-{estanteria}-{hueco} ya está ocupada " +
+                        $"por el artículo '{ubicacionOcupada.Articulo?.Codigo ?? ubicacionOcupada.IdArticulo.ToString()}'.");
+                // ──────────────────────────────────────────────────────────────────
 
                 var ubicacion = await context.Ubicacion
                     .FirstOrDefaultAsync(u =>
@@ -133,7 +147,6 @@ public class OrdenFaseRepository : GenericRepository<OrdenFase>
 
                 if (ubicacion == null)
                 {
-                    // Crear la ubicación indicada por el usuario
                     ubicacion = new Ubicacion
                     {
                         LetraPasillo = pasillo,
@@ -146,13 +159,11 @@ public class OrdenFaseRepository : GenericRepository<OrdenFase>
                 }
                 else
                 {
-                    // Ya existe esa ubicación para ese artículo → sumar
                     ubicacion.Cantidad += cantidadOK;
                 }
 
                 await context.SaveChangesAsync();
 
-                // Recalcular stock total sumando todas las ubicaciones del artículo
                 articuloPS.Stock = await context.Ubicacion
                     .Where(u => u.IdArticulo == articuloPS.IdArticulo)
                     .SumAsync(u => u.Cantidad);

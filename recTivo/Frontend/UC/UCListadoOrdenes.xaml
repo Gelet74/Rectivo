@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              mc:Ignorable="d"
              Background="#2D2D30"
-             d:DesignHeight="600" d:DesignWidth="1000">
+             d:DesignHeight="600" d:DesignWidth="1100">
 
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVis"/>
@@ -102,7 +102,7 @@
 
                 <Button Content="✔  Cerrar orden PT"
                         Click="BtnCerrarOrdenPT_Click"
-                        Width="150" Height="30"
+                        Width="170" Height="30"
                         Margin="8,18,0,0"
                         Background="#4CAF50" Foreground="White"
                         BorderBrush="#4CAF50" FontWeight="Bold" Cursor="Hand"/>
@@ -124,9 +124,11 @@
                           CanUserAddRows="False"
                           RowHeaderWidth="0"
                           MaxHeight="160"
-                          Background="#E0E0E0"
-                          RowBackground="#F5F5F5"
-                          AlternatingRowBackground="#E8E8E8"
+                          Background="#3A3A3D"
+                          RowBackground="#2D2D30"
+                          Foreground="White"
+                          AlternatingRowBackground="#333337"
+                          HorizontalGridLinesBrush="#444444"
                           GridLinesVisibility="Horizontal"
                           BorderThickness="0"
                           Margin="8,0,8,8">
@@ -177,10 +179,11 @@
                   RowHeaderWidth="0"
                   Margin="20,0,20,0"
                   Background="#3A3A3D"
-                  RowBackground="#F5F5F5"
-                  AlternatingRowBackground="#E8E8E8"
+                  RowBackground="#2D2D30"
+                  Foreground="White"
+                  AlternatingRowBackground="#333337"
                   GridLinesVisibility="Horizontal"
-                  HorizontalGridLinesBrush="#CCCCCC"
+                  HorizontalGridLinesBrush="#444444"
                   BorderThickness="0"
                   ScrollViewer.VerticalScrollBarVisibility="Auto" SelectionChanged="DataGrid_SelectionChanged">
             <DataGrid.Columns>

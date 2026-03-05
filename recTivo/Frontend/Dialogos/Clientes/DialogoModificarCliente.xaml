@@ -82,6 +82,12 @@
                                     <ColumnDefinition Width="*" />
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+
                                 <StackPanel Grid.Column="0" Margin="0,0,20,0">
 
                                     <TextBlock Text="Nombre:" Foreground="#FF9800"/>
@@ -104,14 +110,6 @@
                                              Width="180"
                                              Height="30"
                                              Margin="0,5"/>
-
-                                    <TextBlock Text="DNI:" Foreground="#FF9800"/>
-                                    <TextBox Text="{Binding Dni}"
-                                             HorizontalAlignment="Left"
-                                             Width="180"
-                                             Height="30"
-                                             Margin="0,5"/>
-
                                 </StackPanel>
 
                                 <StackPanel Grid.Column="1" Cursor="">
@@ -128,27 +126,32 @@
                                              Width="180"
                                              Height="30"
                                              Margin="0,5"/>
-
-                                    <TextBlock Text="Contraseña:" Foreground="#FF9800"/>
-                                    <TextBox Text="{Binding Password}"
+                                    <TextBlock Text="DNI:" Foreground="#FF9800"/>
+                                    <TextBox Text="{Binding Dni}"
                                              HorizontalAlignment="Left"
                                              Width="180"
                                              Height="30"
                                              Margin="0,5"/>
-                                    <Button Content="Guardar cambios"
-                                            x:Name="btnGuardarCambios"
-                                            Click="btnGuardarCambios_Click"
-                                            Width="180"
-                                            Height="30"
-                                            HorizontalAlignment="Left"
-                                            BorderBrush="#FF5722"
-                                            Margin="0,20,0,0"
-                                            Background="#E0E0E0"
-                                            Foreground="#FF5722"
-                                            FontWeight="Bold"/>
+                                    
                                 </StackPanel>
+                                <Button Content="Guardar cambios"
+                                        x:Name="btnGuardarCambios"
+                                        Click="btnGuardarCambios_Click"
+                                        Width="180"
+                                        Height="30"
+                                        Grid.ColumnSpan="2"
+                                        Grid.Row="2"
+                                        VerticalAlignment="Bottom"
+                                        Margin="0,20,0,0"
+                                        BorderBrush="#FF5722"
+                                        Background="#E0E0E0"
+                                        Foreground="#FF5722"
+                                        FontWeight="Bold"/>
+
+
                             </Grid>
                         </StackPanel>
+                    
                     </StackPanel>
                 </Grid>
             </DockPanel>

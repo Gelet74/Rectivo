@@ -45,25 +45,21 @@ namespace recTivo
                 .Select(p => p.NombrePermiso)
                 .ToHashSet();
 
-            // Si no tiene ningún permiso configurado es Administrador o dev → todo visible
             if (permisos.Count == 0) return;
 
             bool esAdmin = app.EmpleadoActual.Rol.NombreRol == "Administrador";
             if (esAdmin) return;
 
-            // ── Almacén ───────────────────────────────────────────────────
             bool verAlmacen = permisos.Contains("Hacer movimientos de almacen") ||
                               permisos.Contains("Registrar movimientos de stock");
             expAlmacen.Visibility = verAlmacen ? Visibility.Visible : Visibility.Collapsed;
 
-            // ── Artículos ─────────────────────────────────────────────────
             bool verArticulos = permisos.Contains("Ver artículos") ||
                                 permisos.Contains("Crear artículos") ||
                                 permisos.Contains("Editar artículos") ||
                                 permisos.Contains("Eliminar artículos");
             expArticulos.Visibility = verArticulos ? Visibility.Visible : Visibility.Collapsed;
 
-            // Ocultar items específicos dentro de Artículos
             if (verArticulos)
             {
                 foreach (ListViewItem item in articulos.Items)
@@ -78,23 +74,17 @@ namespace recTivo
                 }
             }
 
+            expClientes.Visibility = Visibility.Collapsed;
 
-
-            // ── Clientes ──────────────────────────────────────────────────
-            expClientes.Visibility = Visibility.Collapsed; // Solo admin/administrativo
-
-            // ── Empleados ─────────────────────────────────────────────────
             bool verEmpleados = permisos.Contains("Ver usuarios") || permisos.Contains("Gestionar roles");
             expEmpleados.Visibility = verEmpleados ? Visibility.Visible : Visibility.Collapsed;
 
-            // ── Escandallos ───────────────────────────────────────────────
             bool verEscandallos = permisos.Contains("Crear escandallos") || permisos.Contains("Editar escandallos");
             expEscandallos.Visibility = verEscandallos ? Visibility.Visible : Visibility.Collapsed;
 
-            // ── Órdenes ───────────────────────────────────────────────────
-            bool puedeProcesat = permisos.Contains("Registrar movimientos de stock");
+            bool puedeProcesar = permisos.Contains("Registrar movimientos de stock");
             bool puedeCerrar = permisos.Contains("Cerrar fases") || permisos.Contains("Cerrar ordenes");
-            bool verOrdenes = puedeProcesat || puedeCerrar;
+            bool verOrdenes = puedeProcesar || puedeCerrar;
             expOrdenes.Visibility = verOrdenes ? Visibility.Visible : Visibility.Collapsed;
 
             if (verOrdenes)
@@ -103,13 +93,12 @@ namespace recTivo
                 {
                     string itemContent = item.Content?.ToString() ?? "";
                     if (itemContent == "Procesar orden")
-                        item.Visibility = puedeProcesat ? Visibility.Visible : Visibility.Collapsed;
+                        item.Visibility = puedeProcesar ? Visibility.Visible : Visibility.Collapsed;
                     else if (itemContent is "Cerrar orden" or "Listar órdenes")
                         item.Visibility = puedeCerrar ? Visibility.Visible : Visibility.Collapsed;
                 }
             }
 
-            // ── Ventas ────────────────────────────────────────────────────
             bool verVentas = permisos.Contains("Gestionar ventas");
             expVentas.Visibility = verVentas ? Visibility.Visible : Visibility.Collapsed;
         }
@@ -119,6 +108,12 @@ namespace recTivo
             panelPrincipal.Children.Clear();
             _dashboardInicial = _serviceProvider.GetRequiredService<UCDashboard>();
             panelPrincipal.Children.Add(_dashboardInicial);
+        }
+
+        private bool HayUCActivo()
+        {
+            return panelPrincipal.Children.Count > 0 &&
+                   panelPrincipal.Children[0] is not UCDashboard;
         }
 
         private int _totalArticulos;
@@ -214,7 +209,6 @@ namespace recTivo
             switch (item.Content.ToString())
             {
                 case "Dar de alta":
-                    // CORREGIDO: usar el contenedor DI en lugar de new
                     _serviceProvider.GetService<DialogoAltaCliente>()?.ShowDialog();
                     break;
                 case "Modificar":
@@ -304,6 +298,7 @@ namespace recTivo
                         var uc = _serviceProvider.GetRequiredService<UCCerrarFase>();
                         uc.SolicitarCierre += () =>
                         {
+                            uc.LimpiarHandlers();
                             panelPrincipal.Children.Remove(uc);
                             MostrarDashboard();
                         };
@@ -326,20 +321,19 @@ namespace recTivo
                     dlgCrear.tabControl.SelectedIndex = 0;
                     dlgCrear.ShowDialog();
                     break;
-
                 case "Cerrar pedido":
                     var dlgCerrar = _serviceProvider.GetService<DialogoPedidos>();
                     dlgCerrar.tabControl.SelectedIndex = 1;
-                    dlgCerrar.ViewModel.FiltrarSoloPendientes();  // solo muestra pendientes
+                    dlgCerrar.ViewModel.FiltrarSoloPendientes();
                     dlgCerrar.ShowDialog();
                     break;
-
                 case "Listar pedidos":
                     var dlgListar = _serviceProvider.GetService<DialogoPedidos>();
                     dlgListar.tabControl.SelectedIndex = 1;
                     dlgListar.ShowDialog();
-                    break;                    
+                    break;
             }
+
             ventas.SelectedItem = null;
         }
 
@@ -354,7 +348,8 @@ namespace recTivo
 
         private void Menu_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Escape)
+            // Solo bloquar Escape si no hay un UC activo que deba manejarlo
+            if (e.Key == Key.Escape && !HayUCActivo())
                 e.Handled = true;
         }
 

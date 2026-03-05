@@ -10,11 +10,12 @@ namespace recTivo.Frontend.Dialogos.Articulos
     {
         private MVArticulo _mvArticulo;
         private bool _escapeEnCurso = false;
+
         public DialogoAltaArticulo(MVArticulo mvArticulo)
         {
             InitializeComponent();
             _mvArticulo = mvArticulo;
-            DataContext = _mvArticulo; 
+            DataContext = _mvArticulo;
         }
 
         private async void btnAltaArticulo_Click(object sender, RoutedEventArgs e)
@@ -27,8 +28,6 @@ namespace recTivo.Frontend.Dialogos.Articulos
             }
         }
 
-
-        
         protected override void OnPreviewKeyDown(KeyEventArgs e)
         {
             if (e.Key == Key.Escape)

@@ -1,4 +1,5 @@
-﻿using recTivo.MVVM;
+﻿using recTivo.Frontend.Dialogos.VentanasInicio;
+using recTivo.MVVM;
 using System;
 using System.Windows;
 using System.Windows.Controls;
@@ -10,6 +11,7 @@ namespace recTivo.Frontend.UC
     {
         private readonly MVOrden _vm;
         public event Action? SolicitarCierre;
+        private bool _escapeEnCurso = false;
 
         public UCCerrarFase(MVOrden vm)
         {
@@ -17,9 +19,46 @@ namespace recTivo.Frontend.UC
             _vm = vm;
             DataContext = _vm;
 
-            Loaded += async (_, _) => await _vm.InicializarListadoAsync();
+            Loaded += async (_, _) =>
+            {
+                await _vm.InicializarListadoAsync();
 
-            KeyDown += (_, e) => { if (e.Key == Key.Escape) SolicitarCierre?.Invoke(); };
+                var ownerWindow = Window.GetWindow(this);
+                if (ownerWindow != null)
+                    ownerWindow.PreviewKeyDown += OwnerWindow_PreviewKeyDown;
+            };
+
+            Unloaded += (_, _) => LimpiarHandlers();
+        }
+
+        public void LimpiarHandlers()
+        {
+            var ownerWindow = Window.GetWindow(this);
+            if (ownerWindow != null)
+                ownerWindow.PreviewKeyDown -= OwnerWindow_PreviewKeyDown;
+        }
+
+        private void OwnerWindow_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape)
+            {
+                if (_escapeEnCurso) { e.Handled = true; return; }
+
+                _escapeEnCurso = true;
+                e.Handled = true;
+                try
+                {
+                    var ownerWindow = Window.GetWindow(this);
+                    var dialog = new ConfirmacionDialogo { Owner = ownerWindow };
+                    bool? result = dialog.ShowDialog();
+                    if (result == true && dialog.Confirmado)
+                        SolicitarCierre?.Invoke();
+                }
+                finally
+                {
+                    _escapeEnCurso = false;
+                }
+            }
         }
 
         private async void BtnCerrarFase_Click(object sender, RoutedEventArgs e)

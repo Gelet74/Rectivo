@@ -184,12 +184,18 @@ namespace recTivo.MVVM
                     return;
                 }
 
+                
                 ubicacion.Cantidad -= cantidadASacar;
 
                 if (ubicacion.Cantidad == 0)
-                    ubicacion.IdArticulo = null;
+                {
+                    _context.Ubicacion.Remove(ubicacion); 
+                }
+                else
+                {
+                    _context.Ubicacion.Update(ubicacion);
+                }
 
-                _context.Ubicacion.Update(ubicacion);
                 await _context.SaveChangesAsync();
 
                 // Recalcular Stock como suma real de todas las ubicaciones del artículo

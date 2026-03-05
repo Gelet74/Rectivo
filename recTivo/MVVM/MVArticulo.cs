@@ -28,7 +28,7 @@ namespace recTivo.MVVM
             _empleadoRepository = empleadoRepository;
             _ordenRepository = ordenRepository;
 
-            _articulo = new Articulo();
+            _articulo = new Articulo { Pvp = 0.00 };
         }
 
         // -----------------------------
@@ -340,13 +340,25 @@ namespace recTivo.MVVM
         public string Codigo
         {
             get => _articulo.Codigo;
-            set { _articulo.Codigo = value; OnPropertyChanged(); }
+            set
+            {
+                _articulo.Codigo = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(ErrorCodigo));
+                OnPropertyChanged(nameof(PuedeGuardar));
+            }
         }
 
         public string Descrip
         {
             get => _articulo.descrip;
-            set { _articulo.descrip = value; OnPropertyChanged(); }
+            set
+            {
+                _articulo.descrip = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(ErrorDescrip));
+                OnPropertyChanged(nameof(PuedeGuardar));
+            }
         }
 
         public string Descrip2
@@ -358,7 +370,7 @@ namespace recTivo.MVVM
         public double? Pvp
         {
             get => _articulo.Pvp;
-            set { _articulo.Pvp = value; OnPropertyChanged(); }
+            set { _articulo.Pvp = value ?? 0.00; OnPropertyChanged(); }
         }
 
         public decimal? PrecioCompra
@@ -372,6 +384,18 @@ namespace recTivo.MVVM
             get => _articulo.Stock;
             set { _articulo.Stock = value; OnPropertyChanged(); }
         }
+
+        public bool PuedeGuardar => !string.IsNullOrWhiteSpace(Codigo) && !string.IsNullOrWhiteSpace(Descrip);
+
+        // -----------------------------
+        // VALIDACIÓN (strings simples)
+        // -----------------------------
+
+        public string ErrorCodigo =>
+            string.IsNullOrWhiteSpace(Codigo) ? "El código es obligatorio." : string.Empty;
+
+        public string ErrorDescrip =>
+            string.IsNullOrWhiteSpace(Descrip) ? "La descripción es obligatoria." : string.Empty;
 
         // -----------------------------
         // CRUD

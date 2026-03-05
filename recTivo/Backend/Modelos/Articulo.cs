@@ -1,11 +1,12 @@
 ﻿using recTivo.MVVM.Base;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace recTivo.Backend.Modelos
 {
-    public class Articulo : ValidatableViewModel
+    public class Articulo : ValidatableViewModel, IDataErrorInfo
     {
         public int IdArticulo { get; set; }
         public string Codigo { get; set; } = null!;
@@ -49,5 +50,31 @@ namespace recTivo.Backend.Modelos
                     $"{u.LetraPasillo ?? "?"}-{u.NumeroEstanteria?.ToString() ?? "?"}-{u.Numero?.ToString() ?? "?"} ({u.Cantidad})"));
             }
         }
+        // ===========================
+        // VALIDACIONES (IDataErrorInfo)
+        // ===========================
+
+        public string Error => string.Empty;
+
+        public string this[string columnName]
+        {
+            get
+            {
+                return columnName switch
+                {
+                    nameof(Codigo) when string.IsNullOrWhiteSpace(Codigo)
+                        => "El código es obligatorio.",
+                    nameof(descrip) when string.IsNullOrWhiteSpace(descrip)
+                        => "La descripción es obligatoria.",
+                    _ => string.Empty
+                };
+            }
+        }
+
+        /// <summary>Devuelve true si todos los campos obligatorios son válidos.</summary>
+        [NotMapped]
+        public bool EsValido =>
+            !string.IsNullOrWhiteSpace(Codigo) &&
+            !string.IsNullOrWhiteSpace(descrip);
     }
 }

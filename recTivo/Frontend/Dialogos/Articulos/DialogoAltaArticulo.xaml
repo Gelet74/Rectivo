@@ -15,6 +15,11 @@
             <Setter Property="BorderThickness" Value="2"/>
             <Setter Property="Padding" Value="5"/>
         </Style>
+        <Style x:Key="ErrorText" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="#F44336"/>
+            <Setter Property="FontSize"   Value="11"/>
+            <Setter Property="Margin"     Value="0,-3,0,3"/>
+        </Style>
     </Window.Resources>
 
     <Grid>
@@ -39,74 +44,84 @@
                                Grid.Column="1"
                                Margin="0,0,10,0"/>
                 </Grid>
-                <Grid Margin="30">
+
+                <Grid Margin="30,20,30,20">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
+                        <!-- 0: Label Código -->
                         <RowDefinition Height="Auto"/>
+                        <!-- 1: TextBox Código -->
                         <RowDefinition Height="Auto"/>
+                        <!-- 2: Error Código -->
                         <RowDefinition Height="Auto"/>
+                        <!-- 3: Label Descrip -->
                         <RowDefinition Height="Auto"/>
+                        <!-- 4: TextBox Descrip -->
                         <RowDefinition Height="Auto"/>
+                        <!-- 5: Error Descrip -->
                         <RowDefinition Height="Auto"/>
+                        <!-- 6: Label Descrip2 -->
                         <RowDefinition Height="Auto"/>
+                        <!-- 7: TextBox Descrip2 -->
+                        <RowDefinition Height="Auto"/>
+                        <!-- 8: Label PVP -->
+                        <RowDefinition Height="Auto"/>
+                        <!-- 9: TextBox PVP + Botón -->
                     </Grid.RowDefinitions>
-                    <TextBlock Text="Código:" Foreground="#FF9800"/>
-                    <TextBox Text="{Binding Codigo, UpdateSourceTrigger=PropertyChanged}"
-                                 Grid.Row="1"
-                                 HorizontalAlignment="Left"
-                                 Height="30" 
-                                 Margin="0,5" 
-                                 Width="450"/>
 
-                    <TextBlock Text="Descripción 1:"
-                                   Grid.Row="2"
-                                   Foreground="#FF9800"/>
-                    <TextBox Text="{Binding Descrip, UpdateSourceTrigger=PropertyChanged}"
-                                 HorizontalAlignment="Left"
-                                 Grid.Row="3"
-                                 Grid.ColumnSpan="2"
-                                 Height="30" 
-                                 Margin="0,5,0,5" 
-                                 Width="414"/>
+                    <!-- CÓDIGO -->
+                    <TextBlock Text="Código:" Foreground="#FF9800" Grid.Row="0"/>
+                    <TextBox x:Name="txtCodigo"
+                             Text="{Binding Codigo, UpdateSourceTrigger=PropertyChanged}"
+                             Grid.Row="1" Grid.ColumnSpan="2"
+                             HorizontalAlignment="Left"
+                             Height="30" Margin="0,5,0,2" Width="414"/>
+                    <TextBlock Grid.Row="2" Grid.ColumnSpan="2"
+                               Text="{Binding ErrorCodigo}"
+                               Style="{StaticResource ErrorText}"/>
 
-                    <TextBlock Text="Descripción 2:"
-                                   Grid.Row="4"
-                                   Foreground="#FF9800"/>
+                    <!-- DESCRIPCIÓN 1 -->
+                    <TextBlock Text="Descripción 1:" Foreground="#FF9800" Grid.Row="3"/>
+                    <TextBox x:Name="txtDescrip"
+                             Text="{Binding Descrip, UpdateSourceTrigger=PropertyChanged}"
+                             Grid.Row="4" Grid.ColumnSpan="2"
+                             HorizontalAlignment="Left"
+                             Height="30" Margin="0,5,0,2" Width="414"/>
+                    <TextBlock Grid.Row="5" Grid.ColumnSpan="2"
+                               Text="{Binding ErrorDescrip}"
+                               Style="{StaticResource ErrorText}"/>
+
+                    <!-- DESCRIPCIÓN 2 -->
+                    <TextBlock Text="Descripción 2:" Foreground="#FF9800" Grid.Row="6"/>
                     <TextBox Text="{Binding Descrip2, UpdateSourceTrigger=PropertyChanged}"
-                                 HorizontalAlignment="Left"
-                                 Grid.ColumnSpan="2"
-                                 Grid.Row="5"
-                                 Height="30"
-                                 Margin="0,5" 
-                                 Width="414"/>
+                             Grid.Row="7" Grid.ColumnSpan="2"
+                             HorizontalAlignment="Left"
+                             Height="30" Margin="0,5,0,8" Width="414"/>
 
-                    <TextBlock Text="PVP:" 
-                                   Grid.Row="6"
-                                   Foreground="#FF9800"/>
+                    <!-- PVP + BOTÓN -->
+                    <TextBlock Text="PVP:" Foreground="#FF9800" Grid.Row="8"/>
                     <TextBox Text="{Binding Pvp, UpdateSourceTrigger=PropertyChanged}"
-                                 HorizontalAlignment="Left"
-                                 Grid.Row="7"
-                                 Height="30" 
-                                 Margin="0,5"
-                                 Width="100"/>
+                             Grid.Row="9"
+                             HorizontalAlignment="Left"
+                             Height="30" Margin="0,5,0,0" Width="100"/>
 
-                    <Button Grid.Column="1"
-                                Grid.Row="7"
-                                Content="Dar de alta artículo"
-                                x:Name="btnAltaArticulo"
-                                Click="btnAltaArticulo_Click"
-                                Height="30" Width="180"
-                                HorizontalAlignment="Right"
-                                Margin="0,5,18,0"
-                                VerticalAlignment="Top"
-                                BorderBrush="#FF5722"
-                                Background="#E0E0E0"
-                                Foreground="#FF5722"
-                                FontWeight="Bold"/>
+                    <Button Grid.Column="1" Grid.Row="9"
+                            Content="Dar de alta artículo"
+                            x:Name="btnAltaArticulo"
+                            Click="btnAltaArticulo_Click"
+                            IsEnabled="{Binding PuedeGuardar}"
+                            BorderBrush="#FF5722"
+                            Background="#E0E0E0"
+                            Foreground="#FF5722"
+                            Height="30" Width="180"
+                            HorizontalAlignment="Right"
+                            FontWeight="Bold"
+                            Margin="0,5,0,0"
+                            VerticalAlignment="Top"/>
                 </Grid>
             </DockPanel>
         </Border>
