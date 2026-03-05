@@ -50,5 +50,17 @@ namespace recTivo.Frontend.UC
             }
             else base.OnPreviewKeyDown(e);
         }
+
+        private async void BtnCerrarOrdenPT_Click(object sender, RoutedEventArgs e)
+        {
+            await _vm.CerrarOrdenPTAsync();
+        }
+
+        private void DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+
+      
     }
 }

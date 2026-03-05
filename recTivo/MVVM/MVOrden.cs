@@ -959,6 +959,49 @@ namespace recTivo.MVVM
             }
         }
 
+        // ================================================================
+        //   CERRAR ORDEN PT (agrupación — fase única sin producción)
+        // ================================================================
+        public async Task<bool> CerrarOrdenPTAsync()
+        {
+            if (OrdenSeleccionada == null)
+            { MensajeError.Mostrar("ÓRDENES", "Selecciona una orden."); return false; }
+
+            if (!OrdenSeleccionada.Codigo.StartsWith("PT"))
+            { MensajeError.Mostrar("ÓRDENES", "Esta opción solo aplica a órdenes PT."); return false; }
+
+            if (OrdenSeleccionada.EstadoBD == nameof(EstadoOrden.Cerrada))
+            { MensajeError.Mostrar("ÓRDENES", "Esta orden ya está cerrada."); return false; }
+
+            try
+            {
+                // Cerrar la fase única
+                var fases = await _ordenFaseRepo.GetByOrdenAsync(OrdenSeleccionada.IdOrden);
+                foreach (var fase in fases)
+                {
+                    fase.EstadoEnum = EstadoOrden.Cerrada;
+                    fase.CantidadOK = fase.CantidadEntrada;
+                    fase.CantidadDefecto = 0;
+                    fase.FechaFin = DateTime.Today;
+                }
+
+                // Cerrar la orden
+                await _ordenRepo.CambiarEstadoAsync(OrdenSeleccionada.IdOrden, EstadoOrden.Cerrada);
+
+                MensajeInformacion.Mostrar("ÓRDENES",
+                    $"Orden PT {OrdenSeleccionada.Codigo} cerrada correctamente.", 2);
+
+                await CargarFasesAsync();
+                await CargarOrdenesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                MensajeError.Mostrar("ÓRDENES", $"Error al cerrar la orden: {ex.Message}");
+                return false;
+            }
+        }
+
         private void LimpiarCamposCierre()
         {
             CierreCantidadOK = "";

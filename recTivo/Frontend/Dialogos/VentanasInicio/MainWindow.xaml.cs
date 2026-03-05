@@ -78,6 +78,8 @@ namespace recTivo
                 }
             }
 
+
+
             // ── Clientes ──────────────────────────────────────────────────
             expClientes.Visibility = Visibility.Collapsed; // Solo admin/administrativo
 
@@ -166,6 +168,11 @@ namespace recTivo
             }
 
             almacen.SelectedItem = null;
+        }
+
+        private void Logo_Click(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            MostrarDashboard();
         }
 
         private void articulos_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -331,10 +338,9 @@ namespace recTivo
                     var dlgListar = _serviceProvider.GetService<DialogoPedidos>();
                     dlgListar.tabControl.SelectedIndex = 1;
                     dlgListar.ShowDialog();
-                    break;
-
-                    ventas.SelectedItem = null;
+                    break;                    
             }
+            ventas.SelectedItem = null;
         }
 
         private void salir_Click(object sender, RoutedEventArgs e)

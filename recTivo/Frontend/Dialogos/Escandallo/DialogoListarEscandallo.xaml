@@ -72,6 +72,7 @@
 
                         <ComboBox x:Name="cmbCodigoArticulo"
                                   Width="150"
+                                  Height="25"
                                   ItemsSource="{Binding ArticulosTodos}"
                                   DisplayMemberPath="Codigo"
                                   SelectedValuePath="Codigo"
@@ -85,9 +86,13 @@
                     </StackPanel>
 
                     <!-- Descripción -->
-                    <TextBlock Text="{Binding DescripcionArticulo}"
-                               Foreground="White"
-                               Margin="0,10,0,10"/>
+                    <StackPanel Orientation="Horizontal" Margin="0,10,0,10">
+                        <TextBlock Text="{Binding Descripcion}"
+                                   Foreground="White"
+                                   Margin="0,0,16,0"/>
+                        <TextBlock Text="{Binding Descripcion2}"
+                                   Foreground="White"/>
+                    </StackPanel>
 
                     <!-- TREEVIEW -->
                     <TreeView ItemsSource="{Binding EscandalloActual}"
@@ -103,6 +108,8 @@
                                     <TextBlock Text="{Binding CodigoArticulo}" FontWeight="Bold" Margin="5,0"/>
                                     <TextBlock Text=" - " />
                                     <TextBlock Text="{Binding Descripcion}" />
+                                    <TextBlock Text="  " />
+                                    <TextBlock Text="{Binding Descripcion2}" />
                                     <TextBlock Text=" | Cant: " />
                                     <TextBlock Text="{Binding Cantidad}" />
                                 </StackPanel>

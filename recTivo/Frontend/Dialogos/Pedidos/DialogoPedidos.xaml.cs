@@ -19,11 +19,13 @@ namespace recTivo.Frontend.Dialogos.Ventas
             PedidoRepository pedidoRepo,
             ArticuloRepository articuloRepo,
             EscandalloRepository escandalloRepo,
-            ClienteRepository clienteRepo)
+            ClienteRepository clienteRepo,
+            OrdenRepository ordenRepo, 
+            OrdenFaseRepository ordenFaseRepo)
         {
             InitializeComponent();
 
-            _vm = new MVPedido(pedidoRepo, articuloRepo, escandalloRepo, clienteRepo);
+            _vm = new MVPedido(pedidoRepo, articuloRepo, escandalloRepo, clienteRepo, ordenRepo, ordenFaseRepo);
             DataContext = _vm;
 
             Loaded += async (_, _) => await _vm.InicializarAsync();

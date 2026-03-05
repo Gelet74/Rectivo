@@ -86,6 +86,20 @@ namespace recTivo.MVVM
             }
         }
 
+        private string _descripcion = "";
+        public string Descripcion
+        {
+            get => _descripcion;
+            set => SetProperty(ref _descripcion, value);
+        }
+
+        private string _descripcion2 = "";
+        public string Descripcion2
+        {
+            get => _descripcion2;
+            set => SetProperty(ref _descripcion2, value);
+        }
+
         // true = artículo elegido válido (sin escandallo previo); false = bloqueado
         private bool _articuloFinalValido = true;
         public bool ArticuloFinalValido
@@ -750,6 +764,9 @@ namespace recTivo.MVVM
                 EscandalloActual.Clear();
 
                 ArticuloFinal = await _articuloRepository.GetByCodigoAsync(escandallo.CodigoProducto);
+
+                Descripcion = ArticuloFinal?.descrip ?? "";
+                Descripcion2 = ArticuloFinal?.descrip2 ?? "";
                 OnPropertyChanged(nameof(ArticuloFinal));
                 OnPropertyChanged(nameof(DescripcionFinal));
                 OnPropertyChanged(nameof(Descripcion2Final));

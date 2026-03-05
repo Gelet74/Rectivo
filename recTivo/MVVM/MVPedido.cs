@@ -54,17 +54,23 @@ namespace recTivo.MVVM
         private readonly ArticuloRepository _articuloRepo;
         private readonly EscandalloRepository _escandalloRepo;
         private readonly ClienteRepository _clienteRepo;
+        private readonly OrdenRepository _ordenRepo;
+        private readonly OrdenFaseRepository _ordenFaseRepo;
 
         public MVPedido(
             PedidoRepository pedidoRepo,
             ArticuloRepository articuloRepo,
             EscandalloRepository escandalloRepo,
-            ClienteRepository clienteRepo)
+            ClienteRepository clienteRepo,
+            OrdenRepository ordenRepo,
+            OrdenFaseRepository ordenFaseRepo)
         {
             _pedidoRepo = pedidoRepo;
             _articuloRepo = articuloRepo;
             _escandalloRepo = escandalloRepo;
             _clienteRepo = clienteRepo;
+            _ordenRepo = ordenRepo;
+            _ordenFaseRepo = ordenFaseRepo;
         }
 
         private List<Articulo> _todosArticulosPT = new();
@@ -340,6 +346,77 @@ namespace recTivo.MVVM
         }
 
         // ================================================================
+        //  CREAR ÓRDENES DE AGRUPACIÓN — una por artículo PT del pedido
+        // ================================================================
+        private async Task CrearOrdenesAgrupacionAsync(Pedido pedido)
+        {
+            // Empleado de sesión
+            int idEmpleado = 1; // fallback
+            if (System.Windows.Application.Current is App app && app.EmpleadoActual != null)
+                idEmpleado = app.EmpleadoActual.Id;
+
+            // Pre-cargar escandallos y artículos en memoria (mismo patrón que CalcularPvpAsync)
+            var todosEscandallos = await _escandalloRepo.GetAllEscandallосAsync();
+            var todosComponentes = await _escandalloRepo.GetAllComponentesAsync();
+            var todosArticulos = await _articuloRepo.GetAllAsync();
+
+            var escandallosPorCodigo = todosEscandallos
+                .ToDictionary(e => e.CodigoProducto, e => e, StringComparer.OrdinalIgnoreCase);
+
+            var componentesPorEscandallo = todosComponentes
+                .GroupBy(c => c.IdEscandallo)
+                .ToDictionary(g => g.Key, g => g.ToList());
+
+            var articulosPorCodigo = todosArticulos
+                .ToDictionary(a => a.Codigo, a => a, StringComparer.OrdinalIgnoreCase);
+
+            foreach (var linea in pedido.Lineas)
+            {
+                // Obtener componentes PS y HE del escandallo del PT
+                if (!escandallosPorCodigo.TryGetValue(linea.CodigoArticulo, out var escandallo))
+                    continue;
+
+                if (!componentesPorEscandallo.TryGetValue(escandallo.IdEscandallo, out var componentes))
+                    continue;
+
+                var componentesPsHe = componentes
+                    .Where(c => c.CodigoArticulo.StartsWith("PS", StringComparison.OrdinalIgnoreCase) ||
+                                c.CodigoArticulo.StartsWith("HE", StringComparison.OrdinalIgnoreCase))
+                    .ToList();
+
+                if (componentesPsHe.Count == 0)
+                    continue;
+
+                if (!articulosPorCodigo.TryGetValue(linea.CodigoArticulo, out var articuloPT))
+                    continue;
+
+                var orden = new Orden
+                {
+                    Codigo = linea.CodigoArticulo,
+                    Cantidad = linea.Cantidad,
+                    IdArticulo = articuloPT.IdArticulo,
+                    IdEmpleado = idEmpleado,
+                    FechaFin = pedido.FechaEntrega,
+                    Estado = nameof(EstadoOrden.Pendiente)
+                };
+
+                await _ordenRepo.AddAsync(orden);
+
+                // Fase única de agrupación
+                var fase = new OrdenFase
+                {
+                    IdOrden = orden.IdOrden,
+                    CodigoFase = linea.CodigoArticulo,
+                    NumeroFase = 1,
+                    CantidadEntrada = linea.Cantidad,
+                    FechaFin = pedido.FechaEntrega,
+                    Estado = nameof(EstadoOrden.Pendiente)
+                };
+                await _ordenFaseRepo.AddAsync(fase);
+            }
+        }
+
+        // ================================================================
         //  CREAR PEDIDO
         // ================================================================
         public async Task<bool> CrearPedidoAsync()
@@ -371,6 +448,11 @@ namespace recTivo.MVVM
                 };
 
                 await _pedidoRepo.AddAsync(pedido);
+
+                await CrearOrdenesAgrupacionAsync(pedido);
+
+                MensajeInformacion.Mostrar("VENTAS",
+                    $"Pedido #{pedido.IdPedido} creado correctamente. Total: {TotalPedido:0.00} €", 2);
 
                 MensajeInformacion.Mostrar("VENTAS",
                     $"Pedido #{pedido.IdPedido} creado correctamente. Total: {TotalPedido:0.00} €", 2);

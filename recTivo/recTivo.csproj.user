@@ -62,9 +62,6 @@
     <Compile Update="Frontend\Dialogos\VentanasInicio\Login.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Frontend\Dialogos\Ventas\DialogoCrearPedido.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Update="Frontend\UC\UCCerrarFase.xaml.cs">
       <SubType>Code</SubType>
     </Compile>

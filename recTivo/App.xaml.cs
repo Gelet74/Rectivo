@@ -128,14 +128,18 @@ namespace recTivo
                 provider.GetRequiredService<PedidoRepository>(),
                 provider.GetRequiredService<ArticuloRepository>(),
                 provider.GetRequiredService<EscandalloRepository>(),
-                provider.GetRequiredService<ClienteRepository>()
+                provider.GetRequiredService<ClienteRepository>(),
+                provider.GetRequiredService<OrdenRepository>(), 
+                provider.GetRequiredService<OrdenFaseRepository>()
             ));
 
             services.AddTransient<DialogoPedidos>(provider => new DialogoPedidos(
                 provider.GetRequiredService<PedidoRepository>(),
                 provider.GetRequiredService<ArticuloRepository>(),
                 provider.GetRequiredService<EscandalloRepository>(),
-                provider.GetRequiredService<ClienteRepository>()
+                provider.GetRequiredService<ClienteRepository>(),
+                provider.GetRequiredService<OrdenRepository>(), 
+                provider.GetRequiredService<OrdenFaseRepository>()
             ));
 
             services.AddTransient<ConfirmacionDialogo>();
