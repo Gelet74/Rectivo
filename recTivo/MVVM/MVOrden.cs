@@ -47,22 +47,20 @@ namespace recTivo.MVVM
         private readonly OrdenRepository _ordenRepo;
         private readonly EmpleadoRepository _empleadoRepo;
         private readonly OrdenFaseRepository _ordenFaseRepo;
-        private readonly RectivoContext _context;
+        // _context ya no se necesita en el ViewModel
 
         public MVOrden(
             EscandalloRepository escandalloRepo,
             ArticuloRepository articuloRepo,
             OrdenRepository ordenRepo,
             EmpleadoRepository empleadoRepo,
-            OrdenFaseRepository ordenFaseRepo,
-            RectivoContext context)
+            OrdenFaseRepository ordenFaseRepo)
         {
             _escandalloRepo = escandalloRepo;
             _articuloRepo = articuloRepo;
             _ordenRepo = ordenRepo;
             _empleadoRepo = empleadoRepo;
             _ordenFaseRepo = ordenFaseRepo;
-            _context = context;
         }
 
         // ================================================================
@@ -667,13 +665,16 @@ namespace recTivo.MVVM
             foreach (var comp in componentes)
             {
                 string cod = comp.CodigoArticulo;
-                bool esFase = (cod.StartsWith("01") || cod.StartsWith("02") || cod.StartsWith("03"))
-                              && cod.Length > 2;
+
+                // Reconoce tanto "01","02","03" solos como códigos que empiezan por ellos
+                bool esFase = cod == "01" || cod == "02" || cod == "03" ||
+                              ((cod.StartsWith("01") || cod.StartsWith("02") || cod.StartsWith("03"))
+                               && cod.Length > 2);
 
                 if (esFase)
                 {
                     int numero = int.Parse(cod.Substring(0, 2));
-                    if (!fases.Any(f => f.codigo == cod))
+                    if (!fases.Any(f => f.numero == numero))
                         fases.Add((numero, cod));
                 }
                 else
@@ -809,14 +810,22 @@ namespace recTivo.MVVM
 
         public bool HayFaseActiva => FaseActiva != null;
 
-        public string NombreFaseActiva => FaseActiva?.CodigoFase.Substring(0, 2) switch
+        public string NombreFaseActiva
         {
-            "01" => "FASE 1 · SECCIONADORA",
-            "02" => "FASE 2 · CANTEADORA",
-            "03" => "FASE 3 · MECANIZADO",
-            _ => FaseActiva != null ? $"FASE {FaseActiva.NumeroFase}" : ""
-        };
-
+            get
+            {
+                if (FaseActiva == null) return "";
+                string cod = FaseActiva.CodigoFase;
+                string prefijo = cod.Length >= 2 ? cod.Substring(0, 2) : cod;
+                return prefijo switch
+                {
+                    "01" => "FASE 1 · SECCIONADORA",
+                    "02" => "FASE 2 · CANTEADORA",
+                    "03" => "FASE 3 · MECANIZADO",
+                    _ => $"FASE {FaseActiva.NumeroFase}"
+                };
+            }
+        }
         public string TextoBotonCerrar => EsUltimaFase ? "Cerrar fase y orden" : "Cerrar fase";
 
         // ── Campos de cierre ───────────────────────────────────────────────
@@ -929,12 +938,12 @@ namespace recTivo.MVVM
 
             try
             {
+                // ── Ya no se pasa _context como parámetro ──────────────────
                 await _ordenFaseRepo.CerrarFaseAsync(
                     FaseActiva!.IdOrdenFase,
                     ok, def,
                     empleadoActual.Id,
                     CierreFecha!.Value,
-                    _context,
                     pasillo, estanteria, hueco);
 
                 string msg = $"{NombreFaseActiva} cerrada. Pasan a siguiente fase: {ok} unidades.";
@@ -975,7 +984,6 @@ namespace recTivo.MVVM
 
             try
             {
-                // Cerrar la fase única
                 var fases = await _ordenFaseRepo.GetByOrdenAsync(OrdenSeleccionada.IdOrden);
                 foreach (var fase in fases)
                 {
@@ -985,7 +993,6 @@ namespace recTivo.MVVM
                     fase.FechaFin = DateTime.Today;
                 }
 
-                // Cerrar la orden
                 await _ordenRepo.CambiarEstadoAsync(OrdenSeleccionada.IdOrden, EstadoOrden.Cerrada);
 
                 MensajeInformacion.Mostrar("ÓRDENES",

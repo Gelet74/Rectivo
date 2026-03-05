@@ -26,27 +26,62 @@ public class OrdenFaseRepository : GenericRepository<OrdenFase>
     /// a la ubicación indicada por el usuario (pasillo, estantería, hueco).
     /// </summary>
     public async Task CerrarFaseAsync(
-        int idOrdenFase,
-        int cantidadOK,
-        int cantidadDefecto,
-        int idEmpleado,
-        DateTime fechaCierre,
-        RectivoContext context,
-        string? ubicacionPasillo = null,
-        int? ubicacionEstanteria = null,
-        int? ubicacionHueco = null)
+    int idOrdenFase,
+    int cantidadOK,
+    int cantidadDefecto,
+    int idEmpleado,
+    DateTime fechaCierre,
+    string? ubicacionPasillo = null,
+    int? ubicacionEstanteria = null,
+    int? ubicacionHueco = null)
     {
-        var fase = await _dbSet
+        var fase = await _context.Set<OrdenFase>()
             .FirstOrDefaultAsync(f => f.IdOrdenFase == idOrdenFase)
             ?? throw new Exception($"Fase {idOrdenFase} no encontrada.");
 
         if (fase.EstadoEnum == EstadoOrden.Cerrada)
             throw new Exception("Esta fase ya está cerrada.");
 
+        // ── VALIDACIÓN PREVIA: ubicación antes de tocar nada ─────────────
+        bool esUltimaFase = !await _context.Set<OrdenFase>()
+            .AnyAsync(f => f.IdOrden == fase.IdOrden &&
+                           f.NumeroFase == fase.NumeroFase + 1);
+
+        if (esUltimaFase && ubicacionPasillo != null)
+        {
+            string pasilloVal = ubicacionPasillo;
+            int estanteriaVal = ubicacionEstanteria ?? 1;
+            int huecoVal = ubicacionHueco ?? 1;
+
+            var ordenPrevia = await _context.Orden
+                .FirstOrDefaultAsync(o => o.IdOrden == fase.IdOrden)
+                ?? throw new Exception("Orden no encontrada.");
+
+            var articuloPSPrevio = await _context.Articulos
+                .FirstOrDefaultAsync(a => a.Codigo == ordenPrevia.Codigo);
+
+            if (articuloPSPrevio != null)
+            {
+                var ubicacionOcupadaPrevia = await _context.Ubicacion
+                    .FirstOrDefaultAsync(u =>
+                        u.LetraPasillo == pasilloVal &&
+                        u.NumeroEstanteria == estanteriaVal &&
+                        u.Numero == huecoVal &&
+                        u.IdArticulo != null &&
+                        u.IdArticulo != articuloPSPrevio.IdArticulo);
+
+                if (ubicacionOcupadaPrevia != null)
+                    throw new Exception(
+                        $"La ubicación {pasilloVal}-{estanteriaVal}-{huecoVal} ya está ocupada " +
+                        $"por el artículo '{ubicacionOcupadaPrevia.Articulo?.Codigo ?? ubicacionOcupadaPrevia.IdArticulo.ToString()}'.");
+            }
+        }
+        // ─────────────────────────────────────────────────────────────────
+
         // Validar que la fase anterior esté cerrada
         if (fase.NumeroFase > 1)
         {
-            var faseAnterior = await _dbSet
+            var faseAnterior = await _context.Set<OrdenFase>()
                 .FirstOrDefaultAsync(f => f.IdOrden == fase.IdOrden &&
                                           f.NumeroFase == fase.NumeroFase - 1);
             if (faseAnterior != null && faseAnterior.EstadoEnum != EstadoOrden.Cerrada)
@@ -67,12 +102,12 @@ public class OrdenFaseRepository : GenericRepository<OrdenFase>
         await _context.SaveChangesAsync();
 
         // ── 2) Descontar MP asociadas al componente de fase ───────────────
-        var escandallo = await context.Escandallos
+        var escandallo = await _context.Escandallos
             .FirstOrDefaultAsync(e => e.CodigoProducto == fase.CodigoFase);
 
         if (escandallo != null)
         {
-            var componentes = await context.ComponenteEscandallos
+            var componentes = await _context.ComponenteEscandallos
                 .Where(c => c.IdEscandallo == escandallo.IdEscandallo &&
                              c.CodigoArticulo.StartsWith("MP"))
                 .ToListAsync();
@@ -80,7 +115,7 @@ public class OrdenFaseRepository : GenericRepository<OrdenFase>
             foreach (var comp in componentes)
             {
                 decimal cantidadMP = (comp.Cantidad ?? 1) * fase.CantidadEntrada;
-                var articulo = await context.Articulos
+                var articulo = await _context.Articulos
                     .FirstOrDefaultAsync(a => a.Codigo == comp.CodigoArticulo);
 
                 if (articulo != null)
@@ -89,11 +124,11 @@ public class OrdenFaseRepository : GenericRepository<OrdenFase>
                     if (articulo.Stock < 0) articulo.Stock = 0;
                 }
             }
-            await context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
         }
 
         // ── 3) Propagar CantidadOK a la siguiente fase (si existe) ────────
-        var siguienteFase = await _dbSet
+        var siguienteFase = await _context.Set<OrdenFase>()
             .Where(f => f.IdOrden == fase.IdOrden &&
                         f.NumeroFase == fase.NumeroFase + 1)
             .FirstOrDefaultAsync();
@@ -106,15 +141,14 @@ public class OrdenFaseRepository : GenericRepository<OrdenFase>
         else
         {
             // ── 4) Última fase → cerrar orden y subir PS a stock ──────────
-
-            var orden = await context.Orden
+            var orden = await _context.Orden
                 .FirstOrDefaultAsync(o => o.IdOrden == fase.IdOrden)
                 ?? throw new Exception("Orden no encontrada.");
 
             orden.Estado = nameof(EstadoOrden.Cerrada);
-            await context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
 
-            var articuloPS = await context.Articulos
+            var articuloPS = await _context.Articulos
                 .FirstOrDefaultAsync(a => a.Codigo == orden.Codigo);
 
             if (articuloPS != null && cantidadOK > 0)
@@ -123,22 +157,7 @@ public class OrdenFaseRepository : GenericRepository<OrdenFase>
                 int estanteria = ubicacionEstanteria ?? 1;
                 int hueco = ubicacionHueco ?? 1;
 
-                // ── NUEVO: comprobar si esa ubicación ya existe con otro artículo ──
-                var ubicacionOcupada = await context.Ubicacion
-                    .FirstOrDefaultAsync(u =>
-                        u.LetraPasillo == pasillo &&
-                        u.NumeroEstanteria == estanteria &&
-                        u.Numero == hueco &&
-                        u.IdArticulo != null &&
-                        u.IdArticulo != articuloPS.IdArticulo);
-
-                if (ubicacionOcupada != null)
-                    throw new Exception(
-                        $"La ubicación {pasillo}-{estanteria}-{hueco} ya está ocupada " +
-                        $"por el artículo '{ubicacionOcupada.Articulo?.Codigo ?? ubicacionOcupada.IdArticulo.ToString()}'.");
-                // ──────────────────────────────────────────────────────────────────
-
-                var ubicacion = await context.Ubicacion
+                var ubicacion = await _context.Ubicacion
                     .FirstOrDefaultAsync(u =>
                         u.IdArticulo == articuloPS.IdArticulo &&
                         u.LetraPasillo == pasillo &&
@@ -147,28 +166,27 @@ public class OrdenFaseRepository : GenericRepository<OrdenFase>
 
                 if (ubicacion == null)
                 {
-                    ubicacion = new Ubicacion
+                    _context.Ubicacion.Add(new Ubicacion
                     {
                         LetraPasillo = pasillo,
                         NumeroEstanteria = estanteria,
                         Numero = hueco,
                         IdArticulo = articuloPS.IdArticulo,
                         Cantidad = cantidadOK
-                    };
-                    context.Ubicacion.Add(ubicacion);
+                    });
                 }
                 else
                 {
                     ubicacion.Cantidad += cantidadOK;
                 }
 
-                await context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
 
-                articuloPS.Stock = await context.Ubicacion
+                articuloPS.Stock = await _context.Ubicacion
                     .Where(u => u.IdArticulo == articuloPS.IdArticulo)
                     .SumAsync(u => u.Cantidad);
 
-                await context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
             }
         }
     }

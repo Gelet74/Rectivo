@@ -71,5 +71,10 @@ namespace recTivo.Frontend.UC
         {
             await _vm.CargarOrdenesAsync();
         }
+
+        private void DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
     }
 }

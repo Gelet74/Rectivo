@@ -26,6 +26,23 @@
             <Setter Property="FontSize"   Value="11"/>
             <Setter Property="Margin"     Value="0,2,0,4"/>
         </Style>
+        <!-- ── Sobreescribir MaterialDesign en DataGrid ── -->
+        <Style TargetType="DataGridColumnHeader">
+            <Setter Property="Background"      Value="#3A3A3D"/>
+            <Setter Property="Foreground"      Value="White"/>
+            <Setter Property="FontWeight"      Value="Bold"/>
+            <Setter Property="Padding"         Value="8,4"/>
+            <Setter Property="BorderBrush"     Value="#555"/>
+            <Setter Property="BorderThickness" Value="0,0,1,0"/>
+        </Style>
+        <Style TargetType="DataGridRow">
+            <Setter Property="Background" Value="#3A3A3D"/>
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+        <Style TargetType="DataGridCell">
+            <Setter Property="Foreground"      Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+        </Style>
     </UserControl.Resources>
 
     <DockPanel>
@@ -70,12 +87,14 @@
                           SelectedItem="{Binding OrdenSeleccionada, Mode=TwoWay}"
                           AutoGenerateColumns="False" IsReadOnly="True"
                           CanUserAddRows="False" RowHeaderWidth="0"
-                          Background="#3A3A3D" RowBackground="#F5F5F5"
-                          AlternatingRowBackground="#E8E8E8"
+                          Background="#3A3A3D" RowBackground="#3A3A3D"
+                          AlternatingRowBackground="#2D2D30"
+                          Foreground="White"
                           GridLinesVisibility="Horizontal"
-                          HorizontalGridLinesBrush="#CCCCCC"
+                          HorizontalGridLinesBrush="#555555"
                           BorderThickness="0"
-                          ScrollViewer.VerticalScrollBarVisibility="Auto">
+                          ScrollViewer.VerticalScrollBarVisibility="Auto"
+                          SelectionChanged="DataGrid_SelectionChanged">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Código"
                                             Binding="{Binding Codigo}"

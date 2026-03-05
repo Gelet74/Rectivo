@@ -78,8 +78,7 @@ namespace recTivo
                 provider.GetRequiredService<ArticuloRepository>(),
                 provider.GetRequiredService<OrdenRepository>(),
                 provider.GetRequiredService<EmpleadoRepository>(),
-                provider.GetRequiredService<OrdenFaseRepository>(),
-                provider.GetRequiredService<RectivoContext>()
+                provider.GetRequiredService<OrdenFaseRepository>()
             ));
 
             // VENTANAS

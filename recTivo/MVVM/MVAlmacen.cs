@@ -165,7 +165,6 @@ namespace recTivo.MVVM
                     return;
                 }
 
-                // Buscar la ubicación concreta indicada por el usuario
                 var ubicacion = await _context.Ubicacion.FirstOrDefaultAsync(u =>
                     u.LetraPasillo == Pasillo &&
                     u.NumeroEstanteria == estanteria &&
@@ -184,30 +183,29 @@ namespace recTivo.MVVM
                     return;
                 }
 
-                
                 ubicacion.Cantidad -= cantidadASacar;
 
                 if (ubicacion.Cantidad == 0)
-                {
-                    _context.Ubicacion.Remove(ubicacion); 
-                }
-                else
-                {
-                    _context.Ubicacion.Update(ubicacion);
-                }
+                    _context.Ubicacion.Remove(ubicacion);
 
                 await _context.SaveChangesAsync();
 
-                // Recalcular Stock como suma real de todas las ubicaciones del artículo
-                articulo.Stock = await _context.Ubicacion
-                    .Where(u => u.IdArticulo == articulo.IdArticulo)
+                // ── Recargar el artículo desde _context para evitar conflicto de tracking ──
+                var articuloDB = await _context.Articulos
+                    .FirstOrDefaultAsync(a => a.IdArticulo == articulo.IdArticulo)
+                    ?? throw new Exception("Artículo no encontrado en base de datos.");
+
+                articuloDB.Stock = await _context.Ubicacion
+                    .Where(u => u.IdArticulo == articuloDB.IdArticulo)
                     .SumAsync(u => u.Cantidad);
 
-                _context.Articulos.Update(articulo);
                 await _context.SaveChangesAsync();
 
+                // Sincronizar el objeto en memoria del ViewModel
+                articulo.Stock = articuloDB.Stock;
+
                 MensajeInformacion.Mostrar("ÉXITO",
-                    $"Se retiraron {cantidadASacar} unidades. Stock total restante: {articulo.Stock}");
+                    $"Se retiraron {cantidadASacar} unidades. Stock total restante: {articuloDB.Stock}");
 
                 LimpiarCampos();
             }
