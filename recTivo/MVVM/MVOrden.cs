@@ -47,8 +47,8 @@ namespace recTivo.MVVM
         private readonly OrdenRepository _ordenRepo;
         private readonly EmpleadoRepository _empleadoRepo;
         private readonly OrdenFaseRepository _ordenFaseRepo;
-        // _context ya no se necesita en el ViewModel
 
+        // CORRECCIÓN 1: constructor sin RectivoContext (no se necesita en el ViewModel)
         public MVOrden(
             EscandalloRepository escandalloRepo,
             ArticuloRepository articuloRepo,
@@ -71,7 +71,6 @@ namespace recTivo.MVVM
         // ================================================================
         //   SECCIÓN: PROCESAR ORDEN (PT → PS)
         // ================================================================
-
         private List<Articulo> _articulosPT = new();
         public List<Articulo> ArticulosPT
         {
@@ -107,7 +106,6 @@ namespace recTivo.MVVM
         // ================================================================
         //   SECCIÓN: PS DIRECTO
         // ================================================================
-
         private List<Articulo> _articulosPS = new();
 
         private string _filtroBusquedaPS = "";
@@ -145,7 +143,6 @@ namespace recTivo.MVVM
         // ================================================================
         //   SECCIÓN: LISTADO DE ÓRDENES
         // ================================================================
-
         private List<OrdenViewModel> _todasOrdenes = new();
 
         private ObservableCollection<OrdenViewModel> _ordenesFiltradas = new();
@@ -477,6 +474,8 @@ namespace recTivo.MVVM
 
                     if (nuevaOrden.Codigo.StartsWith("PS"))
                         await GenerarFasesAsync(nuevaOrden);
+                    else if (nuevaOrden.Codigo.StartsWith("PT"))
+                        await GenerarFaseAgrupamientoAsync(nuevaOrden);
                 }
 
                 MensajeInformacion.Mostrar("ÓRDENES", $"Se han generado {nuevas} órdenes de fabricación.", 2);
@@ -559,7 +558,30 @@ namespace recTivo.MVVM
         }
 
         // ================================================================
-        //   FASES: GENERAR
+        //   FASES: GENERAR FASE DE AGRUPAMIENTO (PT)
+        // ================================================================
+        private async Task GenerarFaseAgrupamientoAsync(Orden ordenPT)
+        {
+            try
+            {
+                await _ordenFaseRepo.AddAsync(new OrdenFase
+                {
+                    IdOrden = ordenPT.IdOrden,
+                    CodigoFase = "AGRUPAMIENTO",
+                    NumeroFase = 1,
+                    CantidadEntrada = ordenPT.Cantidad,
+                    FechaFin = ordenPT.FechaFin,
+                    Estado = nameof(EstadoOrden.Pendiente)
+                });
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"[MVOrden] Error generando fase agrupamiento: {ex.Message}");
+            }
+        }
+
+        // ================================================================
+        //   FASES: GENERAR FASES PS (máquinas)
         // ================================================================
         private async Task GenerarFasesAsync(Orden ordenPS)
         {
@@ -658,6 +680,11 @@ namespace recTivo.MVVM
             return d;
         }
 
+        // ================================================================
+        //   FASES: RECOPILAR
+        //   CORRECCIÓN 3: solo "01", "02", "03" exactos como fases
+        //   para evitar que códigos como "013410BB" sean tratados como fase
+        // ================================================================
         private async Task RecopilarFases(
             List<ComponenteEscandallo> componentes,
             List<(int numero, string codigo)> fases)
@@ -666,14 +693,11 @@ namespace recTivo.MVVM
             {
                 string cod = comp.CodigoArticulo;
 
-                // Reconoce tanto "01","02","03" solos como códigos que empiezan por ellos
-                bool esFase = cod == "01" || cod == "02" || cod == "03" ||
-                              ((cod.StartsWith("01") || cod.StartsWith("02") || cod.StartsWith("03"))
-                               && cod.Length > 2);
+                bool esFase = cod == "01" || cod == "02" || cod == "03";
 
                 if (esFase)
                 {
-                    int numero = int.Parse(cod.Substring(0, 2));
+                    int numero = int.Parse(cod);
                     if (!fases.Any(f => f.numero == numero))
                         fases.Add((numero, cod));
                 }
@@ -765,6 +789,7 @@ namespace recTivo.MVVM
 
         // ================================================================
         //   LISTADO: CARGAR FASES DE LA ORDEN SELECCIONADA
+        //   CORRECCIÓN 4: refresca el estado de la orden desde BD
         // ================================================================
         private async Task CargarFasesAsync()
         {
@@ -775,6 +800,11 @@ namespace recTivo.MVVM
 
             try
             {
+                // Recargar el estado de la orden desde BD para evitar caché de EF
+                var ordenActualizada = await _ordenRepo.GetByIdAsync(OrdenSeleccionada.Orden.IdOrden);
+                if (ordenActualizada != null)
+                    OrdenSeleccionada.Orden.Estado = ordenActualizada.Estado;
+
                 var fases = await _ordenFaseRepo
                     .GetByOrdenAsync(OrdenSeleccionada.Orden.IdOrden);
 
@@ -795,7 +825,6 @@ namespace recTivo.MVVM
         // ================================================================
         //   CERRAR FASE
         // ================================================================
-
         private OrdenFase? _faseActiva;
         public OrdenFase? FaseActiva
         {
@@ -817,6 +846,9 @@ namespace recTivo.MVVM
                 if (FaseActiva == null) return "";
                 string cod = FaseActiva.CodigoFase;
                 string prefijo = cod.Length >= 2 ? cod.Substring(0, 2) : cod;
+                if (FaseActiva.CodigoFase == "AGRUPAMIENTO")
+                    return "FASE 1 · AGRUPAMIENTO";
+
                 return prefijo switch
                 {
                     "01" => "FASE 1 · SECCIONADORA",
@@ -826,9 +858,9 @@ namespace recTivo.MVVM
                 };
             }
         }
+
         public string TextoBotonCerrar => EsUltimaFase ? "Cerrar fase y orden" : "Cerrar fase";
 
-        // ── Campos de cierre ───────────────────────────────────────────────
         private string _cierreCantidadOK = "";
         public string CierreCantidadOK
         {
@@ -850,7 +882,6 @@ namespace recTivo.MVVM
             set { SetProperty(ref _cierreFecha, value); OnPropertyChanged(nameof(PuedeCerrarFase)); OnPropertyChanged(nameof(ErrorCierreFase)); }
         }
 
-        // ── Ubicación (solo en última fase) ───────────────────────────────
         private bool _esUltimaFase;
         public bool EsUltimaFase
         {
@@ -885,7 +916,6 @@ namespace recTivo.MVVM
             set { SetProperty(ref _ubicacionHueco, value); OnPropertyChanged(nameof(PuedeCerrarFase)); OnPropertyChanged(nameof(ErrorCierreFase)); }
         }
 
-        // ── Validación ────────────────────────────────────────────────────
         public bool PuedeCerrarFase =>
             FaseActiva != null &&
             int.TryParse(CierreCantidadOK, out int ok) && ok >= 0 &&
@@ -924,7 +954,6 @@ namespace recTivo.MVVM
             }
         }
 
-        // ── Cerrar fase ───────────────────────────────────────────────────
         public async Task<bool> CerrarFaseActivaAsync(Empleado empleadoActual)
         {
             if (!PuedeCerrarFase) return false;
@@ -938,7 +967,6 @@ namespace recTivo.MVVM
 
             try
             {
-                // ── Ya no se pasa _context como parámetro ──────────────────
                 await _ordenFaseRepo.CerrarFaseAsync(
                     FaseActiva!.IdOrdenFase,
                     ok, def,
@@ -946,9 +974,10 @@ namespace recTivo.MVVM
                     CierreFecha!.Value,
                     pasillo, estanteria, hueco);
 
+                // CORRECCIÓN 4: recargar desde BD para obtener estado actualizado sin caché
+                var ordenActualizada = await _ordenRepo.GetByIdAsync(OrdenSeleccionada!.Orden.IdOrden);
                 string msg = $"{NombreFaseActiva} cerrada. Pasan a siguiente fase: {ok} unidades.";
 
-                var ordenActualizada = await _ordenRepo.GetByIdAsync(OrdenSeleccionada!.Orden.IdOrden);
                 if (ordenActualizada?.Estado == nameof(EstadoOrden.Cerrada))
                     msg = $"Todas las fases completadas. Orden cerrada. {ok} uds de " +
                           $"{OrdenSeleccionada.Codigo} subidas a stock en {pasillo}-{estanteria}-{hueco}.";
@@ -968,46 +997,6 @@ namespace recTivo.MVVM
             }
         }
 
-        // ================================================================
-        //   CERRAR ORDEN PT (agrupación — fase única sin producción)
-        // ================================================================
-        public async Task<bool> CerrarOrdenPTAsync()
-        {
-            if (OrdenSeleccionada == null)
-            { MensajeError.Mostrar("ÓRDENES", "Selecciona una orden."); return false; }
-
-            if (!OrdenSeleccionada.Codigo.StartsWith("PT"))
-            { MensajeError.Mostrar("ÓRDENES", "Esta opción solo aplica a órdenes PT."); return false; }
-
-            if (OrdenSeleccionada.EstadoBD == nameof(EstadoOrden.Cerrada))
-            { MensajeError.Mostrar("ÓRDENES", "Esta orden ya está cerrada."); return false; }
-
-            try
-            {
-                var fases = await _ordenFaseRepo.GetByOrdenAsync(OrdenSeleccionada.IdOrden);
-                foreach (var fase in fases)
-                {
-                    fase.EstadoEnum = EstadoOrden.Cerrada;
-                    fase.CantidadOK = fase.CantidadEntrada;
-                    fase.CantidadDefecto = 0;
-                    fase.FechaFin = DateTime.Today;
-                }
-
-                await _ordenRepo.CambiarEstadoAsync(OrdenSeleccionada.IdOrden, EstadoOrden.Cerrada);
-
-                MensajeInformacion.Mostrar("ÓRDENES",
-                    $"Orden PT {OrdenSeleccionada.Codigo} cerrada correctamente.", 2);
-
-                await CargarFasesAsync();
-                await CargarOrdenesAsync();
-                return true;
-            }
-            catch (Exception ex)
-            {
-                MensajeError.Mostrar("ÓRDENES", $"Error al cerrar la orden: {ex.Message}");
-                return false;
-            }
-        }
 
         private void LimpiarCamposCierre()
         {

@@ -1,4 +1,3 @@
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using recTivo.Backend.Modelos;
 
@@ -8,8 +7,12 @@ public class OrdenRepository : GenericRepository<Orden>, IOrdenRepository
 {
     public OrdenRepository(RectivoContext context) : base(context) { }
 
+    // CORRECCIÓN 4: Include de Fases para que el estado se cargue fresco desde BD
     public async Task<Orden?> GetByIdAsync(int id)
-        => await _dbSet.FindAsync(id);
+        => await _dbSet
+            .Include(o => o.Fases)
+            .AsNoTracking()  // evita que EF devuelva la versión en caché
+            .FirstOrDefaultAsync(o => o.IdOrden == id);
 
     public async Task<Orden?> GetByCodigoAsync(string codigo)
         => await _dbSet.FirstOrDefaultAsync(o => o.Codigo == codigo);

@@ -32,7 +32,7 @@ namespace recTivo
 
         private void ConfigureServices(ServiceCollection services)
         {
-            // CONTEXTO: Transient para evitar contextos compartidos en WPF
+            // CONTEXTO
             services.AddDbContext<RectivoContext>(options =>
             {
                 options.UseMySQL("server=localhost;database=RECTIVO;user=root;password=mysql;Allow User Variables=True;Treat Tiny As Boolean=False;Default Command Timeout=60;")
@@ -44,7 +44,7 @@ namespace recTivo
 
             services.AddLogging(configure => configure.AddConsole());
 
-            // REPOSITORIOS: todos Transient, consistente con el contexto
+            // REPOSITORIOS
             services.AddTransient(typeof(IRepository<>), typeof(GenericRepository<>));
             services.AddTransient<ArticuloRepository>();
             services.AddTransient<EmpleadoRepository>();
@@ -53,12 +53,14 @@ namespace recTivo
             services.AddTransient<EscandalloRepository>();
             services.AddTransient<OrdenFaseRepository>();
             services.AddTransient<PedidoRepository>();
-            services.AddTransient<MVOrden>();
+            services.AddTransient<RolRepository>();
+
+            // USER CONTROLS
             services.AddTransient<UCCerrarFase>();
             services.AddTransient<UCListadoOrdenes>();
-
-            services.AddTransient<UCListadoOrdenes>();
-            services.AddTransient<RolRepository>();
+            services.AddTransient<UCListadoArticulos>();
+            services.AddTransient<UCListadoClientes>();
+            services.AddTransient<UCDashboard>();
 
             // VIEWMODELS
             services.AddTransient<MVArticulo>();
@@ -73,6 +75,7 @@ namespace recTivo
                 provider.GetRequiredService<ArticuloRepository>(),
                 provider.GetRequiredService<OrdenRepository>()
             ));
+            // CORRECCIÓN 1: MVOrden sin RectivoContext
             services.AddTransient<MVOrden>(provider => new MVOrden(
                 provider.GetRequiredService<EscandalloRepository>(),
                 provider.GetRequiredService<ArticuloRepository>(),
@@ -123,30 +126,26 @@ namespace recTivo
                 provider.GetRequiredService<MVOrden>()
             ));
 
+            // DIÁLOGOS DE PEDIDOS
             services.AddTransient<MVPedido>(provider => new MVPedido(
                 provider.GetRequiredService<PedidoRepository>(),
                 provider.GetRequiredService<ArticuloRepository>(),
                 provider.GetRequiredService<EscandalloRepository>(),
                 provider.GetRequiredService<ClienteRepository>(),
-                provider.GetRequiredService<OrdenRepository>(), 
+                provider.GetRequiredService<OrdenRepository>(),
                 provider.GetRequiredService<OrdenFaseRepository>()
             ));
-
             services.AddTransient<DialogoPedidos>(provider => new DialogoPedidos(
                 provider.GetRequiredService<PedidoRepository>(),
                 provider.GetRequiredService<ArticuloRepository>(),
                 provider.GetRequiredService<EscandalloRepository>(),
                 provider.GetRequiredService<ClienteRepository>(),
-                provider.GetRequiredService<OrdenRepository>(), 
+                provider.GetRequiredService<OrdenRepository>(),
                 provider.GetRequiredService<OrdenFaseRepository>()
             ));
 
+            // OTROS
             services.AddTransient<ConfirmacionDialogo>();
-
-            // USER CONTROLS
-            services.AddTransient<UCListadoArticulos>();
-            services.AddTransient<UCListadoClientes>();
-            services.AddTransient<UCDashboard>();
         }
 
         protected override async void OnStartup(StartupEventArgs e)

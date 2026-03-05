@@ -99,7 +99,7 @@ namespace recTivo.Backend.Modelos
                 entity.ToTable("orden");
                 entity.HasIndex(e => e.IdArticulo, "ID_ARTICULO");
                 entity.HasIndex(e => e.IdEmpleado, "ID_EMPLEADO");
-                entity.Property(e => e.IdOrden).HasColumnName("ID_ORDEN");
+                entity.Property(e => e.IdOrden).HasColumnName("ID_ORDEN").ValueGeneratedOnAdd();
                 entity.Property(e => e.Cantidad).HasColumnName("CANTIDAD");
                 entity.Property(e => e.Codigo).HasMaxLength(10).HasColumnName("CODIGO");
                 entity.Property(e => e.FechaFin).HasColumnType("date").HasColumnName("FECHA_FIN");

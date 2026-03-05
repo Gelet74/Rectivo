@@ -20,7 +20,7 @@ public class OrdenFase
     public int? IdEmpleado { get; set; }
     public string Estado { get; set; } = nameof(EstadoOrden.Pendiente);
 
-    // ── Propiedades calculadas ────────────────────────────────────────────
+    // ── Propiedades calculadas ──
     [NotMapped]
     public EstadoOrden EstadoEnum
     {
@@ -34,22 +34,29 @@ public class OrdenFase
         EstadoOrden.Pendiente => "Pendiente",
         EstadoOrden.EnCurso => "En curso",
         EstadoOrden.Cerrada => "Cerrada",
-        _                   => Estado
+        _ => Estado
     };
 
     [NotMapped]
-    public string NombreFaseTexto => CodigoFase?.Substring(0, 2) switch
+    public string NombreFaseTexto
     {
-        "01" => "FASE 1 · SECCIONADORA",
-        "02" => "FASE 2 · CANTEADORA",
-        "03" => "FASE 3 · MECANIZADO",
-        _ => $"FASE {NumeroFase}"
-    };
+        get
+        {
+            if (CodigoFase == "AGRUPAMIENTO") return "FASE 1 · AGRUPAMIENTO";
+            return CodigoFase?.Substring(0, 2) switch
+            {
+                "01" => "FASE 1 · SECCIONADORA",
+                "02" => "FASE 2 · CANTEADORA",
+                "03" => "FASE 3 · MECANIZADO",
+                _ => $"FASE {NumeroFase}"
+            };
+        }
+    }
 
     [NotMapped]
     public string NombreFase => NombreFaseTexto;
 
-    // ── Navegación ────────────────────────────────────────────────────────
+    // ── Navegación ──
     public virtual Orden OrdenNavigation { get; set; } = null!;
     public virtual Empleado? EmpleadoNavigation { get; set; }
 }

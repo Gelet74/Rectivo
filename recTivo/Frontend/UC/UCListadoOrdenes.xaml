@@ -100,12 +100,6 @@
                         Background="#E0E0E0" Foreground="#FF5722"
                         BorderBrush="#FF5722" FontWeight="Bold" Cursor="Hand"/>
 
-                <Button Content="✔  Cerrar orden PT"
-                        Click="BtnCerrarOrdenPT_Click"
-                        Width="170" Height="30"
-                        Margin="8,18,0,0"
-                        Background="#4CAF50" Foreground="White"
-                        BorderBrush="#4CAF50" FontWeight="Bold" Cursor="Hand"/>
 
             </WrapPanel>
         </Border>
