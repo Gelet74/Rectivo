@@ -1,7 +1,9 @@
 ﻿using di.proyecto.clase._2025.Frontend.Mensajes;
 using recTivo.Backend.Modelos;
 using recTivo.Frontend.Dialogos.VentanasInicio;
+using recTivo.Informes;
 using recTivo.MVVM;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -11,6 +13,7 @@ namespace recTivo.Frontend.Dialogos.Escandallo
     public partial class DialogoListarEscandallo : Window
     {
         private readonly MVEscandallo _vm;
+        private bool _escapeEnCurso = false;
 
         public DialogoListarEscandallo(MVEscandallo vm)
         {
@@ -41,12 +44,47 @@ namespace recTivo.Frontend.Dialogos.Escandallo
             await _vm.CargarEscandallo(codigo);
         }
 
+        // ── PDF: escandallo cargado actualmente ──────────────────────────
+        private void BtnExportarEscandallo_Click(object sender, RoutedEventArgs e)
+        {
+            if (_vm.ArticuloFinal == null)
+            {
+                MensajeInformacion.Mostrar("ESCANDALLO", "Carga un escandallo primero.");
+                return;
+            }
+
+            // Construimos el objeto Escandallo a partir del ArticuloFinal cargado
+            var escandallo = new recTivo.Backend.Modelos.Escandallo
+            {
+                CodigoProducto = _vm.ArticuloFinal.Codigo,
+                Descrip = _vm.ArticuloFinal.descrip ?? "",
+                Descrip2 = _vm.ArticuloFinal.descrip2
+            };
+
+            // Aplanar el árbol jerárquico de componentes en lista plana
+            var componentes = AplanarComponentes(_vm.EscandalloActual);
+
+            string ruta = PdfService.GenerarEscandallo(escandallo, componentes);
+            Process.Start(new ProcessStartInfo(ruta) { UseShellExecute = true });
+        }
+
+        // Helper: recorre el árbol de ComponenteEscandallo recursivamente
+        private static IEnumerable<ComponenteEscandallo> AplanarComponentes(
+            IEnumerable<ComponenteEscandallo> nodos)
+        {
+            foreach (var nodo in nodos)
+            {
+                yield return nodo;
+                if (nodo.Hijos != null)
+                    foreach (var hijo in AplanarComponentes(nodo.Hijos))
+                        yield return hijo;
+            }
+        }
+
         private void TreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
             _vm.ComponentePadreSeleccionado = e.NewValue as ComponenteEscandallo;
         }
-
-        private bool _escapeEnCurso = false;
 
         protected override void OnPreviewKeyDown(KeyEventArgs e)
         {

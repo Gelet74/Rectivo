@@ -100,6 +100,20 @@
                         Background="#E0E0E0" Foreground="#FF5722"
                         BorderBrush="#FF5722" FontWeight="Bold" Cursor="Hand"/>
 
+                <Button Content="📄  Exportar lista"
+                        Click="BtnExportarOrdenes_Click"
+                        Width="140" Height="30"
+                        Margin="8,18,0,0"
+                        Background="#E0E0E0" Foreground="#1565C0"
+                        BorderBrush="#1565C0" FontWeight="Bold" Cursor="Hand"/>
+
+                <Button Content="🖨  Detalle orden"
+                        Click="BtnDetalleOrden_Click"
+                        Width="140" Height="30"
+                        Margin="8,18,0,0"
+                        Background="#E0E0E0" Foreground="#1565C0"
+                        BorderBrush="#1565C0" FontWeight="Bold" Cursor="Hand"/>
+
 
             </WrapPanel>
         </Border>
@@ -179,7 +193,7 @@
                   GridLinesVisibility="Horizontal"
                   HorizontalGridLinesBrush="#444444"
                   BorderThickness="0"
-                  ScrollViewer.VerticalScrollBarVisibility="Auto" SelectionChanged="DataGrid_SelectionChanged">
+                  ScrollViewer.VerticalScrollBarVisibility="Auto">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ID"
                                     Binding="{Binding IdOrden}" Width="55"/>

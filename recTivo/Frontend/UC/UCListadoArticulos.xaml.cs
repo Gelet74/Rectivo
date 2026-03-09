@@ -2,7 +2,9 @@
 using Microsoft.Extensions.DependencyInjection;
 using recTivo.Frontend.Dialogos.Articulos;
 using recTivo.Frontend.Dialogos.VentanasInicio;
+using recTivo.Informes;
 using recTivo.MVVM;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -37,6 +39,38 @@ namespace recTivo.Frontend.UC
             _mvArticulo.LimpiarFiltros();
         }
 
+        // ── PDF: listado de artículos ────────────────────────────────────
+        private void BtnExportarArticulos_Click(object sender, RoutedEventArgs e)
+        {
+            if (_mvArticulo.ListaArticulos == null || !_mvArticulo.ListaArticulos.Any())
+            {
+                MensajeInformacion.Mostrar("ARTÍCULOS", "No hay artículos para exportar.");
+                return;
+            }
+
+            string ruta = PdfService.GenerarListadoArticulos(_mvArticulo.ListaArticulos);
+            Process.Start(new ProcessStartInfo(ruta) { UseShellExecute = true });
+        }
+
+        private void modificarArticulo_Click(object sender, RoutedEventArgs e)
+        {
+            if (_mvArticulo.ArticuloSeleccionado == null)
+            {
+                MensajeError.Mostrar("ERROR", "Debes seleccionar un artículo primero.");
+                return;
+            }
+
+            var vmModificar = _serviceProvider.GetRequiredService<MVArticulo>();
+            vmModificar.ArticuloSeleccionado = _mvArticulo.ArticuloSeleccionado;
+
+            var dialogo = new DialogoModificarArticulo(vmModificar)
+            {
+                Owner = Window.GetWindow(this)
+            };
+
+            dialogo.ShowDialog();
+        }
+
         protected override void OnPreviewKeyDown(KeyEventArgs e)
         {
             if (e.Key == Key.Escape)
@@ -57,9 +91,7 @@ namespace recTivo.Frontend.UC
                     bool? result = dialog.ShowDialog();
 
                     if (result == true && dialog.Confirmado)
-                    {
                         SolicitarCierre?.Invoke();
-                    }
                 }
                 finally
                 {
@@ -70,26 +102,6 @@ namespace recTivo.Frontend.UC
             {
                 base.OnPreviewKeyDown(e);
             }
-        }
-
-        private void modificarArticulo_Click(object sender, RoutedEventArgs e)
-        {
-            if (_mvArticulo.ArticuloSeleccionado == null)
-            {
-                MensajeError.Mostrar("ERROR", "Debes seleccionar un artículo primero.");
-                return;
-            }
-
-            // Crear nuevo ViewModel para el diálogo
-            var vmModificar = _serviceProvider.GetRequiredService<MVArticulo>();
-            vmModificar.ArticuloSeleccionado = _mvArticulo.ArticuloSeleccionado;
-
-            var dialogo = new DialogoModificarArticulo(vmModificar)
-            {
-                Owner = Window.GetWindow(this)
-            };
-
-            dialogo.ShowDialog();
         }
     }
 }

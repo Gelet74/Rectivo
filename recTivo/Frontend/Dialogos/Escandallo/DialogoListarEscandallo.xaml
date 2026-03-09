@@ -78,6 +78,9 @@
                                     Background="#FF9800" Foreground="White"
                                     BorderBrush="#FF9800" FontWeight="Bold" Cursor="Hand"
                                     Margin="0"/>
+                            <Button Content="📄 Exportar PDF" Click="BtnExportarEscandallo_Click"
+                                    Height="28" Foreground="White"
+                                    Style="{StaticResource MaterialDesignRaisedButton}" Margin="4,0"/>
                         </WrapPanel>
                     </Border>
 
