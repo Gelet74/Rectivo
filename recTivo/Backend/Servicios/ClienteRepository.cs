@@ -7,7 +7,7 @@ public class ClienteRepository : GenericRepository<Cliente>, IClienteRepository
 {
     public ClienteRepository(RectivoContext context) : base(context) { }
 
-    public async Task<IEnumerable<Cliente>> GetAllAsync()
+    public override async Task<IEnumerable<Cliente>> GetAllAsync()
     {
         return await _dbSet.ToListAsync();
     }

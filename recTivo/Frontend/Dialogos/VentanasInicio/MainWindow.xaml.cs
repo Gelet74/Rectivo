@@ -21,7 +21,7 @@ namespace recTivo
     public partial class MainWindow : MetroWindow, INotifyPropertyChanged
     {
         private readonly IServiceProvider _serviceProvider;
-        private UIElement _dashboardInicial;
+        private UIElement? _dashboardInicial;
 
         public MainWindow(IServiceProvider serviceProvider)
         {
@@ -139,9 +139,9 @@ namespace recTivo
 
         private async Task CargarTotalesAsync()
         {
-            var articuloRepo = _serviceProvider.GetService<ArticuloRepository>();
-            var clienteRepo = _serviceProvider.GetService<ClienteRepository>();
-            var empleadoRepo = _serviceProvider.GetService<EmpleadoRepository>();
+            var articuloRepo = _serviceProvider.GetService<ArticuloRepository>()!;
+            var clienteRepo = _serviceProvider.GetService<ClienteRepository>()!;
+            var empleadoRepo = _serviceProvider.GetService<EmpleadoRepository>()!;
 
             TotalArticulos = (await articuloRepo.GetAllAsync()).Count();
             TotalClientes = (await clienteRepo.GetAllAsync()).Count();
@@ -187,8 +187,9 @@ namespace recTivo
                     break;
                 case "Listar artículos":
                     {
-                        panelPrincipal.Children.Clear();
                         var uc = _serviceProvider.GetService<UCListadoArticulos>();
+                        if (uc == null) break;
+                        panelPrincipal.Children.Clear();
                         uc.SolicitarCierre += () =>
                         {
                             panelPrincipal.Children.Remove(uc);
@@ -216,8 +217,9 @@ namespace recTivo
                     break;
                 case "Listar clientes":
                     {
-                        panelPrincipal.Children.Clear();
                         var uc = _serviceProvider.GetService<UCListadoClientes>();
+                        if (uc == null) break;
+                        panelPrincipal.Children.Clear();
                         uc.SolicitarCierre += () =>
                         {
                             panelPrincipal.Children.Remove(uc);
@@ -282,8 +284,8 @@ namespace recTivo
                     break;
                 case "Listar órdenes":
                     {
-                        panelPrincipal.Children.Clear();
                         var uc = _serviceProvider.GetRequiredService<UCListadoOrdenes>();
+                        panelPrincipal.Children.Clear();
                         uc.SolicitarCierre += () =>
                         {
                             panelPrincipal.Children.Remove(uc);
@@ -294,8 +296,8 @@ namespace recTivo
                     }
                 case "Cerrar orden":
                     {
-                        panelPrincipal.Children.Clear();
                         var uc = _serviceProvider.GetRequiredService<UCCerrarFase>();
+                        panelPrincipal.Children.Clear();
                         uc.SolicitarCierre += () =>
                         {
                             uc.LimpiarHandlers();
@@ -317,20 +319,26 @@ namespace recTivo
             switch (item.Content.ToString())
             {
                 case "Crear pedido":
-                    var dlgCrear = _serviceProvider.GetService<DialogoPedidos>();
-                    dlgCrear.tabControl.SelectedIndex = 0;
-                    dlgCrear.ShowDialog();
+                    if (_serviceProvider.GetService<DialogoPedidos>() is { } dlgCrear)
+                    {
+                        dlgCrear.tabControl.SelectedIndex = 0;
+                        dlgCrear.ShowDialog();
+                    }
                     break;
                 case "Cerrar pedido":
-                    var dlgCerrar = _serviceProvider.GetService<DialogoPedidos>();
-                    dlgCerrar.tabControl.SelectedIndex = 1;
-                    dlgCerrar.ViewModel.FiltrarSoloPendientes();
-                    dlgCerrar.ShowDialog();
+                    if (_serviceProvider.GetService<DialogoPedidos>() is { } dlgCerrar)
+                    {
+                        dlgCerrar.tabControl.SelectedIndex = 1;
+                        dlgCerrar.ViewModel.FiltrarSoloPendientes();
+                        dlgCerrar.ShowDialog();
+                    }
                     break;
                 case "Listar pedidos":
-                    var dlgListar = _serviceProvider.GetService<DialogoPedidos>();
-                    dlgListar.tabControl.SelectedIndex = 1;
-                    dlgListar.ShowDialog();
+                    if (_serviceProvider.GetService<DialogoPedidos>() is { } dlgListar)
+                    {
+                        dlgListar.tabControl.SelectedIndex = 1;
+                        dlgListar.ShowDialog();
+                    }
                     break;
             }
 
@@ -348,12 +356,11 @@ namespace recTivo
 
         private void Menu_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            // Solo bloquar Escape si no hay un UC activo que deba manejarlo
             if (e.Key == Key.Escape && !HayUCActivo())
                 e.Handled = true;
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
         protected void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

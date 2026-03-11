@@ -7,8 +7,6 @@ namespace recTivo.Backend.Repos;
 
 public class EmpleadoRepository : GenericRepository<Empleado>
 {
-    private readonly ILogger<GenericRepository<Empleado>> _logger;
-
     public EmpleadoRepository(RectivoContext context, ILogger<GenericRepository<Empleado>> logger)
         : base(context, logger)
     {
@@ -22,26 +20,26 @@ public class EmpleadoRepository : GenericRepository<Empleado>
         _logger?.LogInformation("Validando credenciales para {Username}", username);
 
         var empleado = await _dbSet
-            .Include(e => e.Rol)
-                .ThenInclude(r => r.Permisos)
-            .FirstOrDefaultAsync(e => e.Username == username);
+                    .Include(e => e.Rol!)
+                        .ThenInclude(r => r.Permisos)
+                    .FirstOrDefaultAsync(e => e.Username == username);
 
         if (empleado == null)
             return null;
 
-        if (PasswordService.Verify(password, empleado.Password))
+        if (!string.IsNullOrEmpty(empleado.Password) && PasswordService.Verify(password, empleado.Password))
             return empleado;
 
         return null;
     }
 
-    public async Task<IEnumerable<Empleado>> GetAllAsync()
+    public override async Task<IEnumerable<Empleado>> GetAllAsync()
     {
         return await _context.Empleados
                              .Include(e => e.Rol)
                              .ToListAsync();
     }
-    public async Task DeleteAsync(int id)
+    public override async Task DeleteAsync(int id)
     {
         var empleado = await _dbSet.FindAsync(id);
 

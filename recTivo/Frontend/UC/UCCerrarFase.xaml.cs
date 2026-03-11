@@ -11,7 +11,6 @@ namespace recTivo.Frontend.UC
     {
         private readonly MVOrden _vm;
         public event Action? SolicitarCierre;
-        private bool _escapeEnCurso = false;
 
         public UCCerrarFase(MVOrden vm)
         {
@@ -42,22 +41,8 @@ namespace recTivo.Frontend.UC
         {
             if (e.Key == Key.Escape)
             {
-                if (_escapeEnCurso) { e.Handled = true; return; }
-
-                _escapeEnCurso = true;
                 e.Handled = true;
-                try
-                {
-                    var ownerWindow = Window.GetWindow(this);
-                    var dialog = new ConfirmacionDialogo { Owner = ownerWindow };
-                    bool? result = dialog.ShowDialog();
-                    if (result == true && dialog.Confirmado)
-                        SolicitarCierre?.Invoke();
-                }
-                finally
-                {
-                    _escapeEnCurso = false;
-                }
+                SolicitarCierre?.Invoke();
             }
         }
 

@@ -12,18 +12,19 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
         <!-- CABECERA CON BOTÓN CAMBIAR USUARIO -->
-        <Grid>
+        <Grid Grid.Row="0">
             <StackPanel Orientation="Vertical" HorizontalAlignment="Left">
                 <TextBlock Text="Panel principal"
                            FontSize="26"
                            FontWeight="Bold"
                            Foreground="White"/>
 
-                <TextBlock FontSize="16" Margin="0,5,0,20" Foreground="White">
+                <TextBlock FontSize="16" Margin="0,5,0,10" Foreground="#D0D0D0">
                     <Run Text="Bienvenido, "/>
                     <Run Text="{Binding UsuarioLogueado}"/>
                 </TextBlock>
@@ -46,14 +47,106 @@
             </Button>
         </Grid>
 
-        <!-- TARJETAS -->
-        <UniformGrid Grid.Row="1" Columns="4" Margin="0,10,0,0" HorizontalAlignment="Stretch">
+        <!-- ACCESOS RÁPIDOS (arriba) -->
+        <StackPanel Grid.Row="1" Margin="0,0,0,20">
+            <TextBlock Text="Accesos rápidos"
+                       FontSize="16"
+                       FontWeight="Bold"
+                       Foreground="#D0D0D0"
+                       Margin="0,0,0,8"/>
+
+            <WrapPanel ItemHeight="50" ItemWidth="170">
+                <!-- Crear artículo -->
+                <Button Content="Crear artículo"
+                        Width="170"
+                        Height="50"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Margin="0,0,10,8"
+                        Background="#FF9800"
+                        Foreground="White"
+                        FontWeight="Bold"
+                        FontSize="13"
+                        x:Name="btnCrearArticulo" Click="BtnCrearArticulo_Click"/>
+
+                <!-- Crear cliente -->
+                <Button Content="Crear cliente"
+                        Width="170"
+                        Height="50"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Margin="0,0,10,8"
+                        Background="#FF9800"
+                        Foreground="White"
+                        FontWeight="Bold"
+                        FontSize="13"
+                        x:Name="btnCrearCliente" Click="BtnCrearCliente_Click"/>
+
+                <!-- Crear empleado -->
+                <Button Content="Crear empleado"
+                        Width="170"
+                        Height="50"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Margin="0,0,10,8"
+                        Background="#FF9800"
+                        Foreground="White"
+                        FontWeight="Bold"
+                        FontSize="13"
+                        x:Name="btnCrearEmpleado" Click="BtnCrearEmpleado_Click"/>
+
+                <!-- Crear escandallo -->
+                <Button Content="Crear escandallo"
+                        Width="170"
+                        Height="50"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Margin="0,0,10,8"
+                        Background="#FF9800"
+                        Foreground="White"
+                        FontWeight="Bold"
+                        FontSize="13"
+                        x:Name="btnCrearEscandallo" Click="BtnCrearEscandallo_Click"/>
+
+                <!-- Procesar orden -->
+                <Button x:Name="btnProcesarOrden" Content="Procesar orden"
+                        Width="170"
+                        Height="50"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Margin="0,0,10,8"
+                        Background="#FF9800"
+                        Foreground="White"
+                        FontWeight="Bold"
+                        FontSize="13"
+                        Click="BtnProcesarOrden_Click"/>
+
+                <!-- Crear pedido -->
+                <Button x:Name="btnCrearPedido" Content="Crear pedido"
+                        Width="170"
+                        Height="50"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Margin="0,0,10,8"
+                        Background="#FF9800"
+                        Foreground="White"
+                        FontWeight="Bold"
+                        FontSize="13"
+                        Click="btnCrearPedido_Click"/>
+            </WrapPanel>
+        </StackPanel>
+
+        <!-- SEPARADOR -->
+        <Separator Grid.Row="2" Background="#555555" Margin="0,0,0,16"/>
+
+        <!-- TARJETAS DE TOTALES (debajo de accesos rápidos) -->
+        <UniformGrid Grid.Row="3" Columns="4" HorizontalAlignment="Stretch" VerticalAlignment="Top">
 
             <!-- Artículos -->
             <Border Background="#3A3A3C"
                     CornerRadius="10"
                     Padding="15"
-                    Margin="10">
+                    Margin="0,0,10,0">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
@@ -61,33 +154,31 @@
                     </Grid.ColumnDefinitions>
 
                     <Image Source="/Recursos/Iconos/Articulos.png"
-                           Width="55"
-                           Height="55"
+                           Width="45"
+                           Height="45"
                            VerticalAlignment="Center"
-                           Margin="10,0,15,0"/>
+                           Margin="5,0,12,0"/>
 
-                    <StackPanel Grid.Column="1"
-                                VerticalAlignment="Center">
+                    <StackPanel Grid.Column="1" VerticalAlignment="Center">
                         <TextBlock Text="Total Artículos"
                                    Foreground="#FF9800"
-                                   FontSize="16"
+                                   FontSize="14"
                                    FontWeight="Bold"
-                                   Margin="20,0,0,5"/>
-
+                                   Margin="0,0,0,4"/>
                         <TextBlock Text="{Binding TotalArticulos}"
                                    Foreground="White"
-                                   FontSize="32"
-                                   FontWeight="Bold"
-                                   Margin="20,0,0,5"/>
+                                   Margin="40,0,0,0"
+                                   FontSize="30"
+                                   FontWeight="Bold"/>
                     </StackPanel>
                 </Grid>
             </Border>
 
             <!-- Clientes -->
-            <Border Background="#3A3A3C" 
-                    CornerRadius="8" 
-                    Padding="15" 
-                    Margin="10">
+            <Border Background="#3A3A3C"
+                    CornerRadius="8"
+                    Padding="15"
+                    Margin="0,0,10,0">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
@@ -95,33 +186,31 @@
                     </Grid.ColumnDefinitions>
 
                     <Image Source="/Recursos/Iconos/Clientes.png"
-                           Width="55"
-                           Height="55"
+                           Width="45"
+                           Height="45"
                            VerticalAlignment="Center"
-                           Margin="10,0,15,0"/>
+                           Margin="5,0,12,0"/>
 
-                    <StackPanel Grid.Column="1"
-                                VerticalAlignment="Center">
+                    <StackPanel Grid.Column="1" VerticalAlignment="Center">
                         <TextBlock Text="Total Clientes"
                                    Foreground="#FF9800"
-                                   FontSize="16"
+                                   FontSize="14"
                                    FontWeight="Bold"
-                                   Margin="20,0,0,5"/>
-
+                                   Margin="0,0,0,4"/>
                         <TextBlock Text="{Binding TotalClientes}"
                                    Foreground="White"
-                                   FontSize="32"
-                                   FontWeight="Bold"
-                                   Margin="20,0,0,5"/>
+                                   Margin="70,0,0,0"
+                                   FontSize="30"
+                                   FontWeight="Bold"/>
                     </StackPanel>
                 </Grid>
             </Border>
 
             <!-- Órdenes -->
-            <Border Background="#3A3A3C" 
-                    CornerRadius="8" 
-                    Padding="15" 
-                    Margin="10">
+            <Border Background="#3A3A3C"
+                    CornerRadius="8"
+                    Padding="15"
+                    Margin="0,0,10,0">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
@@ -129,33 +218,31 @@
                     </Grid.ColumnDefinitions>
 
                     <Image Source="/Recursos/Iconos/Ordenes.png"
-                           Width="55"
-                           Height="55"
+                           Width="45"
+                           Height="45"
                            VerticalAlignment="Center"
-                           Margin="10,0,15,0"/>
+                           Margin="5,0,12,0"/>
 
-                    <StackPanel Grid.Column="1"
-                                VerticalAlignment="Center">
+                    <StackPanel Grid.Column="1" VerticalAlignment="Center">
                         <TextBlock Text="Órdenes Abiertas"
                                    Foreground="#FF9800"
-                                   FontSize="16"
+                                   FontSize="14"
                                    FontWeight="Bold"
-                                   Margin="20,0,0,5"/>
-
+                                   Margin="0,0,0,4"/>
                         <TextBlock Text="{Binding TotalOrdenes}"
                                    Foreground="White"
-                                   FontSize="32"
-                                   FontWeight="Bold"
-                                   Margin="20,0,0,5"/>
+                                   Margin="90,0,0,0"
+                                   FontSize="30"
+                                   FontWeight="Bold"/>
                     </StackPanel>
                 </Grid>
             </Border>
 
             <!-- Empleados -->
-            <Border Background="#3A3A3C" 
-                    CornerRadius="8" 
-                    Padding="15" 
-                    Margin="10">
+            <Border Background="#3A3A3C"
+                    CornerRadius="8"
+                    Padding="15"
+                    Margin="0">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
@@ -163,104 +250,25 @@
                     </Grid.ColumnDefinitions>
 
                     <Image Source="/Recursos/Iconos/Empleado.png"
-                           Width="55"
-                           Height="55"
+                           Width="45"
+                           Height="45"
                            VerticalAlignment="Center"
-                           Margin="10,0,15,0"/>
+                           Margin="5,0,12,0"/>
 
-                    <StackPanel Grid.Column="1"
-                                VerticalAlignment="Center">
-                        <TextBlock Text="Total Empleados" 
-                                   Foreground="#FF9800" 
-                                   FontSize="16" 
+                    <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                        <TextBlock Text="Total Empleados"
+                                   Foreground="#FF9800"
+                                   FontSize="14"
                                    FontWeight="Bold"
-                                   Margin="20,0,0,5"/>
-
-                        <TextBlock Text="{Binding TotalEmpleados}" 
-                                   Foreground="White" 
-                                   FontSize="28" 
-                                   FontWeight="Bold" 
-                                   Margin="20,0,0,5"/>
+                                   Margin="0,0,0,4"/>
+                        <TextBlock Text="{Binding TotalEmpleados}"
+                                   Foreground="White"
+                                   Margin="70,0,0,0"
+                                   FontSize="30"
+                                   FontWeight="Bold"/>
                     </StackPanel>
                 </Grid>
             </Border>
         </UniformGrid>
-
-        <!-- ACCESOS RÁPIDOS -->
-        <StackPanel Grid.Row="2" Margin="0,30,0,0">
-            <TextBlock Text="Accesos rápidos"
-                       FontSize="18"
-                       FontWeight="Bold"
-                       Foreground="White"
-                       Margin="0,0,0,10"/>
-
-            <WrapPanel ItemHeight="60" ItemWidth="180">
-                <!-- Crear artículo -->
-                <Button Content="Crear artículo"
-                        Width="180"
-                        Height="60"
-                        HorizontalAlignment="Center"
-                        Margin="10,0,10,0"
-                        Background="#FF9800"
-                        Foreground="White"
-                        FontWeight="Bold"
-                        x:Name="btnCrearArticulo" Click="BtnCrearArticulo_Click"/>
-
-                <!-- Crear cliente -->
-                <Button Content="Crear cliente"
-                        Width="180"
-                        Height="60"
-                        HorizontalAlignment="Center"
-                        Margin="10,0,0,0"
-                        Background="#FF9800"
-                        Foreground="White"
-                        FontWeight="Bold"
-                        x:Name="btnCrearCliente" Click="BtnCrearCliente_Click"/>
-
-                <!-- Crear empleado -->
-                <Button Content="Crear empleado"
-                        Width="180"
-                        Height="60"
-                        HorizontalAlignment="Center"
-                        Margin="10,0,10,0"
-                        Background="#FF9800"
-                        Foreground="White"
-                        FontWeight="Bold"
-                        x:Name="btnCrearEmpleado" Click="BtnCrearEmpleado_Click"/>
-
-                <!-- Crear escandallo -->
-                <Button Content="Crear escandallo"
-                        Width="180"
-                        Height="60"
-                        HorizontalAlignment="Center"
-                        Margin="10,0,10,0"
-                        Background="#FF9800"
-                        Foreground="White"
-                        FontWeight="Bold"
-                        x:Name="btnCrearEscandallo" Click="BtnCrearEscandallo_Click"/>
-
-                <!-- Procesar orden -->
-                <Button x:Name="btnProcesarOrden" Content="Procesar orden"
-                        Width="180"
-                        Height="60"
-                        HorizontalAlignment="Center"
-                        Margin="10,0,10,0"
-                        Background="#FF9800"
-                        Foreground="White"
-                        FontWeight="Bold"
-                        Click="BtnProcesarOrden_Click"/>
-
-                <!-- Crear pedido (deshabilitado) -->
-                <Button x:Name="btnCrearPedido" Content="Crear pedido"
-                        Width="180"
-                        Height="60"
-                        HorizontalAlignment="Center"
-                        Margin="10,0,10,0"
-                        Background="#FF9800"
-                        Foreground="White"
-                        FontWeight="Bold"
-                        Click="btnCrearPedido_Click"/>
-            </WrapPanel>
-        </StackPanel>
     </Grid>
 </UserControl>

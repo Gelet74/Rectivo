@@ -16,7 +16,7 @@ namespace recTivo.Backend.Modelos
 
         [Column("CodigoArticulo")]
         [MaxLength(10)]
-        public string CodigoArticulo { get; set; }
+        public string CodigoArticulo { get; set; } = null!;
 
         [Column("Cantidad")]
         public decimal? Cantidad { get; set; }

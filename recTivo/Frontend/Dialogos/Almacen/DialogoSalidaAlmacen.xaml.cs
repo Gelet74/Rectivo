@@ -18,6 +18,11 @@ namespace recTivo.Frontend.Dialogos
             Loaded += async (_, __) => await vm.MVArticulo.Inicializa();
         }
 
+        private void TextBox_SoloNumeros(object sender, TextCompositionEventArgs e)
+        {
+            e.Handled = !e.Text.All(c => char.IsDigit(c) || c == ',' || c == '.');
+        }
+
         protected override void OnPreviewKeyDown(KeyEventArgs e)
         {
             if (e.Key == Key.Escape)

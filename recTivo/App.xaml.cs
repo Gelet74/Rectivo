@@ -148,7 +148,7 @@ namespace recTivo
             services.AddTransient<ConfirmacionDialogo>();
         }
 
-        protected override async void OnStartup(StartupEventArgs e)
+        protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
 

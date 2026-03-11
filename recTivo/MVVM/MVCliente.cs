@@ -10,13 +10,13 @@ namespace recTivo.MVVM
 {
     public class MVCliente : MVBase
     {
-        private Cliente _cliente;
+        private Cliente? _cliente;
 
         private readonly ClienteRepository _clienteRepository;
         private readonly RectivoContext _context;
         private readonly ArticuloRepository _articuloRepository;
 
-        public ListCollectionView ClientesView { get; private set; }
+        public ListCollectionView? ClientesView { get; private set; }
 
         public MVCliente(
             ClienteRepository clienteRepository,
@@ -45,20 +45,20 @@ namespace recTivo.MVVM
         // SELECCIÓN
         // ============================================================
 
-        private Cliente _clienteSeleccionado;
-        public Cliente ClienteSeleccionado
+        private Cliente? _clienteSeleccionado;
+        public Cliente? ClienteSeleccionado
         {
             get => _clienteSeleccionado;
             set => SetProperty(ref _clienteSeleccionado, value);
         }
 
         // ============================================================
-        // CAMPOS DEL FORMULARIO (con [Required] para validación visual)
+        // CAMPOS DEL FORMULARIO
         // ============================================================
 
-        private string _nombre;
+        private string? _nombre;
         [Required(ErrorMessage = "El Nombre es obligatorio")]
-        public string Nombre
+        public string? Nombre
         {
             get => _nombre;
             set
@@ -68,9 +68,9 @@ namespace recTivo.MVVM
             }
         }
 
-        private string _apellido1;
+        private string? _apellido1;
         [Required(ErrorMessage = "El primer apellido es obligatorio")]
-        public string Apellido1
+        public string? Apellido1
         {
             get => _apellido1;
             set
@@ -80,16 +80,16 @@ namespace recTivo.MVVM
             }
         }
 
-        private string _apellido2;
-        public string Apellido2
+        private string? _apellido2;
+        public string? Apellido2
         {
             get => _apellido2;
             set => SetProperty(ref _apellido2, value);
         }
 
-        private string _dni;
+        private string? _dni;
         [Required(ErrorMessage = "El DNI es obligatorio")]
-        public string Dni
+        public string? Dni
         {
             get => _dni;
             set
@@ -99,15 +99,15 @@ namespace recTivo.MVVM
             }
         }
 
-        private string _telefono;
-        public string Telefono
+        private string? _telefono;
+        public string? Telefono
         {
             get => _telefono;
             set => SetProperty(ref _telefono, value);
         }
 
-        private string _filtroNombre;
-        public string FiltroNombre
+        private string? _filtroNombre;
+        public string? FiltroNombre
         {
             get => _filtroNombre;
             set
@@ -117,8 +117,8 @@ namespace recTivo.MVVM
             }
         }
 
-        private string _filtroApellido1;
-        public string FiltroApellido1
+        private string? _filtroApellido1;
+        public string? FiltroApellido1
         {
             get => _filtroApellido1;
             set
@@ -128,8 +128,8 @@ namespace recTivo.MVVM
             }
         }
 
-        private string _filtroApellido2;
-        public string FiltroApellido2
+        private string? _filtroApellido2;
+        public string? FiltroApellido2
         {
             get => _filtroApellido2;
             set
@@ -139,8 +139,8 @@ namespace recTivo.MVVM
             }
         }
 
-        private string _DNI;
-        public string DNI
+        private string? _DNI;
+        public string? DNI
         {
             get => _DNI;
             set
@@ -150,9 +150,9 @@ namespace recTivo.MVVM
             }
         }
 
-        private string _usuario;
+        private string? _usuario;
         [Required(ErrorMessage = "El Usuario es obligatorio")]
-        public string Usuario
+        public string? Usuario
         {
             get => _usuario;
             set
@@ -162,9 +162,9 @@ namespace recTivo.MVVM
             }
         }
 
-        private string _password;
+        private string? _password;
         [Required(ErrorMessage = "La Contraseña es obligatoria")]
-        public string Password
+        public string? Password
         {
             get => _password;
             set
@@ -174,26 +174,29 @@ namespace recTivo.MVVM
             }
         }
 
-        public List<string> NombreLista => ListaClientes?
+        public List<string> NombreLista => ListaClientes
             .Select(a => a.Nombre)
             .Where(c => !string.IsNullOrWhiteSpace(c))
+            .Select(c => c!)
             .Distinct()
             .OrderBy(c => c)
             .ToList();
 
-        public List<string> Apellido1Lista => ListaClientes?
-           .Select(a => a.Apellido1)
-           .Where(d => !string.IsNullOrWhiteSpace(d))
-           .Distinct()
-           .OrderBy(d => d)
-           .ToList();
+        public List<string> Apellido1Lista => ListaClientes
+            .Select(a => a.Apellido1)
+            .Where(d => !string.IsNullOrWhiteSpace(d))
+            .Select(d => d!)
+            .Distinct()
+            .OrderBy(d => d)
+            .ToList();
 
-        public List<string> Apellido2Lista => ListaClientes?
-          .Select(a => a.Apellido2)
-          .Where(d => !string.IsNullOrWhiteSpace(d))
-          .Distinct()
-          .OrderBy(d => d)
-          .ToList();
+        public List<string> Apellido2Lista => ListaClientes
+            .Select(a => a.Apellido2)
+            .Where(d => !string.IsNullOrWhiteSpace(d))
+            .Select(d => d!)
+            .Distinct()
+            .OrderBy(d => d)
+            .ToList();
 
         // ============================================================
         // VALIDACIÓN BOTÓN ALTA
@@ -274,7 +277,7 @@ namespace recTivo.MVVM
                 Apellido2 = Apellido2,
                 Dni = Dni,
                 Telefono = Telefono,
-                Usuario = Usuario,
+                Usuario = Usuario ?? string.Empty,
                 Password = BCrypt.Net.BCrypt.HashPassword(Password)
             };
 
@@ -289,10 +292,10 @@ namespace recTivo.MVVM
         // CARGAR CLIENTE SELECCIONADO
         // ============================================================
 
-        public async Task<bool> CargarClienteSeleccionadoAsync()
+        public Task<bool> CargarClienteSeleccionadoAsync()
         {
             if (ClienteSeleccionado == null)
-                return false;
+                return Task.FromResult(false);
 
             Nombre = ClienteSeleccionado.Nombre;
             Apellido1 = ClienteSeleccionado.Apellido1;
@@ -310,7 +313,7 @@ namespace recTivo.MVVM
             OnPropertyChanged(nameof(Usuario));
             OnPropertyChanged(nameof(Password));
 
-            return true;
+            return Task.FromResult(true);
         }
 
         // ============================================================
@@ -327,9 +330,11 @@ namespace recTivo.MVVM
             ClienteSeleccionado.Apellido2 = Apellido2;
             ClienteSeleccionado.Dni = Dni;
             ClienteSeleccionado.Telefono = Telefono;
-            ClienteSeleccionado.Usuario = Usuario;
+            ClienteSeleccionado.Usuario = Usuario ?? string.Empty;
 
-            if (!BCrypt.Net.BCrypt.Verify(Password, ClienteSeleccionado.Password))
+            if (!string.IsNullOrEmpty(Password) &&
+                !string.IsNullOrEmpty(ClienteSeleccionado.Password) &&
+                !BCrypt.Net.BCrypt.Verify(Password, ClienteSeleccionado.Password))
             {
                 ClienteSeleccionado.Password = BCrypt.Net.BCrypt.HashPassword(Password);
             }
@@ -373,8 +378,8 @@ namespace recTivo.MVVM
         // LISTAS FILTRADAS PARA COMBOBOX
         // ============================================================
 
-        private List<string> _listaNombresFiltrados;
-        public List<string> ListaNombresFiltrados
+        private List<string>? _listaNombresFiltrados;
+        public List<string>? ListaNombresFiltrados
         {
             get => _listaNombresFiltrados;
             set => SetProperty(ref _listaNombresFiltrados, value);

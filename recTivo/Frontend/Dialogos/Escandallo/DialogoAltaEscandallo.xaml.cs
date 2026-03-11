@@ -18,14 +18,14 @@ namespace recTivo.Frontend.Dialogos.Escandallo
             DataContext = _vm;
             Loaded += async (_, __) => await _vm.Inicializa();
 
-            // Validar al cambiar el artículo final seleccionado
             cmbArticuloFinal.SelectionChanged += CmbArticuloFinal_SelectionChanged;
         }
 
         private async void CmbArticuloFinal_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var articuloElegido = cmbArticuloFinal.SelectedItem as recTivo.Backend.Modelos.Articulo;
-            await _vm.ValidarArticuloFinal(articuloElegido);
+            if (articuloElegido != null)
+                await _vm.ValidarArticuloFinal(articuloElegido);
         }
 
         protected override void OnPreviewKeyDown(KeyEventArgs e)
@@ -86,7 +86,6 @@ namespace recTivo.Frontend.Dialogos.Escandallo
 
         private void TreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-            // reservado para selección futura
         }
 
         private async void BtnGuardar_Click(object sender, RoutedEventArgs e)

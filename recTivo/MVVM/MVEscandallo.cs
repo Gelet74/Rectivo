@@ -195,7 +195,7 @@ namespace recTivo.MVVM
             set
             {
                 SetProperty(ref _articuloSeleccionado, value);
-                CodigoSeleccionado = value?.Codigo;
+                CodigoSeleccionado = value.Codigo;
             }
         }
 

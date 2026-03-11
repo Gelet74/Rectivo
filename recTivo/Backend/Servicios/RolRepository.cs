@@ -21,7 +21,8 @@ namespace recTivo.Backend.Repos
 
         public async Task<Rol> GetByIdAsync(int id)
         {
-            return await _context.Rols.FirstOrDefaultAsync(r => r.Id == id);
+            return await _context.Rols.FirstOrDefaultAsync(r => r.Id == id)
+                ?? throw new Exception($"Rol con ID {id} no encontrado.");
         }
 
         public async Task AddAsync(Rol rol)

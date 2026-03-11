@@ -8,7 +8,6 @@ namespace recTivo.Backend.Servicios
 {
   public class UsuarioRepository : GenericRepository<Empleado>
     {
-        private readonly ILogger<GenericRepository<Empleado>> _logger;
         /// <summary>
         /// Crea una nueva instancia de <see cref="UsuarioRepository"/>.
         /// </summary>
@@ -47,7 +46,7 @@ namespace recTivo.Backend.Servicios
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al autenticar usuario {Username}.", username);
+                _logger?.LogError(ex, "Error al autenticar usuario {Username}.", username);
                 throw;
             }
         }
@@ -71,14 +70,14 @@ namespace recTivo.Backend.Servicios
                 var usuario = await GetByIdAsync(userId).ConfigureAwait(false);
                 if (usuario == null)
                 {
-                    _logger.LogWarning("Cambio de contraseña: usuario con id {Id} no encontrado.", userId);
+                    _logger?.LogWarning("Cambio de contraseña: usuario con id {Id} no encontrado.", userId);
                     return false;
                 }
 
                 // Verificar contraseña actual (simple). Si usas hashing, verifica el hash en lugar de comparar strings.
                 if (usuario.Password != currentPassword)
                 {
-                    _logger.LogWarning("Cambio de contraseña fallido: contraseña actual incorrecta para usuario id {Id}.", userId);
+                    _logger?.LogWarning("Cambio de contraseña fallido: contraseña actual incorrecta para usuario id {Id}.", userId);
                     return false;
                 }
 
@@ -88,12 +87,12 @@ namespace recTivo.Backend.Servicios
                 _context.Update(usuario);
                 await _context.SaveChangesAsync().ConfigureAwait(false);
 
-                _logger.LogInformation("Contraseña actualizada correctamente para usuario id {Id}.", userId);
+                _logger?.LogInformation("Contraseña actualizada correctamente para usuario id {Id}.", userId);
                 return true;
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al cambiar la contraseña del usuario id {Id}.", userId);
+                _logger?.LogError(ex, "Error al cambiar la contraseña del usuario id {Id}.", userId);
                 throw;
             }
         }

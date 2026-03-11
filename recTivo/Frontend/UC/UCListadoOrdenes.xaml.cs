@@ -13,7 +13,6 @@ namespace recTivo.Frontend.UC
     public partial class UCListadoOrdenes : UserControl
     {
         private readonly MVOrden _vm;
-        private bool _escapeEnCurso = false;
 
         public event Action? SolicitarCierre;
 
@@ -75,21 +74,12 @@ namespace recTivo.Frontend.UC
             Process.Start(new ProcessStartInfo(ruta) { UseShellExecute = true });
         }
 
-        // ── Escape ───────────────────────────────────────────────────────
         protected override void OnPreviewKeyDown(KeyEventArgs e)
         {
             if (e.Key == Key.Escape)
             {
-                if (_escapeEnCurso) { e.Handled = true; return; }
-                _escapeEnCurso = true;
                 e.Handled = true;
-                try
-                {
-                    var dialog = new ConfirmacionDialogo { Owner = Window.GetWindow(this) };
-                    if (dialog.ShowDialog() == true && dialog.Confirmado)
-                        SolicitarCierre?.Invoke();
-                }
-                finally { _escapeEnCurso = false; }
+                SolicitarCierre?.Invoke();
             }
             else base.OnPreviewKeyDown(e);
         }

@@ -1,8 +1,6 @@
 ﻿using recTivo.MVVM.Base;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace recTivo.Backend.Modelos
 {
@@ -54,9 +52,9 @@ namespace recTivo.Backend.Modelos
         // VALIDACIONES (IDataErrorInfo)
         // ===========================
 
-        public string Error => string.Empty;
+        public override string Error => string.Empty;
 
-        public string this[string columnName]
+        public override string this[string columnName]
         {
             get
             {

@@ -5,7 +5,6 @@ using recTivo.Informes;
 using recTivo.MVVM;
 using System.Diagnostics;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace recTivo.Frontend.Dialogos.Escandallo
@@ -44,7 +43,7 @@ namespace recTivo.Frontend.Dialogos.Escandallo
             await _vm.CargarEscandallo(codigo);
         }
 
-        // ── PDF: escandallo cargado actualmente ──────────────────────────
+        // ── PDF: escandallo cargado actualmente ─
         private void BtnExportarEscandallo_Click(object sender, RoutedEventArgs e)
         {
             if (_vm.ArticuloFinal == null)
@@ -53,7 +52,6 @@ namespace recTivo.Frontend.Dialogos.Escandallo
                 return;
             }
 
-            // Construimos el objeto Escandallo a partir del ArticuloFinal cargado
             var escandallo = new recTivo.Backend.Modelos.Escandallo
             {
                 CodigoProducto = _vm.ArticuloFinal.Codigo,
@@ -61,14 +59,12 @@ namespace recTivo.Frontend.Dialogos.Escandallo
                 Descrip2 = _vm.ArticuloFinal.descrip2
             };
 
-            // Aplanar el árbol jerárquico de componentes en lista plana
             var componentes = AplanarComponentes(_vm.EscandalloActual);
 
             string ruta = PdfService.GenerarEscandallo(escandallo, componentes);
             Process.Start(new ProcessStartInfo(ruta) { UseShellExecute = true });
         }
 
-        // Helper: recorre el árbol de ComponenteEscandallo recursivamente
         private static IEnumerable<ComponenteEscandallo> AplanarComponentes(
             IEnumerable<ComponenteEscandallo> nodos)
         {
@@ -83,7 +79,8 @@ namespace recTivo.Frontend.Dialogos.Escandallo
 
         private void TreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-            _vm.ComponentePadreSeleccionado = e.NewValue as ComponenteEscandallo;
+            if (e.NewValue is ComponenteEscandallo componente)
+                _vm.ComponentePadreSeleccionado = componente;
         }
 
         protected override void OnPreviewKeyDown(KeyEventArgs e)

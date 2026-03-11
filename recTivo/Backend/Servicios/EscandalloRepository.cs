@@ -6,11 +6,9 @@ namespace recTivo.Backend.Repos
 {
     public class EscandalloRepository : GenericRepository<Escandallo>, IEscandalloRepository
     {
-        private readonly RectivoContext _context;
 
         public EscandalloRepository(RectivoContext context) : base(context)
         {
-            _context = context;
         }
 
         public override async Task<IEnumerable<Escandallo>> GetAllAsync()

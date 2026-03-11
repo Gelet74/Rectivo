@@ -5,11 +5,9 @@ namespace recTivo.Backend.Repos
 {
     public class ComponenteEscandalloRepository : GenericRepository<ComponenteEscandallo>, IRepository<ComponenteEscandallo>
     {
-        private readonly RectivoContext _context;
 
         public ComponenteEscandalloRepository(RectivoContext context) : base(context)
         {
-            _context = context;
         }
 
         /// <summary>

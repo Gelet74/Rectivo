@@ -1,7 +1,6 @@
 ﻿using di.proyecto.clase._2025.Frontend.Mensajes;
 using Microsoft.Extensions.DependencyInjection;
 using recTivo.Frontend.Dialogos.Clientes;
-using recTivo.Frontend.Dialogos.VentanasInicio;
 using recTivo.MVVM;
 using System.Windows;
 using System.Windows.Controls;
@@ -14,12 +13,11 @@ namespace recTivo.Frontend.UC
     /// </summary>
     public partial class UCListadoClientes : UserControl
     {
-        private bool _escapeEnCurso = false;
         private readonly MVCliente _mvCliente;
         private readonly IServiceProvider _serviceProvider;
-        private DialogoModificarCliente _dialogoModificarCliente;
+        private DialogoModificarCliente? _dialogoModificarCliente;
 
-        public event Action SolicitarCierre;
+        public event Action? SolicitarCierre;
         public UCListadoClientes(MVCliente mvCliente,
                                  IServiceProvider serviceProvider)
         {
@@ -30,7 +28,7 @@ namespace recTivo.Frontend.UC
             Loaded += async (_, __) =>
             {
                 DataContext = _mvCliente;
-                await _mvCliente.Inicializa();                
+                await _mvCliente.Inicializa();
 
                 Focusable = true;
                 Focus();
@@ -47,31 +45,8 @@ namespace recTivo.Frontend.UC
         {
             if (e.Key == Key.Escape)
             {
-                if (_escapeEnCurso)
-                {
-                    e.Handled = true;
-                    return;
-                }
-                _escapeEnCurso = true;
                 e.Handled = true;
-                try
-                {
-                    var ownerWindow = Window.GetWindow(this);
-
-                    var dialog = new ConfirmacionDialogo
-                    {
-                        Owner = ownerWindow
-                    };
-
-                    bool? result = dialog.ShowDialog();
-
-                    if (result == true && dialog.Confirmado)
-                        SolicitarCierre?.Invoke();
-                }
-                finally
-                {
-                    _escapeEnCurso = false;
-                }
+                SolicitarCierre?.Invoke();
             }
             else
             {
@@ -96,7 +71,7 @@ namespace recTivo.Frontend.UC
 
             _dialogoModificarCliente.ShowDialog();
         }
-        }
     }
+}
 
 

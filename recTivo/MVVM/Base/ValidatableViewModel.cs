@@ -24,17 +24,12 @@ namespace recTivo.MVVM.Base
             get
             {
                 var validationResults = new List<System.ComponentModel.DataAnnotations.ValidationResult>();
-
                 if (Validator.TryValidateProperty(
-                        GetType().GetProperty(columnName).GetValue(this)
-                        , new ValidationContext(this)
-                        {
-                            MemberName = columnName
-                        }
-                        , validationResults))
-                    return null;
-
-                return validationResults.First().ErrorMessage;
+                        GetType().GetProperty(columnName)?.GetValue(this),
+                        new ValidationContext(this) { MemberName = columnName },
+                        validationResults))
+                    return string.Empty;
+                return validationResults.First().ErrorMessage ?? string.Empty;
             }
         }
 
@@ -49,7 +44,7 @@ namespace recTivo.MVVM.Base
         /// <summary>
         /// Método para notificar a la vista que debe reevaluar la disponibilidad de los comandos.
         /// </summary>
-        protected void RaiseCommandsCanExecuteChanged()
+        protected new void RaiseCommandsCanExecuteChanged()
         {
             CommandManager.InvalidateRequerySuggested();
         }

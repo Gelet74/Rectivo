@@ -128,8 +128,8 @@ namespace recTivo.Frontend.UC
 
         private class DashboardData : INotifyPropertyChanged
         {
-            private string _usuarioLogueado;
-            public string UsuarioLogueado
+            private string? _usuarioLogueado;
+            public string? UsuarioLogueado
             {
                 get => _usuarioLogueado;
                 set { _usuarioLogueado = value; OnPropertyChanged(nameof(UsuarioLogueado)); }
@@ -164,7 +164,7 @@ namespace recTivo.Frontend.UC
                 set { _totalEmpleados = value; OnPropertyChanged(nameof(TotalEmpleados)); }
             }
 
-            public event PropertyChangedEventHandler PropertyChanged;
+            public event PropertyChangedEventHandler? PropertyChanged;
             protected void OnPropertyChanged(string name)
                 => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }

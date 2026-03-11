@@ -23,36 +23,34 @@ namespace recTivo.MVVM
             };
         }
 
-        // Propiedades de la UI (Binding)
-        private string _cantidad;
+        private string _cantidad = string.Empty;
         public string Cantidad
         {
             get => _cantidad;
             set { SetProperty(ref _cantidad, value); OnPropertyChanged(nameof(EsValido)); }
         }
 
-        private string _pasillo;
-        public string Pasillo
+        private string? _pasillo;
+        public string? Pasillo
         {
             get => _pasillo;
             set { SetProperty(ref _pasillo, value?.ToUpper()); OnPropertyChanged(nameof(EsValido)); }
         }
 
-        private string _estanteria;
+        private string _estanteria = string.Empty;
         public string Estanteria
         {
             get => _estanteria;
             set { SetProperty(ref _estanteria, value); OnPropertyChanged(nameof(EsValido)); }
         }
 
-        private string _hueco;
+        private string _hueco = string.Empty;
         public string Hueco
         {
             get => _hueco;
             set { SetProperty(ref _hueco, value); OnPropertyChanged(nameof(EsValido)); }
         }
 
-        // ── Validación: el botón solo se habilita cuando todo es correcto ──
         public bool EsValido =>
             MVArticulo.ArticuloSeleccionado != null &&
             int.TryParse(Cantidad, out int c) && c > 0 &&
@@ -60,7 +58,6 @@ namespace recTivo.MVVM
             int.TryParse(Estanteria, out _) &&
             int.TryParse(Hueco, out _);
 
-        // Mensajes de error por campo
         public string ErrorCantidad => !int.TryParse(Cantidad, out int c2) || c2 <= 0
             ? "Introduce un número mayor que 0" : "";
         public string ErrorPasillo => string.IsNullOrWhiteSpace(Pasillo)
@@ -82,7 +79,6 @@ namespace recTivo.MVVM
 
                 if (!int.TryParse(Cantidad, out int cantidadAIngresar) || cantidadAIngresar <= 0) return;
 
-                // CORREGIDO: validar Estanteria y Hueco antes de parsear
                 if (!int.TryParse(Estanteria, out int estanteria) || !int.TryParse(Hueco, out int hueco))
                 {
                     MensajeAdvertencia.Mostrar("AVISO", "Estantería y hueco deben ser números válidos.");
@@ -108,7 +104,6 @@ namespace recTivo.MVVM
                 }
                 else
                 {
-                    // CORREGIDO: avisar si la ubicación ya tiene un artículo diferente
                     if (ubicacion.IdArticulo != null && ubicacion.IdArticulo != articulo.IdArticulo)
                     {
                         MensajeError.Mostrar("ERROR", "Esa ubicación ya contiene un artículo diferente.");
@@ -122,7 +117,6 @@ namespace recTivo.MVVM
 
                 await _context.SaveChangesAsync();
 
-                // CORREGIDO: recalcular Stock como suma real de ubicaciones
                 articulo.Stock = await _context.Ubicacion
                     .Where(u => u.IdArticulo == articulo.IdArticulo)
                     .SumAsync(u => u.Cantidad);
@@ -190,7 +184,6 @@ namespace recTivo.MVVM
 
                 await _context.SaveChangesAsync();
 
-                // ── Recargar el artículo desde _context para evitar conflicto de tracking ──
                 var articuloDB = await _context.Articulos
                     .FirstOrDefaultAsync(a => a.IdArticulo == articulo.IdArticulo)
                     ?? throw new Exception("Artículo no encontrado en base de datos.");
@@ -201,7 +194,6 @@ namespace recTivo.MVVM
 
                 await _context.SaveChangesAsync();
 
-                // Sincronizar el objeto en memoria del ViewModel
                 articulo.Stock = articuloDB.Stock;
 
                 MensajeInformacion.Mostrar("ÉXITO",

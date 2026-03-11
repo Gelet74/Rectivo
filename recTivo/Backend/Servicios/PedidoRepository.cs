@@ -40,14 +40,10 @@ namespace recTivo.Backend.Repos
             await _context.SaveChangesAsync();
         }
 
-        // ── Cerrar pedido: marcar Entregado + descontar stock ───────────
-        // Todo ocurre dentro de una transacción: si algo falla a mitad,
-        // se hace rollback completo y la BD queda como estaba.
         public async Task CerrarPedidoAsync(
             int idPedido,
             Dictionary<string, int> ubicacionesPorArticulo)
         {
-            // Abrir transacción explícita
             await using var tx = await _context.Database.BeginTransactionAsync();
 
             try
@@ -60,14 +56,12 @@ namespace recTivo.Backend.Repos
 
                 foreach (var linea in pedido.Lineas)
                 {
-                    // 1) Descontar de articulo.stock
                     var articulo = await _context.Articulos
                         .FirstOrDefaultAsync(a => a.Codigo == linea.CodigoArticulo);
 
                     if (articulo != null)
-                        articulo.Stock = (byte)Math.Max(0, (int)articulo.Stock - linea.Cantidad);
+                        articulo.Stock = (byte)Math.Max(0, (articulo.Stock ?? 0) - linea.Cantidad);
 
-                    // 2) Descontar de la ubicación elegida por el usuario
                     if (ubicacionesPorArticulo.TryGetValue(linea.CodigoArticulo, out int idUbicacion))
                     {
                         var ub = await _context.Ubicacion
@@ -81,19 +75,16 @@ namespace recTivo.Backend.Repos
                 pedido.Estado = "Entregado";
                 pedido.FechaEntrega = DateTime.Today;
 
-                // Guardar todos los cambios en un único commit
                 await _context.SaveChangesAsync();
                 await tx.CommitAsync();
             }
             catch
             {
-                // Cualquier error → rollback completo, la BD queda intacta
                 await tx.RollbackAsync();
                 throw;
             }
         }
 
-        // ── Eliminar pedido (solo si está Pendiente) ────────────────────
         public async Task DeleteAsync(int idPedido)
         {
             var pedido = await _context.Pedidos.FindAsync(idPedido)
