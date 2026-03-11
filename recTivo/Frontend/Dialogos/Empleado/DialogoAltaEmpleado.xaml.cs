@@ -97,5 +97,12 @@ namespace recTivo.Frontend.Dialogos.Empleado
                 base.OnPreviewKeyDown(e);
             }
         }
+
+        private void txtPassword_PasswordChanged(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is MVEmpleado vm)
+                vm.Password = ((PasswordBox)sender).Password;
+
+        }
     }
 }

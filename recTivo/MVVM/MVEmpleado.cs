@@ -145,7 +145,7 @@ namespace recTivo.MVVM
                 Nombre = Empleado.Nombre,
                 Dni = Empleado.Dni,
                 Username = Empleado.Username,
-                Password = Empleado.Password,
+                Password = BCrypt.Net.BCrypt.HashPassword(Password),
                 IdRol = Empleado.Rol?.Id,
                 Estado = Estado
             };

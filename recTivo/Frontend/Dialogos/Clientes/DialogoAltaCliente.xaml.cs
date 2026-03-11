@@ -32,8 +32,6 @@ namespace recTivo.Frontend.Dialogos.Clientes
                 vm.OnErrorEvent(sender, e);
         }
 
-        // Fuerza que WPF evalúe todos los TextBox con ValidatesOnDataErrors
-        // para que aparezcan en rojo con su mensaje desde el inicio
         private void ForzarValidacion()
         {
             foreach (var tb in FindVisualChildren<TextBox>(this))

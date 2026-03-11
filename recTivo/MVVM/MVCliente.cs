@@ -26,6 +26,8 @@ namespace recTivo.MVVM
             _clienteRepository = clienteRepository;
             _context = context;
             _articuloRepository = articuloRepository;
+
+            _listaClientes = new ObservableCollection<Cliente>();
         }
 
         // ============================================================
@@ -278,7 +280,7 @@ namespace recTivo.MVVM
 
             await _clienteRepository.AddAsync(cliente);
             ListaClientes.Add(cliente);
-            ClientesView.Refresh();
+            ClientesView?.Refresh();
             LimpiarCampos();
             return true;
         }
@@ -327,7 +329,7 @@ namespace recTivo.MVVM
             ClienteSeleccionado.Telefono = Telefono;
             ClienteSeleccionado.Usuario = Usuario;
 
-            if (Password != ClienteSeleccionado.Password)
+            if (!BCrypt.Net.BCrypt.Verify(Password, ClienteSeleccionado.Password))
             {
                 ClienteSeleccionado.Password = BCrypt.Net.BCrypt.HashPassword(Password);
             }
