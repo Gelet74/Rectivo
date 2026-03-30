@@ -9,6 +9,7 @@
              d:DesignHeight="450" d:DesignWidth="800">
 
     <UserControl.Resources>
+
         <Style TargetType="TextBox">
             <Setter Property="Background"      Value="#E0E0E0"/>
             <Setter Property="Foreground"      Value="Black"/>
@@ -17,6 +18,7 @@
             <Setter Property="Padding"         Value="5"/>
             <Setter Property="Height"          Value="30"/>
         </Style>
+
         <Style TargetType="ComboBox">
             <Setter Property="Background"      Value="#E0E0E0"/>
             <Setter Property="Foreground"      Value="Black"/>
@@ -25,6 +27,7 @@
             <Setter Property="Padding"         Value="5"/>
             <Setter Property="Height"          Value="30"/>
         </Style>
+
         <Style TargetType="DataGridColumnHeader">
             <Setter Property="Background"      Value="#3A3A3D"/>
             <Setter Property="Foreground"      Value="White"/>
@@ -33,6 +36,7 @@
             <Setter Property="BorderBrush"     Value="#555"/>
             <Setter Property="BorderThickness" Value="0,0,1,0"/>
         </Style>
+
     </UserControl.Resources>
 
     <Border BorderBrush="#FF9800" BorderThickness="4">
@@ -44,9 +48,11 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
+
                 <TextBlock Text="LISTADO DE CLIENTES"
                            Foreground="White" FontWeight="Bold"
                            VerticalAlignment="Center" Margin="20,0"/>
+
                 <TextBlock Text="Pulsa ESC para volver atrás"
                            Foreground="White" HorizontalAlignment="Right"
                            VerticalAlignment="Center" Grid.Column="1" Margin="0,0,20,0"/>
@@ -55,7 +61,9 @@
             <!-- FILTROS -->
             <Border DockPanel.Dock="Top" Background="#3A3A3D"
                     Margin="20,12,20,8" Padding="12,8" CornerRadius="4">
+
                 <WrapPanel Orientation="Horizontal">
+
                     <TextBlock Text="FILTROS:" Foreground="#FF9800" FontWeight="Bold"
                                VerticalAlignment="Center" Margin="0,0,16,0"/>
 
@@ -80,11 +88,14 @@
                                   IsEditable="True" Width="150"/>
                     </StackPanel>
 
-                    <Button Content="↺  Limpiar filtros"
+                    <Button Content="Limpiar filtros"
                             Click="btnLimpiarFiltros_Click"
-                            Width="140" Height="30" Margin="0,18,0,0"
-                            Background="#E0E0E0" Foreground="#FF5722"
-                            BorderBrush="#FF5722" FontWeight="Bold" Cursor="Hand"/>
+                            Width="140" Height="30" Margin="0,18,0,0"/>
+
+                    <Button Content="Exportar PDF"
+                            Click="BtnExportarClientes_Click"
+                            Width="140" Height="30" Margin="10,18,0,0"/>
+
                 </WrapPanel>
             </Border>
 
@@ -102,12 +113,14 @@
                       GridLinesVisibility="Horizontal"
                       HorizontalGridLinesBrush="#444444"
                       BorderThickness="0">
+
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="NOMBRE"     Binding="{Binding Nombre}"    Width="*"/>
                     <DataGridTextColumn Header="APELLIDO"   Binding="{Binding Apellido1}" Width="*"/>
                     <DataGridTextColumn Header="APELLIDO 2" Binding="{Binding Apellido2}" Width="*"/>
                     <DataGridTextColumn Header="DNI"        Binding="{Binding Dni}"       Width="*"/>
                 </DataGrid.Columns>
+
             </DataGrid>
 
         </DockPanel>

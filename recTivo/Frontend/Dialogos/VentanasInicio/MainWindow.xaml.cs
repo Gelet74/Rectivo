@@ -1,5 +1,4 @@
-﻿using MahApps.Metro.Controls;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using recTivo.Backend.Repos;
 using recTivo.Frontend.Dialogos;
 using recTivo.Frontend.Dialogos.Articulos;
@@ -10,7 +9,6 @@ using recTivo.Frontend.Dialogos.Ordenes;
 using recTivo.Frontend.Dialogos.VentanasInicio;
 using recTivo.Frontend.Dialogos.Ventas;
 using recTivo.Frontend.UC;
-using recTivo.MVVM;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
@@ -18,7 +16,7 @@ using System.Windows.Input;
 
 namespace recTivo
 {
-    public partial class MainWindow : MetroWindow, INotifyPropertyChanged
+    public partial class MainWindow : Window, INotifyPropertyChanged
     {
         private readonly IServiceProvider _serviceProvider;
         private UIElement? _dashboardInicial;

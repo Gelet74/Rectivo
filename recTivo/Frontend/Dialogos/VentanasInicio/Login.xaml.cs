@@ -1,20 +1,16 @@
-﻿using MahApps.Metro.Controls;
-using recTivo.Backend.Repos;
-using System;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using di.proyecto.clase._2025.Frontend.Mensajes;
+﻿using di.proyecto.clase._2025.Frontend.Mensajes;
+using MahApps.Metro.Controls;
 using Microsoft.Extensions.DependencyInjection;
+using recTivo.Backend.Repos;
+using System.Windows;
 
 namespace recTivo.Frontend.Dialogos
 {
-    public partial class Login : MetroWindow
+    public partial class Login : Window
     {
         private readonly EmpleadoRepository _empleadoRepository;
         private readonly IServiceProvider _serviceProvider;
 
-        // Constructor con DI
         public Login(IServiceProvider serviceProvider, EmpleadoRepository empleadoRepository)
         {
             InitializeComponent();
@@ -34,9 +30,6 @@ namespace recTivo.Frontend.Dialogos
                     "Por favor, introduce usuario y clave.");
                 return;
             }
-
-            // ✅ Deshabilitar botón mientras valida
-            btnLogin.IsEnabled = false;
             btnLogin.Content = "Validando...";
 
             try
@@ -45,13 +38,11 @@ namespace recTivo.Frontend.Dialogos
 
                 if (empleado != null)
                 {
-                    // ✅ Guardar el empleado actual
                     if (Application.Current is App app)
                     {
                         app.EmpleadoActual = empleado;
                     }
 
-                    // ✅ CREAR NUEVA INSTANCIA de MainWindow (esto ya recarga automáticamente)
                     var main = _serviceProvider.GetRequiredService<MainWindow>();
 
                     main.WindowState = WindowState.Maximized;
@@ -75,8 +66,6 @@ namespace recTivo.Frontend.Dialogos
             }
             finally
             {
-                // ✅ Rehabilitar botón
-                btnLogin.IsEnabled = true;
                 btnLogin.Content = "Entrar";
             }
         }

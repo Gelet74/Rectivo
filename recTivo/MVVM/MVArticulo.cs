@@ -15,7 +15,7 @@ namespace recTivo.MVVM
         private readonly EmpleadoRepository _empleadoRepository;
         private readonly OrdenRepository _ordenRepository;
 
-        public ListCollectionView ArticulosView { get; private set; }
+        public ListCollectionView? ArticulosView { get; private set; }
 
         public MVArticulo(
             ArticuloRepository articuloRepository,
@@ -35,15 +35,15 @@ namespace recTivo.MVVM
         // PROPIEDADES PRINCIPALES
         // -----------------------------
 
-        private List<Articulo> _listaArticulos;
-        public List<Articulo> ListaArticulos
+        private List<Articulo>? _listaArticulos;
+        public List<Articulo>? ListaArticulos
         {
             get => _listaArticulos;
             set => SetProperty(ref _listaArticulos, value);
         }
 
-        private Articulo _articuloSeleccionado;
-        public Articulo ArticuloSeleccionado
+        private Articulo? _articuloSeleccionado;
+        public Articulo? ArticuloSeleccionado
         {
             get => _articuloSeleccionado;
             set => SetProperty(ref _articuloSeleccionado, value);
@@ -53,8 +53,8 @@ namespace recTivo.MVVM
         // FILTROS CON CASCADA
         // -----------------------------
 
-        private string _filtroCodigo;
-        public string FiltroCodigo
+        private string? _filtroCodigo;
+        public string? FiltroCodigo
         {
             get => _filtroCodigo;
             set
@@ -67,8 +67,8 @@ namespace recTivo.MVVM
             }
         }
 
-        private string _filtroDescripcion;
-        public string FiltroDescripcion
+        private string? _filtroDescripcion;
+        public string? FiltroDescripcion
         {
             get => _filtroDescripcion;
             set
@@ -81,8 +81,8 @@ namespace recTivo.MVVM
             }
         }
 
-        private string _filtroDescripcion2;
-        public string FiltroDescripcion2
+        private string? _filtroDescripcion2;
+        public string? FiltroDescripcion2
         {
             get => _filtroDescripcion2;
             set
@@ -99,22 +99,22 @@ namespace recTivo.MVVM
         // LISTAS FILTRADAS PARA COMBOBOX
         // -----------------------------
 
-        private List<string> _codigosLista;
-        public List<string> CodigosLista
+        private List<string>? _codigosLista;
+        public List<string>? CodigosLista
         {
             get => _codigosLista;
             set => SetProperty(ref _codigosLista, value);
         }
 
-        private List<string> _descripcionesLista;
-        public List<string> DescripcionesLista
+        private List<string>? _descripcionesLista;
+        public List<string>? DescripcionesLista
         {
             get => _descripcionesLista;
             set => SetProperty(ref _descripcionesLista, value);
         }
 
-        private List<string> _descripciones2Lista;
-        public List<string> Descripciones2Lista
+        private List<string>? _descripciones2Lista;
+        public List<string>? Descripciones2Lista
         {
             get => _descripciones2Lista;
             set => SetProperty(ref _descripciones2Lista, value);
@@ -228,6 +228,7 @@ namespace recTivo.MVVM
             CodigosLista = articulosFiltrados
                 .Select(a => a.Codigo)
                 .Where(c => !string.IsNullOrWhiteSpace(c))
+                .Select(c => c!)
                 .Distinct()
                 .OrderBy(c => c)
                 .ToList();
@@ -235,6 +236,7 @@ namespace recTivo.MVVM
             DescripcionesLista = articulosFiltrados
                 .Select(a => a.descrip)
                 .Where(d => !string.IsNullOrWhiteSpace(d))
+                .Select(d => d!)
                 .Distinct()
                 .OrderBy(d => d)
                 .ToList();
@@ -242,6 +244,7 @@ namespace recTivo.MVVM
             Descripciones2Lista = articulosFiltrados
                 .Select(a => a.descrip2)
                 .Where(d => !string.IsNullOrWhiteSpace(d))
+                .Select(d => d!)
                 .Distinct()
                 .OrderBy(d => d)
                 .ToList();
@@ -254,6 +257,7 @@ namespace recTivo.MVVM
             CodigosLista = ListaArticulos
                 .Select(a => a.Codigo)
                 .Where(c => !string.IsNullOrWhiteSpace(c))
+                .Select(c => c!)
                 .Distinct()
                 .OrderBy(c => c)
                 .ToList();
@@ -261,6 +265,7 @@ namespace recTivo.MVVM
             DescripcionesLista = ListaArticulos
                 .Select(a => a.descrip)
                 .Where(d => !string.IsNullOrWhiteSpace(d))
+                .Select(d => d!)
                 .Distinct()
                 .OrderBy(d => d)
                 .ToList();
@@ -268,6 +273,7 @@ namespace recTivo.MVVM
             Descripciones2Lista = ListaArticulos
                 .Select(a => a.descrip2)
                 .Where(d => !string.IsNullOrWhiteSpace(d))
+                .Select(d => d!)
                 .Distinct()
                 .OrderBy(d => d)
                 .ToList();
@@ -337,31 +343,31 @@ namespace recTivo.MVVM
         // PROPIEDADES DEL ARTÍCULO
         // -----------------------------
 
-        public string Codigo
+        public string? Codigo
         {
             get => _articulo.Codigo;
             set
             {
-                _articulo.Codigo = value;
+                _articulo.Codigo = value ?? string.Empty;
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(ErrorCodigo));
                 OnPropertyChanged(nameof(PuedeGuardar));
             }
         }
 
-        public string Descrip
+        public string? Descrip
         {
             get => _articulo.descrip;
             set
             {
-                _articulo.descrip = value;
+                _articulo.descrip = value ?? string.Empty;
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(ErrorDescrip));
                 OnPropertyChanged(nameof(PuedeGuardar));
             }
         }
 
-        public string Descrip2
+        public string? Descrip2
         {
             get => _articulo.descrip2;
             set { _articulo.descrip2 = value; OnPropertyChanged(); }

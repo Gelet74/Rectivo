@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using recTivo.Backend.Modelos;
 
 namespace recTivo.Backend.Modelos
 {
@@ -23,20 +24,8 @@ namespace recTivo.Backend.Modelos
         public virtual DbSet<Pedido> Pedidos { get; set; } = null!;
         public virtual DbSet<PedidoLinea> PedidoLineas { get; set; } = null!;
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-                var conn = "server=localhost;database=RECTIVO;user=root;password=mysql;";
-                optionsBuilder.UseMySQL(conn);
-            }
-        }
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // ===========================
-            // CONFIGURACIÓN DE CLIENTE
-            // ===========================
             modelBuilder.Entity<Cliente>(entity =>
             {
                 entity.ToTable("cliente");
@@ -53,9 +42,6 @@ namespace recTivo.Backend.Modelos
                 entity.Property(c => c.Password).HasColumnName("password").HasMaxLength(255);
             });
 
-            // ===========================
-            // CONFIGURACIÓN DE ARTÍCULO
-            // ===========================
             modelBuilder.Entity<Articulo>(entity =>
             {
                 entity.ToTable("articulo");
@@ -69,9 +55,6 @@ namespace recTivo.Backend.Modelos
                 entity.Property(a => a.PrecioCompra).HasColumnName("precio_compra").HasColumnType("decimal(10,2)");
             });
 
-            // ===========================
-            // CONFIGURACIÓN DE UBICACIÓN
-            // ===========================
             modelBuilder.Entity<Ubicacion>(entity =>
             {
                 entity.ToTable("ubicacion");
@@ -90,9 +73,6 @@ namespace recTivo.Backend.Modelos
                       .OnDelete(DeleteBehavior.SetNull);
             });
 
-            // ===========================
-            // CONFIGURACIÓN DE ORDEN
-            // ===========================
             modelBuilder.Entity<Orden>(entity =>
             {
                 entity.HasKey(e => e.IdOrden).HasName("PRIMARY");
@@ -125,9 +105,6 @@ namespace recTivo.Backend.Modelos
                     .HasConstraintName("orden_ibfk_1");
             });
 
-            // ===========================
-            // CONFIGURACIÓN DE EMPLEADO
-            // ===========================
             modelBuilder.Entity<Empleado>(entity =>
             {
                 entity.ToTable("empleado");
@@ -136,9 +113,6 @@ namespace recTivo.Backend.Modelos
                       .HasForeignKey(e => e.IdRol);
             });
 
-            // ===========================
-            // CONFIGURACIÓN DE PEDIDO
-            // ===========================
             modelBuilder.Entity<Pedido>(entity =>
             {
                 entity.ToTable("pedido");
@@ -165,9 +139,6 @@ namespace recTivo.Backend.Modelos
                       .HasConstraintName("fk_pedidolinea_pedido");
             });
 
-            // ===========================
-            // CONFIGURACIÓN DE PEDIDO_LINEA
-            // ===========================
             modelBuilder.Entity<PedidoLinea>(entity =>
             {
                 entity.ToTable("pedido_linea");
@@ -188,31 +159,22 @@ namespace recTivo.Backend.Modelos
                       .HasConstraintName("fk_pedidolinea_articulo");
             });
 
-            // ===========================
-            // CONFIGURACIÓN DE CLIENTE_HAS_ARTICULO
-            // ===========================
             modelBuilder.Entity<ClienteHasArticulo>(entity =>
             {
-                // CORREGIDO: clave compuesta ahora usa ArticuloCodigo (string) en lugar de ArticuloIdArticulo (int)
                 entity.HasKey(e => new { e.ClienteIdcliente, e.ArticuloCodigo });
                 entity.Property(e => e.ClienteIdcliente).HasColumnName("cliente_IDCLIENTE");
-                // CORREGIDO: nombre de columna real en BD y tipo string
                 entity.Property(e => e.ArticuloCodigo).HasColumnName("articulo_CODIGO").HasMaxLength(10);
 
                 entity.HasOne(e => e.Cliente)
                     .WithMany(c => c.ClienteHasArticulos)
                     .HasForeignKey(e => e.ClienteIdcliente);
 
-                // CORREGIDO: FK por CODIGO, no por ID
                 entity.HasOne(e => e.Articulo)
                     .WithMany(a => a.ClienteHasArticulos)
                     .HasForeignKey(e => e.ArticuloCodigo)
                     .HasPrincipalKey(a => a.Codigo);
             });
 
-            // ===========================
-            // CONFIGURACIÓN DE ESCANDALLO
-            // ===========================
             modelBuilder.Entity<Escandallo>(entity =>
             {
                 entity.ToTable("escandallo");
@@ -223,9 +185,6 @@ namespace recTivo.Backend.Modelos
                 entity.Property(e => e.Descrip2).HasMaxLength(50).HasColumnName("Descrip2");
             });
 
-            // ===========================
-            // CONFIGURACIÓN DE COMPONENTE ESCANDALLO
-            // ===========================
             modelBuilder.Entity<ComponenteEscandallo>(entity =>
             {
                 entity.ToTable("componenteescandallo");
@@ -316,7 +275,6 @@ namespace recTivo.Backend.Modelos
 
             OnModelCreatingPartial(modelBuilder);
         }
-
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
     }
 }

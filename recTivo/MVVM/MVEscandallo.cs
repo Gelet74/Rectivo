@@ -22,14 +22,22 @@ namespace recTivo.MVVM
             _articuloRepository = articuloRepository;
             _ordenRepository = ordenRepository;
 
-            ComponenteNuevo = new ComponenteEscandallo() { Cantidad = 1 };
+            _listaArticulos = new List<Articulo>();
+            _articulosFiltrados = new List<Articulo>();
+            _articulosTodos = new List<Articulo>();
+            _articulosSinEscandallo = new List<Articulo>();
+            _codigosArticulos = new List<string>();
+            _articuloFinal = null;
+            _articuloComponenteSeleccionado = null;
+            _componenteNuevo = new ComponenteEscandallo() { Cantidad = 1 };
+            _componentePadreSeleccionado = null;
+            _componenteSeleccionado = null;
+            _articuloSeleccionado = null;
+            CodigoSeleccionado = string.Empty;
+            _codigoSeleccionadoModificar = string.Empty;
         }
 
         public bool EsNuevoEscandallo { get; set; } = true;
-
-        // ============================================================
-        //   PROPIEDADES
-        // ============================================================
 
         public ObservableCollection<ComponenteEscandallo> Componentes { get; set; } = new();
         public ObservableCollection<Articulo> ArticulosPT { get; set; } = new();
@@ -74,8 +82,8 @@ namespace recTivo.MVVM
         public string DescripcionFinal => ArticuloFinal?.descrip ?? "";
         public string Descripcion2Final => ArticuloFinal?.descrip2 ?? "";
 
-        private Articulo _articuloFinal;
-        public Articulo ArticuloFinal
+        private Articulo? _articuloFinal;
+        public Articulo? ArticuloFinal
         {
             get => _articuloFinal;
             set
@@ -100,7 +108,6 @@ namespace recTivo.MVVM
             set => SetProperty(ref _descripcion2, value);
         }
 
-        // true = artículo elegido válido (sin escandallo previo); false = bloqueado
         private bool _articuloFinalValido = true;
         public bool ArticuloFinalValido
         {
@@ -108,11 +115,7 @@ namespace recTivo.MVVM
             set => SetProperty(ref _articuloFinalValido, value);
         }
 
-        /// <summary>
-        /// Llama a esto desde el SelectionChanged del combo artículo final.
-        /// Devuelve false si el artículo YA tiene escandallo (muestra el error internamente).
-        /// </summary>
-        public async Task<bool> ValidarArticuloFinal(Articulo articulo)
+        public async Task<bool> ValidarArticuloFinal(Articulo? articulo)
         {
             if (articulo == null)
             {
@@ -128,7 +131,6 @@ namespace recTivo.MVVM
                 MensajeError.Mostrar("ALTA ESCANDALLO",
                     $"El artículo '{articulo.Codigo}' ya tiene un escandallo creado.\n" +
                     $"Usa la opción MODIFICAR ESCANDALLO para editarlo.");
-                // Resetear la selección
                 ArticuloFinal = null;
                 EscandalloActual.Clear();
                 OnPropertyChanged(nameof(ArticuloFinal));
@@ -141,12 +143,8 @@ namespace recTivo.MVVM
             return true;
         }
 
-        // ============================================================
-        //   PROPIEDADES PARA COMPONENTE SELECCIONADO
-        // ============================================================
-
-        private Articulo _articuloComponenteSeleccionado;
-        public Articulo ArticuloComponenteSeleccionado
+        private Articulo? _articuloComponenteSeleccionado;
+        public Articulo? ArticuloComponenteSeleccionado
         {
             get => _articuloComponenteSeleccionado;
             set
@@ -174,36 +172,32 @@ namespace recTivo.MVVM
             set => SetProperty(ref _componenteNuevo, value);
         }
 
-        private ComponenteEscandallo _componentePadreSeleccionado;
-        public ComponenteEscandallo ComponentePadreSeleccionado
+        private ComponenteEscandallo? _componentePadreSeleccionado;
+        public ComponenteEscandallo? ComponentePadreSeleccionado
         {
             get => _componentePadreSeleccionado;
             set => SetProperty(ref _componentePadreSeleccionado, value);
         }
 
-        private ComponenteEscandallo _componenteSeleccionado;
-        public ComponenteEscandallo ComponenteSeleccionado
+        private ComponenteEscandallo? _componenteSeleccionado;
+        public ComponenteEscandallo? ComponenteSeleccionado
         {
             get => _componenteSeleccionado;
             set => SetProperty(ref _componenteSeleccionado, value);
         }
 
-        private Articulo _articuloSeleccionado;
-        public Articulo ArticuloSeleccionado
+        private Articulo? _articuloSeleccionado;
+        public Articulo? ArticuloSeleccionado
         {
             get => _articuloSeleccionado;
             set
             {
                 SetProperty(ref _articuloSeleccionado, value);
-                CodigoSeleccionado = value.Codigo;
+                CodigoSeleccionado = value?.Codigo ?? string.Empty;
             }
         }
 
         public string CodigoSeleccionado { get; set; }
-
-        // ============================================================
-        //   PROPIEDADES PARA MODIFICAR ESCANDALLO
-        // ============================================================
 
         private bool _escandalloVisible;
         public bool EscandalloVisible
@@ -212,18 +206,12 @@ namespace recTivo.MVVM
             set => SetProperty(ref _escandalloVisible, value);
         }
 
-        private string _codigoSeleccionadoModificar;
-        public string CodigoSeleccionadoModificar
+        private string? _codigoSeleccionadoModificar;
+        public string? CodigoSeleccionadoModificar
         {
             get => _codigoSeleccionadoModificar;
             set => SetProperty(ref _codigoSeleccionadoModificar, value);
         }
-
-
-
-        // ============================================================
-        //   INICIALIZACIÓN
-        // ============================================================
 
         public async Task Inicializa()
         {
@@ -278,10 +266,9 @@ namespace recTivo.MVVM
                     .OrderBy(c => c)
                     .ToList();
 
-                // Artículos que aún NO tienen escandallo (para el combo de Alta)
                 var codigosConEscandallo = new HashSet<string>(CodigosArticulos);
                 ArticulosSinEscandallo = ArticulosTodos
-                    .Where(a => !codigosConEscandallo.Contains(a.Codigo))
+                    //.Where(a => !codigosConEscandallo.Contains(a.Codigo)) MUESTRA TODOS LOS ARTÍCULOS PARA PODER CREAR ESCANDALLO NUEVO A CUALQUIERA
                     .ToList();
             }
             catch (Exception ex)
@@ -290,11 +277,7 @@ namespace recTivo.MVVM
             }
         }
 
-        // ============================================================
-        //   LIMPIAR CAMPOS
-        // ============================================================
-
-        public async Task LimpiarCampos()
+        public Task LimpiarCampos()
         {
             EsNuevoEscandallo = true;
 
@@ -309,8 +292,9 @@ namespace recTivo.MVVM
             OnPropertyChanged(nameof(DescripcionComponente));
             OnPropertyChanged(nameof(Descripcion2Componente));
             OnPropertyChanged(nameof(EscandalloActual));
-        }
 
+            return Task.CompletedTask;
+        }
 
         public async Task AñadirComponente()
         {
@@ -341,10 +325,6 @@ namespace recTivo.MVVM
                     return;
                 }
 
-                // ============================================================
-                //   1) CREAR COMPONENTE RAÍZ
-                // ============================================================
-
                 var nuevo = new ComponenteEscandallo
                 {
                     CodigoArticulo = ComponenteNuevo.CodigoArticulo,
@@ -356,16 +336,11 @@ namespace recTivo.MVVM
                     Hijos = new ObservableCollection<ComponenteEscandallo>()
                 };
 
-                // ============================================================
-                //   2) EVITAR DUPLICADOS EN EL NIVEL RAÍZ
-                // ============================================================
-
                 var existente = EscandalloActual
                     .FirstOrDefault(c => c.CodigoArticulo == nuevo.CodigoArticulo);
 
                 if (existente != null)
                 {
-                    // Ya existe → sumar cantidad
                     existente.Cantidad += nuevo.Cantidad;
                     MensajeInformacion.Mostrar("ESCANDALLO",
                         $"El componente '{nuevo.CodigoArticulo}' ya existía. Se ha sumado la cantidad.");
@@ -375,15 +350,7 @@ namespace recTivo.MVVM
                     EscandalloActual.Add(nuevo);
                 }
 
-                // ============================================================
-                //   3) CARGA PROFUNDA AUTOMÁTICA CONDICIONAL
-                // ============================================================
-
                 await CargarEscandalloDeComponente(nuevo);
-
-                // ============================================================
-                //   4) LIMPIAR CAMPOS DE ENTRADA
-                // ============================================================
 
                 ComponenteNuevo = new ComponenteEscandallo() { Cantidad = 1 };
                 ArticuloComponenteSeleccionado = null;
@@ -400,24 +367,18 @@ namespace recTivo.MVVM
             }
         }
 
-
-        // ============================================================
-        //   CARGA PROFUNDA AUTOMÁTICA DE UN COMPONENTE
-        // ============================================================
-
         private async Task CargarEscandalloDeComponente(ComponenteEscandallo componente)
         {
             try
             {
                 var esc = await _escandalloRepository.GetByCodigoProductoAsync(componente.CodigoArticulo);
                 if (esc == null)
-                    return; // No tiene escandallo → no cargar nada
+                    return;
 
                 var hijos = await _escandalloRepository.GetComponentesByEscandalloAsync(esc.IdEscandallo);
                 if (hijos == null || hijos.Count == 0)
                     return;
 
-                // Reconstruir jerarquía de los hijos
                 var hijosJerarquia = ReconstruirJerarquia(hijos);
 
                 foreach (var hijoPlano in hijosJerarquia)
@@ -431,25 +392,17 @@ namespace recTivo.MVVM
             }
         }
 
-
-        // ============================================================
-        //   INSERTAR HIJO EVITANDO DUPLICADOS (Código + Padre)
-        // ============================================================
-
         private async Task InsertarHijoSinDuplicar(ComponenteEscandallo padre, ComponenteEscandallo hijoPlano)
         {
-            // Buscar si ya existe un hijo con el mismo código bajo este padre
-            var existente = padre.Hijos
+            var existente = padre.Hijos?
                 .FirstOrDefault(h => h.CodigoArticulo == hijoPlano.CodigoArticulo);
 
             if (existente != null)
             {
-                // Ya existe → sumar cantidades
                 existente.Cantidad += hijoPlano.Cantidad;
             }
             else
             {
-                // Crear hijo nuevo
                 var nuevoHijo = new ComponenteEscandallo
                 {
                     CodigoArticulo = hijoPlano.CodigoArticulo,
@@ -461,17 +414,13 @@ namespace recTivo.MVVM
                     Hijos = new ObservableCollection<ComponenteEscandallo>()
                 };
 
-                padre.Hijos.Add(nuevoHijo);
-
-                // Cargar subcomponentes del hijo (recursivo)
+                padre.Hijos?.Add(nuevoHijo);
                 await CargarEscandalloDeComponente(nuevoHijo);
             }
         }
 
-
         private List<ComponenteEscandallo> ReconstruirJerarquia(List<ComponenteEscandallo> planos)
         {
-            // 1) Asegurar descripciones y listas de hijos
             foreach (var comp in planos)
             {
                 var articulo = ListaArticulos.FirstOrDefault(a => a.Codigo == comp.CodigoArticulo);
@@ -484,7 +433,6 @@ namespace recTivo.MVVM
                 comp.Hijos ??= new ObservableCollection<ComponenteEscandallo>();
             }
 
-            // 2) Asignar hijos a sus padres
             foreach (var comp in planos)
             {
                 if (!string.IsNullOrWhiteSpace(comp.CodigoComponentePadre))
@@ -498,11 +446,10 @@ namespace recTivo.MVVM
                         .FirstOrDefault();
 
                     if (padre != null)
-                        padre.Hijos.Add(comp);
+                        padre.Hijos?.Add(comp);
                 }
             }
 
-            // 3) Devolver solo los nodos raíz
             return planos
                 .Where(c =>
                     string.IsNullOrWhiteSpace(c.CodigoComponentePadre) ||
@@ -510,16 +457,10 @@ namespace recTivo.MVVM
                 .ToList();
         }
 
-
-        // ============================================================
-        //   RECARGAR ESCANDALLO RECURSIVO (desde BD)
-        // ============================================================
-
         private async Task<bool> RecargarEscandalloRecursivo(ComponenteEscandallo componente)
         {
             bool seRecargo = false;
 
-            // Actualizar descripciones
             var articulo = await _articuloRepository.GetByCodigoAsync(componente.CodigoArticulo);
             if (articulo != null)
             {
@@ -527,7 +468,6 @@ namespace recTivo.MVVM
                 componente.Descripcion2 = articulo.descrip2;
             }
 
-            // Buscar si este componente tiene escandallo propio
             var escandallo = await _escandalloRepository
                 .GetByCodigoProductoAsync(componente.CodigoArticulo);
 
@@ -538,7 +478,6 @@ namespace recTivo.MVVM
 
                 if (subComponentes.Any())
                 {
-                    // Reconstruir jerarquía de los hijos
                     var hijosReconstruidos = ReconstruirJerarquia(subComponentes);
 
                     componente.Hijos = new ObservableCollection<ComponenteEscandallo>();
@@ -547,7 +486,6 @@ namespace recTivo.MVVM
                     {
                         hijo.CodigoComponentePadre = componente.CodigoArticulo;
 
-                        // Actualizar descripciones del hijo
                         var artHijo = await _articuloRepository.GetByCodigoAsync(hijo.CodigoArticulo);
                         if (artHijo != null)
                         {
@@ -556,8 +494,6 @@ namespace recTivo.MVVM
                         }
 
                         componente.Hijos.Add(hijo);
-
-                        // Recursivo: cargar subcomponentes del hijo
                         await RecargarEscandalloRecursivo(hijo);
                     }
 
@@ -567,11 +503,6 @@ namespace recTivo.MVVM
 
             return seRecargo;
         }
-
-
-        // ============================================================
-        //   CONSTRUIR JERARQUÍA PARA LISTAR (TreeView)
-        // ============================================================
 
         private async Task ConstruirJerarquiaParaListar(List<ComponenteEscandallo> componentes)
         {
@@ -612,11 +543,7 @@ namespace recTivo.MVVM
                     return;
                 }
 
-                Escandallo existente = null;
-
-                // ============================================================
-                //   MODO MODIFICAR → borrar escandallo anterior
-                // ============================================================
+                Escandallo? existente = null;
 
                 if (!EsNuevoEscandallo)
                 {
@@ -635,10 +562,6 @@ namespace recTivo.MVVM
                     }
                 }
 
-                // ============================================================
-                //   CREAR ESCANDALLO NUEVO
-                // ============================================================
-
                 var nuevoEsc = new Escandallo
                 {
                     CodigoProducto = ArticuloFinal.Codigo,
@@ -648,26 +571,20 @@ namespace recTivo.MVVM
 
                 await _escandalloRepository.AddAsync(nuevoEsc);
 
-                // ============================================================
-                //   GUARDAR TODOS LOS COMPONENTES (RECURSIVO)
-                // ============================================================
-
                 foreach (var raiz in EscandalloActual)
                     await GuardarComponenteRecursivo(raiz, nuevoEsc.IdEscandallo, null);
 
                 MensajeInformacion.Mostrar("ESCANDALLO", "Escandallo guardado correctamente.", 1);
 
-                // Actualizar CodigosArticulos y ArticulosSinEscandallo para reflejar el nuevo escandallo
                 if (!CodigosArticulos.Contains(ArticuloFinal.Codigo))
                 {
                     CodigosArticulos = CodigosArticulos.Append(ArticuloFinal.Codigo).OrderBy(c => c).ToList();
                     var codigosConEscandallo = new HashSet<string>(CodigosArticulos);
                     ArticulosSinEscandallo = ArticulosTodos
-                        .Where(a => !codigosConEscandallo.Contains(a.Codigo))
+                        //.Where(a => !codigosConEscandallo.Contains(a.Codigo)) MUESTRA TODOS LOS ARTÍCULOS PARA PODER CREAR ESCANDALLO NUEVO A CUALQUIERA
                         .ToList();
                 }
 
-                // Reset
                 EsNuevoEscandallo = true;
                 EscandalloActual.Clear();
                 ComponenteNuevo = new ComponenteEscandallo() { Cantidad = 1 };
@@ -681,17 +598,11 @@ namespace recTivo.MVVM
             }
         }
 
-
-        // ============================================================
-        //   GUARDADO RECURSIVO DE UN COMPONENTE
-        // ============================================================
-
         private async Task GuardarComponenteRecursivo(
             ComponenteEscandallo comp,
             int idEscandallo,
-            string codigoPadre)
+            string? codigoPadre)
         {
-            // Obtener artículo
             var articulo = await _articuloRepository.GetByCodigoAsync(comp.CodigoArticulo);
 
             if (articulo == null)
@@ -712,7 +623,6 @@ namespace recTivo.MVVM
                 return;
             }
 
-            // Crear componente para BD
             var nuevo = new ComponenteEscandallo
             {
                 IdEscandallo = idEscandallo,
@@ -726,10 +636,8 @@ namespace recTivo.MVVM
                 Escandallo = null
             };
 
-            // Insertar en BD
             await _escandalloRepository.InsertComponenteAsync(nuevo);
 
-            // Guardar hijos recursivamente
             if (comp.Hijos != null && comp.Hijos.Count > 0)
             {
                 foreach (var hijo in comp.Hijos)
@@ -737,7 +645,7 @@ namespace recTivo.MVVM
             }
         }
 
-        public async Task CargarEscandallo(string codigo)
+        public async Task CargarEscandallo(string? codigo)
         {
             try
             {
@@ -752,15 +660,12 @@ namespace recTivo.MVVM
 
                 if (escandallo == null)
                 {
-                    // MODO CREAR
                     EsNuevoEscandallo = true;
                     MensajeInformacion.Mostrar("ESCANDALLO", $"Creando escandallo nuevo para '{codigo}'.");
                     return;
                 }
 
-                // MODO MODIFICAR
                 EsNuevoEscandallo = false;
-
                 EscandalloActual.Clear();
 
                 ArticuloFinal = await _articuloRepository.GetByCodigoAsync(escandallo.CodigoProducto);
@@ -788,11 +693,6 @@ namespace recTivo.MVVM
             }
         }
 
-
-        // ============================================================
-        //   COMPROBAR SI EXISTE ESCANDALLO (usado por Listar)
-        // ============================================================
-
         public async Task<bool> TieneEscandallo(string codigo)
         {
             if (string.IsNullOrWhiteSpace(codigo))
@@ -800,10 +700,6 @@ namespace recTivo.MVVM
             var esc = await _escandalloRepository.GetByCodigoProductoAsync(codigo.Trim());
             return esc != null;
         }
-
-        // ============================================================
-        //   CARGAR ESCANDALLO PARA MODIFICAR
-        // ============================================================
 
         public async Task<bool> CargarEscandalloParaModificar()
         {
@@ -822,12 +718,7 @@ namespace recTivo.MVVM
             return true;
         }
 
-
-        // ============================================================
-        //   ACTUALIZAR CANTIDAD
-        // ============================================================
-
-        public bool ActualizarCantidad(ComponenteEscandallo componente)
+        public bool ActualizarCantidad(ComponenteEscandallo? componente)
         {
             if (componente == null) return false;
 
@@ -842,20 +733,13 @@ namespace recTivo.MVVM
             return true;
         }
 
-
-        // ============================================================
-        //   QUITAR COMPONENTE
-        // ============================================================
-
-        public void QuitarComponente(ComponenteEscandallo componente)
+        public void QuitarComponente(ComponenteEscandallo? componente)
         {
             if (componente == null) return;
 
-            // Intentar quitar de raíz
             if (EscandalloActual.Remove(componente))
                 return;
 
-            // Si no está en raíz, buscar recursivamente
             QuitarComponenteRecursivo(EscandalloActual, componente);
         }
 
@@ -873,11 +757,6 @@ namespace recTivo.MVVM
             }
             return false;
         }
-
-
-        // ============================================================
-        //   GUARDAR Y LIMPIAR
-        // ============================================================
 
         public async Task GuardarYLimpiar()
         {

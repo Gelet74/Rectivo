@@ -1,6 +1,6 @@
 ﻿<Window x:Class="recTivo.Frontend.Dialogos.Articulos.DialogoAltaArticulo"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Height="350" Width="500"
         ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen"
@@ -15,6 +15,7 @@
             <Setter Property="BorderThickness" Value="2"/>
             <Setter Property="Padding" Value="5"/>
         </Style>
+
         <Style x:Key="ErrorText" TargetType="TextBlock">
             <Setter Property="Foreground" Value="#F44336"/>
             <Setter Property="FontSize"   Value="11"/>
@@ -37,6 +38,7 @@
                                VerticalAlignment="Center"
                                HorizontalAlignment="Left"
                                Margin="10,0"/>
+
                     <TextBlock Text="Pulsa ESC para volver atrás"
                                Foreground="White"
                                HorizontalAlignment="Right"
@@ -50,27 +52,18 @@
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
+
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
-                        <!-- 0: Label Código -->
                         <RowDefinition Height="Auto"/>
-                        <!-- 1: TextBox Código -->
                         <RowDefinition Height="Auto"/>
-                        <!-- 2: Error Código -->
                         <RowDefinition Height="Auto"/>
-                        <!-- 3: Label Descrip -->
                         <RowDefinition Height="Auto"/>
-                        <!-- 4: TextBox Descrip -->
                         <RowDefinition Height="Auto"/>
-                        <!-- 5: Error Descrip -->
                         <RowDefinition Height="Auto"/>
-                        <!-- 6: Label Descrip2 -->
                         <RowDefinition Height="Auto"/>
-                        <!-- 7: TextBox Descrip2 -->
                         <RowDefinition Height="Auto"/>
-                        <!-- 8: Label PVP -->
                         <RowDefinition Height="Auto"/>
-                        <!-- 9: TextBox PVP + Botón -->
                     </Grid.RowDefinitions>
 
                     <!-- CÓDIGO -->
@@ -102,37 +95,23 @@
                              HorizontalAlignment="Left"
                              Height="30" Margin="0,5,0,8" Width="414"/>
 
-                    <!-- PVP + BOTÓN -->
+                    <!-- PVP -->
                     <TextBlock Text="PVP:" Foreground="#FF9800" Grid.Row="8"/>
                     <TextBox Text="{Binding Pvp, UpdateSourceTrigger=PropertyChanged}"
                              Grid.Row="9"
                              HorizontalAlignment="Left"
                              Height="30" Margin="0,5,0,0" Width="100"/>
 
+                    <!-- BOTÓN -->
                     <Button Grid.Column="1" Grid.Row="9"
-        Content="DAR DE ALTA ARTÍCULO"
-        x:Name="btnAltaArticulo"
-        Click="btnAltaArticulo_Click"
-        IsEnabled="{Binding PuedeGuardar}"
-        Height="30" Width="180"
-        HorizontalAlignment="Right"
-        Margin="0,5,0,0"
-        VerticalAlignment="Top">
-                        <mah:ControlsHelper.ContentCharacterCasing>Normal</mah:ControlsHelper.ContentCharacterCasing>
-                        <Button.Style>
-                            <Style TargetType="Button" BasedOn="{StaticResource MahApps.Styles.Button.Square}">
-                                <Setter Property="Background" Value="#555555"/>
-                                <Setter Property="Foreground" Value="#999999"/>
-                                <Setter Property="FontWeight" Value="Bold"/>
-                                <Style.Triggers>
-                                    <Trigger Property="IsEnabled" Value="True">
-                                        <Setter Property="Background" Value="#FF9800"/>
-                                        <Setter Property="Foreground" Value="White"/>
-                                    </Trigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Button.Style>
-                    </Button>
+                            Content="DAR DE ALTA ARTÍCULO"
+                            x:Name="btnAltaArticulo"
+                            Click="btnAltaArticulo_Click"
+                            IsEnabled="{Binding PuedeGuardar}"
+                            Height="30" Width="180"
+                            HorizontalAlignment="Right"
+                            Margin="0,5,0,0"
+                            VerticalAlignment="Top"/>
                 </Grid>
             </DockPanel>
         </Border>

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using recTivo.Backend.Modelos;
@@ -13,6 +14,7 @@ using recTivo.Frontend.Dialogos.VentanasInicio;
 using recTivo.Frontend.Dialogos.Ventas;
 using recTivo.Frontend.UC;
 using recTivo.MVVM;
+using System.IO;
 using System.Windows;
 
 namespace recTivo
@@ -32,10 +34,22 @@ namespace recTivo
 
         private void ConfigureServices(ServiceCollection services)
         {
+            // CONFIGURACIÓN — lee appsettings.json desde la carpeta del ejecutable
+            var configuration = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: false)
+                .Build();
+
+            services.AddSingleton<IConfiguration>(configuration);
+
             // CONTEXTO
+            var connectionString = configuration.GetConnectionString("RectivoDb")
+                ?? throw new InvalidOperationException(
+                    "No se encontró la cadena de conexión 'RectivoDb' en appsettings.json.");
+
             services.AddDbContext<RectivoContext>(options =>
             {
-                options.UseMySQL("server=localhost;database=RECTIVO;user=root;password=mysql;Allow User Variables=True;Treat Tiny As Boolean=False;Default Command Timeout=60;")
+                options.UseMySQL(connectionString)
                        .EnableSensitiveDataLogging()
                        .LogTo(message => System.Diagnostics.Debug.WriteLine(message),
                               LogLevel.Information);
@@ -75,7 +89,6 @@ namespace recTivo
                 provider.GetRequiredService<ArticuloRepository>(),
                 provider.GetRequiredService<OrdenRepository>()
             ));
-            // CORRECCIÓN 1: MVOrden sin RectivoContext
             services.AddTransient<MVOrden>(provider => new MVOrden(
                 provider.GetRequiredService<EscandalloRepository>(),
                 provider.GetRequiredService<ArticuloRepository>(),
@@ -104,7 +117,6 @@ namespace recTivo
 
             // DIÁLOGOS DE CLIENTES
             services.AddTransient<DialogoAltaCliente>();
-            services.AddTransient<DialogoConsultaCliente>();
             services.AddTransient<DialogoModificarCliente>();
 
             // DIÁLOGOS DE EMPLEADOS
@@ -136,15 +148,9 @@ namespace recTivo
                 provider.GetRequiredService<OrdenFaseRepository>()
             ));
             services.AddTransient<DialogoPedidos>(provider => new DialogoPedidos(
-                provider.GetRequiredService<PedidoRepository>(),
-                provider.GetRequiredService<ArticuloRepository>(),
-                provider.GetRequiredService<EscandalloRepository>(),
-                provider.GetRequiredService<ClienteRepository>(),
-                provider.GetRequiredService<OrdenRepository>(),
-                provider.GetRequiredService<OrdenFaseRepository>()
+                provider.GetRequiredService<MVPedido>()
             ));
 
-            // OTROS
             services.AddTransient<ConfirmacionDialogo>();
         }
 
@@ -152,7 +158,7 @@ namespace recTivo
         {
             base.OnStartup(e);
 
-            var login = _serviceProvider.GetRequiredService<Login>();
+            var login = _serviceProvider.GetRequiredService<Inicio>();
             login.Show();
         }
     }

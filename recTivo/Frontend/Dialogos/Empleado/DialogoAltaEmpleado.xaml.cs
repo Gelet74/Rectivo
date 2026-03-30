@@ -101,8 +101,9 @@ namespace recTivo.Frontend.Dialogos.Empleado
         private void txtPassword_PasswordChanged(object sender, RoutedEventArgs e)
         {
             if (DataContext is MVEmpleado vm)
-                vm.Password = ((PasswordBox)sender).Password;
-
+            {
+                vm.Empleado.Password = ((PasswordBox)sender).Password;
+            }
         }
     }
 }

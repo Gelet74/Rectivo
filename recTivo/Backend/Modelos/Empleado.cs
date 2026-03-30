@@ -53,7 +53,7 @@ public partial class Empleado : ValidatableViewModel
 
     private string? _password;
     [Column("PASSWORD")]
-    [StringLength(50)]
+    [StringLength(255)]
     [Required(ErrorMessage = "El Password es obligatorio")]
     public string? Password
     {

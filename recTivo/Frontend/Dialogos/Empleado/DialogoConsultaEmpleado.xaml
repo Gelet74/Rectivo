@@ -1,13 +1,35 @@
 ﻿<Window x:Class="recTivo.Frontend.Dialogos.Empleado.DialogoConsultaEmpleado"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Height="550" Width="900"
+        Height="550" Width="1000"
         ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen"
         Background="#2D2D30"
         WindowStyle="None">
 
     <Window.Resources>
+
+        <!-- TEXTBOX -->
+        <Style TargetType="TextBox">
+            <Setter Property="Background"      Value="#E0E0E0"/>
+            <Setter Property="Foreground"      Value="Black"/>
+            <Setter Property="BorderBrush"     Value="#E0E0E0"/>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="Padding"         Value="5"/>
+            <Setter Property="Height"          Value="30"/>
+        </Style>
+
+        <!-- COMBOBOX -->
+        <Style TargetType="ComboBox">
+            <Setter Property="Background"      Value="#E0E0E0"/>
+            <Setter Property="Foreground"      Value="Black"/>
+            <Setter Property="BorderBrush"     Value="#E0E0E0"/>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="Padding"         Value="5"/>
+            <Setter Property="Height"          Value="30"/>
+        </Style>
+
+        <!-- CABECERA DATAGRID -->
         <Style TargetType="DataGridColumnHeader">
             <Setter Property="Background"      Value="#3A3A3D"/>
             <Setter Property="Foreground"      Value="White"/>
@@ -16,6 +38,21 @@
             <Setter Property="BorderBrush"     Value="#555"/>
             <Setter Property="BorderThickness" Value="0,0,1,0"/>
         </Style>
+
+        <!-- FILA SELECCIONADA EN NARANJA -->
+        <Style TargetType="DataGridRow">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="#2D2D30"/>
+
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="#FF9800"/>
+                    <Setter Property="Foreground" Value="White"/>
+                    <Setter Property="FontWeight" Value="Bold"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
     </Window.Resources>
 
     <Grid>
@@ -28,18 +65,96 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
+
                     <TextBlock Text="LISTAR EMPLEADOS"
                                Foreground="White" FontWeight="Bold"
-                               VerticalAlignment="Center" HorizontalAlignment="Left"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Left"
                                Margin="20,0"/>
+
                     <TextBlock Text="Pulsa ESC para volver atrás"
-                               Foreground="White" HorizontalAlignment="Right"
-                               VerticalAlignment="Center" Grid.Column="1" Margin="0,0,20,0"/>
+                               Foreground="White"
+                               HorizontalAlignment="Right"
+                               VerticalAlignment="Center"
+                               Grid.Column="1"
+                               Margin="0,0,20,0"/>
                 </Grid>
 
+                <!-- FILTROS -->
+                <Border DockPanel.Dock="Top" Background="#3A3A3D"
+                        Margin="20,12,20,8" Padding="12,8" CornerRadius="4">
+
+                    <WrapPanel Orientation="Horizontal">
+
+                        <TextBlock Text="FILTROS:" Foreground="#FF9800" FontWeight="Bold"
+                                   VerticalAlignment="Center" Margin="0,0,16,0"/>
+
+                        <StackPanel Margin="0,0,16,0">
+                            <TextBlock Text="Nombre" Foreground="#FF9800" Margin="0,0,0,3"/>
+                            <ComboBox ItemsSource="{Binding NombreLista}"
+                                      Text="{Binding FiltroNombre, UpdateSourceTrigger=PropertyChanged}"
+                                      IsEditable="True" Width="130">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding}" Foreground="Black"/>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                        </StackPanel>
+
+                        <StackPanel Margin="0,0,16,0">
+                            <TextBlock Text="Apellidos" Foreground="#FF9800" Margin="0,0,0,3"/>
+                            <ComboBox ItemsSource="{Binding ApellidosLista}"
+                                      Text="{Binding FiltroApellidos, UpdateSourceTrigger=PropertyChanged}"
+                                      IsEditable="True" Width="130">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding}" Foreground="Black"/>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                        </StackPanel>
+
+                        <StackPanel Margin="0,0,16,0">
+                            <TextBlock Text="Rol" Foreground="#FF9800" Margin="0,0,0,3"/>
+                            <ComboBox ItemsSource="{Binding RolLista}"
+                                      Text="{Binding FiltroRol, UpdateSourceTrigger=PropertyChanged}"
+                                      IsEditable="True" Width="130">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding}" Foreground="Black"/>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                        </StackPanel>
+
+                        <StackPanel Margin="0,0,16,0">
+                            <TextBlock Text="Estado" Foreground="#FF9800" Margin="0,0,0,3"/>
+                            <ComboBox ItemsSource="{Binding EstadoLista}"
+                                      Text="{Binding FiltroEstado, UpdateSourceTrigger=PropertyChanged}"
+                                      IsEditable="True" Width="100">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding}" Foreground="Black"/>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                        </StackPanel>
+
+                        <Button Content="Limpiar filtros"
+                                Click="btnLimpiarFiltros_Click"
+                                Width="140" Height="30" Margin="0,18,0,0"/>
+
+                        <Button Content="Exportar PDF"
+                                Click="BtnExportarEmpleados_Click"
+                                Width="140" Height="30" Margin="10,18,0,0"/>
+
+                    </WrapPanel>
+                </Border>
+
                 <!-- DATAGRID -->
-                <DataGrid Margin="20"
-                          ItemsSource="{Binding ListaEmpleados}"
+                <DataGrid Margin="20,0,20,20"
+                          ItemsSource="{Binding EmpleadosView}"
                           SelectedItem="{Binding EmpleadoSeleccionado}"
                           AutoGenerateColumns="False"
                           IsReadOnly="True"
@@ -54,15 +169,23 @@
                           HorizontalGridLinesBrush="#444444"
                           BorderThickness="0"
                           SelectionChanged="DataGrid_SelectionChanged">
+
+                    <!-- DESACTIVAR SELECCIÓN NEGRA DEL SISTEMA -->
+                    <DataGrid.Resources>
+                        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Transparent"/>
+                        <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="Transparent"/>
+                    </DataGrid.Resources>
+
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="Nombre"     Binding="{Binding Nombre}"        Width="100"/>
-                        <DataGridTextColumn Header="Apellidos"  Binding="{Binding Apellidos}"     Width="130"/>
-                        <DataGridTextColumn Header="DNI"        Binding="{Binding Dni}"           Width="110"/>
-                        <DataGridTextColumn Header="Rol"        Binding="{Binding Rol.NombreRol}" Width="120"/>
-                        <DataGridTextColumn Header="Usuario"    Binding="{Binding Username}"      Width="110"/>
-                        <DataGridTextColumn Header="Contraseña" Binding="{Binding Password}"      Width="120"/>
-                        <DataGridTextColumn Header="Estado"     Binding="{Binding Estado}"        Width="110"/>
+                        <DataGridTextColumn Header="NOMBRE"     Binding="{Binding Nombre}"        Width="100"/>
+                        <DataGridTextColumn Header="APELLIDOS"  Binding="{Binding Apellidos}"     Width="130"/>
+                        <DataGridTextColumn Header="DNI"        Binding="{Binding Dni}"           Width="100"/>
+                        <DataGridTextColumn Header="ROL"        Binding="{Binding Rol.NombreRol}" Width="120"/>
+                        <DataGridTextColumn Header="USUARIO"    Binding="{Binding Username}"      Width="100"/>
+                        <DataGridTextColumn Header="CONTRASEÑA" Binding="{Binding Password}"      Width="*"/>
+                        <DataGridTextColumn Header="ESTADO"     Binding="{Binding Estado}"        Width="80"/>
                     </DataGrid.Columns>
+
                 </DataGrid>
 
             </DockPanel>

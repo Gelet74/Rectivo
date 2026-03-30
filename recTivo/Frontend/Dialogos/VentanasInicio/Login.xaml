@@ -1,41 +1,39 @@
-﻿<mah:MetroWindow x:Class="recTivo.Frontend.Dialogos.Login"
+﻿<Window x:Class="recTivo.Frontend.Dialogos.Login"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:mat="http://materialdesigninxaml.net/winfx/xaml/themes"
-      xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
       xmlns:local="clr-namespace:recTivo.Frontend.Dialogos"
       mc:Ignorable="d" 
       Height="350"
       Width="400"
       Loaded="Window_Loaded"
       Title="RECTIVO"
-      WindowTitleBrush="#ffb607"
-      TitleForeground="White"           
       WindowStartupLocation="CenterScreen"
       Background="#2D2D30"           
       ResizeMode="NoResize">
+    
+    <Border BorderBrush="#FF9800" BorderThickness="4">
 
-    <Grid Margin="20">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
+        <Grid Margin="20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
 
-        <!-- Título -->
-        <TextBlock Text="Iniciar Sesión"
+            <TextBlock Text="Iniciar Sesión"
                    FontSize="22"
                    FontWeight="Bold"
                    Foreground="#ffb607"
                    HorizontalAlignment="Center"
                    Margin="0,0,0,20"/>
 
-        <StackPanel Grid.Row="1" Orientation="Vertical" Margin="0,10,0,10">
-            <TextBlock Text="Usuario:" FontWeight="SemiBold" Foreground="#ffb607"/>
-            <TextBox x:Name="txtUsuario"
+            <StackPanel Grid.Row="1" Orientation="Vertical" Margin="0,10,0,10">
+                <TextBlock Text="Usuario:" FontWeight="SemiBold" Foreground="#ffb607"/>
+                <TextBox x:Name="txtUsuario"
                      Width="250"
                      Height="30"
                      Foreground="#ffb607"
@@ -43,11 +41,11 @@
                      HorizontalAlignment="Center"
                      BorderBrush="#ffb607"
                      SelectionBrush="#ffb607"/>
-        </StackPanel>
+            </StackPanel>
 
-        <StackPanel Grid.Row="2" Orientation="Vertical" Margin="0,10,0,10">
-            <TextBlock Text="Contraseña:" FontWeight="SemiBold" Foreground="#ffb607"/>
-            <PasswordBox x:Name="txtPassword"
+            <StackPanel Grid.Row="2" Orientation="Vertical" Margin="0,10,0,10">
+                <TextBlock Text="Contraseña:" FontWeight="SemiBold" Foreground="#ffb607"/>
+                <PasswordBox x:Name="txtPassword"
                          Width="250"
                          Foreground="#ffb607"
                          Height="30"
@@ -55,21 +53,33 @@
                          HorizontalAlignment="Center"
                          BorderBrush="#ffb607"
                          SelectionBrush="#ffb607"/>
-        </StackPanel>
+            </StackPanel>
 
-        <!-- Botón -->
-        <Button Grid.Row="3"
-                Content="Entrar"
-                Width="120"
-                Height="35"
-                Background="#ffb607"
-                Foreground="White"
-                FontWeight="Bold"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Top"
-                Margin="0,20,0,0"
+            <Button Grid.Row="3"
                 x:Name="btnLogin"
                 Click="BtnLogin_Click"
-                IsDefault="True"/>
-    </Grid>
-</mah:MetroWindow>
+                IsDefault="True"
+                Width="120" Height="35"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Top"
+                Margin="0,20,0,0">
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Setter Property="Background" Value="#ffb607"/>
+                        <Setter Property="Foreground" Value="White"/>
+                        <Setter Property="FontWeight" Value="Bold"/>
+                        <Setter Property="Content" Value="Entrar"/>
+                        <Style.Triggers>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Background" Value="#ffb607"/>
+                                <Setter Property="Foreground" Value="White"/>
+                                <Setter Property="Opacity" Value="1"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+
+        </Grid>
+    </Border>
+</Window>

@@ -7,15 +7,10 @@ using System.IO;
 
 namespace recTivo.Informes
 {
-    /// <summary>
-    /// Servicio central para generar informes PDF en recTivo.
-    /// Requiere el paquete NuGet: QuestPDF
-    /// </summary>
     public static class PdfService
     {
         static PdfService()
         {
-            // Licencia gratuita Community (proyectos no comerciales)
             QuestPDF.Settings.License = LicenseType.Community;
         }
 
@@ -104,31 +99,36 @@ namespace recTivo.Informes
                         // ── Datos generales ──────────────────────────────
                         col.Item()
                             .Border(1).BorderColor(Colors.Grey.Lighten2)
-                            .Padding(10)
+                            .Padding(12)
                             .Column(datos =>
                             {
+                                // Título sección
                                 datos.Item()
+                                    .BorderBottom(1).BorderColor(ColorPrimario)
+                                    .PaddingBottom(4).PaddingTop(0)
                                     .Text("DATOS DE LA ORDEN")
                                     .Bold().FontSize(9).FontColor(ColorPrimario);
 
-                                datos.Item().PaddingTop(6).Row(row =>
+                                // Fila 1: Código | Descripción | Descripción 2
+                                datos.Item().PaddingTop(8).Row(row =>
                                 {
                                     FilaDato(row.RelativeItem(), "Código", orden.Codigo);
                                     FilaDato(row.RelativeItem(), "Descripción", orden.Descripcion);
+                                    FilaDato(row.RelativeItem(), "Descripción 2",
+                                        string.IsNullOrWhiteSpace(orden.Descrip2) ? "—" : orden.Descrip2);
                                 });
 
-                                datos.Item().PaddingTop(4).Row(row =>
+                                // Separador ligero
+                                datos.Item().PaddingTop(8).PaddingBottom(0)
+                                    .BorderBottom(1).BorderColor(Colors.Grey.Lighten3);
+
+                                // Fila 2: Cantidad | Fecha fin | Estado
+                                datos.Item().PaddingTop(8).Row(row =>
                                 {
                                     FilaDato(row.RelativeItem(), "Cantidad", orden.Cantidad.ToString());
                                     FilaDato(row.RelativeItem(), "Fecha fin", orden.FechaFin);
-                                    FilaDato(row.RelativeItem(), "Estado", orden.Estado);
+                                    FilaDatoEstado(row.RelativeItem(), "Estado", orden.Estado);
                                 });
-
-                                if (!string.IsNullOrWhiteSpace(orden.Descrip2))
-                                {
-                                    datos.Item().PaddingTop(4);
-                                    FilaDatoSimple(datos.Item(), "Descripción 2", orden.Descrip2);
-                                }
                             });
 
                         // ── Fases ────────────────────────────────────────
@@ -170,9 +170,9 @@ namespace recTivo.Informes
 
                                     CeldaDato(tabla.Cell(), fase.NombreFaseTexto, bg);
                                     CeldaDato(tabla.Cell(), fase.CantidadEntrada.ToString(), bg, Alineacion.Centro);
-                                    CeldaDato(tabla.Cell(), fase.CantidadOK?.ToString() ?? "—", bg, Alineacion.Centro);
-                                    CeldaDato(tabla.Cell(), fase.CantidadDefecto?.ToString() ?? "—", bg, Alineacion.Centro);
-                                    CeldaDato(tabla.Cell(), fase.FechaFin?.ToString("dd/MM/yyyy") ?? "—", bg, Alineacion.Centro);
+                                    CeldaDato(tabla.Cell(), fase.CantidadOK?.ToString() ?? " ", bg, Alineacion.Centro);
+                                    CeldaDato(tabla.Cell(), fase.CantidadDefecto?.ToString() ?? " ", bg, Alineacion.Centro);
+                                    CeldaDato(tabla.Cell(), fase.FechaFin?.ToString("dd/MM/yyyy") ?? " ", bg, Alineacion.Centro);
                                     CeldaEstado(tabla.Cell(), fase.EstadoTexto, bg);
                                 }
                             });
@@ -195,7 +195,6 @@ namespace recTivo.Informes
 
         // ================================================================
         //  3. LISTADO DE ARTÍCULOS / STOCK
-        //     Formato apaisado (Landscape) para incluir la columna Ubicación
         // ================================================================
 
         public static string GenerarListadoArticulos(
@@ -209,7 +208,6 @@ namespace recTivo.Informes
             {
                 container.Page(page =>
                 {
-                    // Apaisado para que quepan todas las columnas
                     page.Size(PageSizes.A4.Landscape());
                     page.Margin(1.5f, Unit.Centimetre);
                     page.DefaultTextStyle(t => t.FontSize(8).FontFamily("Arial"));
@@ -220,13 +218,13 @@ namespace recTivo.Informes
                     {
                         tabla.ColumnsDefinition(cols =>
                         {
-                            cols.ConstantColumn(65);    // Código
-                            cols.RelativeColumn(2);     // Descripción
-                            cols.RelativeColumn(1.5f);  // Descripción 2
-                            cols.ConstantColumn(50);    // Stock
-                            cols.ConstantColumn(65);    // PVP
-                            cols.ConstantColumn(75);    // P. Compra
-                            cols.RelativeColumn(2);     // Ubicación
+                            cols.ConstantColumn(65);
+                            cols.RelativeColumn(2);
+                            cols.RelativeColumn(1.5f);
+                            cols.ConstantColumn(50);
+                            cols.ConstantColumn(65);
+                            cols.ConstantColumn(75);
+                            cols.RelativeColumn(2);
                         });
 
                         tabla.Header(h =>
@@ -287,30 +285,26 @@ namespace recTivo.Informes
                     {
                         col.Spacing(12);
 
-                        // ── Cabecera producto ────────────────────────────
                         col.Item()
                             .Border(1).BorderColor(Colors.Grey.Lighten2)
-                            .Padding(10)
+                            .Padding(12)
                             .Column(d =>
                             {
                                 d.Item()
+                                    .BorderBottom(1).BorderColor(ColorPrimario)
+                                    .PaddingBottom(4)
                                     .Text("PRODUCTO")
                                     .Bold().FontSize(9).FontColor(ColorPrimario);
 
-                                d.Item().PaddingTop(6).Row(row =>
+                                d.Item().PaddingTop(8).Row(row =>
                                 {
                                     FilaDato(row.RelativeItem(), "Código", escandallo.CodigoProducto);
                                     FilaDato(row.RelativeItem(), "Descripción", escandallo.Descrip);
+                                    FilaDato(row.RelativeItem(), "Descripción 2",
+                                        string.IsNullOrWhiteSpace(escandallo.Descrip2) ? "—" : escandallo.Descrip2);
                                 });
-
-                                if (!string.IsNullOrWhiteSpace(escandallo.Descrip2))
-                                {
-                                    d.Item().PaddingTop(4);
-                                    FilaDatoSimple(d.Item(), "Descripción 2", escandallo.Descrip2);
-                                }
                             });
 
-                        // ── Componentes ──────────────────────────────────
                         col.Item()
                             .Text("COMPONENTES")
                             .Bold().FontSize(9).FontColor(ColorPrimario);
@@ -350,7 +344,6 @@ namespace recTivo.Informes
                                 }
                             });
 
-                            // Total si hay precios
                             var total = listaComp
                                 .Where(c => c.PrecioUnitario.HasValue && c.Cantidad.HasValue)
                                 .Sum(c => c.PrecioUnitario!.Value * c.Cantidad!.Value);
@@ -466,8 +459,28 @@ namespace recTivo.Informes
         {
             c.Column(col =>
             {
-                col.Item().Text(etiqueta.ToUpper()).FontSize(7).FontColor(Colors.Grey.Medium);
-                col.Item().Text(valor ?? "—").Bold().FontSize(9);
+                col.Item().Text(etiqueta.ToUpper())
+                    .FontSize(7).FontColor(Colors.Grey.Medium);
+                col.Item().PaddingTop(2).Text(valor ?? "—")
+                    .Bold().FontSize(9);
+            });
+        }
+
+        private static void FilaDatoEstado(IContainer c, string etiqueta, string valor)
+        {
+            string color = valor switch
+            {
+                "Cerrada" => Colors.Green.Darken2,
+                "En curso" => Colors.Orange.Darken2,
+                _ => Colors.Grey.Darken1
+            };
+
+            c.Column(col =>
+            {
+                col.Item().Text(etiqueta.ToUpper())
+                    .FontSize(7).FontColor(Colors.Grey.Medium);
+                col.Item().PaddingTop(2).Text(valor ?? "—")
+                    .Bold().FontSize(9).FontColor(color);
             });
         }
 
@@ -481,6 +494,123 @@ namespace recTivo.Informes
         }
 
         private static string Fecha() => DateTime.Now.ToString("yyyyMMdd_HHmm");
+
+        public static string GenerarListadoClientes(
+    IEnumerable<Cliente> clientes,
+    string? rutaDestino = null)
+        {
+            var lista = clientes.ToList();
+            rutaDestino ??= RutaDescargas($"Clientes_{Fecha()}.pdf");
+
+            Document.Create(container =>
+            {
+                container.Page(page =>
+                {
+                    ConfigurarPagina(page);
+                    page.Header().Element(c => Cabecera(c, "LISTADO DE CLIENTES"));
+
+                    page.Content().PaddingTop(10).Table(tabla =>
+                    {
+                        tabla.ColumnsDefinition(cols =>
+                        {
+                            cols.RelativeColumn(2);
+                            cols.RelativeColumn(2);
+                            cols.RelativeColumn(2);
+                            cols.ConstantColumn(90);
+                            cols.ConstantColumn(90);
+                        });
+
+                        tabla.Header(h =>
+                        {
+                            CeldaCabecera(h.Cell(), "NOMBRE");
+                            CeldaCabecera(h.Cell(), "APELLIDO 1");
+                            CeldaCabecera(h.Cell(), "APELLIDO 2");
+                            CeldaCabecera(h.Cell(), "DNI");
+                            CeldaCabecera(h.Cell(), "TELÉFONO");
+                        });
+
+                        bool par = false;
+                        foreach (var c in lista.OrderBy(x => x.Apellido1))
+                        {
+                            var bg = par ? Colors.Grey.Lighten4 : Colors.White;
+                            par = !par;
+
+                            CeldaDato(tabla.Cell(), c.Nombre ?? "—", bg);
+                            CeldaDato(tabla.Cell(), c.Apellido1 ?? "—", bg);
+                            CeldaDato(tabla.Cell(), c.Apellido2 ?? "—", bg);
+                            CeldaDato(tabla.Cell(), c.Dni ?? "—", bg, Alineacion.Centro);
+                            CeldaDato(tabla.Cell(), c.Telefono ?? "—", bg, Alineacion.Centro);
+                        }
+                    });
+
+                    page.Footer().Element(Pie);
+                });
+            })
+            .GeneratePdf(rutaDestino);
+
+            return rutaDestino;
+        }
+        public static string GenerarListadoEmpleados(
+    IEnumerable<Empleado> empleados,
+    string? rutaDestino = null)
+        {
+            var lista = empleados.ToList();
+            rutaDestino ??= RutaDescargas($"Empleados_{Fecha()}.pdf");
+
+            Document.Create(container =>
+            {
+                container.Page(page =>
+                {
+                    page.Size(PageSizes.A4.Landscape());
+                    page.Margin(1.5f, Unit.Centimetre);
+                    page.DefaultTextStyle(t => t.FontSize(8).FontFamily("Arial"));
+
+                    page.Header().Element(c => Cabecera(c, "LISTADO DE EMPLEADOS"));
+
+                    page.Content().PaddingTop(10).Table(tabla =>
+                    {
+                        tabla.ColumnsDefinition(cols =>
+                        {
+                            cols.RelativeColumn(2);
+                            cols.RelativeColumn(2);
+                            cols.ConstantColumn(90);
+                            cols.RelativeColumn(2);
+                            cols.RelativeColumn(2);
+                            cols.ConstantColumn(70);
+                        });
+
+                        tabla.Header(h =>
+                        {
+                            CeldaCabecera(h.Cell(), "NOMBRE");
+                            CeldaCabecera(h.Cell(), "APELLIDOS");
+                            CeldaCabecera(h.Cell(), "DNI");
+                            CeldaCabecera(h.Cell(), "ROL");
+                            CeldaCabecera(h.Cell(), "USUARIO");
+                            CeldaCabecera(h.Cell(), "ESTADO");
+                        });
+
+                        bool par = false;
+                        foreach (var e in lista.OrderBy(x => x.Apellidos))
+                        {
+                            var bg = par ? Colors.Grey.Lighten4 : Colors.White;
+                            par = !par;
+
+                            CeldaDato(tabla.Cell(), e.Nombre ?? "—", bg);
+                            CeldaDato(tabla.Cell(), e.Apellidos ?? "—", bg);
+                            CeldaDato(tabla.Cell(), e.Dni ?? "—", bg, Alineacion.Centro);
+                            CeldaDato(tabla.Cell(), e.Rol?.NombreRol ?? "—", bg);
+                            CeldaDato(tabla.Cell(), e.Username ?? "—", bg);
+                            CeldaEstado(tabla.Cell(), e.Estado ?? "—", bg);
+                        }
+                    });
+
+                    page.Footer().Element(Pie);
+                });
+            })
+            .GeneratePdf(rutaDestino);
+
+            return rutaDestino;
+        }
 
         private static string RutaDescargas(string nombre)
         {

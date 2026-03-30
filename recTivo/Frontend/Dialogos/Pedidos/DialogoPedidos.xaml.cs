@@ -1,5 +1,5 @@
-﻿using recTivo.Backend.Modelos;
-using recTivo.Backend.Repos;
+﻿using di.proyecto.clase._2025.Frontend.Mensajes;
+using recTivo.Backend.Modelos;
 using recTivo.Frontend.Dialogos.VentanasInicio;
 using recTivo.MVVM;
 using System.Windows;
@@ -15,23 +15,19 @@ namespace recTivo.Frontend.Dialogos.Ventas
 
         private bool _escapeEnCurso = false;
 
-        public DialogoPedidos(
-            PedidoRepository pedidoRepo,
-            ArticuloRepository articuloRepo,
-            EscandalloRepository escandalloRepo,
-            ClienteRepository clienteRepo,
-            OrdenRepository ordenRepo, 
-            OrdenFaseRepository ordenFaseRepo)
+        public DialogoPedidos(MVPedido vm)
         {
             InitializeComponent();
 
-            _vm = new MVPedido(pedidoRepo, articuloRepo, escandalloRepo, clienteRepo, ordenRepo, ordenFaseRepo);
-            DataContext = _vm;
+            _vm = vm;
+            DataContext = vm;
 
             Loaded += async (_, _) => await _vm.InicializarAsync();
         }
 
-        // ── ESC con confirmación (igual que el resto de diálogos) ────
+        // ───────────────────────────────────────────────────────────────
+        // ESC con confirmación
+        // ───────────────────────────────────────────────────────────────
         protected override void OnPreviewKeyDown(KeyEventArgs e)
         {
             if (e.Key == Key.Escape)
@@ -61,32 +57,40 @@ namespace recTivo.Frontend.Dialogos.Ventas
             }
         }
 
-        // ── Checkbox artículo PT ─────────────────────────────────────
+        // ───────────────────────────────────────────────────────────────
+        // Checkbox artículo PT
+        // ───────────────────────────────────────────────────────────────
         private async void ChkPT_Checked(object sender, RoutedEventArgs e)
         {
-            if ((sender as System.Windows.Controls.CheckBox)?.DataContext is Articulo art)
+            if ((sender as CheckBox)?.DataContext is Articulo art)
                 await _vm.TogglePT(art, true);
         }
 
         private async void ChkPT_Unchecked(object sender, RoutedEventArgs e)
         {
-            if ((sender as System.Windows.Controls.CheckBox)?.DataContext is Articulo art)
+            if ((sender as CheckBox)?.DataContext is Articulo art)
                 await _vm.TogglePT(art, false);
         }
 
-        // ── Edición cantidad en DataGrid ─────────────────────────────
+        // ───────────────────────────────────────────────────────────────
+        // Edición cantidad en DataGrid
+        // ───────────────────────────────────────────────────────────────
         private void DgLineas_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
         {
             Dispatcher.BeginInvoke(() => _vm.NotificarTotalCambiado());
         }
 
-        // ── Crear pedido ─────────────────────────────────────────────
+        // ───────────────────────────────────────────────────────────────
+        // Crear pedido
+        // ───────────────────────────────────────────────────────────────
         private async void BtnCrearPedido_Click(object sender, RoutedEventArgs e)
         {
             await _vm.CrearPedidoAsync();
         }
 
-        // ── Cerrar pedido ────────────────────────────────────────────
+        // ───────────────────────────────────────────────────────────────
+        // Cerrar pedido
+        // ───────────────────────────────────────────────────────────────
         private async void BtnCerrarPedido_Click(object sender, RoutedEventArgs e)
         {
             if (dgPedidos.SelectedItem is FilaPedido fila)
@@ -95,11 +99,8 @@ namespace recTivo.Frontend.Dialogos.Ventas
             }
             else
             {
-                MessageBox.Show(
-                    "Selecciona un pedido de la lista haciendo clic sobre él.",
-                    "VENTAS",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Information);
+                MensajeInformacion.Mostrar(
+                    "VENTAS", "Selecciona un pedido de la lista haciendo clic sobre él");
             }
         }
     }

@@ -1,14 +1,13 @@
-﻿<mah:MetroWindow x:Class="recTivo.MainWindow"
+﻿<Window x:Class="recTivo.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:recTivo"
         xmlns:mat="http://materialdesigninxaml.net/winfx/xaml/themes"
-        xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
         mc:Ignorable="d"
         WindowStyle="None"
-        Icon="/Recursos/Iconos/rectivo_logo_fondo.png"         
+        Icon="/Recursos/Iconos/rectivo_logo_fondo.png"
         Height="600" Width="1000">
 
     <Grid Background="#2D2D30">
@@ -321,4 +320,4 @@
 
         <Grid x:Name="panelPrincipal" Grid.Column="1" Margin="20"/>
     </Grid>
-</mah:MetroWindow>
+</Window>

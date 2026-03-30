@@ -14,9 +14,6 @@
     <Compile Update="Frontend\Dialogos\Clientes\DialogoAltaCliente.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Frontend\Dialogos\Clientes\DialogoConsultaCliente.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Update="Frontend\Dialogos\Clientes\DialogoModificarCliente.xaml.cs">
       <SubType>Code</SubType>
     </Compile>

@@ -8,7 +8,9 @@
              d:DesignHeight="600" d:DesignWidth="1100">
 
     <UserControl.Resources>
+
         <BooleanToVisibilityConverter x:Key="BoolToVis"/>
+
         <Style TargetType="ComboBox">
             <Setter Property="Background"      Value="#E0E0E0"/>
             <Setter Property="Foreground"      Value="Black"/>
@@ -17,12 +19,14 @@
             <Setter Property="Padding"         Value="5"/>
             <Setter Property="Height"          Value="30"/>
         </Style>
+
         <Style TargetType="DataGridColumnHeader">
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="Background" Value="#3A3A3D"/>
             <Setter Property="FontWeight" Value="Bold"/>
             <Setter Property="Padding"    Value="8,4"/>
         </Style>
+
         <Style TargetType="TextBox">
             <Setter Property="Background"      Value="#E0E0E0"/>
             <Setter Property="Foreground"      Value="Black"/>
@@ -31,10 +35,12 @@
             <Setter Property="Padding"         Value="5"/>
             <Setter Property="Height"          Value="30"/>
         </Style>
+
         <Style TargetType="DatePicker">
             <Setter Property="Background"  Value="#E0E0E0"/>
             <Setter Property="Height"      Value="30"/>
         </Style>
+
         <Style x:Key="CenterCell" TargetType="TextBlock">
             <Setter Property="HorizontalAlignment" Value="Center"/>
             <Setter Property="TextAlignment" Value="Center"/>
@@ -42,7 +48,18 @@
 
         <Style x:Key="CenterEdit" TargetType="TextBox">
             <Setter Property="HorizontalContentAlignment" Value="Center"/>
-        </Style>        
+        </Style>
+
+        <!-- Botón naranja sin MahApps -->
+        <Style x:Key="BotonNaranja" TargetType="Button">
+            <Setter Property="Background"  Value="#FF9800"/>
+            <Setter Property="Foreground"  Value="White"/>
+            <Setter Property="FontWeight"  Value="Bold"/>
+            <Setter Property="Height"      Value="30"/>
+            <Setter Property="BorderBrush" Value="#FF9800"/>
+            <Setter Property="Padding"     Value="6,3"/>
+        </Style>
+
     </UserControl.Resources>
 
     <DockPanel>
@@ -61,6 +78,7 @@
         <!-- FILTROS -->
         <Border DockPanel.Dock="Top" Background="#3A3A3D"
                 Margin="20,0,20,10" Padding="12,8" CornerRadius="4">
+
             <WrapPanel Orientation="Horizontal">
 
                 <StackPanel Margin="0,0,16,0">
@@ -86,46 +104,39 @@
                     <DatePicker SelectedDate="{Binding FiltroFechaHasta, Mode=TwoWay}" Width="140"/>
                 </StackPanel>
 
-                <Button Content="↺  Limpiar"
+                <Button Content="Limpiar"
                         Click="BtnLimpiar_Click"
-                        Width="120" Height="30"
-                        Margin="0,18,0,0"
-                        Background="#E0E0E0" Foreground="#FF5722"
-                        BorderBrush="#FF5722" FontWeight="Bold" Cursor="Hand"/>
+                        Width="120" Margin="0,18,0,0"
+                        Style="{StaticResource BotonNaranja}"/>
 
-                <Button Content="↻  Recargar"
+                <Button Content="Recargar"
                         Click="BtnRecargar_Click"
-                        Width="120" Height="30"
-                        Margin="8,18,0,0"
-                        Background="#E0E0E0" Foreground="#FF5722"
-                        BorderBrush="#FF5722" FontWeight="Bold" Cursor="Hand"/>
+                        Width="120" Margin="8,18,0,0"
+                        Style="{StaticResource BotonNaranja}"/>
 
-                <Button Content="📄  Exportar lista"
+                <Button Content="Exportar lista"
                         Click="BtnExportarOrdenes_Click"
-                        Width="140" Height="30"
-                        Margin="8,18,0,0"
-                        Background="#E0E0E0" Foreground="#1565C0"
-                        BorderBrush="#1565C0" FontWeight="Bold" Cursor="Hand"/>
+                        Width="140" Margin="8,18,0,0"
+                        Style="{StaticResource BotonNaranja}"/>
 
-                <Button Content="🖨  Detalle orden"
+                <Button Content="Detalle orden"
                         Click="BtnDetalleOrden_Click"
-                        Width="140" Height="30"
-                        Margin="8,18,0,0"
-                        Background="#E0E0E0" Foreground="#1565C0"
-                        BorderBrush="#1565C0" FontWeight="Bold" Cursor="Hand"/>
-
+                        Width="140" Margin="8,18,0,0"
+                        Style="{StaticResource BotonNaranja}"/>
 
             </WrapPanel>
         </Border>
 
-        <!-- PANEL FASES (abajo, dock) -->
+        <!-- PANEL FASES -->
         <Border DockPanel.Dock="Bottom"
                 Visibility="{Binding FasesVisible, Converter={StaticResource BoolToVis}}"
                 Background="#1E1E1E" BorderBrush="#FF9800" BorderThickness="1"
                 Margin="20,8,20,8" Padding="0" CornerRadius="4">
+
             <StackPanel>
                 <TextBlock Text="Fases de la orden seleccionada:"
                            Foreground="#FF9800" FontWeight="Bold" Margin="12,8,0,6"/>
+
                 <DataGrid ItemsSource="{Binding FasesOrden}"
                           AutoGenerateColumns="False"
                           IsReadOnly="True"
@@ -140,21 +151,16 @@
                           GridLinesVisibility="Horizontal"
                           BorderThickness="0"
                           Margin="8,0,8,8">
+
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="Nº Fase"
-                                            Binding="{Binding NumeroFase}" Width="80"/>
-                        <DataGridTextColumn Header="Código fase"
-                                            Binding="{Binding CodigoFase}" Width="110"/>
-                        <DataGridTextColumn Header="Entrada"
-                                            Binding="{Binding CantidadEntrada}" Width="80"/>
-                        <DataGridTextColumn Header="OK"
-                                            Binding="{Binding CantidadOK}" Width="70"/>
-                        <DataGridTextColumn Header="Defectuosas"
-                                            Binding="{Binding CantidadDefecto}" Width="120"/>
-                        <DataGridTextColumn Header="Fecha fin"
-                                            Binding="{Binding FechaFin, StringFormat=dd/MM/yyyy}" Width="100"/>
-                        <DataGridTextColumn Header="Estado"
-                                            Binding="{Binding EstadoTexto}" Width="100">
+                        <DataGridTextColumn Header="Nº Fase" Binding="{Binding NumeroFase}" Width="80"/>
+                        <DataGridTextColumn Header="Código fase" Binding="{Binding CodigoFase}" Width="110"/>
+                        <DataGridTextColumn Header="Entrada" Binding="{Binding CantidadEntrada}" Width="80"/>
+                        <DataGridTextColumn Header="OK" Binding="{Binding CantidadOK}" Width="70"/>
+                        <DataGridTextColumn Header="Defectuosas" Binding="{Binding CantidadDefecto}" Width="120"/>
+                        <DataGridTextColumn Header="Fecha fin" Binding="{Binding FechaFin, StringFormat=dd/MM/yyyy}" Width="100"/>
+
+                        <DataGridTextColumn Header="Estado" Binding="{Binding EstadoTexto}" Width="100">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="TextBlock">
                                     <Setter Property="FontWeight" Value="Bold"/>
@@ -172,6 +178,7 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
+
                     </DataGrid.Columns>
                 </DataGrid>
             </StackPanel>
@@ -194,22 +201,16 @@
                   HorizontalGridLinesBrush="#444444"
                   BorderThickness="0"
                   ScrollViewer.VerticalScrollBarVisibility="Auto">
+
             <DataGrid.Columns>
-                <DataGridTextColumn Header="ID"
-                                    Binding="{Binding IdOrden}" Width="55"/>
-                <DataGridTextColumn Header="Código"
-                                    Binding="{Binding Codigo}" Width="120"
-                                    FontWeight="SemiBold"/>
-                <DataGridTextColumn Header="Descripción"
-                                    Binding="{Binding Descripcion}" Width="350"/>
-                <DataGridTextColumn Header="Descripción 2"
-                                    Binding="{Binding Descrip2}" Width="350"/>
-                <DataGridTextColumn Header="Cantidad"
-                                    Binding="{Binding Cantidad}" Width="120"/>
-                <DataGridTextColumn Header="Fecha fin"
-                                    Binding="{Binding FechaFin}" Width="130"/>
-                <DataGridTextColumn Header="Estado"
-                                    Binding="{Binding Estado}" Width="100">
+                <DataGridTextColumn Header="ID" Binding="{Binding IdOrden}" Width="55"/>
+                <DataGridTextColumn Header="Código" Binding="{Binding Codigo}" Width="120" FontWeight="SemiBold"/>
+                <DataGridTextColumn Header="Descripción" Binding="{Binding Descripcion}" Width="350"/>
+                <DataGridTextColumn Header="Descripción 2" Binding="{Binding Descrip2}" Width="350"/>
+                <DataGridTextColumn Header="Cantidad" Binding="{Binding Cantidad}" Width="120"/>
+                <DataGridTextColumn Header="Fecha fin" Binding="{Binding FechaFin}" Width="130"/>
+
+                <DataGridTextColumn Header="Estado" Binding="{Binding Estado}" Width="100">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="TextBlock">
                             <Setter Property="FontWeight" Value="Bold"/>
@@ -227,6 +228,7 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
+
             </DataGrid.Columns>
         </DataGrid>
 

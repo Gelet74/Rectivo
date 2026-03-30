@@ -1,12 +1,9 @@
-﻿using MahApps.Metro.Controls;
-using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Threading.Tasks;
+﻿using Microsoft.Extensions.DependencyInjection;
 using System.Windows;
 
 namespace recTivo.Frontend.Dialogos
 {
-    public partial class Inicio : MetroWindow
+    public partial class Inicio : Window
     {
         private readonly IServiceProvider _serviceProvider;
 

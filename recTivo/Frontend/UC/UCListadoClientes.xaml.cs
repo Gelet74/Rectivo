@@ -1,6 +1,7 @@
 ﻿using di.proyecto.clase._2025.Frontend.Mensajes;
 using Microsoft.Extensions.DependencyInjection;
 using recTivo.Frontend.Dialogos.Clientes;
+using recTivo.Informes;
 using recTivo.MVVM;
 using System.Windows;
 using System.Windows.Controls;
@@ -33,6 +34,14 @@ namespace recTivo.Frontend.UC
                 Focusable = true;
                 Focus();
             };
+        }
+
+        private void BtnExportarClientes_Click(object sender, RoutedEventArgs e)
+        {
+            var vm = (MVCliente)DataContext;
+            var clientes = vm.ClientesView?.Cast<Cliente>() ?? vm.ListaClientes;
+            var ruta = PdfService.GenerarListadoClientes(clientes);
+            MensajeInformacion.Mostrar("PDF generado", $"Guardado en:\n{ruta}");
         }
 
         private void btnLimpiarFiltros_Click(object sender, RoutedEventArgs e)

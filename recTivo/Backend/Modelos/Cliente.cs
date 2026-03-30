@@ -18,7 +18,7 @@ public class Cliente : ValidatableViewModel
     public string? Nombre
     {
         get => _nombre;
-        set => SetProperty(ref _nombre, value);
+        set { SetProperty(ref _nombre, value); OnPropertyChanged(nameof(NombreCompleto)); }
     }
 
     private string? _apellido1;
@@ -27,7 +27,7 @@ public class Cliente : ValidatableViewModel
     public string? Apellido1
     {
         get => _apellido1;
-        set => SetProperty(ref _apellido1, value);
+        set { SetProperty(ref _apellido1, value); OnPropertyChanged(nameof(NombreCompleto)); }
     }
 
     private string? _apellido2;
@@ -35,7 +35,7 @@ public class Cliente : ValidatableViewModel
     public string? Apellido2
     {
         get => _apellido2;
-        set => SetProperty(ref _apellido2, value);
+        set { SetProperty(ref _apellido2, value); OnPropertyChanged(nameof(NombreCompleto)); }
     }
 
     [Column("NUM_FACTURA")]
@@ -80,5 +80,5 @@ public class Cliente : ValidatableViewModel
     }
 
     [NotMapped]
-    public string NombreCompleto => $"{Nombre} {Apellido1} {Apellido2}".Trim();
+    public string NombreCompleto => $"{_nombre} {_apellido1} {_apellido2}".Trim();
 }

@@ -2,16 +2,30 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         ResizeMode="NoResize"
         WindowStyle="None"
         WindowStartupLocation="CenterScreen"
         Background="#2D2D30"
-        Height="720" Width="1100">
+        Height="720" Width="1100"
+        Language="es-ES">
 
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVis"/>
+
+        <Style TargetType="TextBlock" x:Key="RectivoTextBlock">
+            <Setter Property="Foreground" Value="#FF9800"/>
+        </Style>
+
+        <Style x:Key="RectivoTextBox" TargetType="TextBox">
+            <Setter Property="Background"      Value="#E0E0E0"/>
+            <Setter Property="Foreground"      Value="Black"/>
+            <Setter Property="BorderBrush"     Value="#E0E0E0"/>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="Padding"         Value="5"/>
+        </Style>
 
         <Style TargetType="TextBox">
             <Setter Property="Background"      Value="#E0E0E0"/>
@@ -32,30 +46,62 @@
             <Setter Property="AutoGenerateColumns"      Value="False"/>
             <Setter Property="RowHeaderWidth"           Value="0"/>
         </Style>
+
+        <Style x:Key="RectivoDataGridCell" TargetType="DataGridCell">
+            <Setter Property="Foreground" Value="#FF9800"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+        </Style>
+
+        <Style x:Key="RectivoDataGridRow" TargetType="DataGridRow">
+            <Setter Property="Foreground" Value="#FF9800"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="#1E1E1E"/>
+                    <Setter Property="Foreground" Value="#FFB74D"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="RectivoDatePickerTextBox" TargetType="DatePickerTextBox">
+            <Setter Property="Foreground" Value="Transparent"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+        </Style>
+
     </Window.Resources>
 
     <Grid>
         <Border BorderBrush="#FF9800" BorderThickness="4">
             <DockPanel LastChildFill="True">
 
-                <!-- CABECERA -->
                 <Grid DockPanel.Dock="Top" Height="40" Background="#808080">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
+
                     <TextBlock Text="VENTAS — PEDIDOS"
-                               Foreground="White" VerticalAlignment="Center"
-                               HorizontalAlignment="Left" Margin="10,0" FontWeight="Bold"/>
+                               Style="{StaticResource RectivoTextBlock}"
+                               Foreground="White"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Left"
+                               Margin="10,0"
+                               FontWeight="Bold"/>
+
                     <TextBlock Text="Pulsa ESC para volver atrás"
-                               Foreground="White" HorizontalAlignment="Right"
-                               VerticalAlignment="Center" Grid.Column="1" Margin="0,0,10,0"/>
+                               Foreground="White"
+                               Grid.Column="1"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Right"
+                               Margin="0,0,10,0"/>
                 </Grid>
 
                 <Grid Margin="20">
                     <TabControl x:Name="tabControl"
                                 Background="#2D2D30"
-                                BorderBrush="#FF9800" BorderThickness="0,2,0,0">
+                                BorderBrush="#FF9800"
+                                BorderThickness="0,2,0,0">
 
                         <TabControl.Resources>
                             <Style TargetType="TabItem">
@@ -74,9 +120,9 @@
                             </Style>
                         </TabControl.Resources>
 
-                        <!-- ══════════════════════════════════════════════ -->
-                        <!--  PESTAÑA 1: CREAR PEDIDO                      -->
-                        <!-- ══════════════════════════════════════════════ -->
+                        <!-- ============================
+                             PESTAÑA 1: CREAR PEDIDO
+                             ============================ -->
                         <TabItem Header="🛒  Crear pedido">
                             <Grid Margin="0,12,0,0">
                                 <Grid.RowDefinitions>
@@ -95,77 +141,114 @@
                                     <!-- LISTBOX PT -->
                                     <Border Grid.Column="0" Background="#3A3A3D" CornerRadius="4" Padding="12">
                                         <StackPanel>
+
                                             <TextBlock Text="Artículos PT:"
-                                                       Foreground="#FF9800" FontWeight="Bold" Margin="0,0,0,6"/>
+                                                       Style="{StaticResource RectivoTextBlock}"
+                                                       FontWeight="Bold"
+                                                       Margin="0,0,0,6"/>
+
                                             <TextBox x:Name="txtFiltroPT"
+                                                     Style="{StaticResource RectivoTextBox}"
                                                      Text="{Binding FiltroPT, UpdateSourceTrigger=PropertyChanged}"
-                                                     Height="28" Margin="0,0,0,8"/>
+                                                     Height="28"
+                                                     Margin="0,0,0,8"/>
+
                                             <ListBox x:Name="lstPT"
                                                      ItemsSource="{Binding ArticulosPTFiltrados}"
-                                                     Background="Transparent" BorderThickness="0"
+                                                     Background="Transparent"
+                                                     BorderThickness="0"
                                                      MaxHeight="300"
                                                      ScrollViewer.VerticalScrollBarVisibility="Auto">
+
                                                 <ListBox.ItemTemplate>
                                                     <DataTemplate>
-                                                        <CheckBox x:Name="chkPT" Foreground="White" Margin="0,3"
-                                                                  Checked="ChkPT_Checked" Unchecked="ChkPT_Unchecked">
+                                                        <CheckBox Margin="0,3"
+                                                                  Checked="ChkPT_Checked"
+                                                                  Unchecked="ChkPT_Unchecked">
+
                                                             <StackPanel>
-                                                                <TextBlock Text="{Binding Codigo}" FontWeight="Bold" Foreground="White"/>
-                                                                <TextBlock Text="{Binding descrip}"  Foreground="#AAAAAA" FontSize="11"/>
-                                                                <TextBlock Text="{Binding descrip2}" Foreground="#AAAAAA" FontSize="11"/>
+                                                                <TextBlock Text="{Binding Codigo}"
+                                                                           Foreground="White"
+                                                                           FontWeight="Bold"/>
+
+                                                                <TextBlock Text="{Binding descrip}"
+                                                                           Foreground="#AAAAAA"
+                                                                           FontSize="11"/>
+
+                                                                <TextBlock Text="{Binding descrip2}"
+                                                                           Foreground="#AAAAAA"
+                                                                           FontSize="11"/>
                                                             </StackPanel>
+
                                                         </CheckBox>
                                                     </DataTemplate>
                                                 </ListBox.ItemTemplate>
-                                                <ListBox.ItemContainerStyle>
-                                                    <Style TargetType="ListBoxItem">
-                                                        <Setter Property="Background" Value="Transparent"/>
-                                                        <Setter Property="Padding"    Value="2"/>
-                                                        <Setter Property="Template">
-                                                            <Setter.Value>
-                                                                <ControlTemplate TargetType="ListBoxItem">
-                                                                    <ContentPresenter/>
-                                                                </ControlTemplate>
-                                                            </Setter.Value>
-                                                        </Setter>
-                                                    </Style>
-                                                </ListBox.ItemContainerStyle>
+
                                             </ListBox>
+
                                         </StackPanel>
                                     </Border>
 
                                     <!-- LÍNEAS DEL PEDIDO -->
                                     <Border Grid.Column="2" Background="#3A3A3D" CornerRadius="4" Padding="12">
                                         <StackPanel>
+
                                             <TextBlock Text="Líneas del pedido — edita las cantidades:"
-                                                       Foreground="#FF9800" FontWeight="Bold" Margin="0,0,0,8"/>
+                                                       Style="{StaticResource RectivoTextBlock}"
+                                                       FontWeight="Bold"
+                                                       Margin="0,0,0,8"/>
+
                                             <DataGrid x:Name="dgLineas"
                                                       ItemsSource="{Binding LineasPedido}"
-                                                      IsReadOnly="False" MaxHeight="320"
-                                                      CellEditEnding="DgLineas_CellEditEnding">
+                                                      IsReadOnly="False"
+                                                      AutoGenerateColumns="False"
+                                                      CanUserAddRows="False"
+                                                      MaxHeight="320"
+                                                      CellEditEnding="DgLineas_CellEditEnding"
+                                                      RowStyle="{StaticResource RectivoDataGridRow}"
+                                                      CellStyle="{StaticResource RectivoDataGridCell}">
+
                                                 <DataGrid.Columns>
+
                                                     <DataGridTextColumn Header="Código"
-                                                                        Binding="{Binding Codigo}"
-                                                                        Width="100" IsReadOnly="True" FontWeight="SemiBold"/>
+                                                                        Binding="{Binding Articulo.Codigo}"
+                                                                        Width="100"
+                                                                        IsReadOnly="True"/>
+
                                                     <DataGridTextColumn Header="Descripción"
-                                                                        Binding="{Binding Descripcion}"
-                                                                        Width="150" IsReadOnly="True"/>
+                                                                        Binding="{Binding Articulo.descrip}"
+                                                                        Width="200"
+                                                                        IsReadOnly="True"/>
+
                                                     <DataGridTextColumn Header="Descripción 2"
-                                                                        Binding="{Binding Descripcion2}"
-                                                                        Width="150" IsReadOnly="True"/>
+                                                                        Binding="{Binding Articulo.descrip2}"
+                                                                        Width="200"
+                                                                        IsReadOnly="True"/>
+
                                                     <DataGridTextColumn Header="Cantidad"
-                                                                        Binding="{Binding Cantidad, UpdateSourceTrigger=LostFocus}"
-                                                                        Width="70"/>
-                                                    <DataGridTextColumn Header="PVP unit."
-                                                                        Binding="{Binding PrecioUnitario, StringFormat={}{0:0.00} €}"
-                                                                        Width="120" IsReadOnly="True"/>
+                                                                        Binding="{Binding Cantidad, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                                        Width="80"
+                                                                        IsReadOnly="False"/>
+
+                                                    <DataGridTextColumn Header="Precio"
+                                                                        Binding="{Binding PrecioUnitario}"
+                                                                        Width="100"
+                                                                        IsReadOnly="True"/>
+
                                                     <DataGridTextColumn Header="Subtotal"
-                                                                        Binding="{Binding Subtotal, StringFormat={}{0:0.00} €}"
-                                                                        Width="120" IsReadOnly="True"/>
+                                                                        Binding="{Binding Subtotal}"
+                                                                        Width="100"
+                                                                        IsReadOnly="True"/>
+
                                                 </DataGrid.Columns>
+
                                             </DataGrid>
+
+
                                             <TextBlock Text="Haz doble clic en Cantidad para editarla."
-                                                       Foreground="#888" FontSize="11" Margin="0,6,0,0"/>
+                                                       Foreground="#888"
+                                                       FontSize="11"
+                                                       Margin="0,6,0,0"/>
                                         </StackPanel>
                                     </Border>
                                 </Grid>
@@ -173,6 +256,7 @@
                                 <!-- FILA 2: Cliente + fecha + total -->
                                 <Border Grid.Row="1" Background="#3A3A3D" CornerRadius="4"
                                         Padding="16,10" Margin="0,12,0,0">
+
                                     <Grid>
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="Auto"/>
@@ -184,56 +268,88 @@
                                             <ColumnDefinition Width="Auto"/>
                                         </Grid.ColumnDefinitions>
 
+                                        <!-- CLIENTE -->
                                         <StackPanel Grid.Column="0" VerticalAlignment="Center" Width="200">
-                                            <TextBlock Text="Buscar cliente:" Foreground="#FF9800" Margin="0,0,0,4"/>
+
+                                            <TextBlock Text="Buscar cliente:"
+                                                       Style="{StaticResource RectivoTextBlock}"
+                                                       Margin="0,0,0,4"/>
+
                                             <TextBox Text="{Binding FiltroCliente, UpdateSourceTrigger=PropertyChanged}"
-                                                     Height="28" Margin="0,0,0,6"/>
+                                                     Style="{StaticResource RectivoTextBox}"
+                                                     Height="28"
+                                                     Margin="0,0,0,6"/>
+
                                             <ComboBox x:Name="cmbCliente"
                                                       ItemsSource="{Binding ClientesFiltrados}"
                                                       SelectedItem="{Binding ClienteSeleccionado, Mode=TwoWay}"
-                                                      Height="28" Background="#E0E0E0">
-                                                <ComboBox.ItemTemplate>
-                                                    <DataTemplate>
-                                                        <TextBlock>
-                                                            <Run Text="{Binding Nombre}"/>
-                                                            <Run Text=" "/>
-                                                            <Run Text="{Binding Apellido1}"/>
-                                                            <Run Text=" — DNI: "/>
-                                                            <Run Text="{Binding Dni}"/>
-                                                        </TextBlock>
-                                                    </DataTemplate>
-                                                </ComboBox.ItemTemplate>
-                                            </ComboBox>
+                                                      DisplayMemberPath="NombreCompleto"
+                                                      Height="28"
+                                                      Background="#E0E0E0"
+                                                      Foreground="#FF9800"/>
                                         </StackPanel>
 
                                         <StackPanel Grid.Column="2" VerticalAlignment="Center">
-                                            <TextBlock Text="Fecha entrega prevista:" Foreground="#FF9800" Margin="0,0,0,4"/>
-                                            <DatePicker SelectedDate="{Binding FechaEntrega, Mode=TwoWay}"
-                                                        Width="160" Height="30" Background="#E0E0E0"/>
+                                            <TextBlock Text="Fecha entrega prevista:"
+                                                       Style="{StaticResource RectivoTextBlock}"
+                                                       Margin="0,0,0,4"/>
+
+                                            <Grid Width="160" Height="30">
+                                                <DatePicker x:Name="dpFecha"
+                                                            SelectedDate="{Binding FechaEntrega, Mode=TwoWay}"
+                                                            Background="#2D2D30"
+                                                            BorderBrush="#FF9800">
+                                                    <DatePicker.Resources>
+                                                        <Style TargetType="DatePickerTextBox">
+                                                            <Setter Property="Foreground" Value="Transparent"/>
+                                                            <Setter Property="Background" Value="Transparent"/>
+                                                            <Setter Property="BorderBrush" Value="Transparent"/>
+                                                        </Style>
+                                                    </DatePicker.Resources>
+                                                </DatePicker>
+                                                <TextBlock Text="{Binding SelectedDate, ElementName=dpFecha, StringFormat={}{0:dd/MM/yyyy}}"
+                                                           Foreground="#FF9800"
+                                                           VerticalAlignment="Center"
+                                                           Margin="8,0,30,0"
+                                                           IsHitTestVisible="False"
+                                                           Panel.ZIndex="9999"/>
+                                            </Grid>
                                         </StackPanel>
 
                                         <StackPanel Grid.Column="4" VerticalAlignment="Center">
-                                            <TextBlock Text="TOTAL PEDIDO" Foreground="#FF9800" FontWeight="Bold" Margin="0,0,0,4"/>
+
+                                            <TextBlock Text="TOTAL PEDIDO"
+                                                       Style="{StaticResource RectivoTextBlock}"
+                                                       FontWeight="Bold"
+                                                       Margin="0,0,0,4"/>
+
                                             <TextBlock Text="{Binding TotalPedido, StringFormat={}{0:0.00} €}"
-                                                       Foreground="White" FontSize="22" FontWeight="Bold"/>
+                                                       Foreground="White"
+                                                       FontSize="22"
+                                                       FontWeight="Bold"/>
+
                                         </StackPanel>
 
                                         <Button Grid.Column="6"
                                                 Content="Crear pedido"
                                                 Click="BtnCrearPedido_Click"
-                                                Width="180" Height="40"
-                                                Background="#FF9800" Foreground="White"
-                                                BorderBrush="#FF9800" FontWeight="Bold"
-                                                VerticalAlignment="Center" Cursor="Hand"/>
+                                                Width="180"
+                                                Height="40"
+                                                Background="#FF9800"
+                                                Foreground="White"
+                                                BorderBrush="#FF9800"
+                                                FontWeight="Bold"
+                                                VerticalAlignment="Center"
+                                                Cursor="Hand"/>
+
                                     </Grid>
+
                                 </Border>
+
                             </Grid>
                         </TabItem>
 
-                        <!-- ══════════════════════════════════════════════ -->
-                        <!--  PESTAÑA 2: LISTAR / CERRAR PEDIDOS           -->
-                        <!-- ══════════════════════════════════════════════ -->
-                        <TabItem Header="📋  Listar pedidos">
+                        <TabItem Header="Listar pedidos">
                             <Grid Margin="0,12,0,0">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto"/>
@@ -241,34 +357,48 @@
                                     <RowDefinition Height="Auto"/>
                                 </Grid.RowDefinitions>
 
-                                <!-- Filtros -->
                                 <Border Grid.Row="0" Background="#3A3A3D" CornerRadius="4"
                                         Padding="16,10" Margin="0,0,0,12">
+
                                     <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="Estado:" Foreground="#FF9800"
-                                                   VerticalAlignment="Center" Margin="0,0,8,0"/>
+
+                                        <TextBlock Text="Estado:"
+                                                   Style="{StaticResource RectivoTextBlock}"
+                                                   Margin="0,0,8,0"/>
+
                                         <ComboBox ItemsSource="{Binding OpcionesEstado}"
                                                   SelectedItem="{Binding FiltroEstadoPedido, Mode=TwoWay}"
-                                                  Width="120" Height="28" Background="#E0E0E0" Margin="0,0,20,0"/>
+                                                  Width="120"
+                                                  Height="28"
+                                                  Background="#E0E0E0"
+                                                  Margin="0,0,20,0"/>
 
-                                        <TextBlock Text="Cliente / Nº:" Foreground="#FF9800"
-                                                   VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                        <TextBlock Text="Cliente / Nº:"
+                                                   Style="{StaticResource RectivoTextBlock}"
+                                                   Margin="0,0,8,0"/>
+
                                         <TextBox Text="{Binding FiltroCodigoPedido, UpdateSourceTrigger=PropertyChanged}"
-                                                 Width="160" Height="28"/>
+                                                 Style="{StaticResource RectivoTextBox}"
+                                                 Width="160"
+                                                 Height="28"/>
+
                                     </StackPanel>
+
                                 </Border>
 
-                                <!-- Tabla pedidos — selección por fila completa -->
-                                <DataGrid x:Name="dgPedidos" Grid.Row="1"
+                                <DataGrid x:Name="dgPedidos"
+                                          Grid.Row="1"
                                           Background="#3A3A3D"
                                           ItemsSource="{Binding PedidosFiltrados}"
-                                              IsReadOnly="True"
-                                              SelectionMode="Single"
-                                              SelectionUnit="FullRow"
-                                              EnableRowVirtualization="False">
+                                          IsReadOnly="True"
+                                          SelectionMode="Single"
+                                          SelectionUnit="FullRow"
+                                          EnableRowVirtualization="False"
+                                          RowStyle="{StaticResource RectivoDataGridRow}"
+                                          CellStyle="{StaticResource RectivoDataGridCell}">
 
                                     <DataGrid.Columns>
-                                        <DataGridTextColumn Header="Nº"      Binding="{Binding IdPedido}" Width="55"  FontWeight="SemiBold"/>
+                                        <DataGridTextColumn Header="Nº"      Binding="{Binding IdPedido}" Width="55"/>
                                         <DataGridTextColumn Header="Cliente" Binding="{Binding Cliente}"  Width="250"/>
                                         <DataGridTextColumn Header="Fecha"   Binding="{Binding Fecha}"    Width="150"/>
                                         <DataGridTextColumn Header="Entrega" Binding="{Binding Entrega}"  Width="150"/>
@@ -276,37 +406,22 @@
                                         <DataGridTextColumn Header="Total"   Binding="{Binding Total, StringFormat={}{0:0.00} €}" Width="150"/>
                                     </DataGrid.Columns>
 
-                                    <DataGrid.RowStyle>
-                                        <Style TargetType="DataGridRow">
-                                            <Setter Property="Cursor" Value="Hand"/>
-                                            <!-- Selección visible en azul -->
-                                            <Style.Triggers>
-                                                <Trigger Property="IsSelected" Value="True">
-                                                    <Setter Property="Background" Value="#1565C0"/>
-                                                    <Setter Property="Foreground" Value="White"/>
-                                                </Trigger>
-                                                <DataTrigger Binding="{Binding Estado}" Value="Entregado">
-                                                    <Setter Property="Background" Value="#C8E6C9"/>
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </DataGrid.RowStyle>
-
-
                                 </DataGrid>
 
-                                <!-- Botón cerrar pedido -->
                                 <Grid Grid.Row="2" Margin="0,10,0,0">
                                     <Button Content="Cerrar pedido seleccionado (entregar)"
                                             Click="BtnCerrarPedido_Click"
                                             HorizontalAlignment="Right"
-                                            Width="300" Height="38"
-                                            Background="#FF9800" Foreground="White"
-                                            BorderBrush="#FF9800" FontWeight="Bold" Cursor="Hand"/>
+                                            Width="300"
+                                            Height="38"
+                                            Background="#FF9800"
+                                            Foreground="White"
+                                            BorderBrush="#FF9800"
+                                            FontWeight="Bold"
+                                            Cursor="Hand"/>
                                 </Grid>
                             </Grid>
                         </TabItem>
-
                     </TabControl>
                 </Grid>
             </DockPanel>

@@ -1,5 +1,4 @@
-﻿using recTivo.Frontend.Dialogos.VentanasInicio;
-using recTivo.MVVM;
+﻿using recTivo.MVVM;
 using System;
 using System.Windows;
 using System.Windows.Controls;
@@ -21,7 +20,6 @@ namespace recTivo.Frontend.UC
             Loaded += async (_, _) =>
             {
                 await _vm.InicializarListadoAsync();
-
                 var ownerWindow = Window.GetWindow(this);
                 if (ownerWindow != null)
                     ownerWindow.PreviewKeyDown += OwnerWindow_PreviewKeyDown;
@@ -59,7 +57,6 @@ namespace recTivo.Frontend.UC
 
         private void DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-
         }
     }
 }

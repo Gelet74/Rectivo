@@ -10,6 +10,7 @@
         Validation.Error="OnErrorEvent">
 
     <Window.Resources>
+
         <BooleanToVisibilityConverter x:Key="BoolToVis"/>
 
         <Style TargetType="TextBox">
@@ -22,7 +23,7 @@
                 <Setter.Value>
                     <ControlTemplate>
                         <StackPanel>
-                            <AdornedElementPlaceholder x:Name="placeholder"/>
+                            <AdornedElementPlaceholder/>
                             <TextBlock Text="{Binding [0].ErrorContent}"
                                        Foreground="Red"
                                        FontSize="10"
@@ -57,12 +58,14 @@
             <Setter Property="BorderThickness" Value="2"/>
             <Setter Property="Padding" Value="5"/>
         </Style>
+
     </Window.Resources>
 
     <Grid>
         <Border BorderBrush="#FF9800" BorderThickness="4">
             <DockPanel LastChildFill="True">
 
+                <!-- CABECERA -->
                 <Grid DockPanel.Dock="Top" Height="40" Background="#808080">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
@@ -83,84 +86,95 @@
                                Margin="0,0,10,0"/>
                 </Grid>
 
+                <!-- CONTENIDO -->
                 <Grid Margin="30,20,30,10">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
 
+                    <!-- COLUMNA IZQUIERDA -->
                     <StackPanel Grid.Column="0" Margin="10,0,10,0">
 
                         <TextBlock Text="Apellidos:" Foreground="#FF9800"/>
-                        <TextBox Text="{Binding Empleado.Apellidos, 
+                        <TextBox Text="{Binding Empleado.Apellidos,
                                         ValidatesOnDataErrors=True,
-                                        NotifyOnValidationError=True, 
+                                        NotifyOnValidationError=True,
                                         UpdateSourceTrigger=PropertyChanged}"
-                             Height="30" Margin="0,2,0,8"
-                             Width="180" HorizontalAlignment="Left"/>
+                                 HorizontalAlignment="Left"
+                                 Height="30" Margin="0,2,0,8" Width="180"/>
 
                         <TextBlock Text="Nombre:" Foreground="#FF9800" Margin="0,10,0,0"/>
-                        <TextBox Text="{Binding Empleado.Nombre, 
+                        <TextBox Text="{Binding Empleado.Nombre,
                                         ValidatesOnDataErrors=True,
-                                        NotifyOnValidationError=True, 
+                                        NotifyOnValidationError=True,
                                         UpdateSourceTrigger=PropertyChanged}"
-                             Height="30" Margin="0,2,0,8"
-                             Width="180" HorizontalAlignment="Left"/>
+                                 HorizontalAlignment="Left"
+                                 Height="30" Margin="0,2,0,8" Width="180"/>
 
                         <TextBlock Text="DNI:" Foreground="#FF9800" Margin="0,10,0,0"/>
                         <TextBox Text="{Binding Empleado.Dni,
-                                    ValidatesOnDataErrors=True,
-                                    NotifyOnValidationError=True,
-                                    UpdateSourceTrigger=PropertyChanged}"
-                                    Height="30" Margin="0,2,0,8"
-                                    Width="180" HorizontalAlignment="Left"/>
+                                        ValidatesOnDataErrors=True,
+                                        NotifyOnValidationError=True,
+                                        UpdateSourceTrigger=PropertyChanged}"
+                                 HorizontalAlignment="Left"
+                                 Height="30" Margin="0,2,0,8" Width="180"/>
 
                         <TextBlock Text="Puesto:" Foreground="#FF9800" Margin="0,10,0,0"/>
                         <ComboBox ItemsSource="{Binding ListaRoles}"
                                   SelectedItem="{Binding Empleado.Rol,
                                                 ValidatesOnDataErrors=True,
-                                                NotifyOnValidationError=True, 
+                                                NotifyOnValidationError=True,
                                                 UpdateSourceTrigger=PropertyChanged}"
-                                  DisplayMemberPath="Nombre"
-                                  SelectedValuePath="Id"
-                                  Height="30" Margin="0,2,0,8"
-                                  Width="180" HorizontalAlignment="Left"/>
+                                  HorizontalAlignment="Left"
+                                  Height="30" Margin="0,2,0,8" Width="180">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding NombreRol}" Foreground="Black"/>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
 
                     </StackPanel>
 
+                    <!-- COLUMNA DERECHA -->
                     <StackPanel Grid.Column="1" Margin="20,0,0,0">
 
                         <TextBlock Text="Usuario:" Foreground="#FF9800"/>
-                        <TextBox Text="{Binding Empleado.Username, 
+                        <TextBox Text="{Binding Empleado.Username,
                                         ValidatesOnDataErrors=True,
-                                        NotifyOnValidationError=True, 
+                                        NotifyOnValidationError=True,
                                         UpdateSourceTrigger=PropertyChanged}"
-                                  Height="30" Margin="0,2,0,8"
-                                  Width="180" HorizontalAlignment="Left"/>
+                                 HorizontalAlignment="Left"
+                                 Height="30" Margin="0,2,0,8" Width="180"/>
 
                         <TextBlock Text="Contraseña:" Foreground="#FF9800" Margin="0,10,0,0"/>
                         <PasswordBox x:Name="txtPassword"
                                      PasswordChanged="txtPassword_PasswordChanged"
-                                     Height="30" Margin="0,2,0,8"
-                                     Width="180" HorizontalAlignment="Left"/>
+                                     HorizontalAlignment="Left"
+                                     Height="30" Margin="0,2,0,8" Width="180"/>
 
                         <TextBlock Text="Estado:" Foreground="#FF9800" Margin="0,10,0,0"/>
                         <ComboBox ItemsSource="{Binding Estados}"
-                              SelectedItem="{Binding Estado, Mode=TwoWay}"
-                              Height="30" Margin="0,2,0,8"
-                              Width="180" HorizontalAlignment="Left"/>
+                                  SelectedItem="{Binding Estado, Mode=TwoWay}"
+                                  Height="30" Margin="0,2,0,8" Width="180"
+                                  HorizontalAlignment="Left"
+                                  Background="White" Foreground="Black">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding}" Foreground="Black"/>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
 
                         <Button Content="Dar de alta"
-                            Click="btnAltaEmpleado_Click"
-                            Height="30" Width="180"
-                            Margin="0,10,0,0"
-                            Background="#E0E0E0"
-                            BorderBrush="#FF5722"
-                            Foreground="#FF5722"
-                            FontWeight="Bold"
-                            IsEnabled="{Binding HasNoErrors}"
-                            HorizontalAlignment="Left"/>
+                                Click="btnAltaEmpleado_Click"
+                                Height="30" Width="180"
+                                Margin="0,26,0,0"
+                                HorizontalAlignment="Left"
+                                IsEnabled="{Binding HasNoErrors}"/>
                     </StackPanel>
+
                 </Grid>
 
             </DockPanel>

@@ -51,7 +51,5 @@ namespace recTivo.Frontend.Dialogos.Articulos
                 base.OnPreviewKeyDown(e);
             }
         }
-
-        // ELIMINADO: INotifyPropertyChanged — no tiene uso en una ventana
     }
 }
