@@ -10,7 +10,6 @@
 
     <Window.Resources>
 
-        <!-- TextBox estándar -->
         <Style TargetType="TextBox">
             <Setter Property="Background"      Value="#E0E0E0"/>
             <Setter Property="Foreground"      Value="Black"/>

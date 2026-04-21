@@ -60,7 +60,7 @@ namespace recTivo.Backend.Repos
                         .FirstOrDefaultAsync(a => a.Codigo == linea.CodigoArticulo);
 
                     if (articulo != null)
-                        articulo.Stock = (byte)Math.Max(0, (articulo.Stock ?? 0) - linea.Cantidad);
+                        articulo.Stock = Math.Max(0, (articulo.Stock ?? 0) - linea.Cantidad);
 
                     if (ubicacionesPorArticulo.TryGetValue(linea.CodigoArticulo, out int idUbicacion))
                     {
@@ -68,7 +68,7 @@ namespace recTivo.Backend.Repos
                             .FirstOrDefaultAsync(u => u.IdUbicacion == idUbicacion);
 
                         if (ub != null)
-                            ub.Cantidad = Math.Max(0, ub.Cantidad - linea.Cantidad);
+                            ub.Cantidad = Math.Max(0, (ub.Cantidad ?? 0) - linea.Cantidad);
                     }
                 }
 

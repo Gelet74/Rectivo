@@ -49,7 +49,6 @@ public class OrdenFaseRepository : GenericRepository<OrdenFase>
 
         bool esFasePT = fase.CodigoFase == "AGRUPAMIENTO";
 
-        // ── VALIDACIÓN PREVIA: ubicación antes de tocar nada ─────────────
         bool esUltimaFase = !await _context.Set<OrdenFase>()
             .AnyAsync(f => f.IdOrden == fase.IdOrden &&
                            f.NumeroFase == fase.NumeroFase + 1);
@@ -81,7 +80,6 @@ public class OrdenFaseRepository : GenericRepository<OrdenFase>
             }
         }
 
-        // ── Validar fase anterior cerrada ─────────────────────────────────
         if (fase.NumeroFase > 1)
         {
             var faseAnterior = await _context.Set<OrdenFase>()
@@ -96,7 +94,6 @@ public class OrdenFaseRepository : GenericRepository<OrdenFase>
                 $"OK ({cantidadOK}) + Defectos ({cantidadDefecto}) " +
                 $"superan la entrada ({fase.CantidadEntrada}).");
 
-        // ── 1) Cerrar la fase ─────────────────────────────────────────────
         fase.CantidadOK = cantidadOK;
         fase.CantidadDefecto = cantidadDefecto;
         fase.IdEmpleado = idEmpleado;
@@ -106,12 +103,10 @@ public class OrdenFaseRepository : GenericRepository<OrdenFase>
 
         if (esFasePT)
         {
-            // ── FASE PT: descontar PS del stock y subir PT ────────────────
             await CerrarFasePTAsync(orden, cantidadOK, ubicacionPasillo, ubicacionEstanteria, ubicacionHueco);
         }
         else
         {
-            // ── FASE PS: lógica original ──────────────────────────────────
             await CerrarFasePSAsync(fase, orden, cantidadOK, ubicacionPasillo, ubicacionEstanteria, ubicacionHueco, esUltimaFase);
         }
     }
@@ -126,7 +121,7 @@ public class OrdenFaseRepository : GenericRepository<OrdenFase>
         int? ubicacionEstanteria,
         int? ubicacionHueco)
     {
-        // 1) Obtener los PS del escandallo del PT
+   
         var escandallo = await _context.Escandallos
             .FirstOrDefaultAsync(e => e.CodigoProducto == orden.Codigo);
 
@@ -137,7 +132,6 @@ public class OrdenFaseRepository : GenericRepository<OrdenFase>
                              c.CodigoArticulo.StartsWith("PS"))
                 .ToListAsync();
 
-            // 2) Descontar cada PS del stock
             foreach (var comp in componentesPS)
             {
                 int cantidadPS = (int)Math.Ceiling((comp.Cantidad ?? 1) * cantidadOK);
@@ -153,12 +147,12 @@ public class OrdenFaseRepository : GenericRepository<OrdenFase>
                         .OrderBy(u => u.IdUbicacion)
                         .ToListAsync();
 
-                    int pendienteDescontar = cantidadPS;
+                    decimal pendienteDescontar = cantidadPS;
                     foreach (var ubi in ubicaciones)
                     {
                         if (pendienteDescontar <= 0) break;
-                        int descontar = Math.Min(ubi.Cantidad, pendienteDescontar);
-                        ubi.Cantidad -= descontar;
+                        decimal descontar = Math.Min(ubi.Cantidad ?? 0, pendienteDescontar);
+                        ubi.Cantidad = (ubi.Cantidad ?? 0) - descontar;
                         pendienteDescontar -= descontar;
                     }
 

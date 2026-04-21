@@ -86,7 +86,7 @@
                         <TextBox Text="{Binding Cantidad, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                  Margin="0,5" Width="180" HorizontalAlignment="Left" Height="30"
                                  PreviewTextInput="TextBox_SoloNumeros"/>
-                        <TextBlock Text="{Binding ErrorCantidad}" Style="{StaticResource ErrorText}"/>
+                        <TextBlock Text="{Binding ErrorCantidad}" Style="{StaticResource ErrorText}" TextWrapping="Wrap"/>
 
                     </StackPanel>
 

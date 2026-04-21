@@ -15,11 +15,11 @@ namespace recTivo.MVVM
             _context = context;
             MVArticulo = mvArticulo;
 
-            // Cuando cambia el artículo seleccionado, recalcular EsValido
             MVArticulo.PropertyChanged += (_, e) =>
             {
                 if (e.PropertyName == nameof(MVArticulo.ArticuloSeleccionado))
                     OnPropertyChanged(nameof(EsValido));
+                    OnPropertyChanged(nameof(ErrorCantidad));
             };
         }
 
@@ -27,7 +27,7 @@ namespace recTivo.MVVM
         public string Cantidad
         {
             get => _cantidad;
-            set { SetProperty(ref _cantidad, value); OnPropertyChanged(nameof(EsValido)); }
+            set { SetProperty(ref _cantidad, value); OnPropertyChanged(nameof(EsValido)); OnPropertyChanged(nameof(ErrorCantidad)); }
         }
 
         private string? _pasillo;
@@ -51,15 +51,28 @@ namespace recTivo.MVVM
             set { SetProperty(ref _hueco, value); OnPropertyChanged(nameof(EsValido)); }
         }
 
+        private bool EsTablero =>
+        MVArticulo.ArticuloSeleccionado?.descrip
+        ?.Contains("tablero", StringComparison.OrdinalIgnoreCase) ?? false;
         public bool EsValido =>
-            MVArticulo.ArticuloSeleccionado != null &&
-            int.TryParse(Cantidad, out int c) && c > 0 &&
-            !string.IsNullOrWhiteSpace(Pasillo) &&
-            int.TryParse(Estanteria, out _) &&
-            int.TryParse(Hueco, out _);
+        MVArticulo.ArticuloSeleccionado != null &&
+        decimal.TryParse(Cantidad, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out decimal c) && c > 0 &&
+        (EsTablero || c == Math.Floor(c)) &&
+        !string.IsNullOrWhiteSpace(Pasillo) &&
+        int.TryParse(Estanteria, out _) &&
+        int.TryParse(Hueco, out _);
 
-        public string ErrorCantidad => !int.TryParse(Cantidad, out int c2) || c2 <= 0
-            ? "Introduce un número mayor que 0" : "";
+        public string ErrorCantidad
+        {
+            get
+            {
+                if (!decimal.TryParse(Cantidad, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out decimal c) || c <= 0)
+                    return "Introduce un número mayor que 0";
+                if (!EsTablero && c != Math.Floor(c))
+                    return "Este artículo no admite cantidades decimales";
+                return "";
+            }
+        }
         public string ErrorPasillo => string.IsNullOrWhiteSpace(Pasillo)
             ? "Obligatorio" : "";
         public string ErrorEstanteria => !int.TryParse(Estanteria, out _)
@@ -77,7 +90,7 @@ namespace recTivo.MVVM
                 var articulo = MVArticulo.ArticuloSeleccionado;
                 if (articulo == null) return;
 
-                if (!int.TryParse(Cantidad, out int cantidadAIngresar) || cantidadAIngresar <= 0) return;
+                if (!decimal.TryParse(Cantidad, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out decimal cantidadAIngresar) || cantidadAIngresar <= 0) return;
 
                 if (!int.TryParse(Estanteria, out int estanteria) || !int.TryParse(Hueco, out int hueco))
                 {
@@ -147,7 +160,7 @@ namespace recTivo.MVVM
                     return;
                 }
 
-                if (!int.TryParse(Cantidad, out int cantidadASacar) || cantidadASacar <= 0)
+                if (!decimal.TryParse(Cantidad, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out decimal cantidadASacar) || cantidadASacar <= 0)
                 {
                     MensajeAdvertencia.Mostrar("AVISO", "Introduce una cantidad válida.");
                     return;

@@ -385,7 +385,7 @@ namespace recTivo.MVVM
             set { _articulo.PrecioCompra = value; OnPropertyChanged(); }
         }
 
-        public int? Stock
+        public decimal? Stock
         {
             get => _articulo.Stock;
             set { _articulo.Stock = value; OnPropertyChanged(); }

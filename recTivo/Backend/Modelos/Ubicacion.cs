@@ -20,7 +20,7 @@ public class Ubicacion
     public int? NumeroEstanteria { get; set; }
 
     [Column("CANTIDAD")]
-    public int Cantidad { get; set; }
+    public decimal? Cantidad { get; set; }
 
     [Column("ID_ARTICULO")]
     public int? IdArticulo { get; set; }

@@ -15,7 +15,7 @@ namespace recTivo.Backend.Modelos
         [Column("descripcion2")]
         public string? descrip2 { get; set; }
 
-        public int? Stock { get; set; } = 0;
+        public decimal? Stock { get; set; } = 0;
         public double? Pvp { get; set; }
 
         [Column("precio_compra")]
@@ -35,7 +35,7 @@ namespace recTivo.Backend.Modelos
         // ===========================
 
         [NotMapped]
-        public int StockTotal => Ubicaciones?.Sum(u => u.Cantidad) ?? Stock ?? 0;
+        public decimal StockTotal => Ubicaciones?.Sum(u => u.Cantidad) ?? Stock ?? 0;
 
         [NotMapped]
         public string UbicacionesResumen

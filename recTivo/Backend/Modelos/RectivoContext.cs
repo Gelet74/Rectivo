@@ -49,8 +49,8 @@ namespace recTivo.Backend.Modelos
                 entity.Property(a => a.IdArticulo).HasColumnName("id_articulo");
                 entity.Property(a => a.Codigo).HasColumnName("codigo").HasMaxLength(10).IsRequired();
                 entity.Property(a => a.descrip).HasColumnName("descripcion").HasMaxLength(50).IsRequired();
-                entity.Property(a => a.descrip2).HasColumnName("descripcion2").HasMaxLength(50);
-                entity.Property(a => a.Stock).HasColumnName("stock").HasDefaultValue(0);
+                entity.Property(a => a.descrip2).HasColumnName("descripcion2").HasMaxLength(50); 
+                entity.Property(a => a.Stock).HasColumnName("stock").HasColumnType("decimal(10,2)").HasDefaultValue(0m);
                 entity.Property(a => a.Pvp).HasColumnName("pvp");
                 entity.Property(a => a.PrecioCompra).HasColumnName("precio_compra").HasColumnType("decimal(10,2)");
             });
@@ -63,14 +63,9 @@ namespace recTivo.Backend.Modelos
                 entity.Property(u => u.Numero).HasColumnName("NUMERO");
                 entity.Property(u => u.LetraPasillo).HasColumnName("LETRA_PASILLO").HasMaxLength(10);
                 entity.Property(u => u.NumeroEstanteria).HasColumnName("NUMERO_ESTANTERIA");
-                // AÑADIDOS: faltaban en la configuración original
-                entity.Property(u => u.Cantidad).HasColumnName("CANTIDAD");
+                entity.Property(u => u.Cantidad).HasColumnName("CANTIDAD").HasColumnType("decimal(10,2)");
                 entity.Property(u => u.IdArticulo).HasColumnName("ID_ARTICULO");
-
-                entity.HasOne(u => u.Articulo)
-                      .WithMany(a => a.Ubicaciones)
-                      .HasForeignKey(u => u.IdArticulo)
-                      .OnDelete(DeleteBehavior.SetNull);
+                entity.HasOne(u => u.Articulo).WithMany(a => a.Ubicaciones).HasForeignKey(u => u.IdArticulo).OnDelete(DeleteBehavior.SetNull);
             });
 
             modelBuilder.Entity<Orden>(entity =>
