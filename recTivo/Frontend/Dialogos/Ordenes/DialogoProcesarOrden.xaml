@@ -174,33 +174,47 @@
                                                        Foreground="#FF9800" FontWeight="Bold" Margin="0,0,0,8"/>
 
                                             <DataGrid x:Name="dgPTSeleccionados"
-                                                      ItemsSource="{Binding PTSeleccionados}"
-                                                      IsReadOnly="False"
-                                                      MaxHeight="340">
+          ItemsSource="{Binding PTSeleccionados}"
+          IsReadOnly="False"
+          MaxHeight="340">
+
+                                                <DataGrid.CellStyle>
+                                                    <Style TargetType="DataGridCell">
+                                                        <Setter Property="Foreground" Value="White"/>
+
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding IsMarcado}" Value="True">
+                                                                <Setter Property="Foreground" Value="#FF9800"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </DataGrid.CellStyle>
 
                                                 <DataGrid.Columns>
                                                     <DataGridTextColumn Header="Código"
-                                                                        Binding="{Binding Codigo}"
-                                                                        Width="120"
-                                                                        IsReadOnly="True"
-                                                                        FontWeight="SemiBold"/>
+                            Binding="{Binding Codigo}"
+                            Width="120"
+                            IsReadOnly="True"
+                            FontWeight="SemiBold"/>
 
                                                     <DataGridTextColumn Header="Descripción"
-                                                                        Binding="{Binding Descripcion}"
-                                                                        Width="*"
-                                                                        IsReadOnly="True"/>
+                            Binding="{Binding Descripcion}"
+                            Width="*"
+                            IsReadOnly="True"/>
 
                                                     <DataGridTextColumn Header="Descripción 2"
-                                                                        Binding="{Binding Descripcion2}"
-                                                                        Width="*"
-                                                                        IsReadOnly="True"/>
+                            Binding="{Binding Descripcion2}"
+                            Width="*"
+                            IsReadOnly="True"/>
 
                                                     <DataGridTextColumn Header="Cantidad"
-                                                                        Binding="{Binding Cantidad, UpdateSourceTrigger=LostFocus}"
-                                                                        Width="90"/>
+                            Binding="{Binding Cantidad, UpdateSourceTrigger=LostFocus}"
+                            Width="90"/>
                                                 </DataGrid.Columns>
 
                                             </DataGrid>
+
+
 
                                             <TextBlock Text="Haz doble clic en la celda Cantidad para editarla."
                                                        Foreground="#888" FontSize="11" Margin="0,6,0,0"/>

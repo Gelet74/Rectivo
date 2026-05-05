@@ -3,17 +3,31 @@ using recTivo.Backend.Modelos;
 using recTivo.Backend.Repos;
 using recTivo.MVVM.Base;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 
 namespace recTivo.MVVM
 {
-    public class FilaPTSeleccionado
+    public class FilaPTSeleccionado : INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        protected void OnPropertyChanged(string name)
+            => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+
         public Articulo Articulo { get; set; } = null!;
         public string Codigo => Articulo.Codigo;
         public string Descripcion => Articulo.descrip ?? "";
         public string Descripcion2 => Articulo.descrip2 ?? "";
         public decimal Cantidad { get; set; } = 1;
+
+        private bool _isMarcado;
+        public bool IsMarcado
+        {
+            get => _isMarcado;
+            set { _isMarcado = value; OnPropertyChanged(nameof(IsMarcado)); }
+        }
     }
+
 
     public class FilaOrdenPreview
     {
@@ -265,16 +279,27 @@ namespace recTivo.MVVM
             if (marcado)
             {
                 if (!PTSeleccionados.Any(p => p.Codigo == articulo.Codigo))
-                    PTSeleccionados.Add(new FilaPTSeleccionado { Articulo = articulo, Cantidad = 1 });
+                {
+                    PTSeleccionados.Add(new FilaPTSeleccionado
+                    {
+                        Articulo = articulo,
+                        Cantidad = 1,
+                        IsMarcado = true
+                    });
+                }
             }
             else
             {
                 var fila = PTSeleccionados.FirstOrDefault(p => p.Codigo == articulo.Codigo);
-                if (fila != null) PTSeleccionados.Remove(fila);
+                if (fila != null)
+                    PTSeleccionados.Remove(fila);
             }
+
             OrdenesPreview.Clear();
             PreviewVisible = false;
         }
+
+
 
         // ================================================================
         //   PS DIRECTO: TOGGLE
