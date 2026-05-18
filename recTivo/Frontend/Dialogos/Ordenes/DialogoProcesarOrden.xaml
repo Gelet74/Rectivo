@@ -24,6 +24,19 @@
             <Setter Property="Padding"         Value="5"/>
         </Style>
 
+        <Style TargetType="CalendarDayButton">
+            <Setter Property="Foreground" Value="#1E1E1E"/>
+        </Style>
+
+        <Style TargetType="CalendarButton">
+            <Setter Property="Foreground" Value="#1E1E1E"/>
+        </Style>
+
+        <Style TargetType="Calendar">
+            <Setter Property="Foreground" Value="#1E1E1E"/>
+            <Setter Property="Background" Value="White"/>
+        </Style>
+
         <Style TargetType="DataGrid">
             <Setter Property="Background"                Value="#E0E0E0"/>
             <Setter Property="RowBackground"             Value="#F5F5F5"/>
@@ -105,6 +118,7 @@
                             </Style>
                         </TabControl.Resources>
 
+                        <!-- ══════════════════════════════════════════ PESTAÑA PT ══ -->
                         <TabItem Header="Desde PT">
 
                             <Grid Margin="0,12,0,0">
@@ -122,6 +136,7 @@
                                         <ColumnDefinition Width="*"/>
                                     </Grid.ColumnDefinitions>
 
+                                    <!-- Lista artículos PT -->
                                     <Border Grid.Column="0" Background="#3A3A3D" CornerRadius="4" Padding="12">
                                         <StackPanel>
                                             <TextBlock Text="Artículos PT disponibles:"
@@ -138,13 +153,11 @@
                                                         <CheckBox Foreground="White" Margin="0,3"
                                                                   Checked="ChkPT_Checked"
                                                                   Unchecked="ChkPT_Unchecked">
-
                                                             <StackPanel>
                                                                 <TextBlock Text="{Binding Codigo}" FontWeight="Bold" Foreground="White"/>
                                                                 <TextBlock Text="{Binding descrip}"  Foreground="#AAAAAA" FontSize="11"/>
                                                                 <TextBlock Text="{Binding descrip2}" Foreground="#AAAAAA" FontSize="11"/>
                                                             </StackPanel>
-
                                                         </CheckBox>
                                                     </DataTemplate>
                                                 </ListBox.ItemTemplate>
@@ -167,6 +180,7 @@
                                         </StackPanel>
                                     </Border>
 
+                                    <!-- PT seleccionados -->
                                     <Border Grid.Column="2" Background="#3A3A3D" CornerRadius="4" Padding="12">
                                         <StackPanel>
 
@@ -174,14 +188,13 @@
                                                        Foreground="#FF9800" FontWeight="Bold" Margin="0,0,0,8"/>
 
                                             <DataGrid x:Name="dgPTSeleccionados"
-          ItemsSource="{Binding PTSeleccionados}"
-          IsReadOnly="False"
-          MaxHeight="340">
+                                                      ItemsSource="{Binding PTSeleccionados}"
+                                                      IsReadOnly="False"
+                                                      MaxHeight="340">
 
                                                 <DataGrid.CellStyle>
                                                     <Style TargetType="DataGridCell">
                                                         <Setter Property="Foreground" Value="White"/>
-
                                                         <Style.Triggers>
                                                             <DataTrigger Binding="{Binding IsMarcado}" Value="True">
                                                                 <Setter Property="Foreground" Value="#FF9800"/>
@@ -192,29 +205,24 @@
 
                                                 <DataGrid.Columns>
                                                     <DataGridTextColumn Header="Código"
-                            Binding="{Binding Codigo}"
-                            Width="120"
-                            IsReadOnly="True"
-                            FontWeight="SemiBold"/>
-
+                                                                        Binding="{Binding Codigo}"
+                                                                        Width="120"
+                                                                        IsReadOnly="True"
+                                                                        FontWeight="SemiBold"/>
                                                     <DataGridTextColumn Header="Descripción"
-                            Binding="{Binding Descripcion}"
-                            Width="*"
-                            IsReadOnly="True"/>
-
+                                                                        Binding="{Binding Descripcion}"
+                                                                        Width="*"
+                                                                        IsReadOnly="True"/>
                                                     <DataGridTextColumn Header="Descripción 2"
-                            Binding="{Binding Descripcion2}"
-                            Width="*"
-                            IsReadOnly="True"/>
-
+                                                                        Binding="{Binding Descripcion2}"
+                                                                        Width="*"
+                                                                        IsReadOnly="True"/>
                                                     <DataGridTextColumn Header="Cantidad"
-                            Binding="{Binding Cantidad, UpdateSourceTrigger=LostFocus}"
-                            Width="90"/>
+                                                                        Binding="{Binding Cantidad, UpdateSourceTrigger=LostFocus}"
+                                                                        Width="90"/>
                                                 </DataGrid.Columns>
 
                                             </DataGrid>
-
-
 
                                             <TextBlock Text="Haz doble clic en la celda Cantidad para editarla."
                                                        Foreground="#888" FontSize="11" Margin="0,6,0,0"/>
@@ -224,9 +232,9 @@
 
                                 </Grid>
 
+                                <!-- Fecha fin + opciones PT -->
                                 <Border Grid.Row="1" Background="#3A3A3D" CornerRadius="4"
                                         Padding="16,10" Margin="0,12,0,0">
-
                                     <Grid>
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="Auto"/>
@@ -240,22 +248,23 @@
                                             <TextBlock Text="Fecha fin para todas las órdenes*:"
                                                        Foreground="#FF9800" Margin="0,0,0,4"/>
 
+                                            <!-- FIX: Visibility="Hidden" en DatePickerTextBox evita la doble fecha -->
                                             <Grid Width="160" Height="30">
                                                 <DatePicker x:Name="dpFechaFin"
                                                             SelectedDate="{Binding FechaFin, Mode=TwoWay}"
-                                                            Background="#2D2D30"
+                                                            Background="Transparent"
+                                                            Foreground="Transparent"
                                                             BorderBrush="#FF9800">
                                                     <DatePicker.Resources>
                                                         <Style TargetType="DatePickerTextBox">
-                                                            <Setter Property="Foreground" Value="Transparent"/>
-                                                            <Setter Property="Background" Value="Transparent"/>
-                                                            <Setter Property="BorderBrush" Value="Transparent"/>
+                                                            <Setter Property="Visibility" Value="Hidden"/>
                                                         </Style>
                                                     </DatePicker.Resources>
                                                 </DatePicker>
                                                 <TextBlock Text="{Binding SelectedDate, ElementName=dpFechaFin, StringFormat={}{0:dd/MM/yyyy}}"
                                                            Foreground="#FF9800"
                                                            VerticalAlignment="Center"
+                                                           HorizontalAlignment="Left"
                                                            Margin="8,0,30,0"
                                                            IsHitTestVisible="False"
                                                            Panel.ZIndex="9999"/>
@@ -263,10 +272,8 @@
                                         </StackPanel>
 
                                         <StackPanel Grid.Column="1" Orientation="Vertical" VerticalAlignment="Center">
-
                                             <TextBlock Text="¿Generar también orden del PT?"
                                                        Foreground="#FF9800" Margin="0,0,0,6"/>
-
                                             <StackPanel Orientation="Horizontal">
                                                 <RadioButton x:Name="rbSoloPT"
                                                              Content="Solo componentes PS"
@@ -274,15 +281,14 @@
                                                              Checked="RbSoloPT_Checked"
                                                              Foreground="White"
                                                              Margin="0,0,20,0"/>
-
                                                 <RadioButton x:Name="rbConPT"
                                                              Content="PS + orden del PT"
                                                              GroupName="opcionPT"
                                                              Checked="RbConPT_Checked"
                                                              Foreground="White"/>
                                             </StackPanel>
-
                                         </StackPanel>
+
                                         <Button Grid.Column="2"
                                                 Content="Calcular órdenes"
                                                 Click="BtnCalcular_Click"
@@ -292,12 +298,13 @@
                                                 VerticalAlignment="Center" Cursor="Hand"/>
                                     </Grid>
                                 </Border>
+
+                                <!-- Preview órdenes PT -->
                                 <Border Grid.Row="2"
                                         Visibility="{Binding PreviewVisible, Converter={StaticResource BoolToVis}}"
                                         Background="#1E1E1E" BorderBrush="#FF9800" BorderThickness="1"
                                         CornerRadius="4" Margin="0,12,0,0" Padding="0">
                                     <StackPanel>
-
                                         <TextBlock Text="Órdenes que se generarán:"
                                                    Foreground="#FF9800" FontWeight="Bold"
                                                    Margin="12,10,0,8"/>
@@ -305,24 +312,27 @@
                                                   IsReadOnly="True"
                                                   MaxHeight="200"
                                                   Margin="8,0,8,8">
+
+                                            <DataGrid.CellStyle>
+                                                <Style TargetType="DataGridCell">
+                                                    <Setter Property="Foreground" Value="#FF9800"/>
+                                                </Style>
+                                            </DataGrid.CellStyle>
+
                                             <DataGrid.Columns>
                                                 <DataGridTextColumn Header="Tipo"
                                                                     Binding="{Binding Tipo}"
                                                                     Width="55"/>
-
                                                 <DataGridTextColumn Header="Código"
                                                                     Binding="{Binding CodigoArticulo}"
                                                                     Width="120"
                                                                     FontWeight="SemiBold"/>
-
                                                 <DataGridTextColumn Header="Descripción"
                                                                     Binding="{Binding Descripcion}"
                                                                     Width="*"/>
-
                                                 <DataGridTextColumn Header="Descripción 2"
                                                                     Binding="{Binding Descripcion2}"
                                                                     Width="*"/>
-
                                                 <DataGridTextColumn Header="Cantidad"
                                                                     Binding="{Binding Cantidad, StringFormat={}{0:0.##}}"
                                                                     Width="90"/>
@@ -331,10 +341,10 @@
                                     </StackPanel>
                                 </Border>
 
+                                <!-- Botón confirmar PT -->
                                 <Grid Grid.Row="3"
                                       Visibility="{Binding PreviewVisible, Converter={StaticResource BoolToVis}}"
                                       Margin="0,8,0,0">
-
                                     <Button Content="Confirmar y generar órdenes"
                                             Click="BtnConfirmar_Click"
                                             HorizontalAlignment="Right"
@@ -343,9 +353,11 @@
                                             BorderBrush="#FF9800" FontWeight="Bold"
                                             Cursor="Hand"/>
                                 </Grid>
+
                             </Grid>
                         </TabItem>
 
+                        <!-- ══════════════════════════════════════════ PESTAÑA PS ══ -->
                         <TabItem Header="PS directo">
 
                             <Grid Margin="0,12,0,0">
@@ -363,6 +375,7 @@
                                         <ColumnDefinition Width="*"/>
                                     </Grid.ColumnDefinitions>
 
+                                    <!-- Lista artículos PS -->
                                     <Border Grid.Column="0" Background="#3A3A3D" CornerRadius="4" Padding="12">
                                         <StackPanel>
                                             <TextBlock Text="Artículos PS disponibles:"
@@ -379,13 +392,11 @@
                                                         <CheckBox Foreground="White" Margin="0,3"
                                                                   Checked="ChkPS_Checked"
                                                                   Unchecked="ChkPS_Unchecked">
-
                                                             <StackPanel>
                                                                 <TextBlock Text="{Binding Codigo}" FontWeight="Bold" Foreground="White"/>
                                                                 <TextBlock Text="{Binding descrip}"  Foreground="#AAAAAA" FontSize="11"/>
                                                                 <TextBlock Text="{Binding descrip2}" Foreground="#AAAAAA" FontSize="11"/>
                                                             </StackPanel>
-
                                                         </CheckBox>
                                                     </DataTemplate>
                                                 </ListBox.ItemTemplate>
@@ -426,17 +437,14 @@
                                                                         Width="120"
                                                                         IsReadOnly="True"
                                                                         FontWeight="SemiBold"/>
-
                                                     <DataGridTextColumn Header="Descripción"
                                                                         Binding="{Binding Descripcion}"
                                                                         Width="*"
                                                                         IsReadOnly="True"/>
-
                                                     <DataGridTextColumn Header="Descripción 2"
                                                                         Binding="{Binding Descripcion2}"
                                                                         Width="*"
                                                                         IsReadOnly="True"/>
-
                                                     <DataGridTextColumn Header="Cantidad"
                                                                         Binding="{Binding Cantidad, UpdateSourceTrigger=LostFocus}"
                                                                         Width="90"/>
@@ -452,10 +460,9 @@
 
                                 </Grid>
 
-                                <!-- FECHA FIN PS -->
+                                <!-- Fecha fin PS -->
                                 <Border Grid.Row="1" Background="#3A3A3D" CornerRadius="4"
                                         Padding="16,10" Margin="0,12,0,0">
-
                                     <Grid>
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="Auto"/>
@@ -469,22 +476,23 @@
                                             <TextBlock Text="Fecha fin para todas las órdenes*:"
                                                        Foreground="#FF9800" Margin="0,0,0,4"/>
 
+                                            <!-- FIX: Visibility="Hidden" en DatePickerTextBox evita la doble fecha -->
                                             <Grid Width="160" Height="30">
                                                 <DatePicker x:Name="dpFechaFinPS"
                                                             SelectedDate="{Binding FechaFinPS, Mode=TwoWay}"
-                                                            Background="#2D2D30"
+                                                            Background="Transparent"
+                                                            Foreground="Transparent"
                                                             BorderBrush="#FF9800">
                                                     <DatePicker.Resources>
                                                         <Style TargetType="DatePickerTextBox">
-                                                            <Setter Property="Foreground" Value="Transparent"/>
-                                                            <Setter Property="Background" Value="Transparent"/>
-                                                            <Setter Property="BorderBrush" Value="Transparent"/>
+                                                            <Setter Property="Visibility" Value="Hidden"/>
                                                         </Style>
                                                     </DatePicker.Resources>
                                                 </DatePicker>
                                                 <TextBlock Text="{Binding SelectedDate, ElementName=dpFechaFinPS, StringFormat={}{0:dd/MM/yyyy}}"
-                                                           Foreground="Black"
+                                                           Foreground="#FF9800"
                                                            VerticalAlignment="Center"
+                                                           HorizontalAlignment="Left"
                                                            Margin="8,0,30,0"
                                                            IsHitTestVisible="False"
                                                            Panel.ZIndex="9999"/>
@@ -501,16 +509,14 @@
                                                 VerticalAlignment="Center" Cursor="Hand"/>
 
                                     </Grid>
-
                                 </Border>
 
+                                <!-- Preview órdenes PS -->
                                 <Border Grid.Row="2"
                                         Visibility="{Binding PreviewPSVisible, Converter={StaticResource BoolToVis}}"
                                         Background="#1E1E1E" BorderBrush="#FF9800" BorderThickness="1"
                                         CornerRadius="4" Margin="0,12,0,0" Padding="0">
-
                                     <StackPanel>
-
                                         <TextBlock Text="Órdenes PS que se generarán:"
                                                    Foreground="#FF9800" FontWeight="Bold"
                                                    Margin="12,10,0,8"/>
@@ -520,35 +526,36 @@
                                                   MaxHeight="200"
                                                   Margin="8,0,8,8">
 
+                                            <DataGrid.CellStyle>
+                                                <Style TargetType="DataGridCell">
+                                                    <Setter Property="Foreground" Value="#FF9800"/>
+                                                </Style>
+                                            </DataGrid.CellStyle>
+
                                             <DataGrid.Columns>
                                                 <DataGridTextColumn Header="Código"
                                                                     Binding="{Binding CodigoArticulo}"
                                                                     Width="120"
                                                                     FontWeight="SemiBold"/>
-
                                                 <DataGridTextColumn Header="Descripción"
                                                                     Binding="{Binding Descripcion}"
                                                                     Width="*"/>
-
                                                 <DataGridTextColumn Header="Descripción 2"
                                                                     Binding="{Binding Descripcion2}"
                                                                     Width="*"/>
-
                                                 <DataGridTextColumn Header="Cantidad"
                                                                     Binding="{Binding Cantidad, StringFormat={}{0:0.##}}"
                                                                     Width="90"/>
                                             </DataGrid.Columns>
 
                                         </DataGrid>
-
                                     </StackPanel>
-
                                 </Border>
 
+                                <!-- Botón confirmar PS -->
                                 <Grid Grid.Row="3"
                                       Visibility="{Binding PreviewPSVisible, Converter={StaticResource BoolToVis}}"
                                       Margin="0,8,0,0">
-
                                     <Button Content="Confirmar y generar órdenes PS"
                                             Click="BtnConfirmarPS_Click"
                                             HorizontalAlignment="Right"
@@ -556,7 +563,6 @@
                                             Background="#FF9800" Foreground="White"
                                             BorderBrush="#FF9800" FontWeight="Bold"
                                             Cursor="Hand"/>
-
                                 </Grid>
 
                             </Grid>
