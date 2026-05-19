@@ -63,12 +63,6 @@
             </Style.Triggers>
         </Style>
 
-        <Style x:Key="RectivoDatePickerTextBox" TargetType="DatePickerTextBox">
-            <Setter Property="Foreground" Value="Transparent"/>
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="BorderBrush" Value="Transparent"/>
-        </Style>
-
     </Window.Resources>
 
     <Grid>
@@ -294,26 +288,12 @@
                                                        Style="{StaticResource RectivoTextBlock}"
                                                        Margin="0,0,0,4"/>
 
-                                            <Grid Width="160" Height="30">
-                                                <DatePicker x:Name="dpFecha"
-                                                            SelectedDate="{Binding FechaEntrega, Mode=TwoWay}"
-                                                            Background="#2D2D30"
-                                                            BorderBrush="#FF9800">
-                                                    <DatePicker.Resources>
-                                                        <Style TargetType="DatePickerTextBox">
-                                                            <Setter Property="Foreground" Value="Transparent"/>
-                                                            <Setter Property="Background" Value="Transparent"/>
-                                                            <Setter Property="BorderBrush" Value="Transparent"/>
-                                                        </Style>
-                                                    </DatePicker.Resources>
-                                                </DatePicker>
-                                                <TextBlock Text="{Binding SelectedDate, ElementName=dpFecha, StringFormat={}{0:dd/MM/yyyy}}"
-                                                           Foreground="#FF9800"
-                                                           VerticalAlignment="Center"
-                                                           Margin="8,0,30,0"
-                                                           IsHitTestVisible="False"
-                                                           Panel.ZIndex="9999"/>
-                                            </Grid>
+                                            <DatePicker x:Name="dpFecha"
+                                                        SelectedDate="{Binding FechaEntrega, Mode=TwoWay}"
+                                                        Foreground="#FF9800"
+                                                        Background="#3A3A3D"
+                                                        BorderBrush="#FF9800"
+                                                        Width="160" Height="30"/>
                                         </StackPanel>
 
                                         <StackPanel Grid.Column="4" VerticalAlignment="Center">

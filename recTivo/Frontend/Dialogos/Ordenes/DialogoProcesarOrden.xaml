@@ -24,19 +24,6 @@
             <Setter Property="Padding"         Value="5"/>
         </Style>
 
-        <Style TargetType="CalendarDayButton">
-            <Setter Property="Foreground" Value="#1E1E1E"/>
-        </Style>
-
-        <Style TargetType="CalendarButton">
-            <Setter Property="Foreground" Value="#1E1E1E"/>
-        </Style>
-
-        <Style TargetType="Calendar">
-            <Setter Property="Foreground" Value="#1E1E1E"/>
-            <Setter Property="Background" Value="White"/>
-        </Style>
-
         <Style TargetType="DataGrid">
             <Setter Property="Background"                Value="#E0E0E0"/>
             <Setter Property="RowBackground"             Value="#F5F5F5"/>
@@ -47,6 +34,12 @@
             <Setter Property="CanUserAddRows"            Value="False"/>
             <Setter Property="AutoGenerateColumns"       Value="False"/>
             <Setter Property="RowHeaderWidth"            Value="0"/>
+        </Style>
+
+        <Style x:Key="RectivoDatePickerTextBox" TargetType="DatePickerTextBox">
+            <Setter Property="Foreground" Value="Transparent"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
         </Style>
 
     </Window.Resources>
@@ -108,13 +101,11 @@
                                         <Setter Property="Background" Value="#4A4A4D"/>
                                         <Setter Property="FontSize"   Value="15"/>
                                     </Trigger>
-
                                     <Trigger Property="IsSelected" Value="False">
                                         <Setter Property="Background" Value="#3A3A3D"/>
                                         <Setter Property="FontSize"   Value="13"/>
                                     </Trigger>
                                 </Style.Triggers>
-
                             </Style>
                         </TabControl.Resources>
 
@@ -175,7 +166,6 @@
                                                         </Setter>
                                                     </Style>
                                                 </ListBox.ItemContainerStyle>
-
                                             </ListBox>
                                         </StackPanel>
                                     </Border>
@@ -183,7 +173,6 @@
                                     <!-- PT seleccionados -->
                                     <Border Grid.Column="2" Background="#3A3A3D" CornerRadius="4" Padding="12">
                                         <StackPanel>
-
                                             <TextBlock Text="PT seleccionados — introduce la cantidad a fabricar:"
                                                        Foreground="#FF9800" FontWeight="Bold" Margin="0,0,0,8"/>
 
@@ -221,15 +210,12 @@
                                                                         Binding="{Binding Cantidad, UpdateSourceTrigger=LostFocus}"
                                                                         Width="90"/>
                                                 </DataGrid.Columns>
-
                                             </DataGrid>
 
                                             <TextBlock Text="Haz doble clic en la celda Cantidad para editarla."
                                                        Foreground="#888" FontSize="11" Margin="0,6,0,0"/>
-
                                         </StackPanel>
                                     </Border>
-
                                 </Grid>
 
                                 <!-- Fecha fin + opciones PT -->
@@ -248,27 +234,12 @@
                                             <TextBlock Text="Fecha fin para todas las órdenes*:"
                                                        Foreground="#FF9800" Margin="0,0,0,4"/>
 
-                                            <!-- FIX: Visibility="Hidden" en DatePickerTextBox evita la doble fecha -->
-                                            <Grid Width="160" Height="30">
-                                                <DatePicker x:Name="dpFechaFin"
-                                                            SelectedDate="{Binding FechaFin, Mode=TwoWay}"
-                                                            Background="Transparent"
-                                                            Foreground="Transparent"
-                                                            BorderBrush="#FF9800">
-                                                    <DatePicker.Resources>
-                                                        <Style TargetType="DatePickerTextBox">
-                                                            <Setter Property="Visibility" Value="Hidden"/>
-                                                        </Style>
-                                                    </DatePicker.Resources>
-                                                </DatePicker>
-                                                <TextBlock Text="{Binding SelectedDate, ElementName=dpFechaFin, StringFormat={}{0:dd/MM/yyyy}}"
-                                                           Foreground="#FF9800"
-                                                           VerticalAlignment="Center"
-                                                           HorizontalAlignment="Left"
-                                                           Margin="8,0,30,0"
-                                                           IsHitTestVisible="False"
-                                                           Panel.ZIndex="9999"/>
-                                            </Grid>
+                                            <DatePicker x:Name="dpFechaFin"
+                                                        SelectedDate="{Binding FechaFin, Mode=TwoWay}"
+                                                        Foreground="#FF9800"
+                                                        Background="#3A3A3D"
+                                                        BorderBrush="#FF9800"
+                                                        Width="160" Height="30"/>
                                         </StackPanel>
 
                                         <StackPanel Grid.Column="1" Orientation="Vertical" VerticalAlignment="Center">
@@ -353,7 +324,6 @@
                                             BorderBrush="#FF9800" FontWeight="Bold"
                                             Cursor="Hand"/>
                                 </Grid>
-
                             </Grid>
                         </TabItem>
 
@@ -414,7 +384,6 @@
                                                         </Setter>
                                                     </Style>
                                                 </ListBox.ItemContainerStyle>
-
                                             </ListBox>
                                         </StackPanel>
                                     </Border>
@@ -422,7 +391,6 @@
                                     <!-- PS seleccionados -->
                                     <Border Grid.Column="2" Background="#3A3A3D" CornerRadius="4" Padding="12">
                                         <StackPanel>
-
                                             <TextBlock Text="PS seleccionados — introduce la cantidad a fabricar:"
                                                        Foreground="#FF9800" FontWeight="Bold" Margin="0,0,0,8"/>
 
@@ -449,15 +417,12 @@
                                                                         Binding="{Binding Cantidad, UpdateSourceTrigger=LostFocus}"
                                                                         Width="90"/>
                                                 </DataGrid.Columns>
-
                                             </DataGrid>
 
                                             <TextBlock Text="Haz doble clic en la celda Cantidad para editarla."
                                                        Foreground="#888" FontSize="11" Margin="0,6,0,0"/>
-
                                         </StackPanel>
                                     </Border>
-
                                 </Grid>
 
                                 <!-- Fecha fin PS -->
@@ -476,28 +441,12 @@
                                             <TextBlock Text="Fecha fin para todas las órdenes*:"
                                                        Foreground="#FF9800" Margin="0,0,0,4"/>
 
-                                            <!-- FIX: Visibility="Hidden" en DatePickerTextBox evita la doble fecha -->
-                                            <Grid Width="160" Height="30">
-                                                <DatePicker x:Name="dpFechaFinPS"
-                                                            SelectedDate="{Binding FechaFinPS, Mode=TwoWay}"
-                                                            Background="Transparent"
-                                                            Foreground="Transparent"
-                                                            BorderBrush="#FF9800">
-                                                    <DatePicker.Resources>
-                                                        <Style TargetType="DatePickerTextBox">
-                                                            <Setter Property="Visibility" Value="Hidden"/>
-                                                        </Style>
-                                                    </DatePicker.Resources>
-                                                </DatePicker>
-                                                <TextBlock Text="{Binding SelectedDate, ElementName=dpFechaFinPS, StringFormat={}{0:dd/MM/yyyy}}"
-                                                           Foreground="#FF9800"
-                                                           VerticalAlignment="Center"
-                                                           HorizontalAlignment="Left"
-                                                           Margin="8,0,30,0"
-                                                           IsHitTestVisible="False"
-                                                           Panel.ZIndex="9999"/>
-                                            </Grid>
-
+                                            <DatePicker x:Name="dpFechaFinPS"
+                                                        SelectedDate="{Binding FechaFinPS, Mode=TwoWay}"
+                                                        Foreground="#FF9800"
+                                                        Background="#3A3A3D"
+                                                        BorderBrush="#FF9800"
+                                                        Width="160" Height="30"/>
                                         </StackPanel>
 
                                         <Button Grid.Column="2"
@@ -507,7 +456,6 @@
                                                 Background="#FF9800" Foreground="White"
                                                 BorderBrush="#FF9800" FontWeight="Bold"
                                                 VerticalAlignment="Center" Cursor="Hand"/>
-
                                     </Grid>
                                 </Border>
 
@@ -547,7 +495,6 @@
                                                                     Binding="{Binding Cantidad, StringFormat={}{0:0.##}}"
                                                                     Width="90"/>
                                             </DataGrid.Columns>
-
                                         </DataGrid>
                                     </StackPanel>
                                 </Border>
@@ -564,9 +511,7 @@
                                             BorderBrush="#FF9800" FontWeight="Bold"
                                             Cursor="Hand"/>
                                 </Grid>
-
                             </Grid>
-
                         </TabItem>
 
                     </TabControl>

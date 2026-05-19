@@ -2,6 +2,7 @@
 using recTivo.Backend.Modelos;
 using recTivo.Frontend.Dialogos.VentanasInicio;
 using recTivo.MVVM;
+using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -18,6 +19,14 @@ namespace recTivo.Frontend.Dialogos.Ordenes
             _vm = vm;
             DataContext = _vm;
             rbSoloPT.IsChecked = true;
+
+            // Fecha por defecto: hoy + 2 semanas
+            var fechaDefecto = DateTime.Today.AddDays(14);
+            dpFechaFin.SelectedDate = fechaDefecto;
+            dpFechaFinPS.SelectedDate = fechaDefecto;
+            _vm.FechaFin = fechaDefecto;
+            _vm.FechaFinPS = fechaDefecto;
+
             Loaded += async (_, __) => await _vm.InicializarProcesoAsync();
         }
 
