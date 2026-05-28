@@ -1,4 +1,4 @@
-﻿using di.proyecto.clase._2025.Frontend.Mensajes;
+﻿using recTivo.Frontend.Mensajes;
 using Microsoft.Extensions.DependencyInjection;
 using recTivo.Frontend.Dialogos.Articulos;
 using recTivo.Informes;

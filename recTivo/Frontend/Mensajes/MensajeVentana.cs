@@ -1,7 +1,7 @@
 ﻿using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
-namespace di.proyecto.clase._2025.Frontend.Mensajes
+namespace recTivo.Frontend.Mensajes
 {
     public enum TipoMensaje
     {

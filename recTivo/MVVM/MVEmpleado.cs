@@ -339,7 +339,11 @@ namespace recTivo.MVVM
             EmpleadoSeleccionado.Apellidos = Apellidos;
             EmpleadoSeleccionado.Dni = Dni;
             EmpleadoSeleccionado.Username = Username;
-            EmpleadoSeleccionado.Password = Password;
+            if (EmpleadoSeleccionado.Password != Password)
+            {
+                EmpleadoSeleccionado.Password = BCrypt.Net.BCrypt.HashPassword(Password);
+            }
+
             EmpleadoSeleccionado.Estado = Estado;
             EmpleadoSeleccionado.IdRol = RolSeleccionado?.Id;
 

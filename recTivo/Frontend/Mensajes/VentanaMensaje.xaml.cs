@@ -12,7 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace di.proyecto.clase._2025.Frontend.Mensajes
+namespace recTivo.Frontend.Mensajes
 {
     /// <summary>
     /// Interaction logic for VentanaMensaje.xaml

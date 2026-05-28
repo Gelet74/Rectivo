@@ -1,4 +1,4 @@
-﻿using di.proyecto.clase._2025.Frontend.Mensajes;
+﻿using recTivo.Frontend.Mensajes;
 using recTivo.Backend.Modelos;
 using recTivo.Backend.Repos;
 using recTivo.MVVM.Base;
